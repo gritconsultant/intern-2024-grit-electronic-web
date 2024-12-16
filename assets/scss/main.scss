@@ -1,1 +1,12 @@
 // main.scss */
+
+.fontheader{
+    @apply font-bold text-slate-950
+}
+
+.fontsubheader{
+    @apply font-bold text-sm  text-slate-950
+}
+.detail {
+    @apply text-xs  
+}
