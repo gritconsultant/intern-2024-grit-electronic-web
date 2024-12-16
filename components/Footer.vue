@@ -4,13 +4,13 @@
     <div class="ml-7">
       <img src="/public/image/logo.png" class="w-[150px] flex" />
 
-      <p class="mt-4 ml-4 text-sm">
+      <p class="mt-5 ml-4 text-xs">
         88/8 หมู่ 12 ตำบลศิลา อำเภอเมือง จังหวัดขอนแก่น 40000
       </p>
     </div>
 
     <!-- menu -->
-    <div class="grid grid-cols-3 w-full text-sm mt-2 ml-10 px-32">
+    <div class="grid grid-cols-3 w-full text-xs mt-2 ml-10 px-32">
       <div>
         <div class="font-semibold mb-4">หมวดหมู่</div>
         <div
