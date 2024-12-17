@@ -11,43 +11,75 @@
         </div>
       </div>
     </div>
-    <div class="mt-[30px]">
+    <div class="mt-[30px] mx-[100px]">
       <h1 class="fontheader">สินค้าแนะนำ-Recommend</h1>
-      <div class="mt-2 p-3">
-        <!-- cardproduct demo -->
-        <div
-          class="w-[300px] h-[450px] border-2 p-5 flex flex-col gap-2 rounded-[5px]"
-        >
-          <div class="flex justify-between border-2 h-[30px]">
-            <div>star</div>
-            <div>like</div>
-          </div>
-          <div class="object-cover place-content-center border-2 h-[250px]">
-            <img
-              src="https://blog.bnn.in.th/wp-content/uploads/2024/03/Acer-Aspire-3-A315-59-32GC.jpg"
-              alt=""
-            />
-          </div>
-          <div class="flex justify-between border-2">
-            <div>
-                <span class="fontsubheader">ชื่อ</span>
-            </div>
-            <div>
-                ฿2000
-            </div>
-          </div>
-          <div>
-            <span class="fontsubheader">รายละเอียด</span>
-            <div class="detail">
-                รุ่น Acer Aspire 3 A315-59 59 ��ุตบอล 3 นิ้ว รุ่นใหม่ ที่มี��ุตบอล��้า��ล่อง สามารถใช้งานในบ้านกับ��ู้ใช้ที่อยู่ในบ้านได้อย่า��รา��รื่น
-            </div>
+      <div class="grid grid-cols-4   gap-5 my-5 ">
+        <!-- cardproduct -->
+        <div v-for="(item, i) in products" :key="i">
+          <div :to="i">
+            <CardProduct :product="item" />
           </div>
         </div>
+       
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { Product } from '~/models/product.model';
+
+
+const products = ref<Product[]>([
+  {
+    id: 1,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 1000,
+    amount: 0,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+  {
+    id: 2,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 2000,
+    amount: 3,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+  {
+    id: 3,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 3000,
+    amount: 10,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+  {
+    id: 4,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 4000,
+    amount: 20,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+  {
+    id: 5,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 5000,
+    amount: 30,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+  {
+    id: 6,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 6000,
+    amount: 40,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+]);
+</script>
 
 <style scoped></style>
