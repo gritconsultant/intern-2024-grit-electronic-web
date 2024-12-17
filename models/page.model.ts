@@ -1,5 +1,5 @@
 export interface Page {
-    name: string
-    path: string
-    active: boolean
+    name: string;
+    path: string;
+    active: boolean;
 }
