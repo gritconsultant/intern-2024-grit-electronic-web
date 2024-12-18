@@ -7,7 +7,17 @@ export default defineNuxtConfig({
       BASE_URL: '',
     }
   },
-
+  app: {
+    head: {
+      title: 'http://localhost:3000',
+      script: [
+        {
+          src: 'https://kit.fontawesome.com/02a8dd6235.js',
+          crossorigin: 'anonymous',
+        },
+      ],
+    },
+  },
   css: ['@/assets/css/main.css','~/assets/scss/main.scss'],
   modules: ['@pinia/nuxt'],
   vite: {
