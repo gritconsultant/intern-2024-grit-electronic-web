@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            class="w-[300px] h-[450px] border-2 p-5 flex flex-col gap-2 rounded-[5px]"
+            class="w-[300px] h-[400px] border-2  p-5 flex flex-col gap-2 rounded-[5px]"
           >
             <div class="flex justify-between border-2 h-[30px]">
               <div>star</div>
@@ -13,14 +13,14 @@
                 alt=""
               />
             </div>
-            <div class="flex justify-between border-2">
+            <div class="flex justify-between">
               <div>
                 <span class="fontsubheader">ชื่อ {{ product.name }} </span>
               </div>
-              <div>฿{{ product.price }}</div>
+              <div class="text-indigo-400  ">฿{{ product.price }}</div>
             </div>
             <div>
-              <span class="fontsubheader">รายละเอียด</span>
+              <span class=" fontsubheader">รายละเอียด</span>
               <div class="detail">
                 {{ product.detail }}
               </div>
