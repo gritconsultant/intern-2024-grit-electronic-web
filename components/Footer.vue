@@ -2,7 +2,7 @@
   <div class="p-6 flex gap-9 text-black border-t-2 border-gray-400">
     <!-- logo n ad -->
     <div class="ml-7">
-      <img src="/public/image/logo.png" class="w-[150px] flex" />
+      <img src="/images/logo.ico" class="w-[150px] flex" />
 
       <p class="mt-5 ml-4 text-xs">
         88/8 หมู่ 12 ตำบลศิลา อำเภอเมือง จังหวัดขอนแก่น 40000
