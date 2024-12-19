@@ -5,6 +5,6 @@ export interface Page {
 }
 
 export interface Login {
-    usernames: string;
+    username: string;
     password: string;
 }
