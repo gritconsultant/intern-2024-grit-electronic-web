@@ -21,7 +21,7 @@
             </div>
             <div>
               <span class=" fontsubheader">รายละเอียด</span>
-              <div class="detail">
+              <div class="detail truncate">
                 {{ product.detail }}
               </div>
             </div>

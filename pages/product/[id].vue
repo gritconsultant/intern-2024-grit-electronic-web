@@ -7,7 +7,7 @@
           <div class="w-full p-2">
             <!-- photoshow -->
             <div class="p-2 flex justify-center">
-              <div class="flex justify-center ">
+              <div class="flex justify-center">
                 <img
                   class="object-cover"
                   src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
@@ -56,13 +56,27 @@
             <div class="my-[20px] font-semibold text-[#FF0808] text-4xl">
               ฿4500
             </div>
-            <div class="flex flex-col justify-between gap-5 ">
+            <div class="flex flex-col justify-between gap-5">
               <div class="h-full">
                 <h1 class="fontsubheader">รายละเอียด</h1>
-                <div class="h-[470px] w-full p-[20px]">
-                  <p class="  ">
-                    jdjdsjgfkjsdjkfsjfhshjsfhkjsdhkjfshjkjdsfkjsdfkjdshfkjsbfskfjfkjskjsdkfhskjfhsdjf
-                  </p>
+                <div class="h-[470px] w-full p-[20px] ">
+                  <div class="h-[410px]  truncate ">
+                    <p class="text-wrap">
+                      หากคุณกำลังมองหาคีย์บอร์ดในงบประมาณประมาณ 500 บาท ควรเลือกคีย์บอร์ดแบบมีสายที่ออกแบบมาเพื่อการใช้งานทั่วไป
+                      เช่น รุ่นที่รองรับพิมพ์เอกสาร ทำงานออฟฟิศ
+                      หรือเล่นเกมเบื้องต้น โดยเน้นไปที่แบรนด์ที่เชื่อถือได้ เช่น
+                      Logitech, A4Tech หรือ Nubwo
+                      ซึ่งมักให้ความทนทานและการตอบสนองที่ดีในราคาที่คุ้มค่า
+                      สำหรับการพิมพ์
+                      ควรเลือกคีย์บอร์ดแบบเมมเบรนที่มีปุ่มกดนุ่มสบาย
+                      ช่วยลดความเมื่อยล้าระหว่างการใช้งาน
+                      หากคุณต้องการใช้งานเพื่อการเล่นเกมแบบเบา ๆ
+                      อาจมองหารุ่นที่มีดีไซน์ทันสมัย ปุ่มที่ตอบสนองรวดเร็ว
+                      และรองรับฟีเจอร์ Anti-Ghosting ในบางปุ่มสำคัญ
+                      ควรตรวจสอบรีวิวออนไลน์และทดลองกดปุ่มจริงหากเป็นไปได้
+                      เพื่อให้แน่ใจว่าคีย์บอร์ดที่เลือกเหมาะกับการใช้งานและมอบประสบการณ์ที่ดีที่สุดในงบประมาณจำกัดของคุณ!
+                    </p>
+                  </div>
                 </div>
               </div>
               <div class="ml-[10px]">
@@ -77,7 +91,7 @@
         </div>
         <hr class="hr" />
         <!-- review -->
-        <div class="h-[500px] p-[20px] ">
+        <div class="h-[500px] p-[20px]">
           <h1 class="fontheader">รีวิวสินค้า</h1>
           <div class="flex gap-5">
             <div>star number</div>
@@ -85,9 +99,7 @@
             <div>total review</div>
           </div>
           <!-- comment -->
-          <div
-            class="flex justify-center items-center gap-3 p-[20px] m-[20px] "
-          >
+          <div class="flex justify-center items-center gap-3 p-[20px] m-[20px]">
             <div>+</div>
             <!-- cardreview -->
             <div class="border-2 rounded-[5px] p-5 w-[400px] object-cover">
@@ -124,8 +136,8 @@
               </div>
               <hr class="hr" />
               <div>
-                <div class="detail p-2 h-[90px] ">details</div>
-                <div class="flex justify-center gap-2 bg-slate-500 p-2">
+                <div class="detail p-2 h-[90px]">details</div>
+                <div class="flex justify-center gap-2 p-2">
                   <img
                     class="photoreview"
                     src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-side-view.jpg"
@@ -184,8 +196,8 @@
               </div>
               <hr class="hr" />
               <div>
-                <div class="detail p-2 h-[90px] ">details</div>
-                <div class="flex justify-center gap-2 bg-slate-500 p-2">
+                <div class="detail p-2 h-[90px]">details</div>
+                <div class="flex justify-center gap-2 p-2">
                   <img
                     class="photoreview"
                     src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-side-view.jpg"
@@ -244,8 +256,8 @@
               </div>
               <hr class="hr" />
               <div>
-                <div class="detail p-2 h-[90px] ">details</div>
-                <div class="flex justify-center gap-2 bg-slate-500 p-2">
+                <div class="detail p-2 h-[90px]">details</div>
+                <div class="flex justify-center gap-2 p-2">
                   <img
                     class="photoreview"
                     src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-side-view.jpg"
@@ -278,8 +290,8 @@
     <div class="p-[40px] bg-[#988FD0]/30">
       <div class="grid gap-7 mx-[50px]">
         <h1 class="fontheader">สินค้าใกล้เคียง</h1>
-        <div class=" mx-5 p-2 grid grid-cols-4    ">
-          <div v-for="(item, index) in products.slice(0,4)" :key="index">
+        <div class="mx-5 p-2 grid grid-cols-4">
+          <div v-for="(item, index) in products.slice(0, 4)" :key="index">
             <CardProduct :product="item" />
           </div>
         </div>

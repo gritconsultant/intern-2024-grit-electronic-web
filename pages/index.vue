@@ -32,7 +32,7 @@ const products = ref<Product[]>([
   {
     id: 1,
     name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
+    detail: "Wried Mechanical KEYBOARDbgfnfdgdfsbsdfhsdfhfsdhhdsfhdfdfsfhdfdcxzcxzcf ",
     price: 1000,
     amount: 0,
     img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
