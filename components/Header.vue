@@ -19,21 +19,26 @@
               </NuxtLink>
             </div>
           </div>
-          <div class="flex justify-center pl-40   gap-[70px] w-full  " >
-            <div class="flex h-">
-              <img class="icons" src="https://cdn-icons-png.freepik.com/512/598/598170.png" alt="">
+          <div class="flex justify-center pl-40 gap-[60px] w-full" >
+            <div>
+              <!-- search -->
+              <img class="icons" src="/public/image/icon/search.png">
             </div>
             <div>
-              <img class="icons" src="https://cdn-icons-png.freepik.com/512/8459/8459233.png" alt="">
+              <!-- shopping cart -->
+              <img class="icons" src="/public/image/icon/shopping-cart.png">
             </div>
             <div>
-              <img class="icons" src="https://cdn-icons-png.freepik.com/512/3920/3920260.png" alt="">
+              <!-- fav -->
+              <img class="icons" src="/public/image/icon/heart.png">
             </div>
             <div>
-              <img class="icons" src="https://cdn-icons-png.freepik.com/512/1827/1827422.png" alt="">
+              <!-- notification -->
+              <img class="icons" src="/public/image/icon/bell.png">
             </div>
             <div>
-              <img class="icons" src="https://cdn-icons-png.freepik.com/512/456/456283.png" alt="">
+              <!-- user -->
+              <img class="icons" src="/public/image/icon/user.png">
             </div>
           </div>
         </div>
