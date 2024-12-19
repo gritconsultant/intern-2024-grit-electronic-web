@@ -3,3 +3,8 @@ export interface Page {
     path: string;
     active: boolean;
 }
+
+export interface Login {
+    usernames: string;
+    password: string;
+}
