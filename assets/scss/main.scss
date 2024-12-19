@@ -11,7 +11,7 @@
     @apply text-xs  
 }
 .buttons {
-    @apply  bg-indigo-400   text-white p-[20px] rounded-[10px] text-center text-xl 
+    @apply  bg-[#765798]   text-white p-[20px] rounded-[10px] text-center text-xl 
 }
 .icons {
     @apply w-[20px] h-[20px]
@@ -19,4 +19,13 @@
 
 .photoselect {
     @apply w-[80px] object-cover rounded-[10px] p-1 bg-slate-300/5
+}
+
+.photoreview{
+    @apply w-[70px] h-[70px] rounded-[10px]
+
+}
+
+.hr{
+    @apply my-[30px]
 }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            class="w-[300px] h-[400px] border-2  p-5 flex flex-col gap-2 rounded-[5px]"
+            class="w-[300px] h-[400px] border-2 border-stone-400       p-5 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] "
           >
             <div class="flex justify-between border-2 h-[30px]">
               <div>star</div>
