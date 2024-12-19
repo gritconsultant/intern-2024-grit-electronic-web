@@ -6,7 +6,7 @@
         <NuxtLink to="/" class=" pl-[30px] ">
             <img
               class="w-[150px]"
-              src="/public/image/logo.png"
+              src="/images/logo.ico"
               alt=""
             />
           </nuxtlink>
