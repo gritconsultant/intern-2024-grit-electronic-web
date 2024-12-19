@@ -13,22 +13,20 @@
     </div>
     <div class="mt-[30px] mx-[100px]">
       <h1 class="fontheader">สินค้าแนะนำ-Recommend</h1>
-      <div class="grid grid-cols-4   gap-5 my-5 ">
+      <div class="grid grid-cols-4 gap-5 my-5">
         <!-- cardproduct -->
         <div v-for="(item, i) in products" :key="i">
           <div :to="i">
             <CardProduct :product="item" />
           </div>
         </div>
-       
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Product } from '~/models/product.model';
-
+import type { Product } from "~/models/product.model";
 
 const products = ref<Product[]>([
   {
