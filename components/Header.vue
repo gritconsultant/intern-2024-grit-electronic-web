@@ -22,23 +22,23 @@
           <div class="flex justify-center pl-40 gap-[60px] w-full" >
             <div>
               <!-- search -->
-              <img class="icons" src="/public/image/icon/search.png">
+              <img class="icons" src="https://cdn-icons-png.flaticon.com/256/152/152536.png">
             </div>
             <div>
               <!-- shopping cart -->
-              <img class="icons" src="/public/image/icon/shopping-cart.png">
+              <img class="icons" src="https://cdn-icons-png.flaticon.com/256/88/88032.png">
             </div>
             <div>
               <!-- fav -->
-              <img class="icons" src="/public/image/icon/heart.png">
+              <img class="icons" src="https://cdn-icons-png.flaticon.com/256/157/157990.png">
             </div>
             <div>
               <!-- notification -->
-              <img class="icons" src="/public/image/icon/bell.png">
+              <img class="icons" src="https://cdn-icons-png.flaticon.com/256/388/388652.png">
             </div>
             <div>
               <!-- user -->
-              <img class="icons" src="/public/image/icon/user.png">
+              <img class="icons" src="https://cdn-icons-png.flaticon.com/256/268/268441.png">
             </div>
           </div>
         </div>
