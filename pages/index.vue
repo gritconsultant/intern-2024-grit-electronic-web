@@ -2,22 +2,34 @@
   <div class="mx-[50px]">
     <div class="border-[2px] h-[10rem]">Posters</div>
     <div class="grid grid-cols-1 text-center">
-      <div class="mt-[15px]">
-        <h1 class="mb-[10px]">หมวดหมู่สินค้า</h1>
-        <div class="flex justify-center gap-3">
-          <div>คอมพิวเตอร์</div>
-          <div>โน๊ตบุ๊ค</div>
-          <div>อุปกรณ์เสริม</div>
+        <h1 class="my-[70px] fontheader">หมวดหมู่สินค้า</h1>
+        <div class="flex justify-center gap-5">
+          <div v-for="(data, category) in category" :key="category">
+            <!-- <NuxtLink to=""> -->
+            <div class="border-2 rounded-[50px] p-1">
+              <div class="w-[80px] h-[80px] object-cover  place-content-center rounded-[10px] p-1 bg-slate-300/5 "><img :src="data.img" alt="" /></div>
+            </div>
+            <h1 class="fontsubheader mt-[20px]">{{ data.name }}</h1>
+            <!-- </NuxtLink> -->
+          </div>
         </div>
-      </div>
     </div>
-    <div class="mt-[30px] mx-[100px]">
+    <div class="mt-[70px] mx-[50px]">
       <h1 class="fontheader">สินค้าแนะนำ-Recommend</h1>
-      <div class="grid grid-cols-4 gap-5 my-5">
-        <!-- cardproduct -->
-        <div v-for="(item, i) in products" :key="i">
-          <div :to="i">
-            <CardProduct :product="item" />
+      <!-- cardcategory -->
+      <div class="grid gap-5 mt-[20px]">
+        <div v-for="(item, category) in category" :key="category">
+          <div class="flex justify-between px-1">
+            <h1 class="fontsubheader mt-[3px]">{{ item.name }}</h1>
+            <div class="mr-[30px] text-black/40">ทั้งหมด-></div>
+          </div>
+          <div class="grid grid-cols-4 gap-5 my-2">
+            <!-- cardproduct -->
+            <div v-for="(item, i) in products" :key="i">
+              <div :to="i">
+                <CardProduct :product="item" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -26,13 +38,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Product } from "~/models/product.model";
+import type { Category, Product } from "~/models/product.model";
 
 const products = ref<Product[]>([
   {
     id: 1,
     name: "AULA",
-    detail: "Wried Mechanical KEYBOARDbgfnfdgdfsbsdfhsdfhfsdhhdsfhdfdfsfhdfdcxzcxzcf ",
+    detail:
+      "Wried Mechanical KEYBOARDbgfnfdgdfsbsdfhsdfhfsdhhdsfhdfdfsfhdfdcxzcxzcf ",
     price: 1000,
     amount: 0,
     img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
@@ -61,21 +74,22 @@ const products = ref<Product[]>([
     amount: 20,
     img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
   },
+]);
+const category = ref<Category[]>([
   {
-    id: 5,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 5000,
-    amount: 30,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    id: 1,
+    name: "หมวดที่ 1",
+    img: "https://www.brandlogopng.com/files/png/computer/green-pc-icon-png-hd-computer-circle-icons-68wl.png",
   },
   {
-    id: 6,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 6000,
-    amount: 40,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    id: 2,
+    name: "หมวดที่ 2",
+    img: "https://images.vexels.com/content/158669/preview/notebook-illustration-laptop-f57f36.png",
+  },
+  {
+    id: 3,
+    name: "หมวดที่ 3",
+    img: "https://pngimg.com/d/keyboard_PNG101839.png",
   },
 ]);
 </script>

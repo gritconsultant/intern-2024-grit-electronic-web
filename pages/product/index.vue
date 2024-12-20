@@ -74,7 +74,7 @@ const products = ref<Product[]>([
   {
     id: 4,
     name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
+    detail: "Wriedsaddddddddd ",
     price: 4000,
     amount: 20,
     img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
@@ -101,11 +101,19 @@ const category = ref<Category[]>([
   {
     id: 1,
     name: "หมวดที่ 1",
+    img: ""
   },
   {
     id: 2,
     name: "หมวดที่ 2",
+    img: ""
   },
+  {
+    id: 3,
+    name: "หมวดที่ 3",
+    img: ""
+  },
+  
 ]);
 </script>
 

@@ -59,10 +59,11 @@
             <div class="flex flex-col justify-between gap-5">
               <div class="h-full">
                 <h1 class="fontsubheader">รายละเอียด</h1>
-                <div class="h-[470px] w-full p-[20px] ">
-                  <div class="h-[410px]  truncate ">
-                    <p class="text-wrap">
-                      หากคุณกำลังมองหาคีย์บอร์ดในงบประมาณประมาณ 500 บาท ควรเลือกคีย์บอร์ดแบบมีสายที่ออกแบบมาเพื่อการใช้งานทั่วไป
+                <div class="h-[470px] w-full p-[20px]">
+                  <div class="h-[410px] truncate">
+                    <p class="text-wrap break-words">
+                      หากคุณกำลังมองหาคีย์บอร์ดในงบประมาณประมาณ 500 บาท
+                      ควรเลือกคีย์บอร์ดแบบมีสายที่ออกแบบมาเพื่อการใช้งานทั่วไป
                       เช่น รุ่นที่รองรับพิมพ์เอกสาร ทำงานออฟฟิศ
                       หรือเล่นเกมเบื้องต้น โดยเน้นไปที่แบรนด์ที่เชื่อถือได้ เช่น
                       Logitech, A4Tech หรือ Nubwo
@@ -79,13 +80,16 @@
                   </div>
                 </div>
               </div>
-              <div class="ml-[10px]">
-                <button
-                  class="bg-[#988FD0] text-white p-[15px] rounded-[10px] text-center text-xl w-[350px]"
-                >
+              <button
+                class="bg-[#988FD0] text-white p-[15px] rounded-[10px] text-center text-xl w-[350px] ml-[10px] transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300"
+              >
+                <div class="flex justify-center gap-4">
+                  <div>
+                    <i class="fa-solid fa-cart-plus"></i>
+                  </div>
                   เพิ่มใส่ตะกร้า
-                </button>
-              </div>
+                </div>
+              </button>
             </div>
           </div>
         </div>
