@@ -2,17 +2,17 @@
   <div class="p-6 flex gap-9 text-black border-t-2 border-gray-400">
     <!-- logo n ad -->
     <div class="ml-7">
-      <img src="/images/logo.ico" class="w-[150px] flex" />
+      <img src="/images/logo.ico" class="w-[150px]" />
 
-      <p class="mt-5 ml-4 text-xs">
+      <p class="mt-5 ml-4 detail">
         88/8 หมู่ 12 ตำบลศิลา อำเภอเมือง จังหวัดขอนแก่น 40000
       </p>
     </div>
 
     <!-- menu -->
-    <div class="grid grid-cols-3 w-full text-xs mt-2 ml-10 px-32">
+    <div class="grid grid-cols-3 w-full detail mt-2 ml-10 px-32">
       <div>
-        <div class="font-semibold mb-4">หมวดหมู่</div>
+        <div class="fontsubheader mb-4">หมวดหมู่</div>
         <div
           v-for="(data, i) in page.slice(0, 3)"
           :key="i"
@@ -25,7 +25,7 @@
       </div>
 
       <div>
-        <div class="font-semibold mb-4">ช่วยเหลือ</div>
+        <div class="fontsubheader mb-4">ช่วยเหลือ</div>
         <div
           v-for="(data, i) in page.slice(3, 6)"
           :key="i"
@@ -38,7 +38,7 @@
       </div>
 
       <div>
-        <div class="font-semibold mb-4">ช่องทางการติดต่อ</div>
+        <div class="fontsubheader mb-4">ช่องทางการติดต่อ</div>
         <div>
           <p>อีเมล : GritElectronic@gmail.com</p>
           <p class="mt-1">โทรศัพท์ : 061 - 532 - 9130</p>
@@ -54,17 +54,17 @@ import type { Page } from "~/models/page.model";
 const page = ref<Page[]>([
   {
     name: "โน๊ตบุ๊ค",
-    path: "/laptop",
+    path: "/category/laptop",
     active: false,
   },
   {
     name: "คอมพิวเตอร์",
-    path: "/computer",
+    path: "/category/computer",
     active: false,
   },
   {
     name: "อุปกรณ์เสริม",
-    path: "/accessory",
+    path: "/category/accessorie",
     active: false,
   },
   {

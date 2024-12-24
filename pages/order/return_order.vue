@@ -10,38 +10,52 @@
       <div class="flex justify-between">
         <div class="mx-10">
           <div>
-            <label for="productname"> ชื่อสินค้า </label> <br />
+            <label for="productname "> ชื่อสินค้า </label> <br />
             <input
               type="text"
               id="productname"
-              class="w-[300px] h-[55px] rounded-xl mt-4 shadow-lg text-xs px-2 text-black border-2 "
+              class="w-[400px] h-[45px] mt-2 inputbox"
             />
           </div>
-          <div class="mt-12">
+          <div class="mt-5">
             <label for="productprice"> ราคาสินค้า </label> <br />
             <input
               type="text"
               id="productprice"
-              class="w-[300px] h-[55px] rounded-xl mt-5 shadow-lg text-xs px-2 text-black border-2"
+              class="w-[400px] h-[45px] mt-2 inputbox"
             />
           </div>
+
+            <div class="mt-5">
+              <label for="file_input">หลักฐานการชำระเงิน</label> <br />
+              <input
+                class=" w-[400px] mt-2 inputphoto"
+                id="file_input"
+                type="file"
+              />
+            </div>
         </div>
 
-        <div class="">
+        <div>
           <div class="mr-10">
             <label for="productdetail"> รายละเอียดขอคืนสินค้า </label> <br />
-                <input
+            <input
               type="text"
               id="productdetail"
-              class="w-[450px] h-[55px] rounded-xl text-xs px-2  mt-5 shadow-lg text-black border-2"
+              class="w-[450px] h-[45px] mt-4 inputbox"
             />
+          </div>
 
+          <div class="mt-5 flex justify-between items-center">
+            <label class="text-sm" for="file_input">แนบรูปสินค้า</label>
+            <input
+              class="mr-10 w-[370px] inputphoto"
+              id="file_input"
+              type="file"
+            />
           </div>
         </div>
       </div>
-
-
-
     </div>
   </div>
 </template>

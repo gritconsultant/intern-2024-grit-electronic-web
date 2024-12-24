@@ -16,7 +16,7 @@
           <input
             type="text"
             id="email"
-            class="w-full h-[40px] rounded-xl mt-4 bg-gray-200 shadow-lg text-xs px-2"
+            class="w-full h-[40px] mt-4 inputbox text-black"
             v-model="email"
             required
             placeholder="Enter Your Email"
@@ -26,7 +26,7 @@
 
       <div class="px-6 mt-16 text-sm font-medium text-white flex justify-center">
         <div
-          class="w-[300px] h-[40px] bg-indigo-400 hover:bg-blue-400 rounded-xl"
+          class="w-[300px] h-[40px] bg-violet-400 hover:bg-[#765798] rounded-xl"
         >
           <button
             @click="handleSend"

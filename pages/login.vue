@@ -10,15 +10,15 @@
         <h1>Log in</h1>
       </div>
 
-      <form @submit.prevent="handleLogin">
+
         <div class="text-sm text-white mt-10">
           <div class="w-full px-6">
             <label for="username"> Username </label> <br />
             <input
               type="text"
               id="username"
-              v-model="form.username"
-              class="w-full h-[40px] rounded-xl mt-2 bg-gray-200 shadow-lg text-xs px-2 text-black"
+              v-model="login.username"
+              class="w-full h-[40px] mt-2 inputbox text-black"
               required
               placeholder="Enter Your Username"
             />
@@ -31,13 +31,13 @@
             <input
               :type="passwordVisible ? 'text' : 'password'"
               id="password"
-              v-model="form.password"
-              class="w-full h-[40px] rounded-xl mt-2 bg-gray-200 shadow-lg text-xs px-2 text-black"
+              v-model="login.password"
+              class="w-full h-[40px] mt-2 inputbox text-black"
               required
               placeholder="Enter Your Password"
             />
             <span
-              class="absolute -translate-x-7 translate-y-[18px] cursor-pointer"
+              class="absolute -translate-x-7 translate-y-[18px] cursor-pointer text-black"
               @click="togglePasswordVisibility"
             >
               <i
@@ -49,24 +49,17 @@
 
         <div class="flex justify-end m-8 text-sm">
         <NuxtLink to="/forgetpassword" class="text-red-500 font-semibold underline"
-          >Forget Password?</NuxtLink
-        >
+          >Forget Password?</NuxtLink>
       </div>
 
-        <div class="px-6 mt-12 text-sm font-medium text-white flex justify-center">
+        <div class="px-6 mt-12 flex justify-center">
           <button
             type="submit"
-            :disabled="!form.username || !form.password"
-            class="w-[300px] h-[40px] rounded-xl text-white"
-            :class="{
-              'bg-indigo-400 hover:bg-blue-400': form.username && form.password,
-              'bg-gray-400 cursor-not-allowed': !form.username || !form.password,
-            }"
+            class="w-[300px] h-[40px] rounded-xl text-white bg-violet-400 hover:bg-[#765798]"
           >
-            Log in
+          <NuxtLink to="/">Log in</NuxtLink>
           </button>
         </div>
-      </form>
 
       <hr class="border-white mx-6 mt-8" />
 
@@ -81,7 +74,12 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import { Login } from "~/models/page.model";
+import service from "~/service";
+import { useIndexStore } from "~/store/main";
 
+
+const store = useIndexStore();
 
 definePageMeta({
   layout: "auth",
@@ -89,7 +87,7 @@ definePageMeta({
 
 const router = useRouter(); // ใช้ router สำหรับเปลี่ยนหน้า
 
-const form = reactive({
+const login = ref<Login>({
   username: "",
   password: "",
 });
@@ -100,15 +98,27 @@ const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
-const handleLogin = () => {
-  // ตรวจสอบว่ากรอกครบทั้ง username และ password
-  if (form.username && form.password) {
-    // เปลี่ยนหน้าไปที่ /index
-    router.push("/");
-  } else {
-    alert("Please fill in both username and password.");
-  }
-};
+// const addLogin = async () => {
+//   await service.login
+//     .addLogin(login.value)
+//     .then((resp: any) => {
+
+      
+//       const refToken = useStatefulCookie("token");
+//       refToken.value = resp.data.token;
+//       console.log(resp.data);
+//       store.$state.token = resp.data.token;
+
+
+//       if (store.$state.token != null) {
+//         router.push("/");
+//       }
+//     })
+//     .catch((error: any) => {
+//       console.log(error.data);
+//     })
+//     .finally(() => {});
+// };
 </script>
 
 <style scoped>

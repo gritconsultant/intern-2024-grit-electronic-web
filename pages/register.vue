@@ -10,7 +10,6 @@
         <h1>Register</h1>
       </div>
 
-      <form @submit.prevent="handleRegister">
         <!-- Firstname & Lastname -->
         <div class="flex justify-center text-white text-sm mt-4">
           <div class="w-full px-6">
@@ -18,8 +17,7 @@
             <input
               type="text"
               id="firstname"
-              v-model="form.firstname"
-              class="w-full h-[40px] rounded-xl mt-2 bg-gray-200 shadow-lg text-xs px-2 text-black"
+              class="w-full h-[40px] mt-2 inputbox text-black"
               required
               placeholder="Enter Your Firstname"
             />
@@ -30,8 +28,7 @@
             <input
               type="text"
               id="lastname"
-              v-model="form.lastname"
-              class="w-full h-[40px] rounded-xl mt-2 bg-gray-200 shadow-lg text-xs px-2 text-black"
+              class="w-full h-[40px] mt-2 inputbox text-black"
               required
               placeholder="Enter Your Lastname"
             />
@@ -45,8 +42,7 @@
             <input
               type="text"
               id="username"
-              v-model="form.username"
-              class="w-full h-[40px] rounded-xl mt-2 bg-gray-200 shadow-lg text-xs px-2 text-black"
+              class="w-full h-[40px] mt-2 inputbox text-black"
               required
               placeholder="Enter Your Username"
             />
@@ -57,8 +53,7 @@
             <input
               type="text"
               id="phone"
-              v-model="form.phone"
-              class="w-full h-[40px] rounded-xl mt-2 bg-gray-200 shadow-lg text-xs px-2 text-black"
+              class="w-full h-[40px] mt-2 inputbox text-black"
               required
               placeholder="Enter Phone Number"
               @input="validatePhone"
@@ -73,8 +68,7 @@
             <input
               type="email"
               id="email"
-              v-model="form.email"
-              class="w-full h-[40px] rounded-xl mt-2 bg-gray-200 shadow-lg text-xs px-2 text-black"
+              class="w-full h-[40px] mt-2 inputbox text-black"
               required
               placeholder="Enter Email Address"
             />
@@ -88,25 +82,23 @@
             <input
               :type="passwordVisible ? 'text' : 'password'"
               id="password"
-              v-model="form.password"
-              class="w-full h-[40px] rounded-xl mt-2 bg-gray-200 shadow-lg text-xs px-2 text-black border"
+              class="w-full h-[40px] mt-2 inputbox text-black"
               :class="{ 'border-red-500': passwordError }"
               required
               placeholder="Enter Your Password"
-              @input="validatePassword"
             />
             <span
-              class="absolute top-[38px] right-8 transform-translate-y-1/2 cursor-pointer"
+              class="absolute top-[38px] right-8 transform-translate-y-1/2 cursor-pointer text-black"
               @click="togglePasswordVisibility"
             >
               <i
                 :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
               ></i>
             </span>
-            <p v-if="passwordError" class="text-red-500 text-xs mt-1">
+            <!-- <p v-if="passwordError" class="text-red-500 text-xs mt-1">
               Password must be at least 8 characters, include an uppercase
               letter, a lowercase letter, and a number.
-            </p>
+            </p> -->
           </div>
 
           <div class="w-full px-5">
@@ -114,8 +106,7 @@
             <input
               type="password"
               id="confirmPassword"
-              v-model="form.confirmPassword"
-              class="w-full h-[40px] rounded-xl mt-2 bg-gray-200 shadow-lg text-xs px-2 text-black"
+              class="w-full h-[40px] mt-2 inputbox text-black"
               required
               placeholder="Enter Confirm Password"
             />
@@ -128,12 +119,11 @@
         >
           <button
             type="submit"
-            class="w-[300px] h-[40px] bg-indigo-400 hover:bg-blue-400 rounded-xl text-white"
+            class="w-[300px] h-[40px] bg-violet-400 hover:bg-[#765798] rounded-xl text-white"
           >
-            Register
+            <NuxtLink to="/login">Register</NuxtLink>
           </button>
         </div>
-      </form>
 
       <hr class="border-white mt-5 mx-6" />
 
@@ -149,16 +139,17 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
+import { Register } from "~/models/page.model";
 
 definePageMeta({
   layout: "auth",
 });
 
-const form = reactive({
+const register = ref<Register>({
   firstname: "",
   lastname: "",
   username: "",
-  phone: "",
+  phone: 0,
   email: "",
   password: "",
   confirmPassword: "",
@@ -167,32 +158,17 @@ const form = reactive({
 const passwordVisible = ref(false); // สถานะสำหรับแสดง/ซ่อนรหัสผ่าน
 const passwordError = ref(false); // แสดงข้อผิดพลาดของรหัสผ่าน
 
-const validatePhone = () => {
-  form.phone = form.phone.replace(/[^0-9]/g, "").slice(0, 10);
-};
 
-const validatePassword = () => {
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  passwordError.value = !passwordPattern.test(form.password);
-};
+
+// const validatePassword = () => {
+//   const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+//   passwordError.value = !passwordPattern.test(register.value.password);
+// };
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
-const handleRegister = async () => {
-  if (form.password !== form.confirmPassword) {
-    alert("Passwords do not match.");
-    return;
-  }
-
-  if (passwordError.value) {
-    alert("Fix the password error before submitting.");
-    return;
-  }
-
-  alert("Registration successful!");
-};
 </script>
 
 <style scoped></style>

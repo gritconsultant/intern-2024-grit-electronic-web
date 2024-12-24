@@ -7,6 +7,7 @@
 .fontsubheader{
     @apply font-bold text-sm  text-slate-950
 }
+
 .detail {
     @apply text-xs  
 }
@@ -31,5 +32,14 @@
 }
 
 .headercategory{
-    @apply  font-bold text-3xl text-[#424242]
+    @apply  font-bold text-2xl text-[#424242]
+}
+
+.inputbox {
+    @apply rounded-xl shadow-md border-2 px-2 text-xs
+}
+
+.inputphoto{
+    @apply p-1 rounded-xl shadow-md cursor-pointer bg-gray-50 dark:text-gray-400 
+    focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 border-2
 }
