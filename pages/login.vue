@@ -76,10 +76,10 @@ import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { Login } from "~/models/page.model";
 import service from "~/service";
-import { useIndexStore } from "~/store/main";
+// import { useIndexStore } from "~/store/main";
 
 
-const store = useIndexStore();
+// const store = useIndexStore();
 
 definePageMeta({
   layout: "auth",
