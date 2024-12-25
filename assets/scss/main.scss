@@ -43,3 +43,7 @@
     @apply p-1 rounded-xl shadow-md cursor-pointer bg-gray-50 dark:text-gray-400 
     focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 border-2
 }
+
+.texthide {
+    @apply overflow-hidden text-ellipsis whitespace-nowrap max-w-[200px]
+}

@@ -12,3 +12,11 @@ export interface Category {
     name: string;
     img: string;
 }
+
+export interface paymentInfo {
+    qrCodeUrl: string, // URL ของ QR Code
+    bankName: string,
+    accountNumber: string,
+    accountName: string,
+    totalAmount: number,
+}

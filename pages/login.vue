@@ -38,8 +38,7 @@
             />
             <span
               class="absolute -translate-x-7 translate-y-[18px] cursor-pointer text-black"
-              @click="togglePasswordVisibility"
-            >
+              @click="togglePasswordVisibility">
               <i
                 :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
               ></i>
@@ -74,7 +73,7 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { Login } from "~/models/page.model";
+import type { Login } from "~/models/page.model";
 import service from "~/service";
 // import { useIndexStore } from "~/store/main";
 
