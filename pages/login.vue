@@ -2,6 +2,7 @@
   <div
     class="h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center"
   >
+
     <div class="rounded-2xl w-[450px] h-[600px] bg-black/50">
       <div class="flex justify-center mt-4">
         <img src="public/images/logoLogin.png" class="w-[230px] mt-2" />

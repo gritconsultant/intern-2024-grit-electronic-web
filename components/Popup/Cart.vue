@@ -102,7 +102,7 @@
       </div>
       <button
         @click="checkout"
-        class="w-full mt-4 text-white py-2 rounded-lg bg-[#988FD0] hover:bg-[#765798]"
+        class="mt-4 popupbtn"
       >
         สั่งซื้อสินค้า
       </button>

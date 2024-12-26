@@ -40,10 +40,21 @@
 }
 
 .inputphoto{
-    @apply p-1 rounded-xl shadow-md cursor-pointer bg-gray-50 dark:text-gray-400 
-    focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 border-2
+    @apply border-2 rounded-md p-1
 }
 
 .texthide {
     @apply overflow-hidden text-ellipsis whitespace-nowrap max-w-[200px]
+}
+
+.popupbtn {
+    @apply w-[150px] text-white py-2 rounded-lg bg-[#988FD0] hover:bg-[#765798]
+}
+
+.sidebtn {
+    @apply flex items-center p-2  rounded-r-full hover:bg-[#988FD0] hover:text-white
+}
+
+.boxprofile {
+    @apply border-solid border-black/20 border rounded-lg
 }
