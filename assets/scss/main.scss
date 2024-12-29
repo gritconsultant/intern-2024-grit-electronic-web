@@ -52,9 +52,13 @@
 }
 
 .sidebtn {
-    @apply flex items-center p-2  rounded-r-full hover:bg-[#988FD0] hover:text-white
+    @apply flex items-center p-2  rounded-r-full hover:bg-[#988FD0]/50 hover:text-white
 }
 
 .boxprofile {
     @apply border-solid border-black/20 border rounded-lg
+}
+
+.active-btn {
+    @apply bg-[#988FD0] text-white font-semibold
 }

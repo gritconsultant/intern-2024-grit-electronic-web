@@ -1,9 +1,9 @@
 <template>
   <div class="grid grid-cols-2">
-    <div class="bg-pink-500 border-2">
+    <div class=" border-2">
       <div class="p-[50px]">tack pages</div>
 
-      <div class=" bg-lime-300 flex justify-center">
+      <div class="  flex justify-center">
         <div>
           <ol class="flex gap-[100px]">
             <li
@@ -71,7 +71,7 @@
         </div>
       </div>
     </div>
-    <div class="bg-lime-400 border-2">lllll</div>
+    <div class=" border-2">lllll</div>
   </div>
 </template>
 
