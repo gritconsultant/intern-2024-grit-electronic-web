@@ -2,7 +2,7 @@
   <div>
     <Header />
     <slot />
-    <Footer />
+    <Footer/>
   </div>
 </template>
 
@@ -11,4 +11,5 @@
 </script>
 
 
-<style scoped></style>
+<style scoped>
+</style>

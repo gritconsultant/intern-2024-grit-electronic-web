@@ -1,34 +1,39 @@
 <template>
   <div
-    class="h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center"
+    class="min-h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center px-4"
   >
-    <div class="rounded-2xl w-[600px] h-auto bg-black/50">
-      <div class="flex justify-center mt-4">
-        <img src="public/images/logoLogin.png" class="w-[230px] mt-2" />
+    <form
+      class="rounded-2xl w-full max-w-[500px] bg-black/50 p-6 h-auto m-10"
+      @submit.prevent="handleRegister"
+    >
+      <!-- Logo -->
+      <div class="flex justify-center">
+        <img src="public/images/logoLogin.png" class="w-[150px] sm:w-[200px] md:w-[230px]" />
       </div>
-      <div class="flex justify-center font-normal text-xl text-white">
+      <div class="flex justify-center font-normal text-xl text-white mt-4">
         <h1>Register</h1>
       </div>
 
       <!-- Firstname & Lastname -->
-      <div class="flex justify-center text-white text-sm mt-4">
-        <div class="w-full px-6">
-          <label for="firstname"> Firstname </label> <br />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-white text-sm mt-6">
+        <div>
+          <label for="firstname"> Firstname </label>
           <input
             type="text"
             id="firstname"
-            class="w-full h-[40px] mt-2 inputbox text-black"
+            v-model="register.firstname"
+            class="w-full h-[45px] mt-2 inputbox text-black rounded-md px-3"
             required
             placeholder="Enter Your Firstname"
           />
         </div>
-
-        <div class="w-full px-6">
-          <label for="lastname"> Lastname </label> <br />
+        <div>
+          <label for="lastname"> Lastname </label>
           <input
             type="text"
             id="lastname"
-            class="w-full h-[40px] mt-2 inputbox text-black"
+            v-model="register.lastname"
+            class="w-full h-[45px] mt-2 inputbox text-black rounded-md px-3"
             required
             placeholder="Enter Your Lastname"
           />
@@ -36,24 +41,25 @@
       </div>
 
       <!-- Username & Phone -->
-      <div class="flex justify-center text-white text-sm mt-4">
-        <div class="w-full px-5">
-          <label for="username"> Username </label> <br />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-white text-sm mt-6">
+        <div>
+          <label for="username"> Username </label>
           <input
             type="text"
             id="username"
-            class="w-full h-[40px] mt-2 inputbox text-black"
+            v-model="register.username"
+            class="w-full h-[45px] mt-2 inputbox text-black rounded-md px-3"
             required
             placeholder="Enter Your Username"
           />
         </div>
-
-        <div class="w-full px-5">
-          <label for="phone"> Phone Number </label> <br />
+        <div>
+          <label for="phone"> Phone Number </label>
           <input
             type="text"
             id="phone"
-            class="w-full h-[40px] mt-2 inputbox text-black"
+            v-model="register.phone"
+            class="w-full h-[45px] mt-2 inputbox text-black rounded-md px-3"
             required
             placeholder="Enter Phone Number"
           />
@@ -61,33 +67,33 @@
       </div>
 
       <!-- Email -->
-      <div class="flex justify-center text-white text-sm mt-4">
-        <div class="w-full px-5">
-          <label for="email"> Email </label> <br />
-          <input
-            type="email"
-            id="email"
-            class="w-full h-[40px] mt-2 inputbox text-black"
-            required
-            placeholder="Enter Email Address"
-          />
-        </div>
+      <div class="text-white text-sm mt-6">
+        <label for="email"> Email </label>
+        <input
+          type="email"
+          id="email"
+          v-model="register.email"
+          class="w-full h-[45px] mt-2 inputbox text-black rounded-md px-3"
+          required
+          placeholder="Enter Email Address"
+        />
       </div>
 
       <!-- Password & Confirm Password -->
-      <div class="flex justify-center text-white text-sm mt-4">
-        <div class="w-full px-5 relative">
-          <label for="password"> Password </label> <br />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-white text-sm mt-6">
+        <div class="relative">
+          <label for="password"> Password </label>
           <input
             :type="passwordVisible ? 'text' : 'password'"
             id="password"
-            class="w-full h-[40px] mt-2 inputbox text-black"
+            v-model="register.password"
+            class="w-full h-[45px] mt-2 inputbox text-black rounded-md px-3"
             :class="{ 'border-red-500': passwordError }"
             required
             placeholder="Enter Your Password"
           />
           <span
-            class="absolute top-[38px] right-8 transform-translate-y-1/2 cursor-pointer text-black"
+            class="absolute right-3 top-[42px] cursor-pointer text-black"
             @click="togglePasswordVisibility"
           >
             <i :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
@@ -97,14 +103,13 @@
             a lowercase letter, and a number.
           </p>
         </div>
-
-        <div class="w-full px-5">
-          <label for="confirmPassword"> Confirm Password </label> <br />
+        <div>
+          <label for="confirmPassword"> Confirm Password </label>
           <input
             v-model="register.confirmPassword"
             type="password"
             id="confirmPassword"
-            class="w-full h-[40px] mt-2 inputbox text-black"
+            class="w-full h-[45px] mt-2 inputbox text-black rounded-md px-3"
             required
             placeholder="Enter Confirm Password"
           />
@@ -115,67 +120,73 @@
       </div>
 
       <!-- Register Button -->
-      <div class="px-6 mt-8 text-sm font-medium text-white flex justify-center">
+      <div class="mt-8 flex justify-center">
         <button
           type="submit"
-          class="w-[300px] h-[40px] bg-violet-400 hover:bg-[#765798] rounded-xl text-white"
+          class="w-full max-w-[300px] h-[45px] bg-violet-400 hover:bg-[#765798] rounded-xl text-white"
         >
-          <NuxtLink to="/login">Register</NuxtLink>
+          Register
         </button>
       </div>
 
-      <hr class="border-white mt-5 mx-6" />
+      <!-- Divider -->
+      <hr class="border-white mt-6" />
 
-      <div class="flex justify-center mt-5 text-sm mb-5">
-        <div class="text-white">Already have an account?</div>
-        <NuxtLink to="/login" class="text-red-500 ml-2 font-semibold underline"
-          >Log in</NuxtLink
+      <!-- Log in Link -->
+      <div class="flex justify-center mt-6 text-sm">
+        <p class="text-white">Already have an account?</p>
+        <NuxtLink
+          to="/login"
+          class="text-red-500 ml-2 font-semibold underline"
         >
+          Log in
+        </NuxtLink>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import type { Register } from "~/models/page.model";
+import { ref } from "vue";
 
 definePageMeta({
   layout: "auth",
 });
 
-const register = ref<Register>({
+const register = ref({
   firstname: "",
   lastname: "",
   username: "",
-  phone: 0,
+  phone: "",
   email: "",
   password: "",
   confirmPassword: "",
 });
 
-const passwordVisible = ref(false); // สถานะสำหรับแสดง/ซ่อนรหัสผ่าน
-const passwordError = ref(false); // แสดงข้อผิดพลาดของรหัสผ่าน
+const passwordVisible = ref(false);
+const passwordError = ref(false);
 const passwordMismatch = ref(false);
-
-const validatePassword = () => {
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  passwordError.value = !passwordPattern.test(register.value.password);
-};
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
 const handleRegister = () => {
+  if (!register.value.firstname || !register.value.lastname) {
+    alert("Please fill in all fields");
+    return;
+  }
   if (register.value.password !== register.value.confirmPassword) {
     passwordMismatch.value = true;
-  } else {
-    passwordMismatch.value = false;
-    // Proceed with registration logic
-    console.log("Registration successful", register.value);
+    alert("Passwords do not match.");
+    return;
   }
+  passwordMismatch.value = false;
+
+  console.log("Registration successful", register.value);
+  alert("Registration successful!");
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

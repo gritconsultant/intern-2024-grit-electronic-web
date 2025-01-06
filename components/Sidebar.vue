@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full boxprofile m-9">
+  <div class="h-full boxprofile m-9 grid justify-center items-center">
     <div class="flex justify-center items-center border-b pb-4 m-4">
       <div >
         <p class="font-medium text-lg">UserName</p>
@@ -19,7 +19,7 @@
         </li>
 
         <li>
-          <NuxtLink to="/profile/address" class="sidebtn" active-class="active-btn">
+          <NuxtLink to="/order/checkout" class="sidebtn" active-class="active-btn">
             <p class="ml-2">คำสั่งซื้อสินค้า</p>
           </NuxtLink>
         </li>

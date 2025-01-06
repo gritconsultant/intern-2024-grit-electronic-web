@@ -20,3 +20,10 @@ export interface paymentInfo {
     accountName: string,
     totalAmount: number,
 }
+
+export interface Address {
+    title: string;
+    name: string;
+    address: string;
+    phone: string;
+}  

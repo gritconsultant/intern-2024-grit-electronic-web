@@ -1,46 +1,48 @@
 <template>
   <div
-    class="h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center"
+    class="min-h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center px-4"
   >
-    <div class="rounded-2xl w-[450px] h-[600px] bg-black/50">
-      <div class="flex justify-center mt-10">
-        <img src="public/images/logoLogin.png" class="w-[230px] mt-4" />
+    <div class="rounded-2xl w-full max-w-[450px] bg-black/50 p-6">
+      <!-- Logo -->
+      <div class="flex justify-center mt-4">
+        <img src="public/images/logoLogin.png" class="w-[150px] sm:w-[200px] md:w-[230px]" />
       </div>
       <div class="flex justify-center font-normal text-xl text-white mt-4">
         <h1>Forget Password</h1>
       </div>
 
-      <div class="text-sm text-white mt-12">
-        <div class="w-full px-6">
-          <label for="email"> Email </label> <br />
-          <input
-            type="text"
-            id="email"
-            class="w-full h-[40px] mt-4 inputbox text-black"
-            v-model="email"
-            required
-            placeholder="Enter Your Email"
-          />
-        </div>
+      <!-- Email Input -->
+      <div class="text-sm text-white mt-6">
+        <label for="email"> Email </label>
+        <input
+          type="text"
+          id="email"
+          class="w-full h-[45px] mt-4 inputbox text-black px-3 rounded-md"
+          v-model="email"
+          required
+          placeholder="Enter Your Email"
+        />
       </div>
 
-      <div class="px-6 mt-16 text-sm font-medium text-white flex justify-center">
-        <div
-          class="w-[300px] h-[40px] bg-violet-400 hover:bg-[#765798] rounded-xl"
+      <!-- Send Button -->
+      <div class="mt-10 flex justify-center">
+        <button
+          @click="handleSend"
+          class="w-full max-w-[300px] h-[45px] bg-violet-400 hover:bg-[#765798] rounded-xl text-white"
         >
-          <button
-            @click="handleSend"
-            class="flex items-center justify-center w-full h-full"
-          >
-            Send
-          </button>
-        </div>
+          Send
+        </button>
       </div>
 
-
-      <div class="flex justify-center mt-5 text-sm text-white"> Back to ->
-        <NuxtLink to="/login" class="text-red-500 ml-3 font-semibold underline"
-          >Log in</NuxtLink>
+      <!-- Back to Log in -->
+      <div class="flex justify-center mt-6 text-sm text-white">
+        <p>Back to -></p>
+        <NuxtLink
+          to="/login"
+          class="text-red-500 ml-2 font-semibold underline"
+        >
+          Log in
+        </NuxtLink>
       </div>
     </div>
   </div>
@@ -108,4 +110,5 @@ const handleSend = async () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

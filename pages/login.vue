@@ -1,124 +1,123 @@
 <template>
   <div
-    class="h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center"
+    class="min-h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center px-4"
   >
-
-    <div class="rounded-2xl w-[450px] h-[600px] bg-black/50">
-      <div class="flex justify-center mt-4">
-        <img src="public/images/logoLogin.png" class="w-[230px] mt-2" />
+    <form
+      class="rounded-2xl w-full max-w-[450px] bg-black/50 p-6 h-auto m-10"
+      @submit.prevent="handleLogin"
+    >
+      <!-- Logo -->
+      <div class="flex justify-center">
+        <img src="public/images/logoLogin.png" class="w-[150px] sm:w-[200px] md:w-[230px]" />
       </div>
-      <div class="flex justify-center font-normal text-xl text-white mt-2">
+      <div class="flex justify-center font-normal text-xl text-white mt-4">
         <h1>Log in</h1>
       </div>
 
-
-        <div class="text-sm text-white mt-10">
-          <div class="w-full px-6">
-            <label for="username"> Username </label> <br />
-            <input
-              type="text"
-              id="username"
-              v-model="login.username"
-              class="w-full h-[40px] mt-2 inputbox text-black"
-              required
-              placeholder="Enter Your Username"
-            />
-          </div>
-        </div>
-
-        <div class="text-sm text-white mt-10">
-          <div class="w-full px-6">
-            <label for="password"> Password </label> <br />
-            <input
-              :type="passwordVisible ? 'text' : 'password'"
-              id="password"
-              v-model="login.password"
-              class="w-full h-[40px] mt-2 inputbox text-black"
-              required
-              placeholder="Enter Your Password"
-            />
-            <span
-              class="absolute -translate-x-7 translate-y-[18px] cursor-pointer text-black"
-              @click="togglePasswordVisibility">
-              <i
-                :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"
-              ></i>
-            </span>
-          </div>
-        </div>
-
-        <div class="flex justify-end m-8 text-sm">
-        <NuxtLink to="/forgetpassword" class="text-red-500 font-semibold underline"
-          >Forget Password?</NuxtLink>
+      <!-- Username Input -->
+      <div class="text-sm text-white mt-6">
+        <label for="username"> Username </label>
+        <input
+          type="text"
+          id="username"
+          v-model="login.username"
+          class="w-full h-[45px] mt-2 inputbox text-black px-3 rounded-md"
+          required
+          placeholder="Enter Your Username"
+        />
       </div>
 
-        <div class="px-6 mt-12 flex justify-center">
-          <button
-            type="submit"
-            class="w-[300px] h-[40px] rounded-xl text-white bg-violet-400 hover:bg-[#765798]"
-          >
-          <NuxtLink to="/">Log in</NuxtLink>
-          </button>
-        </div>
-
-      <hr class="border-white mx-6 mt-8" />
-
-      <div class="flex justify-center mt-5 text-sm">
-        <div class="text-white">Don’t have an account?</div>
-        <NuxtLink to="/register" class="text-red-500 ml-2 font-semibold underline">Register now</NuxtLink>
+      <!-- Password Input -->
+      <div class="text-sm text-white mt-6 relative">
+        <label for="password"> Password </label>
+        <input
+          :type="passwordVisible ? 'text' : 'password'"
+          id="password"
+          v-model="login.password"
+          class="w-full h-[45px] mt-2 inputbox text-black px-3 rounded-md"
+          required
+          placeholder="Enter Your Password"
+        />
+        <span
+          class="absolute right-3 top-[38px] cursor-pointer text-black"
+          @click="togglePasswordVisibility"
+        >
+          <i :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+        </span>
       </div>
-    </div>
+
+      <!-- Forget Password -->
+      <div class="flex justify-end mt-4 text-sm">
+        <NuxtLink
+          to="/forgetpassword"
+          class="text-red-500 font-semibold underline"
+        >
+          Forget Password?
+        </NuxtLink>
+      </div>
+
+      <!-- Login Button -->
+      <div class="mt-8 flex justify-center">
+        <button
+          type="submit"
+          class="w-full max-w-[300px] h-[45px] bg-violet-400 hover:bg-[#765798] rounded-xl text-white"
+          @click="redirectToIndex"
+        >
+          Log in
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <hr class="border-white my-6" />
+
+      <!-- Register Now -->
+      <div class="flex justify-center text-sm">
+        <p class="text-white">Don’t have an account?</p>
+        <NuxtLink
+          to="/register"
+          class="text-red-500 ml-2 font-semibold underline"
+        >
+          Register now
+        </NuxtLink>
+      </div>
+    </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
-import type { Login } from "~/models/page.model";
-import service from "~/service";
-// import { useIndexStore } from "~/store/main";
-
-
-// const store = useIndexStore();
+import { ref } from "vue";
 
 definePageMeta({
   layout: "auth",
 });
 
-const router = useRouter(); // ใช้ router สำหรับเปลี่ยนหน้า
-
-const login = ref<Login>({
+const login = ref({
   username: "",
   password: "",
 });
 
-const passwordVisible = ref(false); // สถานะสำหรับแสดง/ซ่อนรหัสผ่าน
+const passwordVisible = ref(false);
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
-// const addLogin = async () => {
-//   await service.login
-//     .addLogin(login.value)
-//     .then((resp: any) => {
-
-      
-//       const refToken = useStatefulCookie("token");
-//       refToken.value = resp.data.token;
-//       console.log(resp.data);
-//       store.$state.token = resp.data.token;
+const handleLogin = () => {
+  if (!login.value.username || !login.value.password) {
+    alert("Please fill in all fields");
+    return;
+  }
+  console.log("Login successful", login.value);
+  alert("Login successful!");
+};
 
 
-//       if (store.$state.token != null) {
-//         router.push("/");
-//       }
-//     })
-//     .catch((error: any) => {
-//       console.log(error.data);
-//     })
-//     .finally(() => {});
-// };
+const router = useRouter();
+
+// ฟังก์ชันสำหรับเปลี่ยนเส้นทางไปยังหน้า index
+const redirectToIndex = () => {
+  router.push("/"); // เปลี่ยนไปหน้า index
+};
 </script>
 
 <style scoped>
