@@ -125,7 +125,7 @@
       <!-- Mobile Dropdown Menu -->
       <div
         v-if="mobileMenuOpen"
-        class="md:hidden bg-white border-t border-gray-200 py-2"
+        class="md:hidden w-[40%] right-0 absolute top-14 border-t border-gray-200 py-2 bg-pink-500"
       >
         <ul>
           <li class="px-4 py-2">

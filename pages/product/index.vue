@@ -1,37 +1,48 @@
 <template>
   <div>
-    <div class="p-[50px]">
+    <div class="p-[20px] lg:p-[50px]">
       <div>tack pages</div>
-      <div class="flex gap-2 my-6">
-        <h1 class="font-bold text-3xl">สินค้าทั้งหมด</h1>
-        <p class="mt-[10px] text-black/40">(สินค้าทั้งหมด 120 รายการ)</p>
+      <div class="flex flex-col lg:flex-row gap-2 my-6">
+        <h1 class="font-bold text-2xl lg:text-3xl">สินค้าทั้งหมด</h1>
+        <p class="mt-2 lg:mt-[10px] text-black/40">(สินค้าทั้งหมด 120 รายการ)</p>
       </div>
       <!-- select -->
-      <div class="flex gap-5 mt-[50px] pl-3 text-black/40">
+      <div class="flex flex-wrap gap-5 mt-[30px] lg:mt-[50px] pl-3 text-black/40">
         <div>
           ราคา
-          <select name="" id=""></select>
+          <select class="border p-1 rounded">
+            <option value="">ทั้งหมด</option>
+            <option value="">ต่ำกว่า 10,000 บาท</option>
+            <option value="">10,000 - 20,000 บาท</option>
+            <option value="">20,000 - 30,000 บาท</option>
+            <option value="">มากกว่า 30,000 บาท</option>
+          </select>
         </div>
         <div>
           หมวดหมู่
-          <select name="" id=""></select>
+          <select class="border p-1 rounded">
+            <option value="">ทั้งหมด</option>
+            <option value="">คอมพิวเตอร์</option>
+            <option value="">โน๊ตบุ๊ค</option>
+            <option value="">อุปกรณ์เสริม</option>
+          </select>
         </div>
       </div>
-      <hr class="mt-[10px] mb-[100px]" />
+      <hr class="mt-[10px] mb-[50px] lg:mb-[100px]" />
       <!-- cardcategory -->
-      <div class="grid gap-20">
+      <div class="grid gap-10 mg lg:gap-20">
         <div
           v-for="(item, category) in category"
           :key="category"
-          class=" gap-10"
+          class="gap-10"
         >
           <div class="flex justify-between px-1">
             <h1 class="headercategory">{{ item.name }}</h1>
             <!-- -->
-            <div class="mt-[10px] mr-[30px] text-black/40">ทั้งหมด-></div>
+            <div class="mt-[10px] mr-[20px] lg:mr-[30px] text-black/40">ทั้งหมด -></div>
           </div>
-          <div >
-            <div class="mt-[10px] grid grid-cols-4 gap-5">
+          <div>
+            <div class="mt-[10px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               <div v-for="(item, index) in products.slice(0, 4)" :key="index">
                 <CardProduct :product="item" />
               </div>
@@ -117,4 +128,15 @@ const category = ref<Category[]>([
 ]);
 </script>
 
-<style scoped></style>
+<style scoped>
+@media (max-width: 768px) {
+  .headercategory {
+    font-size: 1.25rem;
+  }
+}
+@media (min-width: 1024px) {
+  .headercategory {
+    font-size: 1.5rem;
+  }
+}
+</style>

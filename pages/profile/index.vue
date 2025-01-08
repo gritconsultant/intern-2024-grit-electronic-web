@@ -4,15 +4,15 @@
     <Sidebar />
 
     <!-- Main Content -->
-    <div class="w-full boxprofile m-9 -ml-2">
+    <div class="w-full boxprofile m-9 -ml-2 ">
       <div class="flex justify-between items-center border-b pb-4 m-4">
         <h1 class="font-medium text-lg">ข้อมูลบัญชีผู้ใช้</h1>
       </div>
 
       <div>
         <div>
-          <div class="flex justify-between">
-            <div class="mx-10 mt-2">
+          <div class="grid grid-cols-2">
+            <div class="mt-2 ml-10">
               <div>
                 <label for="username"> ชื่อ - นามสกุล </label> <br />
                 <h1 class="font-bold text-lg">Komkem kku</h1>
@@ -49,14 +49,14 @@
             </div>
 
             <div>
-              <div class="mr-10">
+              <div class="mt-3">
                 <label for="email"> Email </label>
                 <br />
                 <h1 class="font-bold text-lg">Komkem.k@kkumail.com</h1>
               </div>
 
               <div class="mt-5">
-                <label for="phonr">เบอร์โทรศัพท์</label> <br />
+                <label for="phone">เบอร์โทรศัพท์</label> <br />
                 <h1 class="font-bold text-lg">0847765928</h1>
               </div>
             </div>

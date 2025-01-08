@@ -27,7 +27,7 @@
             <h1 class="fontsubheader mt-[3px]">{{ item.name }}</h1>
             <div class="mr-[20px] lg:mr-[30px] text-black/40">ทั้งหมด -></div>
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 my-2">
+          <div class=" max-[1000px]: grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 my-2">
             <!-- cardproduct -->
             <div v-for="(item, i) in products" :key="i">
               <div :to="i">
