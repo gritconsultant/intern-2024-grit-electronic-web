@@ -1,29 +1,33 @@
 <template>
-  <div class="mx-[50px]">
+  <div class="mx-[20px] lg:mx-[50px]">
     <div class="border-[2px] h-[10rem]">Posters</div>
     <div class="grid grid-cols-1 text-center">
-        <h1 class="my-[70px] fontheader">หมวดหมู่สินค้า</h1>
-        <div class="flex justify-center gap-5">
-          <div v-for="(data, category) in category" :key="category">
-            <!-- <NuxtLink to=""> -->
-            <div class="border-2 rounded-[50px] p-1">
-              <div class="w-[80px] h-[80px] object-cover  place-content-center rounded-[10px] p-1 bg-slate-300/5 "><img :src="data.img" alt="" /></div>
+      <h1 class="my-[50px] lg:my-[70px] fontheader">หมวดหมู่สินค้า</h1>
+      <div class="flex flex-wrap justify-center gap-5">
+        <div v-for="(data, category) in category" :key="category" class="text-center">
+          <div class="border-2 rounded-[50px] p-1">
+            <div
+              class="w-[60px] h-[60px] lg:w-[80px] lg:h-[80px] object-cover place-content-center rounded-[10px] p-1 bg-slate-300/5"
+            >
+              <img :src="data.img" alt="" />
             </div>
-            <h1 class="fontsubheader mt-[20px]">{{ data.name }}</h1>
-            <!-- </NuxtLink> -->
           </div>
+          <h1 class="fontsubheader mt-[10px] lg:mt-[20px] text-sm lg:text-base">
+            {{ data.name }}
+          </h1>
         </div>
+      </div>
     </div>
-    <div class="mt-[70px] mx-[50px]">
+    <div class="mt-[50px] lg:mt-[70px] mx-[20px] lg:mx-[50px]">
       <h1 class="fontheader">สินค้าแนะนำ-Recommend</h1>
       <!-- cardcategory -->
       <div class="grid gap-5 mt-[20px]">
         <div v-for="(item, category) in category" :key="category">
           <div class="flex justify-between px-1">
             <h1 class="fontsubheader mt-[3px]">{{ item.name }}</h1>
-            <div class="mr-[30px] text-black/40">ทั้งหมด-></div>
+            <div class="mr-[20px] lg:mr-[30px] text-black/40">ทั้งหมด -></div>
           </div>
-          <div class="grid grid-cols-4 gap-5 my-2">
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 my-2">
             <!-- cardproduct -->
             <div v-for="(item, i) in products" :key="i">
               <div :to="i">
@@ -94,4 +98,21 @@ const category = ref<Category[]>([
 ]);
 </script>
 
-<style scoped></style>
+<style scoped>
+@media (max-width: 768px) {
+  .fontheader {
+    font-size: 1.25rem;
+  }
+  .fontsubheader {
+    font-size: 1rem;
+  }
+}
+@media (min-width: 1024px) {
+  .fontheader {
+    font-size: 2rem;
+  }
+  .fontsubheader {
+    font-size: 1.125rem;
+  }
+}
+</style>

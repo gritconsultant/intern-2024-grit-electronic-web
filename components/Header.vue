@@ -10,7 +10,7 @@
         <!-- Navigation and Icons -->
         <div class="flex items-center justify-between w-full">
           <!-- Navigation Menu -->
-          <div class="hidden md:flex items-center fonsubtheader mt-3">
+          <div class="flex items-center fonsubtheader mt-3">
             <div class="mx-4">
               <NuxtLink to="/product" class="hover:underline">สินค้าทั้งหมด</NuxtLink>
             </div>
@@ -70,7 +70,7 @@
           </div>
 
           <!-- Icons -->
-          <div class="flex items-center gap-4 md:gap-6 mt-3 mx-3 md:mx-5">
+          <div class="hidden md:flex items-center gap-4 md:gap-6 mt-3 mx-3 md:mx-5">
             <img
               class="icons w-6 md:w-8"
               src="https://cdn-icons-png.flaticon.com/256/152/152536.png"
@@ -130,17 +130,47 @@
         <ul>
           <li class="px-4 py-2">
             <NuxtLink to="/product" class="block text-black hover:underline">
-              สินค้าทั้งหมด
+              <img
+              class="icons w-6 md:w-8"
+              src="https://cdn-icons-png.flaticon.com/256/152/152536.png"
+              alt="Search"
+            />
             </NuxtLink>
           </li>
           <li class="px-4 py-2">
             <NuxtLink to="/category" class="block text-black hover:underline">
-              หมวดหมู่สินค้า
+              <img
+              class="icons w-6 md:w-8"
+              src="https://cdn-icons-png.flaticon.com/256/88/88032.png"
+              alt="Shopping Cart"
+            />
             </NuxtLink>
           </li>
           <li class="px-4 py-2">
             <NuxtLink to="/contact" class="block text-black hover:underline">
-              ติดต่อเรา
+              <img
+              class="icons w-6 md:w-8"
+              src="https://cdn-icons-png.flaticon.com/256/157/157990.png"
+              alt="Favorites"
+            />
+            </NuxtLink>
+          </li>
+          <li class="px-4 py-2">
+            <NuxtLink to="/contact" class="block text-black hover:underline">
+              <img
+              class="icons w-6 md:w-8"
+              src="https://cdn-icons-png.flaticon.com/256/388/388652.png"
+              alt="Notifications"
+            />
+            </NuxtLink>
+          </li>
+          <li class="px-4 py-2">
+            <NuxtLink to="/contact" class="block text-black hover:underline">
+              <img
+              class="icons w-6 md:w-8"
+              src="https://cdn-icons-png.flaticon.com/256/268/268441.png"
+              alt="User"
+            />
             </NuxtLink>
           </li>
         </ul>

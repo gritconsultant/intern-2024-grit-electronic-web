@@ -1,162 +1,239 @@
 <template>
-  <div class="flex flex-col min-h-screen">
-    <!-- เนื้อหาหลัก -->
-    <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- คอลัมน์ซ้าย -->
-      <div class="border-2 p-5">
-        <div class="text-center text-xl font-semibold mb-5">Tack Pages</div>
-
-        <!-- ขั้นตอนการสั่งซื้อ -->
-        <div class="bg-red-500 grid justify-center">
-          <div class="flex justify-center bg-lime-400 max-w-full md:w-[500px] p-4 rounded-lg">
-            <ol class="flex gap-4 md:gap-16 overflow-x-auto">
-              <!-- ขั้นตอนที่ 1 -->
-              <li class="text-center">
-                <span
-                  class="flex items-center justify-center w-10 h-10 bg-[#988FD0] text-white rounded-full"
-                >
-                  <svg
-                    class="w-4 h-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 16 12"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M1 5.917 5.724 10.5 15 1.5"
-                    />
-                  </svg>
-                </span>
-                <p class="text-sm mt-4">ตะกร้าสินค้า</p>
-              </li>
-
-              <!-- ขั้นตอนที่ 2 -->
-              <li class="text-center">
-                <span
-                  class="flex items-center justify-center w-10 h-10 bg-gray-100 text-gray-500 rounded-full"
-                >
-                  <svg
-                    class="w-4 h-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 16"
-                  >
-                    <path
-                      d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z"
-                    />
-                  </svg>
-                </span>
-                <p class="text-sm mt-4">รายละเอียดคำสั่งซื้อ</p>
-              </li>
-
-              <!-- ขั้นตอนที่ 3 -->
-              <li class="text-center">
-                <span
-                  class="flex items-center justify-center w-10 h-10 bg-gray-100 text-gray-500 rounded-full"
-                >
-                  <svg
-                    class="w-4 h-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 18 20"
-                  >
-                    <path
-                      d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z"
-                    />
-                  </svg>
-                </span>
-                <p class="text-sm mt-4">ชำระเงิน</p>
-              </li>
-            </ol>
+  <div>
+    <div class="p-10">
+      <div class="mx-[20px] lg:mx-[50px]">
+        <div class="w-full lg:w-3/6 p-2">แท็ก</div>
+        <div class="flex flex-col lg:flex-row justify-between gap-4">
+          <div class="w-full p-2">
+            <!-- photoshow -->
+            <div class="p-2 flex justify-center">
+              <div class="flex justify-center">
+                <img
+                  class="object-cover max-w-full h-auto"
+                  src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
+                  alt=""
+                />
+              </div>
+            </div>
+            <!-- selectphoto -->
+            <div class="flex flex-wrap justify-center gap-2 h-auto p-2">
+              <div class="photoselect">
+                <img
+                  class="object-cover max-w-[60px] lg:max-w-[80px]"
+                  src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-side-view.jpg"
+                  alt=""
+                />
+              </div>
+              <div class="photoselect">
+                <img
+                  class="object-cover max-w-[60px] lg:max-w-[80px]"
+                  src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
+                  alt=""
+                />
+              </div>
+              <div class="photoselect">
+                <img
+                  class="object-cover max-w-[60px] lg:max-w-[80px]"
+                  src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-front-view(1).jpg"
+                  alt=""
+                />
+              </div>
+              <div class="photoselect">
+                <img
+                  class="object-cover max-w-[60px] lg:max-w-[80px]"
+                  src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
+                  alt=""
+                />
+              </div>
+            </div>
+          </div>
+          <!-- detailproduct -->
+          <div class="w-full lg:w-3/6 p-5">
+            <h1 class="fontsubheader">ชื่อ</h1>
+            <div class="mt-[6px] flex flex-wrap gap-2 lg:gap-5">
+              <div>star number</div>
+              |
+              <div>total review</div>
+              |
+              <div>like</div>
+            </div>
+            <div class="my-[20px] font-semibold text-[#FF0808] text-2xl lg:text-4xl">
+              ฿4500
+            </div>
+            <div class="flex flex-col justify-between gap-5">
+              <div class="h-full">
+                <h1 class="fontsubheader">รายละเอียด</h1>
+                <div class="h-[200px] lg:h-[470px] w-full p-[20px] overflow-auto">
+                  <p class="text-wrap break-words">
+                    หากคุณกำลังมองหาคีย์บอร์ดในงบประมาณประมาณ 500 บาท ควรเลือกคีย์บอร์ดแบบมีสายที่ออกแบบมาเพื่อการใช้งานทั่วไป เช่น รุ่นที่รองรับพิมพ์เอกสาร ทำงานออฟฟิศ หรือเล่นเกมเบื้องต้น โดยเน้นไปที่แบรนด์ที่เชื่อถือได้ เช่น Logitech, A4Tech หรือ Nubwo ซึ่งมักให้ความทนทานและการตอบสนองที่ดีในราคาที่คุ้มค่า สำหรับการพิมพ์ ควรเลือกคีย์บอร์ดแบบเมมเบรนที่มีปุ่มกดนุ่มสบาย ช่วยลดความเมื่อยล้าระหว่างการใช้งาน หากคุณต้องการใช้งานเพื่อการเล่นเกมแบบเบา ๆ อาจมองหารุ่นที่มีดีไซน์ทันสมัย ปุ่มที่ตอบสนองรวดเร็ว และรองรับฟีเจอร์ Anti-Ghosting ในบางปุ่มสำคัญ ควรตรวจสอบรีวิวออนไลน์และทดลองกดปุ่มจริงหากเป็นไปได้ เพื่อให้แน่ใจว่าคีย์บอร์ดที่เลือกเหมาะกับการใช้งานและมอบประสบการณ์ที่ดีที่สุดในงบประมาณจำกัดของคุณ!
+                  </p>
+                </div>
+              </div>
+              <button
+                class="bg-[#988FD0] text-white p-[15px] rounded-[10px] text-center text-lg lg:text-xl w-full lg:w-[350px] ml-[10px] transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300"
+              >
+                <div class="flex justify-center gap-4">
+                  <div>
+                    <i class="fa-solid fa-cart-plus"></i>
+                  </div>
+                  เพิ่มใส่ตะกร้า
+                </div>
+              </button>
+            </div>
           </div>
         </div>
-
-        <!-- ที่อยู่ -->
-        <div class="mt-5">
-          <div class="bg-pink-500 p-3 flex justify-between items-center border-2">
-            <p>ที่อยู่ของคุณ</p>
-            <p
-              class="text-xs text-black/50 hover:underline cursor-pointer"
-            >
-              เปลี่ยนที่อยู่
-            </p>
+        <hr class="hr" />
+        <!-- review -->
+        <div class="h-auto lg:h-[500px] p-[20px]">
+          <h1 class="fontheader">รีวิวสินค้า</h1>
+          <div class="flex flex-wrap gap-5">
+            <div>star number</div>
+            |
+            <div>total review</div>
           </div>
-          <div class="border-2 mt-3 p-3">
-            <p>ที่อยู่ของร้านค้า</p>
+          <!-- comment -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 p-[20px]">
+            <!-- cardreview -->
+            <div
+              v-for="(item, index) in [1,2,3]"
+              :key="index"
+              class="border-2 rounded-[5px] p-5 w-full lg:w-[400px] object-cover"
+            >
+              <div class="flex justify-between">
+                <div class="flex flex-col items-center gap-2">
+                  <h1 class="subheader w-full">ชื่อ</h1>
+                  <div>createAt</div>
+                </div>
+                <div class="flex flex-col items-center gap-2 w-2/4">
+                  <div class="subheader">4</div>
+                  <div class="icons flex justify-center">
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/256/15853/15853959.png"
+                      alt=""
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/256/15853/15853959.png"
+                      alt=""
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/256/15853/15853959.png"
+                      alt=""
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/256/15853/15853959.png"
+                      alt=""
+                    />
+                    <img
+                      src="https://cdn-icons-png.flaticon.com/256/15853/15853959.png"
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <hr class="hr" />
+              <div>
+                <div class="detail p-2 h-[90px]">details</div>
+                <div class="flex flex-wrap justify-center gap-2 p-2">
+                  <img
+                    class="photoreview max-w-[60px] lg:max-w-[80px]"
+                    src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-side-view.jpg"
+                    alt=""
+                  />
+                  <img
+                    class="photoreview max-w-[60px] lg:max-w-[80px]"
+                    src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
+                    alt=""
+                  />
+                  <img
+                    class="photoreview max-w-[60px] lg:max-w-[80px]"
+                    src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-front-view(1).jpg"
+                    alt=""
+                  />
+                  <img
+                    class="photoreview max-w-[60px] lg:max-w-[80px]"
+                    src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- คอลัมน์ขวา -->
-      <div class="border-2 p-5">
-        <h3 class="text-lg font-semibold">คำสั่งซื้อของคุณ</h3>
-        <ul class="mt-3">
-          <li v-for="(item, index) in orderItems" :key="index" class="flex justify-between border-b py-2">
-            <span>{{ item.name }}</span>
-            <span>฿ {{ item.price }}</span>
-          </li>
-        </ul>
-
-        <div class="mt-5">
-          <input
-            type="text"
-            placeholder="กรอกโค้ดส่วนลด"
-            v-model="discountCode"
-            class="border p-2 w-full rounded mb-3"
-          />
-          <button @click="applyDiscount" class="bg-blue-500 text-white px-4 py-2 rounded w-full">
-            ใช้โค้ด
-          </button>
+    </div>
+    <div class="p-[20px] lg:p-[40px] bg-[#988FD0]/30">
+      <div class="grid gap-7 mx-[20px] lg:mx-[50px]">
+        <h1 class="fontheader">สินค้าใกล้เคียง</h1>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          <div v-for="(item, index) in products.slice(0, 4)" :key="index">
+            <CardProduct :product="item" />
+          </div>
         </div>
-
-        <div class="mt-5 text-right">
-          <p>รวม: ฿ {{ total }}</p>
-          <p>ส่วนลด: ฿ {{ discount }}</p>
-          <p>ค่าส่ง: ฿ {{ shippingCost }}</p>
-          <p class="font-bold">รวมทั้งหมด: ฿ {{ grandTotal }}</p>
-        </div>
-
-        <button class="bg-green-500 text-white px-4 py-2 rounded w-full mt-3">ชำระเงิน</button>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from "vue";
+<script lang="ts" setup>
+import type { Product } from "~/models/product.model";
 
-// ข้อมูลสินค้าในคำสั่งซื้อ
-const orderItems = ref([
-  { name: "แหวนแพซชนาเกตต์ 47 — ทองคำขาว 9k", price: 24999 },
-  { name: "แหวนแพซชนาเกตต์ 47 — ทองคำขาว 9k", price: 24999 },
+const products = ref<Product[]>([
+  {
+    id: 1,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 1000,
+    amount: 0,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+  {
+    id: 2,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 2000,
+    amount: 3,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+  {
+    id: 3,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 3000,
+    amount: 10,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+  {
+    id: 4,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 4000,
+    amount: 20,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+  {
+    id: 5,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 5000,
+    amount: 30,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
+  {
+    id: 6,
+    name: "AULA",
+    detail: "Wried Mechanical KEYBOARD ",
+    price: 6000,
+    amount: 40,
+    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+  },
 ]);
-
-// โค้ดส่วนลด
-const discountCode = ref("");
-const discount = ref(0);
-
-// ค่าขนส่ง
-const shippingCost = ref(180);
-
-// คำนวณรวมทั้งหมด
-const total = computed(() =>
-  orderItems.value.reduce((sum, item) => sum + item.price, 0)
-);
-const grandTotal = computed(() => total.value - discount.value + shippingCost.value);
-
-// ฟังก์ชันใช้โค้ดส่วนลด
-function applyDiscount() {
-  if (discountCode.value === "SALE20") {
-    discount.value = 1000;
-  } else {
-    discount.value = 0;
-    alert("โค้ดส่วนลดไม่ถูกต้อง");
-  }
-}
 </script>
 
 <style scoped>
+.photoselect img {
+  transition: transform 0.2s;
+}
+.photoselect img:hover {
+  transform: scale(1.1);
+}
 </style>
