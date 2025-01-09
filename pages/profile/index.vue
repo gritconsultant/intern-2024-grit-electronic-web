@@ -1,10 +1,11 @@
 <template>
   <div class="flex">
+
     <!-- Sidebar -->
     <Sidebar />
 
     <!-- Main Content -->
-    <div class="w-full boxprofile m-9 -ml-2 ">
+    <div class="w-full boxprofile m-9 -ml-2">
       <div class="flex justify-between items-center border-b pb-4 m-4">
         <h1 class="font-medium text-lg">ข้อมูลบัญชีผู้ใช้</h1>
       </div>
@@ -20,30 +21,60 @@
 
               <!-- change password -->
               <div>
-                <div class="mt-5">
+                <div class="mt-5 relative">
                   <label for="changepassword"> เปลี่ยนรหัสผ่าน </label> <br />
-                  <input
-                    :type="passwordVisible ? 'text' : 'password'"
-                    id="changepassword"
-                    class="w-[400px] h-[45px] mt-2 inputbox"
-                    :class="{ 'border-red-500': passwordError }"
-                  />
+                  <div class="relative">
+                    <input
+                      :type="passwordVisible.changePassword ? 'text' : 'password'"
+                      id="changepassword"
+                      class="w-full max-w-[400px] h-[45px] mt-2 inputbox pr-10"
+                      :class="{ 'border-red-500': passwordError }"
+                      v-model="register.password"
+                      @input="validatePassword"
+                    />
+                    <span
+                      class=" -m-8 cursor-pointer text-black"
+                      @click="togglePasswordVisibility('changePassword')"
+                    >
+                      <i
+                        :class="
+                          passwordVisible.changePassword ? 'fas fa-eye-slash' : 'fas fa-eye'
+                        "
+                      ></i>
+                    </span>
+                  </div>
+
                   <p v-if="passwordError" class="text-red-500 text-xs mt-1">
                     Password must be at least 8 characters, include an uppercase
                     letter, a lowercase letter, and a number.
                   </p>
                 </div>
 
-                <div class="mt-5">
+                <div class="mt-5 relative">
                   <label for="conpassword"> ยืนยันรหัสผ่านใหม่ </label> <br />
-                  <input
-                    type="text"
+                  <div class="relative">
+                    <input
+                    :type="passwordVisible.confirmPassword ? 'text' : 'password'"
                     id="conpassword"
                     class="w-[400px] h-[45px] mt-2 inputbox"
+                    v-model="register.confirmPassword"
+                    @input="validatePasswordMatch"
                   />
+                  <span
+                      class=" -m-8 cursor-pointer text-black"
+                      @click="togglePasswordVisibility('confirmPassword')"
+                    >
+                      <i
+                        :class="
+                          passwordVisible.confirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'
+                        "
+                      ></i>
+                    </span>
+                  </div>
+
                   <p v-if="passwordMismatch" class="text-red-500 text-xs mt-1">
-            Passwords do not match.
-          </p>
+                    Passwords do not match.
+                  </p>
                 </div>
               </div>
             </div>
@@ -68,8 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Register } from '~/models/page.model';
-
+import type { Register } from "~/models/page.model";
 
 const register = ref<Register>({
   firstname: "",
@@ -81,7 +111,10 @@ const register = ref<Register>({
   confirmPassword: "",
 });
 
-const passwordVisible = ref(false); // สถานะสำหรับแสดง/ซ่อนรหัสผ่าน
+const passwordVisible = ref({
+  changePassword: false,
+  confirmPassword: false,
+}); // สถานะสำหรับแสดง/ซ่อนรหัสผ่าน
 const passwordError = ref(false); // แสดงข้อผิดพลาดของรหัสผ่าน
 const passwordMismatch = ref(false);
 
@@ -90,20 +123,23 @@ const validatePassword = () => {
   passwordError.value = !passwordPattern.test(register.value.password);
 };
 
-const togglePasswordVisibility = () => {
-  passwordVisible.value = !passwordVisible.value;
+const validatePasswordMatch = () => {
+  passwordMismatch.value = register.value.password !== register.value.confirmPassword;
 };
 
-const handleRegister = () => {
-  if (register.value.password !== register.value.confirmPassword) {
-    passwordMismatch.value = true;
-  } else {
-    passwordMismatch.value = false;
-    // Proceed with registration logic
-    console.log("Registration successful", register.value);
-  }
+const togglePasswordVisibility = (field: keyof typeof passwordVisible.value) => {
+  passwordVisible.value[field] = !passwordVisible.value[field];
 };
-
 </script>
 
-<style scoped></style>
+<style scoped>
+
+@media (max-width: 768px) {
+  .boxprofile {
+    margin: 0;
+  }
+  .inputbox {
+    width: 100%;
+  }
+}
+</style>

@@ -29,7 +29,7 @@
     </div>
 
     <!-- Cart Items -->
-    <div class="px-5 max-h-80">
+    <div class="px-5 max-h-80 overflow-y-auto">
       <div
         v-for="(item, index) in cartItems"
         :key="item.id"
@@ -121,8 +121,9 @@ definePageMeta({
   layout: "auth",
 });
 
-import { reactive, computed } from "vue";
+import { ref, computed, defineEmits } from "vue";
 import type { Product } from "~/models/product.model";
+
 
 // State สำหรับสินค้าในตะกร้า
 const cartItems = ref<Product[]>([
@@ -199,4 +200,6 @@ const checkout = () => {
 };
 </script>
 
+
 <style scoped></style>
+

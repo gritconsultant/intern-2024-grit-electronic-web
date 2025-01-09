@@ -5,14 +5,18 @@
     <div class="rounded-2xl w-full max-w-[450px] bg-black/50 p-6">
       <!-- Logo -->
       <div class="flex justify-center mt-4">
-        <img src="public/images/logoLogin.png" class="w-[150px] sm:w-[200px] md:w-[230px]" />
+        <img
+          src="public/images/logoLogin.png"
+          class="w-[120px] sm:w-[150px] md:w-[200px] lg:w-[230px]"
+          alt="Logo"
+        />
       </div>
-      <div class="flex justify-center font-normal text-xl text-white mt-4">
+      <div class="flex justify-center font-normal text-lg sm:text-xl lg:text-2xl text-white mt-4">
         <h1>Forget Password</h1>
       </div>
 
       <!-- Email Input -->
-      <div class="text-sm text-white mt-6">
+      <div class="text-sm sm:text-base text-white mt-6">
         <label for="email"> Email </label>
         <input
           type="text"
@@ -35,7 +39,7 @@
       </div>
 
       <!-- Back to Log in -->
-      <div class="flex justify-center mt-6 text-sm text-white">
+      <div class="flex justify-center mt-6 text-sm sm:text-base text-white">
         <p>Back to -></p>
         <NuxtLink
           to="/login"
@@ -49,7 +53,6 @@
 </template>
 
 <script setup lang="ts">
-
 definePageMeta({
   layout: "auth",
 });
@@ -111,4 +114,22 @@ const handleSend = async () => {
 </script>
 
 <style scoped>
+.inputbox {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .inputbox {
+    height: 40px;
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .inputbox {
+    font-size: 1rem;
+  }
+}
 </style>

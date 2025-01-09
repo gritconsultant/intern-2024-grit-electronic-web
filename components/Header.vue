@@ -12,65 +12,19 @@
           <!-- Navigation Menu -->
           <div class="flex items-center fonsubtheader mt-3">
             <div class="mx-4">
-              <NuxtLink to="/product" class="hover:underline">สินค้าทั้งหมด</NuxtLink>
-            </div>
-            <!-- Dropdown -->
-            <div class="relative group">
-              <button class="flex items-center" type="button">
-                <p>หมวดหมู่สินค้า</p>
-                <svg
-                  class="w-2.5 h-2.5 ml-1.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 3"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
-
-              <!-- Dropdown Menu -->
-              <div
-                class="absolute bg-white rounded-lg border-2 shadow w-44 hidden group-hover:block"
+              <NuxtLink
+                to="/product"
+                class="hover:underline hover:text-indigo-500"
+                >สินค้าทั้งหมด</NuxtLink
               >
-                <ul class="py-2 text-sm text-gray-700">
-                  <li>
-                    <NuxtLink
-                      to="/category/computer"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      คอมพิวเตอร์
-                    </NuxtLink>
-                  </li>
-                  <li>
-                    <NuxtLink
-                      to="/category/laptop"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      โน๊ตบุ๊ค
-                    </NuxtLink>
-                  </li>
-                  <li>
-                    <NuxtLink
-                      to="/category/accessorie"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                    >
-                      อุปกรณ์เสริม
-                    </NuxtLink>
-                  </li>
-                </ul>
-              </div>
             </div>
+            <CategoryDropdown />
           </div>
 
           <!-- Icons -->
-          <div class="hidden md:flex items-center gap-4 md:gap-6 mt-3 mx-3 md:mx-5">
+          <div
+            class="hidden md:flex items-center gap-4 md:gap-6 mt-3 mx-3 md:mx-5"
+          >
             <img
               class="icons w-6 md:w-8"
               src="https://cdn-icons-png.flaticon.com/256/152/152536.png"
@@ -109,7 +63,6 @@
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
@@ -121,72 +74,36 @@
           </button>
         </div>
       </div>
-
-      <!-- Mobile Dropdown Menu -->
-      <div
-        v-if="mobileMenuOpen"
-        class="md:hidden w-[40%] right-0 absolute top-14 border-t border-gray-200 py-2 bg-pink-500"
-      >
-        <ul>
-          <li class="px-4 py-2">
-            <NuxtLink to="/product" class="block text-black hover:underline">
-              <img
-              class="icons w-6 md:w-8"
-              src="https://cdn-icons-png.flaticon.com/256/152/152536.png"
-              alt="Search"
-            />
-            </NuxtLink>
-          </li>
-          <li class="px-4 py-2">
-            <NuxtLink to="/category" class="block text-black hover:underline">
-              <img
-              class="icons w-6 md:w-8"
-              src="https://cdn-icons-png.flaticon.com/256/88/88032.png"
-              alt="Shopping Cart"
-            />
-            </NuxtLink>
-          </li>
-          <li class="px-4 py-2">
-            <NuxtLink to="/contact" class="block text-black hover:underline">
-              <img
-              class="icons w-6 md:w-8"
-              src="https://cdn-icons-png.flaticon.com/256/157/157990.png"
-              alt="Favorites"
-            />
-            </NuxtLink>
-          </li>
-          <li class="px-4 py-2">
-            <NuxtLink to="/contact" class="block text-black hover:underline">
-              <img
-              class="icons w-6 md:w-8"
-              src="https://cdn-icons-png.flaticon.com/256/388/388652.png"
-              alt="Notifications"
-            />
-            </NuxtLink>
-          </li>
-          <li class="px-4 py-2">
-            <NuxtLink to="/contact" class="block text-black hover:underline">
-              <img
-              class="icons w-6 md:w-8"
-              src="https://cdn-icons-png.flaticon.com/256/268/268441.png"
-              alt="User"
-            />
-            </NuxtLink>
-          </li>
-        </ul>
-      </div>
     </div>
+
+    <!-- Mobile Icon Menu -->
+    <IconDropdown v-if="mobileMenuOpen" />
+
+    <!-- Cart Popup -->
+     <!-- <div v-if="cartOpen" class="fixed inset-0 bg-black/50 flex justify-end z-50">
+      <div class="w-[400px]">
+        <PopupCart @close="toggleCart" />
+      </div>
+     </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
+import CategoryDropdown from "~/components/Dropdown/Category.vue"; // Dropdown for categories
+import IconDropdown from "~/components/Dropdown/Icon.vue"; // Dropdown for icons
+// import PopupCart from "~/components/Popup/Cart.vue"; // Popup for cart
 
 const mobileMenuOpen = ref(false);
+// const cartOpen = ref(false);
 
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value;
 };
+
+// const toggleCart = () => {
+//   cartOpen.value =!cartOpen.value;
+// }
 </script>
 
 <style scoped>
