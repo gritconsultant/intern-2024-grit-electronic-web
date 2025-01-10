@@ -1,10 +1,10 @@
 <template>
   <div
-    class="w-[400px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg"
+    class="w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg"
   >
     <div class="flex justify-between items-center p-5 border-b-2">
       <h1>ตะกร้าสินค้า ({{ cartItems.length }})</h1>
-      <h2 @click="clearCart" class="text-red-500 cursor-pointer ml-28">
+      <h2 @click="clearCart" class="text-red-500 cursor-pointer ml-[225px]">
         ลบทั้งหมด
       </h2>
       <button @click="closeCart">
@@ -29,7 +29,7 @@
     </div>
 
     <!-- Cart Items -->
-    <div class="px-5 max-h-80 overflow-y-auto">
+    <div class="px-5 flex-grow overflow-y-auto">
       <div
         v-for="(item, index) in cartItems"
         :key="item.id"
@@ -38,13 +38,17 @@
         <img
           :src="item.img"
           alt="product"
-          class="w-16 h-16 object-cover rounded-md"
+          class="w-[75px] h-[75px] object-cover rounded-md"
         />
-        <div class="flex-1 ml-2">
+        <div class="flex-1 ml-4">
           <div class="flex justify-between">
             <div>
-              <p class="text-sm font-medium">{{ item.name }}</p>
+              <p class="text-md font-normal">{{ item.name }}</p>
+              <div class="font-normal text-xs text-black/50">
+              <p class="texthide">{{ item.detail }}</p>
             </div>
+            </div>
+            
             <div>
               <button @click="removeItem(index)" class="text-red-500">
                 <svg
@@ -87,7 +91,7 @@
             </div>
 
             <div class="mt-3">
-              <p class="fontsubheader">฿{{ item.price }}</p>
+              <p class="font-semibold text-lg">฿{{ item.price }}</p>
             </div>
           </div>
         </div>
@@ -100,18 +104,18 @@
         <span>ราคารวม:</span>
         <span class=" text-base">฿{{ totalPrice }}</span>
       </div>
-      <button
-        @click="checkout"
-        class="mt-4 popupbtn"
-      >
-        สั่งซื้อสินค้า
-      </button>
-      <button
-        @click="closeCart"
-        class="w-full mt-2 text-gray-500 text-sm hover:underline"
-      >
-        เลือกซื้อสินค้าต่อ →
-      </button>
+      <div class="flex flex-col items-center mt-10">
+        <button @click="checkout" class="popupbtn w-full mb-2">
+          สั่งซื้อสินค้า
+        </button>
+        <button
+          @click="closeCart"
+          class="w-full text-gray-500 text-sm hover:underline mt-5"
+        >
+          เลือกซื้อสินค้าต่อ →
+        </button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -123,6 +127,9 @@ definePageMeta({
 
 import { ref, computed, defineEmits } from "vue";
 import type { Product } from "~/models/product.model";
+import { useIndexStore } from "~/store/main";
+
+const store = useIndexStore()
 
 
 // State สำหรับสินค้าในตะกร้า
@@ -189,9 +196,8 @@ const clearCart = () => {
 };
 
 // ปิด Popup
-const emit = defineEmits(["close"]);
 const closeCart = () => {
-  emit("close");
+  store.cartAction = false
 };
 
 // ไปหน้า Checkout

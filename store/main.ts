@@ -3,11 +3,17 @@ import { defineStore } from 'pinia';
 interface State {
     token : string
     userId : string
+    cartAction : boolean
+    favouriteAction : boolean
+    notificationAction : boolean
 }
 
 export const useIndexStore = defineStore('index',{
     state: (): State => ({
         token:'',
-        userId:''
+        userId:'',
+        cartAction: false,
+        favouriteAction: false,
+        notificationAction: false,
     })
 })

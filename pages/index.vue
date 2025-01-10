@@ -4,7 +4,11 @@
     <div class="grid grid-cols-1 text-center">
       <h1 class="my-[50px] lg:my-[70px] fontheader">หมวดหมู่สินค้า</h1>
       <div class="flex flex-wrap justify-center gap-5">
-        <div v-for="(data, category) in category" :key="category" class="text-center">
+        <div
+          v-for="(data, category) in category"
+          :key="category"
+          class="text-center"
+        >
           <div class="border-2 rounded-[50px] p-1">
             <div
               class="w-[60px] h-[60px] lg:w-[80px] lg:h-[80px] object-cover place-content-center rounded-[10px] p-1 bg-slate-300/5"
@@ -17,6 +21,11 @@
           </h1>
         </div>
       </div>
+
+      <!-- search -->
+      <div class="grid justify-center mt-8">
+        <Search />
+      </div>
     </div>
     <div class="mt-[50px] lg:mt-[70px] mx-[20px] lg:mx-[50px]">
       <h1 class="fontheader">สินค้าแนะนำ-Recommend</h1>
@@ -27,7 +36,9 @@
             <h1 class="fontsubheader mt-[3px]">{{ item.name }}</h1>
             <div class="mr-[20px] lg:mr-[30px] text-black/40">ทั้งหมด -></div>
           </div>
-          <div class=" max-[1000px]: grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 my-2">
+          <div
+            class="max-[1000px]: grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 my-2"
+          >
             <!-- cardproduct -->
             <div v-for="(item, i) in products" :key="i">
               <div :to="i">

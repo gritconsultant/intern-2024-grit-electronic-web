@@ -1,139 +1,62 @@
 <template>
-  <div
-    class="w-[400px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg"
-  >
-    <div class="flex justify-between items-center p-5 border-b-2">
-      <h1>ตะกร้าสินค้า ({{ cartItems.length }})</h1>
-      <h2 @click="clearCart" class="text-red-500 cursor-pointer ml-28">
-        ลบทั้งหมด
-      </h2>
-      <button @click="closeCart">
-        <svg
-          class="w-6 h-6 hover:text-red-500"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="none"
-          viewBox="0 0 24 24"
+  <div>
+    <div>
+      <div class="relative group">
+        <button
+          class="flex items-center text-black hover:text-indigo-500"
+          type="button"
         >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18 17.94 6M18 18 6.06 6"
-          />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Cart Items -->
-    <div class="px-5 max-h-80 overflow-y-auto">
-      <div
-        v-for="(item, index) in cartItems"
-        :key="item.id"
-        class="flex justify-between items-center border-b py-2"
-      >
         <img
-          :src="item.img"
-          alt="product"
-          class="w-16 h-16 object-cover rounded-md"
-        />
-        <div class="flex-1 ml-2">
-          <div class="flex justify-between">
-            <div>
-              <p class="text-sm font-medium">{{ item.name }}</p>
-            </div>
-            <div>
-              <button @click="removeItem(index)" class="text-red-500">
-                <svg
-                  class="w-[17px] h-[17px] hover:text-red-500"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div class="flex justify-between items-center">
-            <div class="flex items-center gap-2 mt-3 border border-1 rounded">
-              <button @click="decreaseQuantity(index)" class="px-2">-</button>
-              <span>{{ item.amount }}</span>
-              <button @click="increaseQuantity(index)" class="px-2">+</button>
-            </div>
-            <div class="mt-3">
-              <p class="fontsubheader">฿{{ item.price }}</p>
-            </div>
-          </div>
+              class="icons w-6 md:w-8"
+              src="https://cdn-icons-png.flaticon.com/256/268/268441.png"
+              alt="User"
+            />
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div
+          class="absolute bg-white rounded-lg border shadow w-44 hidden group-hover:block"
+        >
+          <ul class="py-2 text-sm text-gray-700">
+            <li>
+              <NuxtLink
+                to="/profile"
+                class="block px-4 py-2 hover:bg-gray-100"
+              >
+                บัญชีผู้ใช้
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink
+                to="/profile/address"
+                class="block px-4 py-2 hover:bg-gray-100"
+              >
+                ที่อยู่ผู้ใช้
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink
+                to="/order/checkout"
+                class="block px-4 py-2 hover:bg-gray-100"
+              >
+                คำสั่งซื้อ
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink
+                to="/login"
+                class="block px-4 py-2 hover:bg-gray-100"
+              >
+                ออกจากระบบ
+              </NuxtLink>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="p-4 border-t mt-4 bg-gray-100">
-      <div class="flex justify-between font-medium">
-        <span>ราคารวม:</span>
-        <span class="text-base">฿{{ totalPrice }}</span>
-      </div>
-      <button @click="checkout" class="mt-4 popupbtn">สั่งซื้อสินค้า</button>
-      <button
-        @click="closeCart"
-        class="w-full mt-2 text-gray-500 text-sm hover:underline"
-      >
-        เลือกซื้อสินค้าต่อ →
-      </button>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, defineEmits } from "vue";
+<script setup lang="ts"></script>
 
-// State สำหรับสินค้าในตะกร้า
-const cartItems = ref([
-  {
-    id: 1,
-    name: "Aspire Go โน๊ตบุ๊ค",
-    detail: "Intel Core i3, RAM 8GB",
-    price: 13990,
-    amount: 1,
-    img: "https://via.placeholder.com/50",
-  },
-]);
-
-// คำนวณราคารวม
-const totalPrice = computed(() =>
-  cartItems.value.reduce((sum, item) => sum + item.price * item.amount, 0)
-);
-
-// เพิ่ม/ลดจำนวนสินค้า
-const increaseQuantity = (index: number) => cartItems.value[index].amount++;
-const decreaseQuantity = (index: number) => {
-  if (cartItems.value[index].amount > 1) cartItems.value[index].amount--;
-};
-
-// ลบสินค้าและล้างตะกร้า
-const removeItem = (index: number) => cartItems.value.splice(index, 1);
-const clearCart = () => (cartItems.value = []);
-
-// ไปหน้า Checkout
-const emit = defineEmits(["close"]);
-const closeCart = () => emit("close");
-const checkout = () => alert("กำลังไปหน้าชำระเงิน...");
-</script>
-
-<style scoped>
-/* Styles */
-</style>
+<style scoped></style>

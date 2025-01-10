@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute top-14 right-0 w-full bg-white shadow-lg z-50">
+  <div class="absolute top-14 right-0 w-full bg-white shadow-lg z-50 md:hidden">
     <ul class="flex flex-col text-center border-t border-gray-200">
       <li class="py-3 border-b">
         <NuxtLink to="/" class="text-black hover:text-indigo-500">

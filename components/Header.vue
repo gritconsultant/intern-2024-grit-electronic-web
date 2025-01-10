@@ -21,38 +21,34 @@
             <CategoryDropdown />
           </div>
 
-          <!-- Icons -->
+          <!-- Icons (Visible in Desktop) -->
           <div
             class="hidden md:flex items-center gap-4 md:gap-6 mt-3 mx-3 md:mx-5"
           >
             <img
               class="icons w-6 md:w-8"
-              src="https://cdn-icons-png.flaticon.com/256/152/152536.png"
-              alt="Search"
-            />
-            <img
-              class="icons w-6 md:w-8"
               src="https://cdn-icons-png.flaticon.com/256/88/88032.png"
               alt="Shopping Cart"
+              @click="store.cartAction = !store.cartAction"
             />
             <img
               class="icons w-6 md:w-8"
               src="https://cdn-icons-png.flaticon.com/256/157/157990.png"
               alt="Favorites"
+              @click="store.favouriteAction = !store.favouriteAction"
             />
             <img
               class="icons w-6 md:w-8"
               src="https://cdn-icons-png.flaticon.com/256/388/388652.png"
               alt="Notifications"
+              @click="store.notificationAction = !store.notificationAction"
             />
-            <img
-              class="icons w-6 md:w-8"
-              src="https://cdn-icons-png.flaticon.com/256/268/268441.png"
-              alt="User"
-            />
+            <div>
+              <ProfileDropdown/>
+            </div>
           </div>
 
-          <!-- Mobile Menu -->
+          <!-- Mobile Menu Button -->
           <button
             class="block md:hidden text-black hover:text-gray-700 focus:outline-none"
             @click="toggleMobileMenu"
@@ -76,34 +72,55 @@
       </div>
     </div>
 
-    <!-- Mobile Icon Menu -->
-    <IconDropdown v-if="mobileMenuOpen" />
+    <!-- Mobile Icon Menu (Visible only in Mobile) -->
+    <IconDropdown v-show="mobileMenuOpen" class="md:hidden" />
+
 
     <!-- Cart Popup -->
-     <!-- <div v-if="cartOpen" class="fixed inset-0 bg-black/50 flex justify-end z-50">
-      <div class="w-[400px]">
-        <PopupCart @close="toggleCart" />
+    <div
+      v-if="store.cartAction"
+      class="fixed inset-0 bg-black/50 flex justify-end z-50"
+    >
+      <div>
+        <PopupCart />
       </div>
-     </div> -->
+    </div>
+
+    <!-- Fav Popup -->
+    <div
+      v-if="store.favouriteAction"
+      class="fixed inset-0 bg-black/50 flex justify-end z-50"
+    >
+      <div>
+        <PopupFavorite />
+      </div>
+    </div>
+
+        <!-- Noti Popup -->
+        <div
+      v-if="store.notificationAction"
+      class="fixed inset-0 bg-black/50 flex justify-end z-50"
+    >
+      <div>
+        <PopupNotification />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useIndexStore } from "~/store/main";
 import CategoryDropdown from "~/components/Dropdown/Category.vue"; // Dropdown for categories
+import ProfileDropdown from "~/components/Dropdown/Profile.vue"; // Dropdown for profile
 import IconDropdown from "~/components/Dropdown/Icon.vue"; // Dropdown for icons
-// import PopupCart from "~/components/Popup/Cart.vue"; // Popup for cart
 
+const store = useIndexStore();
 const mobileMenuOpen = ref(false);
-// const cartOpen = ref(false);
 
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value;
 };
-
-// const toggleCart = () => {
-//   cartOpen.value =!cartOpen.value;
-// }
 </script>
 
 <style scoped>

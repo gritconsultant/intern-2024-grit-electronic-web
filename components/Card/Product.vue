@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="w-[270px] h-[500px] border-2 border-[#A6A6A6] p-5 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg  "
+      class="w-[300px] h-[500px] border-2 border-[#A6A6A6] p-5 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg  "
     >
       <div class="flex justify-between h-[30px]">
         <div
