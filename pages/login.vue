@@ -4,11 +4,10 @@
   >
     <form
       class="rounded-2xl w-full max-w-[450px] bg-black/50 p-6 h-auto m-10"
-      @submit.prevent="handleLogin"
     >
       <!-- Logo -->
       <div class="flex justify-center">
-        <img src="public/images/logoLogin.png" class="w-[150px] sm:w-[200px] md:w-[230px]" />
+        <img src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" class="w-[150px] sm:w-[200px] md:w-[230px]" />
       </div>
       <div class="flex justify-center font-normal text-xl text-white mt-4">
         <h1>Log in</h1>
@@ -20,7 +19,6 @@
         <input
           type="text"
           id="username"
-          v-model="login.username"
           class="w-full h-[45px] mt-2 inputbox text-black px-3 rounded-md"
           required
           placeholder="Enter Your Username"
@@ -28,12 +26,11 @@
       </div>
 
       <!-- Password Input -->
-      <div class="text-sm text-white mt-6 relative">
+      <div class="text-sm text-white  mt-6 relative">
         <label for="password"> Password </label>
         <input
           :type="passwordVisible ? 'text' : 'password'"
           id="password"
-          v-model="login.password"
           class="w-full h-[45px] mt-2 inputbox text-black px-3 rounded-md"
           required
           placeholder="Enter Your Password"
@@ -50,7 +47,7 @@
       <div class="flex justify-end mt-4 text-sm">
         <NuxtLink
           to="/forgetpassword"
-          class="text-red-500 font-semibold underline"
+          class="text-red-500 font-semibold hover:underline"
         >
           Forget Password?
         </NuxtLink>
@@ -60,7 +57,7 @@
       <div class="mt-8 flex justify-center">
         <button
           type="submit"
-          class="w-full max-w-[300px] h-[45px] bg-violet-400 hover:bg-[#765798] rounded-xl text-white"
+          class=" text-white w-full max-w-[300px] h-[45px] bg-[#FCB753] hover:bg-[#FD8C35] rounded-xl"
           @click="redirectToIndex"
         >
           Log in
@@ -71,11 +68,11 @@
       <hr class="border-white my-6" />
 
       <!-- Register Now -->
-      <div class="flex justify-center text-sm">
-        <p class="text-white">Don’t have an account?</p>
+      <div class="flex justify-center text-sm text-white">
+        <p>Don’t have an account?</p>
         <NuxtLink
           to="/register"
-          class="text-red-500 ml-2 font-semibold underline"
+          class="text-red-500 ml-2 font-semibold hover:underline"
         >
           Register now
         </NuxtLink>
@@ -102,14 +99,7 @@ const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
-const handleLogin = () => {
-  if (!login.value.username || !login.value.password) {
-    alert("Please fill in all fields");
-    return;
-  }
-  console.log("Login successful", login.value);
-  alert("Login successful!");
-};
+
 
 
 const router = useRouter();

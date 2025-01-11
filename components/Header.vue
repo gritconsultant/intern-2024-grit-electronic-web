@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div class="h-[60px] pt-[5px] border-2 border-white border-b-black">
+    <div class="h-[80px] pt-[5px] border border-b-black grid items-center">
       <div class="flex items-center justify-between">
         <!-- Logo -->
         <NuxtLink to="/" class="pl-[30px]">
-          <img class="w-[150px]" src="/images/logo.ico" alt="Logo" />
+          <img class="w-[150px]" src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" alt="Logo" />
         </NuxtLink>
 
         <!-- Navigation and Icons -->
         <div class="flex items-center justify-between w-full">
           <!-- Navigation Menu -->
-          <div class="flex items-center fonsubtheader mt-3">
+          <div class="flex items-center fonsubtheader">
             <div class="mx-4">
               <NuxtLink
                 to="/product"
@@ -23,7 +23,7 @@
 
           <!-- Icons (Visible in Desktop) -->
           <div
-            class="hidden md:flex items-center gap-4 md:gap-6 mt-3 mx-3 md:mx-5"
+            class="hidden md:flex items-center gap-4 md:gap-6 mx-3 md:mx-5"
           >
             <img
               class="icons w-6 md:w-8"

@@ -8,7 +8,7 @@
     >
       <!-- Logo -->
       <div class="flex justify-center">
-        <img src="public/images/logoLogin.png" class="w-[150px] sm:w-[200px] md:w-[230px]" />
+        <img src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" class="w-[150px] sm:w-[200px] md:w-[230px]" />
       </div>
       <div class="flex justify-center font-normal text-xl text-white mt-4">
         <h1>Register</h1>
@@ -123,7 +123,7 @@
       <div class="mt-8 flex justify-center">
         <button
           type="submit"
-          class="w-full max-w-[300px] h-[45px] bg-violet-400 hover:bg-[#765798] rounded-xl text-white"
+          class="w-full max-w-[300px] h-[45px] bg-[#FCB753] hover:bg-[#FD8C35] rounded-xl text-white"
         >
           Register
         </button>

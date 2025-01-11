@@ -1,7 +1,9 @@
 <template>
   <div class="mx-[20px] lg:mx-[50px]">
-    <div class="border-[2px] h-[10rem]">Posters</div>
-    <div class="grid grid-cols-1 text-center">
+    <div class="h-[10rem]">
+      <img src="/public/images/banner.jpg" class=" rounded-b-2xl">
+    </div>
+    <div class="grid grid-cols-1 text-center mt-20">
       <h1 class="my-[50px] lg:my-[70px] fontheader">หมวดหมู่สินค้า</h1>
       <div class="flex flex-wrap justify-center gap-5">
         <div
@@ -9,11 +11,11 @@
           :key="category"
           class="text-center"
         >
-          <div class="border-2 rounded-[50px] p-1">
+          <div class="border-2 rounded-[50px] p-1 w-[60px] h-[60px] lg:w-[80px] lg:h-[80px]">
             <div
-              class="w-[60px] h-[60px] lg:w-[80px] lg:h-[80px] object-cover place-content-center rounded-[10px] p-1 bg-slate-300/5"
+              class="w-full h-full object-cover place-content-center rounded-[10px] p-1 bg-slate-300/5"
             >
-              <img :src="data.img" alt="" />
+              <img :src="data.img" />
             </div>
           </div>
           <h1 class="fontsubheader mt-[10px] lg:mt-[20px] text-sm lg:text-base">
@@ -30,7 +32,7 @@
     <div class="mt-[50px] lg:mt-[70px] mx-[20px] lg:mx-[50px]">
       <h1 class="fontheader">สินค้าแนะนำ-Recommend</h1>
       <!-- cardcategory -->
-      <div class="grid gap-5 mt-[20px]">
+      <div class="grid gap-5 mt-[40px]">
         <div v-for="(item, category) in category" :key="category">
           <div class="flex justify-between px-1">
             <h1 class="fontsubheader mt-[3px]">{{ item.name }}</h1>
@@ -93,17 +95,27 @@ const products = ref<Product[]>([
 const category = ref<Category[]>([
   {
     id: 1,
-    name: "หมวดที่ 1",
+    name: "อาหาร",
     img: "https://www.brandlogopng.com/files/png/computer/green-pc-icon-png-hd-computer-circle-icons-68wl.png",
   },
   {
     id: 2,
-    name: "หมวดที่ 2",
+    name: "เครื่องดื่ม",
     img: "https://images.vexels.com/content/158669/preview/notebook-illustration-laptop-f57f36.png",
   },
   {
     id: 3,
-    name: "หมวดที่ 3",
+    name: "สมุนไพร",
+    img: "https://pngimg.com/d/keyboard_PNG101839.png",
+  },
+  {
+    id: 4,
+    name: "ผ้าและเครื่องแต่งกาย",
+    img: "https://pngimg.com/d/keyboard_PNG101839.png",
+  },
+  {
+    id: 5,
+    name: "ของใช้ ของตกแต่ง",
     img: "https://pngimg.com/d/keyboard_PNG101839.png",
   },
 ]);

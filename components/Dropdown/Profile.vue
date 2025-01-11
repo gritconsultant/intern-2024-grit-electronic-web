@@ -16,7 +16,7 @@
   
           <!-- Dropdown Menu -->
           <div
-            class="absolute bg-white rounded-lg border shadow w-44 hidden group-hover:block -right-0"
+            class="absolute bg-white rounded-lg border shadow w-44 hidden group-hover:block -right-4 mt-1"
           >
             <ul class="py-2 text-sm text-gray-700">
               <li>
@@ -32,7 +32,7 @@
                   to="/profile/address"
                   class="block px-4 py-2 hover:bg-gray-100"
                 >
-                  ที่อยู่ผู้ใช้
+                  ที่อยู่
                 </NuxtLink>
               </li>
               <li>

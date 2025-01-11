@@ -16,11 +16,12 @@
           <i class="fa-regular fa-heart"></i>
         </div>
       </div>
-      <div class="object-cover place-content-center border-2 h-[350px]">
+      <div class=" bg-black">
+        <div class="object-cover place-content-center p-2 h-[300px]">
         <img
-          src="https://blog.bnn.in.th/wp-content/uploads/2024/03/Acer-Aspire-3-A315-59-32GC.jpg"
-          alt=""
+          src="https://pngimg.com/d/keyboard_PNG101839.png"
         />
+      </div>
       </div>
       <div class="flex justify-between mt-1">
         <div>
