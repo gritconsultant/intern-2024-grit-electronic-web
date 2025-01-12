@@ -3,7 +3,7 @@
     <div class="p-[50px]">
       <div>tack pages</div>
       <div class="flex gap-2 my-6">
-        <h1 class="font-bold text-3xl">โน๊ตบุ๊ค</h1>
+        <h1 class="font-bold text-3xl">อาหาร</h1>
         <p class="mt-[10px] text-black/40">(สินค้าทั้งหมด 120 รายการ)</p>
       </div>
       <!-- select -->
@@ -21,7 +21,7 @@
       <!-- cardcategory -->
       <div class="grid gap-20">
         <div
-          v-for="(item, category) in category.slice(1, 2)"
+          v-for="(item, category) in category.slice(0, 1)"
           :key="category"
           class="gap-10"
         >

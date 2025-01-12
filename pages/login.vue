@@ -57,7 +57,7 @@
       <div class="mt-8 flex justify-center">
         <button
           type="submit"
-          class=" text-white w-full max-w-[300px] h-[45px] bg-[#FCB753] hover:bg-[#FD8C35] rounded-xl"
+          class=" text-white w-full max-w-[300px] h-[45px] bg-[#FCCA81] hover:bg-[#EE973C] rounded-xl"
           @click="redirectToIndex"
         >
           Log in

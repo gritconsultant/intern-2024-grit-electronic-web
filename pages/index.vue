@@ -5,27 +5,31 @@
     </div>
     <div class="grid grid-cols-1 text-center mt-20">
       <h1 class="my-[50px] lg:my-[70px] fontheader">หมวดหมู่สินค้า</h1>
-      <div class="flex flex-wrap justify-center gap-5">
+      <div class="flex flex-wrap justify-center gap-16">
         <div
           v-for="(data, category) in category"
           :key="category"
           class="text-center"
         >
-          <div class="border-2 rounded-[50px] p-1 w-[60px] h-[60px] lg:w-[80px] lg:h-[80px]">
+        <NuxtLink to="/product">
+          <div class="flex justify-center">
+            <div class="border-2 rounded-[50px] p-1 w-[60px] h-[60px] lg:w-[80px] lg:h-[80px]">
             <div
               class="w-full h-full object-cover place-content-center rounded-[10px] p-1 bg-slate-300/5"
             >
               <img :src="data.img" />
             </div>
           </div>
+          </div>
           <h1 class="fontsubheader mt-[10px] lg:mt-[20px] text-sm lg:text-base">
             {{ data.name }}
           </h1>
+          </NuxtLink>
         </div>
       </div>
 
       <!-- search -->
-      <div class="grid justify-center mt-8">
+      <div class="grid justify-center mt-10">
         <Search />
       </div>
     </div>
@@ -43,9 +47,11 @@
           >
             <!-- cardproduct -->
             <div v-for="(item, i) in products" :key="i">
+              <NuxtLink to="/product/[id]" >
               <div :to="i">
                 <CardProduct :product="item" />
               </div>
+            </NuxtLink>
             </div>
           </div>
         </div>

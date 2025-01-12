@@ -32,7 +32,7 @@
       <div class="mt-10 flex justify-center">
         <button
           @click="handleSend"
-          class="w-full max-w-[300px] h-[45px] bg-violet-400 hover:bg-[#765798] rounded-xl text-white"
+          class="w-full max-w-[300px] h-[45px] bg-[#FCCA81] hover:bg-[#EE973C] rounded-xl text-white"
         >
           Send
         </button>

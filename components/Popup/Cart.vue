@@ -16,7 +16,7 @@
           height="24"
           fill="none"
           viewBox="0 0 24 24"
-        >       
+        >
           <path
             stroke="currentColor"
             stroke-linecap="round"
@@ -45,10 +45,10 @@
             <div>
               <p class="text-md font-normal">{{ item.name }}</p>
               <div class="font-normal text-xs text-black/50">
-              <p class="texthide">{{ item.detail }}</p>
+                <p class="texthide">{{ item.detail }}</p>
+              </div>
             </div>
-            </div>
-            
+
             <div>
               <button @click="removeItem(index)" class="text-red-500">
                 <svg
@@ -72,22 +72,11 @@
             </div>
           </div>
 
-
           <div class="flex justify-between items-center">
             <div class="flex items-center gap-2 mt-3 border border-1 rounded">
-              <button
-                @click="decreaseQuantity(index)"
-                class="px-2"
-              >
-                -
-              </button>
+              <button @click="decreaseQuantity(index)" class="px-2"> - </button>
               <span>{{ item.amount }}</span>
-              <button
-                @click="increaseQuantity(index)"
-                class="px-2"
-              >
-                +
-              </button>
+              <button @click="increaseQuantity(index)" class="px-2"> + </button>
             </div>
 
             <div class="mt-3">
@@ -115,7 +104,6 @@
           เลือกซื้อสินค้าต่อ →
         </button>
       </div>
-
     </div>
   </div>
 </template>
@@ -125,12 +113,13 @@ definePageMeta({
   layout: "auth",
 });
 
-import { ref, computed, defineEmits } from "vue";
-import type { Product } from "~/models/product.model";
+import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import { useIndexStore } from "~/store/main";
+import type { Product } from "~/models/product.model";
 
-const store = useIndexStore()
-
+const store = useIndexStore();
+const router = useRouter();
 
 // State สำหรับสินค้าในตะกร้า
 const cartItems = ref<Product[]>([
@@ -144,22 +133,6 @@ const cartItems = ref<Product[]>([
   },
   {
     id: 2,
-    name: "White - S98 คีย์บอร์ดไร้สาย",
-    detail: "Gasket Mechanical Keyboard",
-    price: 2990,
-    amount: 1,
-    img: "https://via.placeholder.com/50",
-  },
-  {
-    id: 3,
-    name: "White - S98 คีย์บอร์ดไร้สาย",
-    detail: "Gasket Mechanical Keyboard",
-    price: 2990,
-    amount: 1,
-    img: "https://via.placeholder.com/50",
-  },
-  {
-    id: 4,
     name: "White - S98 คีย์บอร์ดไร้สาย",
     detail: "Gasket Mechanical Keyboard",
     price: 2990,
@@ -197,15 +170,14 @@ const clearCart = () => {
 
 // ปิด Popup
 const closeCart = () => {
-  store.cartAction = false
+  store.cartAction = false;
 };
 
-// ไปหน้า Checkout
+// ไปหน้า test.vue
 const checkout = () => {
-  alert("กำลังไปหน้าชำระเงิน...");
+  closeCart();
+  router.push("/order/checkout");
 };
 </script>
 
-
 <style scoped></style>
-

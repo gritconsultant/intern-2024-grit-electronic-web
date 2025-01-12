@@ -1,95 +1,143 @@
 <template>
-  <div class="grid grid-cols-2">
-    <div class="border-2">
-      <div class="p-[50px]">tack pages</div>
+  <div class="flex">
+    <!-- Sidebar -->
+    <Sidebar />
 
-      <div class="bg-red-500 grid justify-center">
-        <div class="flex justify-center bg-lime-400 w-[500px]">
-          <div>
-            <ol class="flex gap-[100px]">
-              <li>
-                <span
-                  class="flex items-center justify-center w-10 h-10 bg-[#988FD0] rounded-full"
-                >
-                  <!-- icon step 1 -->
-                  <svg
-                    class="w-3.5 h-3.5 text-white lg:w-4 lg:h-4 dark:text-blue-300"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 16 12"
-                  >
-                    <path
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M1 5.917 5.724 10.5 15 1.5"
-                    />
-                  </svg>
-                </span>
-                <p class="text-sm mt-4 -ml-3.5">ตะกร้าสินค้า</p>
-              </li>
-              <li>
-                <span
-                  class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500 lg:w-5 lg:h-5 dark:text-gray-100"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 16"
-                  >
-                    <path
-                      d="M18 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2ZM6.5 3a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3.014 13.021l.157-.625A3.427 3.427 0 0 1 6.5 9.571a3.426 3.426 0 0 1 3.322 2.805l.159.622-6.967.023ZM16 12h-3a1 1 0 0 1 0-2h3a1 1 0 0 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Zm0-3h-3a1 1 0 1 1 0-2h3a1 1 0 1 1 0 2Z"
-                    />
-                  </svg>
-                </span>
-                <p class="text-sm mt-4 -ml-8">รายละเอียดคำสั่งซื้อ</p>
-              </li>
-              <li>
-                <span
-                  class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500 lg:w-5 lg:h-5 dark:text-gray-100"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 18 20"
-                  >
-                    <path
-                      d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2ZM7 2h4v3H7V2Zm5.7 8.289-3.975 3.857a1 1 0 0 1-1.393 0L5.3 12.182a1.002 1.002 0 1 1 1.4-1.436l1.328 1.289 3.28-3.181a1 1 0 1 1 1.392 1.435Z"
-                    />
-                  </svg>
-                </span>
+    <!-- Content -->
+    <div class="w-full lg:w-3/4 p-6">
+      <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
 
-                <p class="text-sm mt-4 -ml-1">ชำระเงิน</p>
-              </li>
-            </ol>
+      <!-- Tabs -->
+      <div>
+        <Tab />
+      </div>
+
+      <!-- Order List -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Order Card -->
+        <div class="bg-white p-4 rounded-lg shadow border">
+          <div class="flex justify-between items-center mb-4">
+            <p>หมายเลขคำสั่งซื้อ #334902461</p>
+          </div>
+
+          <!-- Product -->
+          <div class="flex items-center space-x-4 border-b pb-4">
+            <div class="w-[150px] h-[100px]">
+              <img
+                src="https://aulathailand.com/wp-content/uploads/2023/06/1.png"
+                alt="product"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="w-full">
+              <div class="flex justify-between">
+                <h2 class="font-bold">คีย์บอร์ด</h2>
+                <p class="text-lg font-bold">฿24,999</p>
+            </div>
+            <p class="text-gray-500 text-sm">Wried Mechanical KEYBOARD</p>
+            </div>
+
+          </div>
+
+          <!-- Order Summary -->
+          <div class="mt-4">
+            <p class="flex justify-between">
+              <span>รวมทั้งหมด</span>
+              <span class="font-bold">฿24,999</span>
+            </p>
           </div>
         </div>
 
-        <div class="mt-5">
-          <div class="bg-pink-500 border-2 border-solid flex justify-between">
-            <p>ที่อยู่ของคุณ</p>
-            <p class="text-xs flex items-center text-black/50 hover:underline">เปลี่ยนที่อยู่</p>
+        <!-- Order Details -->
+        <div class="bg-white p-4 rounded-lg shadow border">
+          <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
+
+          <!-- Product -->
+          <div class="flex items-center space-x-4 border-b pb-4">
+            <div class="w-[150px] h-[100px]">
+              <img
+                src="https://aulathailand.com/wp-content/uploads/2023/06/1.png"
+                alt="product"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="w-full">
+              <div class="flex justify-between">
+                <h2 class="font-bold">คีย์บอร์ด</h2>
+                <p class="text-lg font-bold">฿24,999</p>
+            </div>
+            <p class="text-gray-500 text-sm">Wried Mechanical KEYBOARD</p>
+            </div>
           </div>
 
-          <div class="border-2 border-solid mt-3">
-            <p>ที่อยู่ของร้านค้า</p>
+          <!-- Address -->
+          <div class="mt-4 space-y-4 border-b pb-4">
+            <div class="flex justify-between">
+              <h3 class="font-bold">ที่อยู่ของคุณ</h3>
+              <p class="text-xs flex items-center text-black/50 hover:underline">เปลี่ยนที่อยู่</p>
+            </div>
+            <div>
+              <p class="text-gray-500 text-sm">
+                ชื่อผู้รับ: คมเข้ม คำเกษ  065 094 5399 <br />
+                ที่อยู่: kku เพลส หมู่ 12 ตำบลในเมือง อำเภอเมือง จังหวัดขอนแก่น 40000
+              </p>
+            </div>
           </div>
+
+
+          <!-- Address -->
+          <div class="mt-4 space-y-4 border-b pb-4">
+              <h3 class="font-bold">จัดส่งโดย</h3>
+            <div class="border flex items-center rounded-lg">
+              <div class="w-20 h-20 rounded-lg">
+                <img src="https://file.thailandpost.com/upload/content/cs4_New%20logo%20THP%20-04_63bce2f853fe8_63f8243acc06e.jpg" class="w-full h-full object-cover rounded-lg">
+              </div>
+              <p class=" text-md font-medium">
+                ไปรษณีย์ไทย <br />
+                <span class=" text-sm font-normal text-gray-500">จัดส่งโดยไปรษณีย์ไทย (Thailand Post)</span>
+              </p>
+            </div>
+          </div>
+
+
+          <!-- Pay -->
+          <div class="mt-4 space-y-4 border-b pb-4">
+              <h3 class="font-bold">การชำระเงิน</h3>
+              <p class="  text-sm font-medium">
+                OR Code Prompt Pay <br>
+                <span class=" text-sm font-normal text-gray-500">ชำระเงินได้ด้วยOR Code Prompt Pay หรือ เลขบัญชี</span>
+              </p>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex space-x-4 mt-4">
+            <button class="flex-1 py-2 bg-[#FCCA81] hover:bg-[#EE973C] text-white rounded-lg" @click="store.paymentAction = !store.paymentAction ">
+              ชำระเงิน
+            </button>
+          </div>
+
+
+              <!-- Fav Popup -->
+    <div
+      v-if="store.paymentAction"
+      class="fixed inset-0 bg-black/50 flex justify-end z-50"
+    >
+      <div>
+        <PopupPayment />
       </div>
-
-
-      </div>
-
     </div>
-    <div class="border-2">lllll</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useIndexStore } from "~/store/main";
+const store = useIndexStore();
 
-<style scoped></style>
+</script>
+
+<style scoped>
+/**** Add custom styling here ****/
+</style>

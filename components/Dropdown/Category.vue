@@ -3,7 +3,7 @@
     <div>
       <div class="relative group">
         <button
-          class="flex items-center text-black hover:text-indigo-500"
+          class="flex items-center text-black hover:text-[#EE973C]"
           type="button"
         >
           <p>หมวดหมู่สินค้า</p>
@@ -30,26 +30,42 @@
           <ul class="py-2 text-sm text-gray-700">
             <li>
               <NuxtLink
-                to="/category/computer"
+                to="/category/food"
                 class="block px-4 py-2 hover:bg-gray-100"
               >
-                คอมพิวเตอร์
+                อาหาร
               </NuxtLink>
             </li>
             <li>
               <NuxtLink
-                to="/category/laptop"
+                to="/category/drink"
                 class="block px-4 py-2 hover:bg-gray-100"
               >
-                โน๊ตบุ๊ค
+                เครื่องดื่ม
               </NuxtLink>
             </li>
             <li>
               <NuxtLink
-                to="/category/accessorie"
+                to="/category/herbs"
                 class="block px-4 py-2 hover:bg-gray-100"
               >
-                อุปกรณ์เสริม
+                สมุนไพร
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink
+                to="/category/cloth"
+                class="block px-4 py-2 hover:bg-gray-100"
+              >
+                ผ้าและเครื่องแต่งกาย
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink
+                to="/category/items"
+                class="block px-4 py-2 hover:bg-gray-100"
+              >
+                ของใช้ ของตกแต่ง
               </NuxtLink>
             </li>
           </ul>

@@ -14,7 +14,7 @@
             <div class="mx-4">
               <NuxtLink
                 to="/product"
-                class="hover:underline hover:text-indigo-500"
+                class="hover:underline hover:text-[#EE973C]"
                 >สินค้าทั้งหมด</NuxtLink
               >
             </div>
@@ -23,7 +23,7 @@
 
           <!-- Icons (Visible in Desktop) -->
           <div
-            class="hidden md:flex items-center gap-4 md:gap-6 mx-3 md:mx-5"
+            class="hidden md:flex items-center gap-4 md:gap-6 mx-3 md:mx-5 "
           >
             <img
               class="icons w-6 md:w-8"
@@ -79,7 +79,7 @@
     <!-- Cart Popup -->
     <div
       v-if="store.cartAction"
-      class="fixed inset-0 bg-black/50 flex justify-end z-50"
+      class="fixed inset-0 bg-black/50 flex justify-end z-50 "
     >
       <div>
         <PopupCart />

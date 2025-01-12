@@ -3,7 +3,7 @@
       <div class="p-[50px]">
         <div>tack pages</div>
         <div class="flex gap-2 my-6">
-          <h1 class="font-bold text-3xl">อุปกรณ์เสริม</h1>
+          <h1 class="font-bold text-3xl">ของใช้ ของตกแต่ง</h1>
           <p class="mt-[10px] text-black/40">(สินค้าทั้งหมด 120 รายการ)</p>
         </div>
         <!-- select -->

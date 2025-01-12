@@ -1,7 +1,9 @@
 <template>
-  <div class="w-[400px] border-2 rounded-lg bg-white shadow-lg p-5">
+  <div
+    class="w-[400px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg"
+  >
     <!-- Header -->
-    <div class="flex justify-between items-center mb-4">
+    <div class="flex justify-between items-center p-5 border-b-2">
       <h1 class="text-lg font-bold">สรุปราคาสินค้า</h1>
       <button @click="closePayment">
         <svg
@@ -22,20 +24,20 @@
     </div>
 
     <!-- QR Code -->
-    <div class="flex justify-center mb-4">
+    <div class="flex justify-center mt-[95px] mb-5">
       <img
         :src="payment.qrCodeUrl"
         alt="QR Code"
-        class="w-[300px] h-[300px] object-cover rounded-lg"
+        class="w-full h-[300px] object-cover rounded-lg"
       />
     </div>
 
     <!-- Bank Info -->
-    <div class="text-center mb-4">
+    <div class="text-center mb-5">
       <h2 class="text-lg font-semibold flex items-center justify-center gap-2">
-        <span class="border-2">{{ payment.bankName }}</span>
+        <span>{{ payment.bankName }}</span>
       </h2>
-      <p class="text-sm mt-2">
+      <p class="text-sm mt-3">
         เลขบัญชี: <span class="font-semibold">{{ payment.accountNumber }}</span>
       </p>
       <p class="text-sm">
@@ -44,7 +46,7 @@
     </div>
 
     <!-- Price -->
-    <div class="border-t pt-4 mb-4">
+    <div class="border-t pt-4 items-center px-5 mt-3">
       <div class="flex justify-between text-sm mb-1 font-semibold">
         <span>รวมทั้งสิ้น</span>
         <span>฿{{ payment.totalAmount }}</span>
@@ -52,13 +54,13 @@
     </div>
 
     <!-- File Upload -->
-    <div class="mb-4">
+    <div class="mb-2 px-4 mt-5">
       <input type="file" class="w-full inputphoto" />
     </div>
 
     <!-- Actions -->
     <div class="flex justify-center mt-4">
-      <button @click="submitPayment" class="popupbtn">ยืนยันคำสั่งซื้อ</button>
+      <button class="popupbtn" @click="confirmOrder">ยืนยันคำสั่งซื้อ</button>
     </div>
   </div>
 </template>
@@ -68,47 +70,39 @@ definePageMeta({
   layout: "auth",
 });
 
-import { ref, defineEmits, onMounted } from "vue";
-import type { paymentInfo } from "~/models/product.model";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useIndexStore } from "~/store/main";
 
-// การ emit เพื่อปิด Popup
-const emit = defineEmits(["close"]);
+// Router สำหรับเปลี่ยนหน้า
+const router = useRouter();
+
+// Store หลัก
+const store = useIndexStore();
 
 // State เก็บข้อมูลการชำระเงิน
-const payment = ref<paymentInfo>({
+const payment = ref({
   qrCodeUrl:
-    "https://www.kasikornbank.com/SiteCollectionDocuments/business/sme/digital-banking/kshop/img-revamp/kplusshop_qr.png", // URL ของ QR Code
+    "https://www.kasikornbank.com/SiteCollectionDocuments/business/sme/digital-banking/kshop/img-revamp/kplusshop_qr.png",
   bankName: "กสิกร",
   accountNumber: "10948-23424-232",
   accountName: "กสิกร รักไทย",
   totalAmount: 30490,
 });
 
-// ดึงข้อมูลจาก Backend
-const fetchPaymentInfo = async () => {
-  try {
-    const response = await fetch(""); // ใส่api
-    const data = await response.json();
-    payment.value = data;
-  } catch (error) {
-    console.error("Failed to fetch payment info:", error);
-  }
-};
-
-
-// ส่งสลิป
-const submitPayment = () => {
-  alert("คำสั่งซื้อสำเร็จ!");
-};
-
-
-// ปิด Popup
+// ฟังก์ชันปิด Popup
 const closePayment = () => {
-  emit("close");
+  store.paymentAction = false;
 };
 
-// เรียกข้อมูลการชำระเงินเมื่อ Component โหลดเสร็จ
-onMounted(() => {
-  fetchPaymentInfo();
-});
+// ฟังก์ชันยืนยันคำสั่งซื้อ
+const confirmOrder = () => {
+  closePayment();
+  // Logic การยืนยันคำสั่งซื้อสามารถเพิ่มได้
+  router.push("/order/shipping"); // ไปที่หน้า shipping
+};
 </script>
+
+<style scoped>
+/* เพิ่มสไตล์ถ้าต้องการ */
+</style>

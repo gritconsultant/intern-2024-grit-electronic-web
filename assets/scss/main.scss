@@ -48,11 +48,11 @@
 }
 
 .popupbtn {
-    @apply w-[150px] text-white py-2 rounded-lg bg-[#988FD0] hover:bg-[#765798]
+    @apply w-[150px] text-white py-2 rounded-lg bg-[#FCCA81] hover:bg-[#EE973C]
 }
 
 .sidebtn {
-    @apply flex items-center p-2  rounded-r-full hover:bg-[#988FD0]/50 hover:text-white
+    @apply flex items-center hover:bg-[#FCCA81] rounded-lg p-2
 }
 
 .boxprofile {
@@ -60,5 +60,5 @@
 }
 
 .active-btn {
-    @apply bg-[#988FD0] text-white font-semibold
+    @apply bg-[#FCCA81] text-black font-semibold 
 }

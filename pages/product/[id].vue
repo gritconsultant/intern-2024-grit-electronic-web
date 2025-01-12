@@ -109,7 +109,7 @@
             <div>total review</div>
           </div>
           <!-- comment -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 p-[20px]">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-20 p-[20px]">
             <!-- cardreview -->
             <div
               v-for="(item, index) in [1, 2, 3]"

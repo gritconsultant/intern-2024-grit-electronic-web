@@ -6,6 +6,7 @@ interface State {
     cartAction : boolean
     favouriteAction : boolean
     notificationAction : boolean
+    paymentAction : boolean
 }
 
 export const useIndexStore = defineStore('index',{
@@ -15,5 +16,6 @@ export const useIndexStore = defineStore('index',{
         cartAction: false,
         favouriteAction: false,
         notificationAction: false,
+        paymentAction: false,
     })
 })

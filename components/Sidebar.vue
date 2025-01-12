@@ -1,47 +1,62 @@
 <template>
-  <div class="h-full boxprofile m-9 grid justify-center items-center">
-    <div class="flex justify-center items-center border-b pb-4 m-4">
-      <div >
-        <p class="font-medium text-lg">UserName</p>
-      </div>
+  <div class="w-full lg:w-1/4 bg-white border-r flex flex-col min-h-screen">
+    <div class="p-6">
+      <h2 class="text-lg font-bold">สวัสดี, ยินดีต้อนรับ</h2>
+      <p class="text-gray-600">aem komkem</p>
     </div>
-    <div>
-      <ul class="space-y-2 mt-4 pl-0 pr-5 pt-5 pb-5">
-        <li class="w-[200px]">
-          <NuxtLink to="/profile" class="sidebtn" active-class="active-btn">
-            <p class="ml-2">บัญชีผู้ใช้</p>
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/profile/address" class="sidebtn" active-class="active-btn">
-            <p class="ml-2">ที่อยู่</p>
-          </NuxtLink>
-        </li>
-
-        <li>
-          <NuxtLink to="/order/checkout" class="sidebtn" active-class="active-btn">
-            <p class="ml-2">คำสั่งซื้อสินค้า</p>
-          </NuxtLink>
-        </li>
-
-        <li>
-          <NuxtLink to="/order/return_order" class="sidebtn" active-class="active-btn">
-            <p class="ml-2">คืนสินค้า</p>
-          </NuxtLink>
-        </li>
-      </ul>
-    </div>
-    <div class="flex justify-center items-end m-5 mt-32">
-            <NuxtLink
-              to="/login"
-              class="flex items-center p-2 gap-2 rounded-full text-red-500 hover:bg-red-100"
-            >
-              <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
-            </NuxtLink>
-        </div>
+    <ul class="space-y-4 p-6">
+      <li>
+        <NuxtLink
+          to="/profile"
+          class="flex items-center space-x-2 sidebtn" active-class="active-btn"
+        >
+          <i class="fas fa-user"></i>
+          <span>จัดการบัญชีผู้ใช้</span>
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink
+          to="/profile/address"
+          class="flex items-center space-x-2 sidebtn" active-class="active-btn"
+        >
+          <i class="fas fa-map-marker-alt"></i>
+          <span>ที่อยู่ของฉัน</span>
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink
+          to="/order/checkout"
+          class="flex items-center space-x-2 sidebtn" active-class="active-btn"
+        >
+          <i class="fas fa-shopping-cart"></i>
+          <span>คำสั่งซื้อของฉัน</span>
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink
+          to="/order/return_order"
+          class="flex items-center space-x-2 sidebtn" active-class="active-btn"
+        >
+          <i class="fas fa-tag"></i>
+          <span>คืนสินค้า</span>
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink
+          to="/login"
+          class="flex items-center space-x-2 rounded-lg p-2 text-red-500 hover:bg-red-100"
+        >
+          <i class="fas fa-sign-out-alt"></i>
+          <span>ออกจากระบบ</span>
+        </NuxtLink>
+      </li>
+    </ul>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineProps({});
 </script>
+
+<style scoped>
+</style>

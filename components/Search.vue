@@ -1,5 +1,5 @@
 <template>
-    <div class="w-[500px] relative flex items-center border border-gray-300 rounded-md bg-white shadow-sm">
+    <div class="w-[800px] relative flex items-center border border-gray-300 rounded-md bg-white shadow-sm">
       <!-- ช่องค้นหา -->
       <input
         type="text"
