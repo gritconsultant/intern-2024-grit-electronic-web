@@ -5,116 +5,90 @@
 
     <!-- Content -->
     <div class="w-full lg:w-3/4 p-6">
-      <h1 class="text-xl font-bold mb-6">ที่ต้องจัดส่ง</h1>
+      <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
 
       <!-- Tabs -->
       <div>
         <Tab />
       </div>
 
-      <!-- Order List -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Order Card -->
+        <!-- Order List -->
         <div class="bg-white p-4 rounded-lg shadow border">
-          <div class="flex justify-between items-center mb-4">
-            <p>หมายเลขคำสั่งซื้อ #334902461</p>
-          </div>
-
-          <!-- Product -->
-          <div class="flex items-center space-x-4 pb-4">
-            <div class="w-[150px] h-[100px]">
-              <img
-                src="https://aulathailand.com/wp-content/uploads/2023/06/1.png"
-                alt="product"
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <div class="w-full">
-              <div class="flex justify-between">
-                <h2 class="font-bold">คีย์บอร์ด</h2>
-                <p class="text-lg font-bold">฿24,999</p>
+          <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
+          <div
+            v-for="order in orders"
+            :key="order.id"
+            @click="selectOrder(order)"
+            class="cursor-pointer border-b pb-4 mb-4"
+            :class="{ 'bg-gray-100': selectedOrder && selectedOrder.id === order.id }"
+          >
+            <div class="flex justify-between items-center">
+              <div>
+                <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
+                <p class="text-gray-500 text-sm">{{ order.date }}</p>
+                <p class="text-gray-500 text-sm">ได้รับภายในวันที่ {{ order.deliveryDate }}</p>
               </div>
-              <p class="text-gray-500 text-sm">Wried Mechanical KEYBOARD</p>
+              <p class="text-lg font-bold">฿{{ order.total }}</p>
             </div>
-          </div>
-
-          <!-- Order Summary -->
-          <div class="mt-4">
-            <p class="flex justify-between border-b pb-2">
-              <span>รวมทั้งหมด</span>
-              <span>฿24,999</span>
-            </p>
-            <p class="flex justify-between mt-3 font-bold text-base">
-              <span>จัดส่งภายในวันที่</span>
-              <span>25 มกราคม 2568</span>
-            </p>
           </div>
         </div>
 
-        <!-- Order Details -->
+        <!-- Selected Order Details -->
         <div class="bg-white p-4 rounded-lg shadow border">
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
-
-          <!-- Product -->
-          <div class="flex items-center space-x-4 border-b pb-4">
-            <div class="w-[150px] h-[100px]">
-              <img
-                src="https://aulathailand.com/wp-content/uploads/2023/06/1.png"
-                alt="product"
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <div class="w-full">
-              <div class="flex justify-between">
-                <h2 class="font-bold">คีย์บอร์ด</h2>
-                <p class="text-lg font-bold">฿24,999</p>
-              </div>
-              <p class="text-gray-500 text-sm">Wried Mechanical KEYBOARD</p>
-            </div>
-          </div>
-
-          <!-- Address -->
-          <div class="mt-4 space-y-4 border-b pb-4">
-            <div>
-              <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-            </div>
-            <div>
-              <p class="text-gray-500 text-sm">
-                ชื่อผู้รับ: คมเข้ม คำเกษ 065 094 5399 <br />
-                ที่อยู่: kku เพลส หมู่ 12 ตำบลในเมือง อำเภอเมือง จังหวัดขอนแก่น
-                40000
-              </p>
-            </div>
-          </div>
-
-          <!-- Address -->
-          <div class="mt-4 space-y-4 border-b pb-4">
-            <h3 class="font-bold">จัดส่งโดย</h3>
-            <div class="border flex items-center rounded-lg">
-              <div class="w-20 h-20 rounded-lg">
+          <div v-if="selectedOrder">
+            <!-- Products -->
+            <div
+              v-for="product in selectedOrder.products"
+              :key="product.id"
+              class="flex items-center space-x-4 border-b pb-4"
+            >
+              <div class="w-[170px] h-[120px]">
                 <img
-                  src="https://file.thailandpost.com/upload/content/cs4_New%20logo%20THP%20-04_63bce2f853fe8_63f8243acc06e.jpg"
-                  class="w-full h-full object-cover rounded-lg"
+                  :src="product.img"
+                  alt="product"
+                  class="w-full h-full object-cover"
                 />
               </div>
-              <p class="text-md font-medium">
-                ไปรษณีย์ไทย <br />
-                <span class="text-sm font-normal text-gray-500"
-                  >จัดส่งภายในวันที่ 25 มกราคม 2568</span
-                >
-              </p>
+              <div class="w-full">
+                <div class="flex justify-between">
+                  <h2 class="font-bold">{{ product.name }}</h2>
+                  <p class="text-lg font-bold">฿{{ product.price }}</p>
+                </div>
+                <p class="text-gray-500 text-sm">{{ product.detail }}</p>
+                <p class="text-gray-500 text-sm">จำนวน: {{ product.amount }}</p>
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="mt-4 border-b pb-4">
+              <h3 class="font-bold">ที่อยู่ของคุณ</h3>
+              <p class="text-gray-500 text-sm">ชื่อผู้รับ: {{ selectedOrder.namerecipe }}</p>
+              <p class="text-gray-500 text-sm">ที่อยู่: {{ selectedOrder.address }}</p>
+            </div>
+
+            <!-- Shipping Status -->
+            <div class="mt-4 space-y-4 border-b pb-4">
+              <h3 class="font-bold">สถานะการจัดส่ง</h3>
+              <div v-for="status in selectedOrder.shippingStatus" :key="status.text" class="flex items-center">
+                <input
+                  type="radio"
+                  :checked="status.isCurrent"
+                  class="mr-2"
+                  disabled
+                />
+                <div>
+                  <p>{{ status.text }}</p>
+                  <p class="text-gray-500 text-sm">{{ status.date }}</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Pay -->
-          <div class="mt-4 space-y-4 border-b pb-4">
-            <h3 class="font-bold">การชำระเงิน</h3>
-            <p class="text-sm font-medium">
-              OR Code Prompt Pay <br />
-              <span class="text-sm font-normal text-gray-500"
-                >ทำการชำระเงินด้วยOR Code Prompt Pay </span
-              >
-            </p>
+          <!-- No Order Selected -->
+          <div v-else class="text-center text-gray-500">
+            เลือกคำสั่งซื้อเพื่อดูรายละเอียด
           </div>
         </div>
       </div>
@@ -123,9 +97,78 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 
+interface Product {
+  id: number;
+  name: string;
+  detail: string;
+  price: number;
+  amount: number;
+  img: string;
+}
+
+interface ShippingStatus {
+  text: string;
+  date: string;
+  isCurrent: boolean;
+}
+
+interface Order {
+  id: string;
+  date: string;
+  total: number;
+  deliveryDate: string;
+  products: Product[];
+  shippingStatus: ShippingStatus[];
+  namerecipe: string;
+  address: string;
+}
+
+const orders = ref<Order[]>([
+  {
+    id: "778231342",
+    date: "26 ตุลาคม 2566",
+    total: 50878,
+    deliveryDate: "17-20 พฤศจิกายน 2566",
+    products: [
+      {
+        id: 1,
+        name: "แหวนเพชรบาเกตต์",
+        detail: "47 — ทองคำขาว 9k",
+        price: 24999,
+        amount: 1,
+        img: "https://via.placeholder.com/100",
+      },
+      {
+        id: 2,
+        name: "แหวนเพชรบาเกตต์",
+        detail: "47 — ทองคำขาว 9k",
+        price: 24999,
+        amount: 1,
+        img: "https://via.placeholder.com/100",
+      },
+    ],
+    shippingStatus: [
+      { text: "การจัดส่งสำเร็จ", date: "23 พฤศจิกายน 2566 17:00 น.", isCurrent: true },
+      { text: "อยู่ระหว่างการจัดส่ง", date: "23 พฤศจิกายน 2566 16:00 น.", isCurrent: false },
+      { text: "พัสดุอยู่ที่ศูนย์เตรียมสินค้า", date: "23 พฤศจิกายน 2566 04:19 น.", isCurrent: false },
+    ],
+    namerecipe: "คมเข้ม คำเกษ",
+    address: "ที่อยู่คำเกษ",
+  },
+]);
+
+const selectedOrder = ref<Order | null>(null);
+
+// Function to select an order
+const selectOrder = (order: Order): void => {
+  selectedOrder.value = order;
+};
 </script>
 
 <style scoped>
-/**** Add custom styling here ****/
+.cursor-pointer.bg-gray-100 {
+  transition: background-color 0.3s ease-in-out;
+}
 </style>

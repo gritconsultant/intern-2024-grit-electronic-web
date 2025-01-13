@@ -27,4 +27,20 @@ export interface Address {
     address: string;
     phone: string;
 }
-  
+
+export interface Order {
+    id: string;
+    date: string;
+    total: number;
+    deliveryDate: string;
+    products: Product[];
+    shippingStatus: ShippingStatus[];
+    namerecipe: string;
+    address: string;
+  }
+
+export interface ShippingStatus {
+    text: string;
+    date: string;
+    isCurrent: boolean;
+  }

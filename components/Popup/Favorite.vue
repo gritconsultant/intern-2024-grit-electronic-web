@@ -1,27 +1,27 @@
 <template>
   <div
-    class="w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg"
+    class="w-full md:w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
   >
-    <div class="flex justify-between items-center p-5 border-b-2">
-      <h1>รายการโปรด ({{ favoriteItems.length }})</h1>
+    <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
+      <h1 class="text-sm md:text-base font-bold">
+        รายการโปรด ({{ favoriteItems.length }})
+      </h1>
       <h2
         @click="clearFavorites"
-        class="text-red-500 cursor-pointer ml-[225px]"
+        class="text-red-500 cursor-pointer ml-auto text-xs md:text-sm"
       >
         ลบทั้งหมด
       </h2>
       <button @click="closeFavorites">
         <svg
-          class="w-6 h-6 hover:text-red-500"
+          class="w-5 h-5 md:w-6 md:h-6 hover:text-red-500"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
           fill="none"
           viewBox="0 0 24 24"
+          stroke="currentColor"
         >
           <path
-            stroke="currentColor"
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Favorite Items -->
-    <div class="px-5 overflow-y-auto flex-1">
+    <div class="px-4 md:px-5 overflow-y-auto flex-1">
       <div
         v-for="(item, index) in favoriteItems"
         :key="item.id"
@@ -41,12 +41,12 @@
         <img
           :src="item.img"
           alt="product"
-          class="w-[75px] h-[75px] object-cover rounded-md"
+          class="w-[50px] h-[50px] md:w-[75px] md:h-[75px] object-cover rounded-md"
         />
         <div class="flex-1 ml-2">
           <div class="flex justify-between">
             <div>
-              <p class="text-sm font-medium">{{ item.name }}</p>
+              <p class="text-xs md:text-sm font-medium">{{ item.name }}</p>
             </div>
           </div>
 
@@ -61,7 +61,7 @@
               <button @click="toggleFavorite(index)" class="text-red-500">
                 <svg
                   v-if="item.isFavorite"
-                  class="w-[22px] h-[22px] text-red-500"
+                  class="w-5 h-5 md:w-6 md:h-6 text-red-500"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   viewBox="0 0 24 24"
@@ -72,7 +72,7 @@
                 </svg>
                 <svg
                   v-else
-                  class="w-[22px] h-[22px] text-gray-400 hover:text-red-500"
+                  class="w-5 h-5 md:w-6 md:h-6 text-gray-400 hover:text-red-500"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -100,10 +100,10 @@
     </div>
 
     <!-- Footer -->
-    <div class="p-4 border-t bg-gray-100">
+    <div class="p-3 md:p-4 border-t bg-gray-100">
       <button
         @click="closeFavorites"
-        class="w-full mt-2 text-gray-500 text-sm hover:underline"
+        class="w-full mt-2 text-sm md:text-base text-gray-500 hover:underline"
       >
         เลือกซื้อสินค้าต่อ →
       </button>
@@ -141,24 +141,6 @@ const favoriteItems = ref([
     img: "https://via.placeholder.com/50",
     isFavorite: true,
   },
-  {
-    id: 3,
-    name: "White - S98 คีย์บอร์ดไร้สาย",
-    detail: "Gasket Mechanical Keyboard",
-    price: 2990,
-    amount: 1,
-    img: "https://via.placeholder.com/50",
-    isFavorite: true,
-  },
-  {
-    id: 4,
-    name: "White - S98 คีย์บอร์ดไร้สาย",
-    detail: "Gasket Mechanical Keyboard",
-    price: 2990,
-    amount: 1,
-    img: "https://via.placeholder.com/50",
-    isFavorite: true,
-  },
 ]);
 
 // Toggle Favorite - ถ้ากดไอคอนหัวใจซ้ำจะเปลี่ยน isFavorite
@@ -182,4 +164,22 @@ const closeFavorites = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Responsive styling */
+@media (max-width: 768px) {
+  .fontsubheader {
+    font-size: 12px;
+  }
+  .texthide {
+    display: none;
+  }
+}
+@media (min-width: 769px) {
+  .fontsubheader {
+    font-size: 16px;
+  }
+  .texthide {
+    display: block;
+  }
+}
+</style>

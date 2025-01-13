@@ -18,6 +18,8 @@
                 >สินค้าทั้งหมด</NuxtLink
               >
             </div>
+
+            <!-- Dropdown  -->
             <CategoryDropdown />
           </div>
 

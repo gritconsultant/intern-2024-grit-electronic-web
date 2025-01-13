@@ -1,19 +1,23 @@
 <template>
   <div
-    class="w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg"
+    class="w-full md:w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
   >
-    <div class="flex justify-between items-center p-5 border-b-2">
-      <h1>ตะกร้าสินค้า ({{ cartItems.length }})</h1>
-      <h2 @click="clearCart" class="text-red-500 cursor-pointer ml-[225px]">
+    <!-- Header -->
+    <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
+      <h1 class="text-sm md:text-base font-bold">
+        ตะกร้าสินค้า ({{ cartItems.length }})
+      </h1>
+      <h2
+        @click="clearCart"
+        class="text-red-500 cursor-pointer text-xs md:text-sm ml-auto"
+      >
         ลบทั้งหมด
       </h2>
       <button @click="closeCart">
         <svg
-          class="w-6 h-6 hover:text-red-500"
+          class="w-5 h-5 md:w-6 md:h-6 hover:text-red-500"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
           fill="none"
           viewBox="0 0 24 24"
         >
@@ -29,7 +33,7 @@
     </div>
 
     <!-- Cart Items -->
-    <div class="px-5 flex-grow overflow-y-auto">
+    <div class="px-4 md:px-5 flex-grow overflow-y-auto">
       <div
         v-for="(item, index) in cartItems"
         :key="item.id"
@@ -38,25 +42,22 @@
         <img
           :src="item.img"
           alt="product"
-          class="w-[75px] h-[75px] object-cover rounded-md"
+          class="w-[50px] h-[50px] md:w-[75px] md:h-[75px] object-cover rounded-md"
         />
-        <div class="flex-1 ml-4">
+        <div class="flex-1 ml-2 md:ml-4">
           <div class="flex justify-between">
             <div>
-              <p class="text-md font-normal">{{ item.name }}</p>
+              <p class="text-sm md:text-md font-normal">{{ item.name }}</p>
               <div class="font-normal text-xs text-black/50">
                 <p class="texthide">{{ item.detail }}</p>
               </div>
             </div>
-
             <div>
               <button @click="removeItem(index)" class="text-red-500">
                 <svg
-                  class="w-[17px] h-[17px] hover:text-red-500"
+                  class="w-[15px] h-[15px] md:w-[17px] md:h-[17px] hover:text-red-500"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
@@ -73,14 +74,18 @@
           </div>
 
           <div class="flex justify-between items-center">
-            <div class="flex items-center gap-2 mt-3 border border-1 rounded">
-              <button @click="decreaseQuantity(index)" class="px-2"> - </button>
-              <span>{{ item.amount }}</span>
-              <button @click="increaseQuantity(index)" class="px-2"> + </button>
+            <div class="flex items-center gap-2 mt-2 md:mt-3 border border-1 rounded">
+              <button @click="decreaseQuantity(index)" class="px-2 text-xs md:text-sm">
+                -
+              </button>
+              <span class="text-sm md:text-base">{{ item.amount }}</span>
+              <button @click="increaseQuantity(index)" class="px-2 text-xs md:text-sm">
+                +
+              </button>
             </div>
 
-            <div class="mt-3">
-              <p class="font-semibold text-lg">฿{{ item.price }}</p>
+            <div class="mt-2 md:mt-3">
+              <p class="font-semibold text-sm md:text-lg">฿{{ item.price }}</p>
             </div>
           </div>
         </div>
@@ -90,16 +95,19 @@
     <!-- Footer -->
     <div class="p-4 border-t mt-4 bg-gray-100">
       <div class="flex justify-between font-medium">
-        <span>ราคารวม:</span>
-        <span class=" text-base">฿{{ totalPrice }}</span>
+        <span class="text-sm md:text-base">ราคารวม:</span>
+        <span class="text-sm md:text-base">฿{{ totalPrice }}</span>
       </div>
-      <div class="flex flex-col items-center mt-10">
-        <button @click="checkout" class="popupbtn w-full mb-2">
+      <div class="flex flex-col items-center mt-5 md:mt-10">
+        <button
+          @click="checkout"
+          class="popupbtn w-full mb-2 text-sm md:text-base py-2"
+        >
           สั่งซื้อสินค้า
         </button>
         <button
           @click="closeCart"
-          class="w-full text-gray-500 text-sm hover:underline mt-5"
+          class="w-full text-gray-500 text-xs md:text-sm hover:underline mt-2 md:mt-5"
         >
           เลือกซื้อสินค้าต่อ →
         </button>
@@ -180,4 +188,12 @@ const checkout = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Responsive styling */
+@media (max-width: 768px) {
+  .popupbtn {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+</style>

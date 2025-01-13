@@ -8,7 +8,8 @@
       <li>
         <NuxtLink
           to="/profile"
-          class="flex items-center space-x-2 sidebtn" active-class="active-btn"
+          class="flex items-center space-x-2"
+          :class="{ 'active-btn': isActive(['/profile']) }"
         >
           <i class="fas fa-user"></i>
           <span>จัดการบัญชีผู้ใช้</span>
@@ -17,7 +18,8 @@
       <li>
         <NuxtLink
           to="/profile/address"
-          class="flex items-center space-x-2 sidebtn" active-class="active-btn"
+          class="flex items-center space-x-2"
+          :class="{ 'active-btn': isActive(['/profile/address']) }"
         >
           <i class="fas fa-map-marker-alt"></i>
           <span>ที่อยู่ของฉัน</span>
@@ -26,7 +28,8 @@
       <li>
         <NuxtLink
           to="/order/checkout"
-          class="flex items-center space-x-2 sidebtn" active-class="active-btn"
+          class="flex items-center space-x-2"
+          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping']) }"
         >
           <i class="fas fa-shopping-cart"></i>
           <span>คำสั่งซื้อของฉัน</span>
@@ -35,7 +38,8 @@
       <li>
         <NuxtLink
           to="/order/return_order"
-          class="flex items-center space-x-2 sidebtn" active-class="active-btn"
+          class="flex items-center space-x-2"
+          :class="{ 'active-btn': isActive(['/order/return_order']) }"
         >
           <i class="fas fa-tag"></i>
           <span>คืนสินค้า</span>
@@ -55,8 +59,20 @@
 </template>
 
 <script setup lang="ts">
-defineProps({});
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+// ฟังก์ชันตรวจสอบ active state รองรับหลาย path
+const isActive = (paths: string[]) => {
+  return paths.includes(route.path);
+};
 </script>
 
 <style scoped>
+.active-btn {
+  background-color: #fcca81;
+  border-radius: 5px;
+  padding: 8px;
+}
 </style>
