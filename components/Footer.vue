@@ -6,10 +6,10 @@
     <div class="ml-0 lg:ml-7 flex flex-col items-center lg:items-start">
       <img
         src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png"
-        class="w-[150px]"
+        class="w-[180px]"
       />
 
-      <p class="mt-5 text-center lg:text-left detail w-[300px]">
+      <p class="mt-5 text-center lg:text-left text-sm w-[270px]">
         173 ศาลาว่าการกรุงเทพมหานคร(เสาชิงช้า) ถนนดินสอ แขวงเสาชิงช้า เขตพระนคร
         กรุงเทพมหานคร 10200
       </p>
@@ -21,11 +21,11 @@
     >
       <!-- Categories -->
       <div class="mb-6 md:mb-0">
-        <div class="fontsubheader mb-4">หมวดหมู่</div>
+        <div class="font-bold text-base mb-4">หมวดหมู่</div>
         <div
           v-for="(data, i) in page.slice(0, 5)"
           :key="i"
-          class="hover:text-[#FCCA81] mt-1"
+          class="hover:text-[#FCCA81] text-sm mt-1"
         >
           <NuxtLink :to="data.path">
             {{ data.name }}
@@ -35,11 +35,11 @@
 
       <!-- Help -->
       <div class="mb-6 md:mb-0">
-        <div class="fontsubheader mb-4">ช่วยเหลือ</div>
+        <div class="font-bold text-base mb-4">ช่วยเหลือ</div>
         <div
           v-for="(data, i) in page.slice(5, 8)"
           :key="i"
-          class="hover:text-[#FCCA81] mt-1"
+          class="hover:text-[#FCCA81] text-sm mt-1"
         >
           <NuxtLink :to="data.path">
             {{ data.name }}
@@ -49,15 +49,15 @@
 
       <!-- Contact -->
       <div>
-        <div class="fontsubheader mb-4">ช่องทางการติดต่อ</div>
-        <div>
+        <div class="font-bold text-base mb-4">ช่องทางการติดต่อ</div>
+        <div class="text-sm">
           <p>อีเมล : bangkokbrand@gmail.com</p>
           <p class="mt-1">โทรศัพท์ : 02-224-3038</p>
           <div class="flex justify-start mt-2 gap-3 items-center ">
             <p>
               <a href="https://www.facebook.com/profile.php?id=100064262010712">
                 <svg
-                  class="w-[19px] h-[19px] text-gray-800 hover:text-[#FCCA81]"
+                  class="w-[20px] h-[20px] text-gray-800 hover:text-[#FCCA81]"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -78,7 +78,7 @@
                 href="https://www.instagram.com/bangkokbrand2023?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==.com"
               >
                 <svg
-                  class="w-[20px] h-[20px] text-gray-800 hover:text-[#FCCA81]"
+                  class="w-[21px] h-[21px] text-gray-800 hover:text-[#FCCA81]"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -98,7 +98,7 @@
             <p>
               <a href="https://www.youtube.com/@bangkokbrandtv/featured.com">
                 <svg
-                  class="w-[20px] h-[22px] text-gray-800 hover:text-[#FCCA81]"
+                  class="w-[21px] h-[22px] text-gray-800 hover:text-[#FCCA81]"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"

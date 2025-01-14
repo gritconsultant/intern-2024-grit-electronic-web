@@ -4,17 +4,20 @@
     <Sidebar />
 
     <!-- Content -->
-    <div class="w-full lg:w-3/4 p-6">
-      <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
+    <div class="w-full lg:w-3/4 p-6 ">
+      <div class="border-b">
+        <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
+      </div>
+
 
       <!-- Tabs -->
-      <div>
+      <div class="mt-5">
         <Tab />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[600px] ">
         <!-- Order List -->
-        <div class="bg-white p-4 rounded-lg shadow border">
+        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
             v-for="order in orders"
@@ -34,7 +37,7 @@
         </div>
 
         <!-- Selected Order Details -->
-        <div class="bg-white p-4 rounded-lg shadow border">
+        <div class="bg-white p-4 rounded-lg shadow border  overflow-y-auto">
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
           <div v-if="selectedOrder">
             <!-- Products -->

@@ -4,7 +4,7 @@
       <h2 class="text-lg font-bold">สวัสดี, ยินดีต้อนรับ</h2>
       <p class="text-gray-600">aem komkem</p>
     </div>
-    <ul class="space-y-4 p-6">
+    <ul class="space-y-10 p-6">
       <li>
         <NuxtLink
           to="/profile"
@@ -29,7 +29,7 @@
         <NuxtLink
           to="/order/checkout"
           class="flex items-center space-x-2"
-          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping']) }"
+          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping', '/order/receiving', '/order/review']) }"
         >
           <i class="fas fa-shopping-cart"></i>
           <span>คำสั่งซื้อของฉัน</span>

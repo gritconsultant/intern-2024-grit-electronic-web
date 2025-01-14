@@ -1,19 +1,19 @@
 <template>
-  <div class="flex">
-
-    <!-- Sidebar -->
+  <div class=" bg-pink-500 h-full">
+    <div class="flex h-[90%] bg-lime-500">
+          <!-- Sidebar -->
     <Sidebar />
 
-    <!-- Main Content -->
-    <div class="w-full boxprofile m-9 -ml-2">
-      <div class="flex justify-between items-center border-b pb-4 m-4">
-        <h1 class="font-medium text-lg">ข้อมูลบัญชีผู้ใช้</h1>
+        <!-- Main Content -->
+        <div class="w-full lg:w-3/4 p-6 h-[100%]">
+      <div class="border-b">
+        <h1 class="text-xl font-bold mb-6">ข้อมูลบัญชีผู้ใช้</h1>
       </div>
 
       <div>
         <div>
           <div class="grid grid-cols-2">
-            <div class="mt-2 ml-10">
+            <div class="mt-10 ml-10">
               <div>
                 <label for="username"> ชื่อ - นามสกุล </label> <br />
                 <h1 class="font-bold text-lg">Komkem kku</h1>
@@ -25,20 +25,23 @@
                   <label for="changepassword"> เปลี่ยนรหัสผ่าน </label> <br />
                   <div class="relative">
                     <input
-                      :type="passwordVisible.changePassword ? 'text' : 'password'"
+                      :type="
+                        passwordVisible.changePassword ? 'text' : 'password'
+                      "
                       id="changepassword"
                       class="w-full max-w-[400px] h-[45px] mt-2 inputbox pr-10"
                       :class="{ 'border-red-500': passwordError }"
-                      v-model="register.password"
                       @input="validatePassword"
                     />
                     <span
-                      class=" -m-8 cursor-pointer text-black"
+                      class="-m-8 cursor-pointer text-black"
                       @click="togglePasswordVisibility('changePassword')"
                     >
                       <i
                         :class="
-                          passwordVisible.changePassword ? 'fas fa-eye-slash' : 'fas fa-eye'
+                          passwordVisible.changePassword
+                            ? 'fas fa-eye-slash'
+                            : 'fas fa-eye'
                         "
                       ></i>
                     </span>
@@ -54,19 +57,22 @@
                   <label for="conpassword"> ยืนยันรหัสผ่านใหม่ </label> <br />
                   <div class="relative">
                     <input
-                    :type="passwordVisible.confirmPassword ? 'text' : 'password'"
-                    id="conpassword"
-                    class="w-[400px] h-[45px] mt-2 inputbox"
-                    v-model="register.confirmPassword"
-                    @input="validatePasswordMatch"
-                  />
-                  <span
-                      class=" -m-8 cursor-pointer text-black"
+                      :type="
+                        passwordVisible.confirmPassword ? 'text' : 'password'
+                      "
+                      id="conpassword"
+                      class="w-[400px] h-[45px] mt-2 inputbox"
+                      @input="validatePasswordMatch"
+                    />
+                    <span
+                      class="-m-8 cursor-pointer text-black"
                       @click="togglePasswordVisibility('confirmPassword')"
                     >
                       <i
                         :class="
-                          passwordVisible.confirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'
+                          passwordVisible.confirmPassword
+                            ? 'fas fa-eye-slash'
+                            : 'fas fa-eye'
                         "
                       ></i>
                     </span>
@@ -76,11 +82,22 @@
                     Passwords do not match.
                   </p>
                 </div>
+
+                <!-- Login Button -->
+                <div class="mt-10">
+                  <button
+                    type="submit"
+                    class="text-white w-full max-w-[300px] h-[45px] bg-[#FCCA81] hover:bg-[#EE973C] hover:text:black rounded-xl"
+                    @click="confirmChange"
+                  >
+                    ยืนยันการเปลี่ยนรหัสผ่าน
+                  </button>
+                </div>
               </div>
             </div>
 
             <div>
-              <div class="mt-3">
+              <div class="mt-10">
                 <label for="email"> Email </label>
                 <br />
                 <h1 class="font-bold text-lg">Komkem.k@kkumail.com</h1>
@@ -95,6 +112,10 @@
         </div>
       </div>
     </div>
+    </div>
+
+
+
   </div>
 </template>
 
@@ -124,16 +145,22 @@ const validatePassword = () => {
 };
 
 const validatePasswordMatch = () => {
-  passwordMismatch.value = register.value.password !== register.value.confirmPassword;
+  passwordMismatch.value =
+    register.value.password !== register.value.confirmPassword;
 };
 
-const togglePasswordVisibility = (field: keyof typeof passwordVisible.value) => {
+const togglePasswordVisibility = (
+  field: keyof typeof passwordVisible.value
+) => {
   passwordVisible.value[field] = !passwordVisible.value[field];
 };
+
+const confirmChange = () => {
+  alert("เปลี่ยนรหัสผ่านแล้ว");
+}
 </script>
 
 <style scoped>
-
 @media (max-width: 768px) {
   .boxprofile {
     margin: 0;

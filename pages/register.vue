@@ -3,7 +3,7 @@
     class="min-h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center px-4"
   >
     <form
-      class="rounded-2xl w-full max-w-[500px] bg-black/50 p-6 h-auto m-10"
+      class="rounded-2xl w-full max-w-[500px] bg-gray-500/40 p-6 h-auto m-10"
       @submit.prevent="handleRegister"
     >
       <!-- Logo -->
@@ -137,7 +137,7 @@
         <p class="text-white">Already have an account?</p>
         <NuxtLink
           to="/login"
-          class="text-red-500 ml-2 font-semibold underline"
+          class="text-red-500 ml-2 font-semibold hover:underline"
         >
           Log in
         </NuxtLink>

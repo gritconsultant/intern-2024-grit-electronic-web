@@ -20,7 +20,7 @@
             </div>
 
             <!-- Dropdown  -->
-            <CategoryDropdown />
+            <DropdownCategory />
           </div>
 
           <!-- Icons (Visible in Desktop) -->
@@ -113,7 +113,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useIndexStore } from "~/store/main";
-import CategoryDropdown from "~/components/Dropdown/Category.vue"; // Dropdown for categories
+ // Dropdown for categories
 import ProfileDropdown from "~/components/Dropdown/Profile.vue"; // Dropdown for profile
 import IconDropdown from "~/components/Dropdown/Icon.vue"; // Dropdown for icons
 

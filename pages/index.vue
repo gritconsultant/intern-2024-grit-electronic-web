@@ -1,35 +1,39 @@
 <template>
-  <div class="mx-[20px] lg:mx-[50px]">
-    <div class="h-[10rem]">
-      <img src="/public/images/banner.jpg" class=" rounded-b-2xl">
+  <div class="mx-[20px] lg:mx-[50px] grid justify-center">
+    <div>
+      <img src="/public/images/banner.jpg" class="rounded-b-2xl" />
     </div>
-    <div class="grid grid-cols-1 text-center mt-20">
+    <div class="grid grid-cols-1 text-center mt-12">
       <h1 class="my-[50px] lg:my-[70px] fontheader">หมวดหมู่สินค้า</h1>
-      <div class="flex flex-wrap justify-center gap-16">
+      <div class="flex flex-wrap justify-center">
         <div
           v-for="(data, category) in category"
           :key="category"
-          class="text-center"
+          class="text-center w-[90px] lg:w-[200px]"
         >
-        <NuxtLink to="/product">
-          <div class="flex justify-center">
-            <div class="border-2 rounded-[50px] p-1 w-[60px] h-[60px] lg:w-[80px] lg:h-[80px]">
-            <div
-              class="w-full h-full object-cover place-content-center rounded-[10px] p-1 bg-slate-300/5"
-            >
-              <img :src="data.img" />
+          <NuxtLink to="/product">
+            <div class="flex justify-center">
+              <div
+                class="border-2 rounded-full p-1 w-[60px] h-[60px] lg:w-[80px] lg:h-[80px]"
+              >
+                <div
+                  class="w-full h-full object-cover place-content-center p-1 bg-slate-300/5"
+                >
+                  <img :src="data.img" />
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
-          <h1 class="fontsubheader mt-[10px] lg:mt-[20px] text-sm lg:text-base">
-            {{ data.name }}
-          </h1>
+            <h1
+              class="fontsubheader mt-[10px] lg:mt-[20px] lg:text-base"
+            >
+              {{ data.name }}
+            </h1>
           </NuxtLink>
         </div>
       </div>
 
       <!-- search -->
-      <div class="grid justify-center mt-10">
+      <div class="grid justify-center sm:mt-8 md:mt-10 lg:mt-12">
         <Search />
       </div>
     </div>
@@ -38,20 +42,20 @@
       <!-- cardcategory -->
       <div class="grid gap-5 mt-[40px]">
         <div v-for="(item, category) in category" :key="category">
-          <div class="flex justify-between px-1">
+          <div class="flex justify-between px-10">
             <h1 class="fontsubheader mt-[3px]">{{ item.name }}</h1>
-            <div class="mr-[20px] lg:mr-[30px] text-black/40">ทั้งหมด -></div>
+              <div class=" text-black/40">ทั้งหมด -></div>
           </div>
           <div
-            class="max-[1000px]: grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 my-2"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 my-5 mt-5"
           >
             <!-- cardproduct -->
-            <div v-for="(item, i) in products" :key="i">
-              <NuxtLink to="/product/[id]" >
-              <div :to="i">
-                <CardProduct :product="item" />
-              </div>
-            </NuxtLink>
+            <div v-for="(item, i) in products" :key="i" class="flex  justify-center">
+              <NuxtLink to="/product/[id]">
+                <div :to="i">
+                  <CardProduct :product="item" />
+                </div>
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -75,9 +79,9 @@ const products = ref<Product[]>([
   },
   {
     id: 2,
-    name: "AULA",
+    name: "ad,feecscscsc",
     detail: "Wried Mechanical KEYBOARD ",
-    price: 2000,
+    price: 300,
     amount: 3,
     img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
   },
@@ -131,9 +135,6 @@ const category = ref<Category[]>([
 @media (max-width: 768px) {
   .fontheader {
     font-size: 1.25rem;
-  }
-  .fontsubheader {
-    font-size: 1rem;
   }
 }
 @media (min-width: 1024px) {

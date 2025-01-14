@@ -1,13 +1,13 @@
 <template>
   <div
-    class="min-h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center px-4"
+    class="min-h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center"
   >
     <form
-      class="rounded-2xl w-full max-w-[450px] bg-black/50 p-6 h-auto m-10"
+      class="rounded-2xl w-full max-w-[500px] bg-gray-500/40 p-6 m-10"
     >
       <!-- Logo -->
       <div class="flex justify-center">
-        <img src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" class="w-[150px] sm:w-[200px] md:w-[230px]" />
+        <img src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" class="w-[170px] sm:w-[220px] md:w-[250px]" />
       </div>
       <div class="flex justify-center font-normal text-xl text-white mt-4">
         <h1>Log in</h1>
@@ -15,13 +15,13 @@
 
       <!-- Username Input -->
       <div class="text-sm text-white mt-6">
-        <label for="username"> Username </label>
+        <label for="email"> Email </label>
         <input
           type="text"
-          id="username"
+          id="email"
           class="w-full h-[45px] mt-2 inputbox text-black px-3 rounded-md"
           required
-          placeholder="Enter Your Username"
+          placeholder="Enter Your Email"
         />
       </div>
 
@@ -88,19 +88,11 @@ definePageMeta({
   layout: "auth",
 });
 
-const login = ref({
-  username: "",
-  password: "",
-});
-
 const passwordVisible = ref(false);
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
-
-
-
 
 const router = useRouter();
 

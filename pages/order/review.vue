@@ -14,9 +14,9 @@
         <Tab />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:h-[600px]">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[600px] overflow-y-auto">
         <!-- Order List -->
-        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
+        <div class="bg-white p-4 rounded-lg shadow border">
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
             v-for="order in orders"
@@ -34,13 +34,23 @@
               </div>
               <p class="text-lg font-bold">฿{{ order.total }}</p>
             </div>
+
+            <div class="flex justify-between items-center mt-4 border-t pt-4">
+              <p class="text-lg">รีวิวและให้คะแนน</p>
+              <div>
+                <button
+                  class="fas fa-star p-2 bg-[#FCCA81] hover:bg-[#EE973C] hover:text-black text-white rounded-lg"
+                  @click="store.reviewAction = !store.reviewAction"
+                >
+                  รีวิวสินค้า
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- Selected Order Details -->
-        <div
-          class="bg-white p-4 rounded-lg shadow border overflow-y-auto"
-        >
+        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
           <div v-if="selectedOrder">
             <!-- Products -->
@@ -90,7 +100,7 @@
                 <p class="text-md font-medium">
                   ไปรษณีย์ไทย <br />
                   <span class="text-sm font-normal text-gray-500">
-                    จัดส่งโดยไปรษณีย์ไทย (Thailand Post)
+                    จัดส่งแล้ววันที่ {{ selectedOrder.date }}
                   </span>
                 </p>
               </div>
@@ -102,19 +112,9 @@
               <p class="text-sm font-medium">
                 OR Code Prompt Pay <br />
                 <span class="text-sm font-normal text-gray-500">
-                  ชำระเงินด้วย OR Code Prompt Pay หรือ เลขบัญชี
+                  ทำการชำระเงินด้วย OR Code Prompt Pay
                 </span>
               </p>
-            </div>
-
-            <!-- Payment Button -->
-            <div class="flex space-x-4 mt-4">
-              <button
-                class="flex-1 py-2 bg-[#FCCA81] hover:bg-[#EE973C] text-white rounded-lg"
-                @click="store.paymentAction = true"
-              >
-                ชำระเงิน
-              </button>
             </div>
           </div>
 
@@ -123,13 +123,12 @@
         </div>
       </div>
     </div>
-
-    <!-- Payment Popup -->
+    <!-- Review Popup -->
     <div
-      v-if="store.paymentAction"
+      v-if="store.reviewAction"
       class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
     >
-      <PopupPayment />
+      <PopupReview />
     </div>
   </div>
 </template>

@@ -2,14 +2,14 @@
   <div class="flex">
     <!-- Sidebar -->
     <Sidebar />
-    <div class="w-full boxprofile m-9 -ml-2">
-      <div class="flex justify-between items-center border-b pb-4 m-4">
-        <h1 class="font-medium text-lg">ที่อยู่</h1>
+    <div class="w-full lg:w-3/4 p-6">
+      <div class="flex justify-between border-b">
+        <h1 class="text-xl font-bold mb-6">ที่อยู่</h1>
         <button class="text-black/50 hover:underline" @click="addNewAddress">เพิ่มที่อยู่ใหม่</button>
       </div>
 
       <div>
-        <div class="flex justify-center">
+        <div class="flex justify-center mt-5">
           <div>
             <div>
               <CardAddress

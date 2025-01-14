@@ -2,11 +2,11 @@
   <div
     class="min-h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center px-4"
   >
-    <div class="rounded-2xl w-full max-w-[450px] bg-black/50 p-6">
+    <div class="rounded-2xl w-full max-w-[450px] bg-gray-500/40 p-6">
       <!-- Logo -->
       <div class="flex justify-center mt-4">
         <img
-          src="public/images/logoLogin.png"
+          src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png"
           class="w-[120px] sm:w-[150px] md:w-[200px] lg:w-[230px]"
           alt="Logo"
         />

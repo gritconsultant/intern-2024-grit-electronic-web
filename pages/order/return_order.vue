@@ -2,14 +2,14 @@
   <div class="flex">
     <!-- Sidebar -->
     <Sidebar />
-    <div class="w-full boxprofile m-9 -ml-2">
-      <div class="flex justify-between items-center border-b pb-4 m-4">
-        <h1 class="font-medium text-lg">คืนสินค้า</h1>
+    <div class="w-full lg:w-3/4 p-6">
+      <div class="border-b">
+        <h1 class="text-xl font-bold mb-6">คืนสินค้า</h1>
       </div>
 
       <div>
         <div class="flex my-6">
-          <h1 class=" font-normal px-5">หมายเลขคำสั่งซื้อ</h1>
+          <h1 class="font-normal px-5">หมายเลขคำสั่งซื้อ</h1>
           <p class="text-black/40">#78965423</p>
         </div>
 
@@ -60,6 +60,17 @@
                 type="file"
               />
             </div>
+
+            <!-- Login Button -->
+            <div class="mt-10">
+              <button
+                type="submit"
+                class="text-white w-full max-w-[300px] h-[45px] bg-[#FCCA81] hover:bg-[#EE973C] hover:text-black rounded-xl"
+                @click="confirmSent"
+              >
+                ยืนยันการคืนสินค้า
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -67,6 +78,11 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+const confirmSent = () => {
+  alert("ส่งคำขอร้องคืนสินค้าเสร็จสิ้น");
+}
+</script>
 
 <style scoped></style>

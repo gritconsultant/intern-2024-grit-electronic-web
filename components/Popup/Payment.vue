@@ -63,14 +63,14 @@
         <input
           id="transfer-proof"
           type="file"
-          class="w-full inputphoto border rounded-md p-2 text-sm"
+          class="w-full border rounded-md p-2 text-sm"
           accept="image/*"
         />
       </div>
 
       <!-- Date and Time -->
       <div class="px-4 mt-5">
-        <label for="transfer-datetime" class="block text-sm font-medium text-gray-700">
+        <label for="transfer-datetime" class="block text-sm font-medium text-gray-700 ">
           วันที่และเวลาที่โอน
         </label>
         <input

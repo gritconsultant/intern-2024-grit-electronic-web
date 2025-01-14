@@ -87,7 +87,7 @@
                 </div>
               </div>
               <button
-                class="bg-[#988FD0] text-white p-[15px] rounded-[10px] text-center text-lg lg:text-xl w-full lg:w-[350px] ml-[10px] transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300"
+                class="bg-[#FCCA81] text-white p-[15px] rounded-[10px] text-center text-lg lg:text-xl w-full lg:w-[350px] ml-[10px] transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-[#EE973C] duration-300"
               >
                 <div class="flex justify-center gap-4">
                   <div>
