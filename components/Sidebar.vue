@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full lg:w-1/4 bg-white border-r flex flex-col ">
+  <div class="w-full lg:w-1/4 bg-white border-r flex flex-col">
     <div class="p-6">
       <h2 class="text-lg font-bold">สวัสดี, ยินดีต้อนรับ</h2>
       <p class="text-gray-600">aem komkem</p>

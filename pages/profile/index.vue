@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-pink-500 h-full p-2">
-    <div class="flex h-full bg-green-600   ">
+  <div class=" p-4">
+    <div class="flex">
       <!-- Sidebar -->
       <Sidebar />
       <!-- Main Content -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex p-4">
     <!-- Sidebar -->
     <Sidebar />
 

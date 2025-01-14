@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-slate-600 p-2">
+  <div class="h-screen p-2">
     <Header />
     <div class="h-[70%]">
       <slot />

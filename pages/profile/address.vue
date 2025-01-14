@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex p-4">
     <!-- Sidebar -->
     <Sidebar />
     <div class="w-full lg:w-3/4 p-6">

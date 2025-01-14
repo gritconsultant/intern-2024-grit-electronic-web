@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex p-4">
     <!-- Sidebar -->
     <Sidebar />
 
@@ -15,7 +15,7 @@
         <Tab />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[600px] ">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Order List -->
         <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
