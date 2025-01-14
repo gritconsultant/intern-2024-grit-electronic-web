@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex p-4">
     <!-- Sidebar -->
     <Sidebar />
 
@@ -14,15 +14,15 @@
         <Tab />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[600px] overflow-y-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[65%] ">
         <!-- Order List -->
-        <div class="bg-white p-4 rounded-lg shadow border">
+        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
             v-for="order in orders"
             :key="order.id"
             @click="selectOrder(order)"
-            class="cursor-pointer border-b p-4 mb-4"
+            class="cursor-pointer] p-4"
             :class="{
               'bg-gray-100': selectedOrder && selectedOrder.id === order.id,
             }"
@@ -134,6 +134,11 @@
 </template>
 
 <script setup lang="ts">
+
+definePageMeta({
+  layout: "user",
+});
+
 import { ref } from "vue";
 import type { Order } from "~/models/product.model";
 import { useIndexStore } from "~/store/main";
@@ -145,25 +150,26 @@ const orders = ref<Order[]>([
   {
     id: "778231342",
     date: "26 ตุลาคม 2566",
-    total: 498,
+    total: 124,
     deliveryDate: "19-26 พฤศจิกายน 2566",
     products: [
-      {
-        id: 1,
-        name: "อาหาร",
-        detail: "ผัดไทย ตราสวัสดีกินดี",
-        price: 249,
-        amount: 1,
-        img: "https://via.placeholder.com/100",
-      },
-      {
-        id: 2,
-        name: "อาหาร",
-        detail: "ผัดไทย ตราสวัสดีกินดี",
-        price: 249,
-        amount: 1,
-        img: "https://via.placeholder.com/100",
-      },
+    {
+    id: 1,
+    name: "มะขาม 4 รส",
+    detail:
+      "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด ",
+    price: 62,
+    amount: 10,
+    img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
+  },
+  {
+    id: 2,
+    name: "มะขามคลุกบ๊วย 4 รส",
+    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย ",
+    price: 62,
+    amount: 13,
+    img: "https://halal.co.th/storages/products/343928.png",
+  },
     ],
     shippingStatus: [],
     namerecipe: "คมเข้ม คำเกษ 098 765 4321",
@@ -182,5 +188,10 @@ const selectOrder = (order: Order): void => {
 <style scoped>
 .cursor-pointer.bg-gray-100 {
   transition: background-color 0.3s ease-in-out;
+}
+
+/* Scrollable content */
+.overflow-y-auto {
+  max-height: calc(75%); /* Adjust based on layout */
 }
 </style>

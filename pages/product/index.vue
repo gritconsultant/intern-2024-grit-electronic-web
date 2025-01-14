@@ -12,19 +12,21 @@
           ราคา
           <select class="border p-1 rounded">
             <option value="">ทั้งหมด</option>
-            <option value="">ต่ำกว่า 10,000 บาท</option>
-            <option value="">10,000 - 20,000 บาท</option>
-            <option value="">20,000 - 30,000 บาท</option>
-            <option value="">มากกว่า 30,000 บาท</option>
+            <option value="">ต่ำกว่า 1,000 บาท</option>
+            <option value="">1,000 - 2,000 บาท</option>
+            <option value="">2,000 - 3,000 บาท</option>
+            <option value="">มากกว่า 3,000 บาท</option>
           </select>
         </div>
         <div>
           หมวดหมู่
           <select class="border p-1 rounded">
             <option value="">ทั้งหมด</option>
-            <option value="">คอมพิวเตอร์</option>
-            <option value="">โน๊ตบุ๊ค</option>
-            <option value="">อุปกรณ์เสริม</option>
+            <option value="">อาหาร</option>
+            <option value="">เครื่องดื่ม</option>
+            <option value="">สมุนไพร</option>
+            <option value="">ผ้าและเครื่องแต่งกาย</option>
+            <option value="">ของใช้ ของตกแต่ง</option>
           </select>
         </div>
       </div>
@@ -60,35 +62,36 @@ import type { Category, Product } from "~/models/product.model";
 const products = ref<Product[]>([
   {
     id: 1,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 1000,
-    amount: 0,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    name: "มะขาม 4 รส",
+    detail:
+      "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด ",
+    price: 62,
+    amount: 10,
+    img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
   },
   {
     id: 2,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 2000,
-    amount: 3,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    name: "มะขามคลุกบ๊วย 4 รส",
+    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย ",
+    price: 62,
+    amount: 13,
+    img: "https://halal.co.th/storages/products/343928.png",
   },
   {
     id: 3,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 3000,
+    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
+    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง ",
+    price: 59,
     amount: 10,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    img: "https://halal.co.th/storages/products/390694.jpg",
   },
   {
     id: 4,
-    name: "AULA",
-    detail: "Wriedsaddddddddd ",
-    price: 4000,
+    name: "เผือกกรอบไส้เสาวรส",
+    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส ",
+    price: 58,
     amount: 20,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    img: "https://halal.co.th/storages/products/680694.jpg",
   },
   {
     id: 5,

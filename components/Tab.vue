@@ -36,7 +36,7 @@
         <NuxtLink
           to="/order/history"
           class="py-2 px-4 text-gray-600 hover:text-[#FCCA81]"
-          :class="isActive('/order/history') ? 'border-b-2 border-indigo-600 text-indigo-600' : ''"
+          :class="isActive('/order/history') ? 'border-b-2 border-[#EE973C] text-[#EE973C]' : ''"
         >
           ประวัติการซื้อ
         </NuxtLink>

@@ -8,7 +8,6 @@
         <div class="border-b">
           <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
         </div>
-
   
         <!-- Tabs -->
         <div class="mt-5">
@@ -24,16 +23,24 @@
               :key="order.id"
               @click="selectOrder(order)"
               class="cursor-pointer border-b p-4 mb-4"
-              :class="{ 'bg-gray-100': selectedOrder && selectedOrder.id === order.id }"
+              :class="{
+                'bg-gray-100': selectedOrder && selectedOrder.id === order.id,
+              }"
             >
-            <div class="flex justify-between items-center">
-              <div>
-                <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
-                <p class="text-gray-500 text-sm">{{ order.date }}</p>
-                <p class="text-gray-500 text-sm">ได้รับภายในวันที่ {{ order.deliveryDate }}</p>
+              <div class="flex justify-between items-center">
+                <div>
+                  <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
+                  <p class="text-gray-500 text-sm">{{ order.date }}</p>
+                  <p class="text-gray-500 text-sm">
+                    ได้รับภายในวันที่ {{ order.deliveryDate }}
+                  </p>
+                </div>
+                <p class="text-lg font-bold">฿{{ order.total }}</p>
               </div>
-              <p class="text-lg font-bold">฿{{ order.total }}</p>
-            </div>
+              <div class="flex justify-end items-center space-x-2">
+                <i class="fas fa-star text-yellow-500"></i>
+                <p class="text-yellow-500 font-bold">5.0</p>
+              </div>
             </div>
           </div>
   
@@ -67,32 +74,46 @@
               <!-- Address -->
               <div class="mt-4 border-b pb-4">
                 <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-                <p class="text-gray-500 text-sm mt-4">ชื่อผู้รับ : {{ selectedOrder.namerecipe }}</p>
-                <p class="text-gray-500 text-sm">ที่อยู่ : {{ selectedOrder.address }}</p>
+                <p class="text-gray-500 text-sm mt-4">
+                  ชื่อผู้รับ : {{ selectedOrder.namerecipe }}
+                </p>
+                <p class="text-gray-500 text-sm">
+                  ที่อยู่ : {{ selectedOrder.address }}
+                </p>
               </div>
-            <!-- Shipping Status -->
-            <div class="mt-4 space-y-4 border-b pb-4">
-              <h3 class="font-bold">สถานะการจัดส่ง</h3>
-              <div v-for="status in selectedOrder.shippingStatus" :key="status.text" class="flex items-center">
-                <input
-                  type="radio"
-                  :checked="status.isCurrent"
-                  class="mr-2"
-                  disabled
-                />
-                <div>
-                  <p>{{ status.text }}</p>
-                  <p class="text-gray-500 text-sm">{{ status.date }}</p>
+              <!-- Shipping Status -->
+              <div class="mt-4 space-y-4 border-b pb-4">
+                <h3 class="font-bold">สถานะการจัดส่ง</h3>
+                <div
+                  v-for="status in selectedOrder.shippingStatus"
+                  :key="status.text"
+                  class="flex items-center"
+                >
+                  <input
+                    type="radio"
+                    :checked="status.isCurrent"
+                    class="mr-2"
+                    disabled
+                  />
+                  <div>
+                    <p>{{ status.text }}</p>
+                    <p class="text-gray-500 text-sm">{{ status.date }}</p>
+                  </div>
                 </div>
               </div>
-            </div>
   
+              <!-- return Button -->
+              <div class="flex space-x-4 mt-4">
+                <button
+                  class="flex-1 py-2 bg-[#FCCA81] hover:bg-[#EE973C] text-white rounded-lg"
+                >
+                  <NuxtLink to="/order/return_order"> คืนสินค้า </NuxtLink>
+                </button>
+              </div>
             </div>
   
             <!-- No Order Selected -->
-            <div v-else class="text-center text-gray-500">
-              เลือกคำสั่งซื้อ
-            </div>
+            <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div>
           </div>
         </div>
       </div>
@@ -101,23 +122,20 @@
   
   <script setup lang="ts">
   definePageMeta({
-  layout: "user",
-});
-
+    layout: "user",
+  });
+  
   import { ref } from "vue";
   import type { Order } from "~/models/product.model";
-  import { useIndexStore } from "~/store/main";
-  
-  const store = useIndexStore();
   
   const orders = ref<Order[]>([
-  {
-    id: "778231342",
-    date: "26 ตุลาคม 2566",
-    total: 124,
-    deliveryDate: "17-20 พฤศจิกายน 2566",
-    products: [
     {
+      id: "778231342",
+      date: "26 ตุลาคม 2566",
+      total: 50878,
+      deliveryDate: "17-20 พฤศจิกายน 2566",
+      products: [
+      {
     id: 1,
     name: "มะขาม 4 รส",
     detail:
@@ -134,16 +152,28 @@
     amount: 13,
     img: "https://halal.co.th/storages/products/343928.png",
   },
-    ],
-    shippingStatus: [
-      { text: "การจัดส่งสำเร็จ", date: "23 พฤศจิกายน 2566 17:00 น.", isCurrent: true },
-      { text: "อยู่ระหว่างการจัดส่ง", date: "23 พฤศจิกายน 2566 16:00 น.", isCurrent: false },
-      { text: "พัสดุอยู่ที่ศูนย์เตรียมสินค้า", date: "23 พฤศจิกายน 2566 04:19 น.", isCurrent: false },
-    ],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-]);
+      ],
+      shippingStatus: [
+        {
+          text: "การจัดส่งสำเร็จ",
+          date: "23 พฤศจิกายน 2566 17:00 น.",
+          isCurrent: true,
+        },
+        {
+          text: "อยู่ระหว่างการจัดส่ง",
+          date: "23 พฤศจิกายน 2566 16:00 น.",
+          isCurrent: false,
+        },
+        {
+          text: "พัสดุอยู่ที่ศูนย์เตรียมสินค้า",
+          date: "23 พฤศจิกายน 2566 04:19 น.",
+          isCurrent: false,
+        },
+      ],
+      namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+      address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
+    },
+  ]);
   
   const selectedOrder = ref<Order | null>(null);
   
@@ -157,10 +187,10 @@
   .cursor-pointer.bg-gray-100 {
     transition: background-color 0.3s ease-in-out;
   }
-
+  
   /* Scrollable content */
-.overflow-y-auto {
-  max-height: calc(75%); /* Adjust based on layout */
-}
+  .overflow-y-auto {
+    max-height: calc(75%); /* Adjust based on layout */
+  }
   </style>
   

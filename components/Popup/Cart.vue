@@ -133,19 +133,20 @@ const router = useRouter();
 const cartItems = ref<Product[]>([
   {
     id: 1,
-    name: "Aspire Go โน๊ตบุ๊ค",
-    detail: "Intel Core i3, RAM 8GB",
-    price: 13990,
+    name: "มะขาม 4 รส",
+    detail:
+      "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด ",
+    price: 62,
     amount: 1,
-    img: "https://via.placeholder.com/50",
+    img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
   },
   {
     id: 2,
-    name: "White - S98 คีย์บอร์ดไร้สาย",
-    detail: "Gasket Mechanical Keyboard",
-    price: 2990,
+    name: "มะขามคลุกบ๊วย 4 รส",
+    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย ",
+    price: 62,
     amount: 1,
-    img: "https://via.placeholder.com/50",
+    img: "https://halal.co.th/storages/products/343928.png",
   },
 ]);
 

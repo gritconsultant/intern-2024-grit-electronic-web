@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full lg:w-1/4 bg-white border-r flex flex-col">
+  <div class="w-full lg:w-1/4 bg-white border-r flex flex-col h-[70%]">
     <div class="p-6">
       <h2 class="text-lg font-bold">สวัสดี, ยินดีต้อนรับ</h2>
       <p class="text-gray-600">aem komkem</p>
@@ -29,7 +29,7 @@
         <NuxtLink
           to="/order/checkout"
           class="flex items-center space-x-2"
-          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping', '/order/receiving', '/order/review']) }"
+          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping', '/order/receiving', '/order/review', '/order/history']) }"
         >
           <i class="fas fa-shopping-cart"></i>
           <span>คำสั่งซื้อของฉัน</span>

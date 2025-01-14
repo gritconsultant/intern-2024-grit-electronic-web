@@ -12,19 +12,19 @@
         />
       </div>
       <div class="flex justify-center font-normal text-lg sm:text-xl lg:text-2xl text-white mt-4">
-        <h1>Forget Password</h1>
+        <h1>ลืมรหัสผ่าน</h1>
       </div>
 
       <!-- Email Input -->
       <div class="text-sm sm:text-base text-white mt-6">
-        <label for="email"> Email </label>
+        <label for="email"> อีเมล </label>
         <input
           type="text"
           id="email"
           class="w-full h-[45px] mt-4 inputbox text-black px-3 rounded-md"
           v-model="email"
           required
-          placeholder="Enter Your Email"
+          placeholder="กรุณาใส่อีเมล"
         />
       </div>
 
@@ -34,18 +34,17 @@
           @click="handleSend"
           class="w-full max-w-[300px] h-[45px] bg-[#FCCA81] hover:bg-[#EE973C] rounded-xl text-white"
         >
-          Send
+          ส่งลืมรหัสผ่าน
         </button>
       </div>
 
       <!-- Back to Log in -->
       <div class="flex justify-center mt-6 text-sm sm:text-base text-white">
-        <p>Back to -></p>
         <NuxtLink
           to="/login"
           class="text-red-500 ml-2 font-semibold underline"
         >
-          Log in
+          เข้าสู่ระบบ
         </NuxtLink>
       </div>
     </div>

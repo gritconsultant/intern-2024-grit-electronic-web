@@ -50,7 +50,7 @@
             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 my-5 mt-5"
           >
             <!-- cardproduct -->
-            <div v-for="(item, i) in products" :key="i" class="flex  justify-center">
+            <div v-for="(item, i) in products" :key="i" class="flex  justify-center ">
               <NuxtLink to="/product/[id]">
                 <div :to="i">
                   <CardProduct :product="item" />
@@ -70,63 +70,63 @@ import type { Category, Product } from "~/models/product.model";
 const products = ref<Product[]>([
   {
     id: 1,
-    name: "AULA",
+    name: "มะขาม 4 รส",
     detail:
-      "Wried Mechanical KEYBOARDbgfnfdgdfsbsdfhsdfhfsdhhdsfhdfdfsfhdfdcxzcxzcf ",
-    price: 1000,
-    amount: 0,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+      "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด ",
+    price: 62,
+    amount: 10,
+    img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
   },
   {
     id: 2,
-    name: "ad,feecscscsc",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 300,
-    amount: 3,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    name: "มะขามคลุกบ๊วย 4 รส",
+    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย ",
+    price: 62,
+    amount: 13,
+    img: "https://halal.co.th/storages/products/343928.png",
   },
   {
     id: 3,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 3000,
+    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
+    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง ",
+    price: 59,
     amount: 10,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    img: "https://halal.co.th/storages/products/390694.jpg",
   },
   {
     id: 4,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 4000,
+    name: "เผือกกรอบไส้เสาวรส",
+    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส ",
+    price: 58,
     amount: 20,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    img: "https://halal.co.th/storages/products/680694.jpg",
   },
 ]);
 const category = ref<Category[]>([
   {
     id: 1,
     name: "อาหาร",
-    img: "https://www.brandlogopng.com/files/png/computer/green-pc-icon-png-hd-computer-circle-icons-68wl.png",
+    img: "https://static.vecteezy.com/system/resources/previews/046/496/668/non_2x/a-plate-with-various-types-of-food-on-it-png.png",
   },
   {
     id: 2,
     name: "เครื่องดื่ม",
-    img: "https://images.vexels.com/content/158669/preview/notebook-illustration-laptop-f57f36.png",
+    img: "https://static.vecteezy.com/system/resources/previews/026/755/602/large_2x/fresh-and-cold-soft-drinks-ai-generative-free-png.png",
   },
   {
     id: 3,
     name: "สมุนไพร",
-    img: "https://pngimg.com/d/keyboard_PNG101839.png",
+    img: "https://static.vecteezy.com/system/resources/previews/054/055/909/non_2x/herbal-collection-in-wooden-mortar-and-pestle-png.png",
   },
   {
     id: 4,
     name: "ผ้าและเครื่องแต่งกาย",
-    img: "https://pngimg.com/d/keyboard_PNG101839.png",
+    img: "https://static.vecteezy.com/system/resources/previews/046/822/472/non_2x/a-wicker-laundry-basket-overflowing-with-clean-clothes-next-to-a-stack-of-freshly-laundered-and-folded-garments-isolated-on-a-transparent-background-free-png.png",
   },
   {
     id: 5,
     name: "ของใช้ ของตกแต่ง",
-    img: "https://pngimg.com/d/keyboard_PNG101839.png",
+    img: "https://static.vecteezy.com/system/resources/previews/034/630/935/non_2x/rustic-home-decor-items-including-ceramic-vases-wooden-branches-antique-books-candle-and-woven-basket-on-transparent-background-interior-accessories-cut-out-vintage-style-ai-generated-png.png",
   },
 ]);
 </script>

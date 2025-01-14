@@ -116,7 +116,7 @@ const payment = ref({
   bankName: "กสิกร",
   accountNumber: "10948-23424-232",
   accountName: "กสิกร รักไทย",
-  price: 30490,
+  price: 198,
   transferDateTime: "", //  สำหรับวันที่และเวลาการโอน
 });
 

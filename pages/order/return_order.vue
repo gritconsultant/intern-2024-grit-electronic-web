@@ -80,6 +80,11 @@
 
 <script setup lang="ts">
 
+definePageMeta({
+  layout: "user",
+});
+
+
 const confirmSent = () => {
   alert("ส่งคำขอร้องคืนสินค้าเสร็จสิ้น");
 }

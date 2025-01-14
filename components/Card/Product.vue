@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="w-[300px] h-[500px] border-2 border-[#A6A6A6] p-5 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg  hover:bg-[#FCCA81] "
+      class="w-[300px] h-[500px] border p-5 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg hover:bg-[#FCCA81]"
     >
       <div class="flex justify-between h-[30px]">
         <div
@@ -16,23 +16,21 @@
           <i class="fa-regular fa-heart"></i>
         </div>
       </div>
-      <div>
-        <div class="object-cover place-content-center p-2 h-[300px]">
-        <img
-          src="https://pngimg.com/d/keyboard_PNG101839.png"
-        />
-      </div>
+      <!-- กรอบรูปภาพ -->
+      <div class="flex justify-center items-center h-[300px] w-full overflow-hidden rounded-md">
+        <!-- ใช้ object-contain เพื่อไม่ตัดส่วนใดส่วนหนึ่งของภาพ -->
+        <img :src="product.img" alt="Product Image" class="w-full h-full object-cover rounded-md "/>
       </div>
       <div class="flex justify-between mt-1">
         <div>
-          <span class="fontsubheader">ชื่อ {{ product.name }} </span>
+          <span class="font-bold text-base">ชื่อ {{ product.name }} </span>
         </div>
-        <div class="text-indigo-400">฿{{ product.price }}</div>
+        <div class="text-red-600 font-bold text-base">฿{{ product.price }}</div>
       </div>
       <div>
-        <span class="fontsubheader">รายละเอียด</span>
+        <span class=" font-medium text-sm ">รายละเอียด</span>
         <div
-          class="border-2 h-[35px] w-full detail truncate break-words text-wrap"
+          class="h-[35px] w-full detail truncate break-words text-wrap"
         >
           {{ product.detail }}
         </div>
@@ -40,6 +38,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import type { Product } from "~/models/product.model";
@@ -52,4 +51,5 @@ const props = defineProps({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

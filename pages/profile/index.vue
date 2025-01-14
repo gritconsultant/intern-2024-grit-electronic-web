@@ -119,6 +119,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: "user",
+});
+
 import type { Register } from "~/models/page.model";
 
 const register = ref<Register>({

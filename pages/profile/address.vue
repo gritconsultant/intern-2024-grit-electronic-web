@@ -27,6 +27,11 @@
 </template>
 
 <script setup lang="ts">
+
+definePageMeta({
+  layout: "user",
+});
+
 import type { Address } from '~/models/product.model';
 
 // Mock ข้อมูลสำหรับตัวอย่าง

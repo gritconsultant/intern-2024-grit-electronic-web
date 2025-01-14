@@ -66,19 +66,19 @@
       id: 1,
       title: "อัปเดตสถานะคำสั่งซื้อ",
       message: "คำสั่งซื้อ #1234 ได้รับการจัดส่งแล้ว",
-      img: "https://via.placeholder.com/50",
+      img: "https://png.pngtree.com/png-vector/20190226/ourmid/pngtree-delivery-truck-icon-png-image_719473.jpg",
     },
     {
       id: 2,
-      title: "โปรโมชั่นใหม่!",
-      message: "ส่วนลด 20% สำหรับสินค้าทุกชิ้นในหมวดหมู่คอมพิวเตอร์",
-      img: "https://via.placeholder.com/50",
+      title: "อัปเดตสถานะคำสั่งซื้อ",
+      message: "คำสั่งซื้อ #1234 กำลังจัดส่งแล้ว",
+      img: "https://png.pngtree.com/png-vector/20190226/ourmid/pngtree-delivery-truck-icon-png-image_719473.jpg",
     },
     {
       id: 3,
-      title: "แจ้งเตือนระบบ",
-      message: "มีการเข้าสู่ระบบจากอุปกรณ์ใหม่",
-      img: "https://via.placeholder.com/50",
+      title: "อัปเดตสถานะคำสั่งซื้อ",
+      message: "คำสั่งซื้อ #1234 รอยืนยันการชำระเงิน",
+      img: "https://png.pngtree.com/png-vector/20190226/ourmid/pngtree-delivery-truck-icon-png-image_719473.jpg",
     },
   ]);
   

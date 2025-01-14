@@ -10,30 +10,30 @@
         <img src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" class="w-[170px] sm:w-[220px] md:w-[250px]" />
       </div>
       <div class="flex justify-center font-normal text-xl text-white mt-4">
-        <h1>Log in</h1>
+        <h1>เข้าสู่ระบบ</h1>
       </div>
 
       <!-- Username Input -->
       <div class="text-sm text-white mt-6">
-        <label for="email"> Email </label>
+        <label for="email"> อีเมล </label>
         <input
           type="text"
           id="email"
           class="w-full h-[45px] mt-2 inputbox text-black px-3 rounded-md"
           required
-          placeholder="Enter Your Email"
+          placeholder="กรุณาใส่อีเมล"
         />
       </div>
 
       <!-- Password Input -->
       <div class="text-sm text-white  mt-6 relative">
-        <label for="password"> Password </label>
+        <label for="password"> รหัสผ่าน </label>
         <input
           :type="passwordVisible ? 'text' : 'password'"
           id="password"
           class="w-full h-[45px] mt-2 inputbox text-black px-3 rounded-md"
           required
-          placeholder="Enter Your Password"
+          placeholder="หรุณาใส่รหัสผ่าน"
         />
         <span
           class="absolute right-3 top-[38px] cursor-pointer text-black"
@@ -49,7 +49,7 @@
           to="/forgetpassword"
           class="text-red-500 font-semibold hover:underline"
         >
-          Forget Password?
+          ลืมรหัสผ่าน?
         </NuxtLink>
       </div>
 
@@ -60,7 +60,7 @@
           class=" text-white w-full max-w-[300px] h-[45px] bg-[#FCCA81] hover:bg-[#EE973C] rounded-xl"
           @click="redirectToIndex"
         >
-          Log in
+          เข้าสู่ระบบ
         </button>
       </div>
 
@@ -69,12 +69,12 @@
 
       <!-- Register Now -->
       <div class="flex justify-center text-sm text-white">
-        <p>Don’t have an account?</p>
+        <p>ไม่มีบัญชีผู้ใช้ ?</p>
         <NuxtLink
           to="/register"
           class="text-red-500 ml-2 font-semibold hover:underline"
         >
-          Register now
+        ลงทะเบียน
         </NuxtLink>
       </div>
     </form>

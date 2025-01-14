@@ -15,7 +15,7 @@
         <Tab />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[65%]">
         <!-- Order List -->
         <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
@@ -66,7 +66,7 @@
             <!-- Address -->
             <div class="mt-4 border-b pb-4">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <p class="text-gray-500 text-sm mt-4">ที่อยู่ : {{ selectedOrder.namerecipe }}</p>
+              <p class="text-gray-500 text-sm mt-4">ชื่อผู้รับ : {{ selectedOrder.namerecipe }}</p>
               <p class="text-gray-500 text-sm">ที่อยู่ : {{ selectedOrder.address }}</p>
             </div>
 
@@ -112,6 +112,11 @@
 </template>
 
 <script setup lang="ts">
+
+definePageMeta({
+  layout: "user",
+});
+
 import { ref } from "vue";
 import type { Order } from "~/models/product.model";
 import { useIndexStore } from "~/store/main";
@@ -123,33 +128,30 @@ const orders = ref<Order[]>([
   {
     id: "778231342",
     date: "26 ตุลาคม 2566",
-    total: 50878,
+    total: 124,
     deliveryDate: "17-20 พฤศจิกายน 2566",
     products: [
-      {
-        id: 1,
-        name: "แหวนเพชรบาเกตต์",
-        detail: "47 — ทองคำขาว 9k",
-        price: 24999,
-        amount: 1,
-        img: "https://via.placeholder.com/100",
-      },
-      {
-        id: 2,
-        name: "แหวนเพชรบาเกตต์",
-        detail: "47 — ทองคำขาว 9k",
-        price: 24999,
-        amount: 1,
-        img: "https://via.placeholder.com/100",
-      },
+    {
+    id: 1,
+    name: "มะขาม 4 รส",
+    detail:
+      "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด ",
+    price: 62,
+    amount: 10,
+    img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
+  },
+  {
+    id: 2,
+    name: "มะขามคลุกบ๊วย 4 รส",
+    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย ",
+    price: 62,
+    amount: 13,
+    img: "https://halal.co.th/storages/products/343928.png",
+  },
     ],
-    shippingStatus: [
-      { text: "การจัดส่งสำเร็จ", date: "23 พฤศจิกายน 2566 17:00 น.", isCurrent: true },
-      { text: "อยู่ระหว่างการจัดส่ง", date: "23 พฤศจิกายน 2566 16:00 น.", isCurrent: false },
-      { text: "พัสดุอยู่ที่ศูนย์เตรียมสินค้า", date: "23 พฤศจิกายน 2566 04:19 น.", isCurrent: false },
-    ],
-    namerecipe: "คมเข้ม คำเกษ",
-    address: "ที่อยู่คำเกษ",
+    shippingStatus: [],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
   },
 ]);
 
@@ -162,7 +164,8 @@ const selectOrder = (order: Order): void => {
 </script>
 
 <style scoped>
-.cursor-pointer.bg-gray-100 {
-  transition: background-color 0.3s ease-in-out;
+/* Scrollable content */
+.overflow-y-auto {
+  max-height: calc(75%); /* Adjust based on layout */
 }
 </style>

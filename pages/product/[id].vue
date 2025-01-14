@@ -10,7 +10,7 @@
               <div class="flex justify-center">
                 <img
                   class="object-cover max-w-full h-auto"
-                  src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
+                  src="https://halal.co.th/storages/products/343928.png"
                   alt=""
                 />
               </div>
@@ -20,28 +20,28 @@
               <div class="photoselect">
                 <img
                   class="object-cover max-w-[60px] lg:max-w-[80px]"
-                  src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-side-view.jpg"
+                  src="https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png"
                   alt=""
                 />
               </div>
               <div class="photoselect">
                 <img
                   class="object-cover max-w-[60px] lg:max-w-[80px]"
-                  src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
+                  src="https://halal.co.th/storages/products/343928.png"
                   alt=""
                 />
               </div>
               <div class="photoselect">
                 <img
                   class="object-cover max-w-[60px] lg:max-w-[80px]"
-                  src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-front-view(1).jpg"
+                  src="https://halal.co.th/storages/products/390690.png"
                   alt=""
                 />
               </div>
               <div class="photoselect">
                 <img
                   class="object-cover max-w-[60px] lg:max-w-[80px]"
-                  src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
+                  src="https://halal.co.th/storages/products/390695.jpg"
                   alt=""
                 />
               </div>
@@ -49,7 +49,7 @@
           </div>
           <!-- detailproduct -->
           <div class="w-full lg:w-3/6 p-5">
-            <h1 class="fontsubheader">ชื่อ</h1>
+            <h1 class="font-bold text-2xl">มะขามหยี 3 รส</h1>
             <div class="mt-[6px] flex flex-wrap gap-2 lg:gap-5">
               <div>star number</div>
               |
@@ -60,7 +60,7 @@
             <div
               class="my-[20px] font-semibold text-[#FF0808] text-2xl lg:text-4xl"
             >
-              ฿4500
+              ฿45
             </div>
             <div class="flex flex-col justify-between gap-5">
               <div class="h-full">
@@ -153,22 +153,22 @@
                 <div class="flex flex-wrap justify-center gap-2 p-2">
                   <img
                     class="photoreview max-w-[60px] lg:max-w-[80px]"
-                    src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-side-view.jpg"
+                    src="https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png"
                     alt=""
                   />
                   <img
                     class="photoreview max-w-[60px] lg:max-w-[80px]"
-                    src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
+                    src="https://halal.co.th/storages/products/343928.png"
                     alt=""
                   />
                   <img
                     class="photoreview max-w-[60px] lg:max-w-[80px]"
-                    src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-front-view(1).jpg"
+                    src="https://halal.co.th/storages/products/390690.png"
                     alt=""
                   />
                   <img
                     class="photoreview max-w-[60px] lg:max-w-[80px]"
-                    src="https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2024/10/import/angry%20miao/am-rgb-650-white-top-view(1).jpg"
+                    src="https://halal.co.th/storages/products/390695.jpg"
                     alt=""
                   />
                 </div>
@@ -178,7 +178,7 @@
         </div>
       </div>
     </div>
-    <div class="p-[20px] lg:p-[40px] bg-[#988FD0]/30">
+    <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30">
       <div class="grid gap-7 mx-[20px] lg:mx-[50px]">
         <h1 class="fontheader">สินค้าใกล้เคียง</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -197,51 +197,36 @@ import type { Product } from "~/models/product.model";
 const products = ref<Product[]>([
   {
     id: 1,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 1000,
-    amount: 0,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    name: "มะขาม 4 รส",
+    detail:
+      "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด ",
+    price: 62,
+    amount: 10,
+    img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
   },
   {
     id: 2,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 2000,
-    amount: 3,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    name: "มะขามคลุกบ๊วย 4 รส",
+    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย ",
+    price: 62,
+    amount: 13,
+    img: "https://halal.co.th/storages/products/343928.png",
   },
   {
     id: 3,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 3000,
+    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
+    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง ",
+    price: 59,
     amount: 10,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    img: "https://halal.co.th/storages/products/390694.jpg",
   },
   {
     id: 4,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 4000,
+    name: "เผือกกรอบไส้เสาวรส",
+    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส ",
+    price: 58,
     amount: 20,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
-  },
-  {
-    id: 5,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 5000,
-    amount: 30,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
-  },
-  {
-    id: 6,
-    name: "AULA",
-    detail: "Wried Mechanical KEYBOARD ",
-    price: 6000,
-    amount: 40,
-    img: "https://aulathailand.com/wp-content/uploads/2023/06/1.png",
+    img: "https://halal.co.th/storages/products/680694.jpg",
   },
 ]);
 </script>
