@@ -23,7 +23,7 @@
       </div>
       <div class="flex justify-between mt-1">
         <div>
-          <span class="font-bold text-base">ชื่อ {{ product.name }} </span>
+          <span class="font-bold text-base"> {{ product.name }} </span>
         </div>
         <div class="text-red-600 font-bold text-base">฿{{ product.price }}</div>
       </div>

@@ -67,67 +67,71 @@
 <script setup lang="ts">
 import type { Category, Product } from "~/models/product.model";
 
+// Product data
 const products = ref<Product[]>([
   {
     id: 1,
     name: "มะขาม 4 รส",
-    detail:
-      "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด ",
+    detail: "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด",
     price: 62,
     amount: 10,
     img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
+    categoryId: 1,
   },
   {
     id: 2,
     name: "มะขามคลุกบ๊วย 4 รส",
-    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย ",
+    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย",
     price: 62,
     amount: 13,
     img: "https://halal.co.th/storages/products/343928.png",
+    categoryId: 1,
   },
   {
     id: 3,
     name: "เลมอนอบแห้ง รสน้ำผึ้ง",
-    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง ",
+    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง",
     price: 59,
     amount: 10,
     img: "https://halal.co.th/storages/products/390694.jpg",
+    categoryId: 2,
   },
   {
     id: 4,
     name: "เผือกกรอบไส้เสาวรส",
-    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส ",
+    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส",
     price: 58,
     amount: 20,
     img: "https://halal.co.th/storages/products/680694.jpg",
-  },
-]);
-const category = ref<Category[]>([
-  {
-    id: 1,
-    name: "อาหาร",
-    img: "https://static.vecteezy.com/system/resources/previews/046/496/668/non_2x/a-plate-with-various-types-of-food-on-it-png.png",
-  },
-  {
-    id: 2,
-    name: "เครื่องดื่ม",
-    img: "https://static.vecteezy.com/system/resources/previews/026/755/602/large_2x/fresh-and-cold-soft-drinks-ai-generative-free-png.png",
-  },
-  {
-    id: 3,
-    name: "สมุนไพร",
-    img: "https://static.vecteezy.com/system/resources/previews/054/055/909/non_2x/herbal-collection-in-wooden-mortar-and-pestle-png.png",
-  },
-  {
-    id: 4,
-    name: "ผ้าและเครื่องแต่งกาย",
-    img: "https://static.vecteezy.com/system/resources/previews/046/822/472/non_2x/a-wicker-laundry-basket-overflowing-with-clean-clothes-next-to-a-stack-of-freshly-laundered-and-folded-garments-isolated-on-a-transparent-background-free-png.png",
+    categoryId: 3,
   },
   {
     id: 5,
-    name: "ของใช้ ของตกแต่ง",
-    img: "https://static.vecteezy.com/system/resources/previews/034/630/935/non_2x/rustic-home-decor-items-including-ceramic-vases-wooden-branches-antique-books-candle-and-woven-basket-on-transparent-background-interior-accessories-cut-out-vintage-style-ai-generated-png.png",
+    name: "กระเป๋าผ้า",
+    detail: "กระเป๋าผ้าลายดอกไม้สีสันสดใส",
+    price: 250,
+    amount: 5,
+    img: "https://example.com/bag.png",
+    categoryId: 4,
   },
+  {
+    id: 6,
+    name: "แจกันเซรามิก",
+    detail: "แจกันเซรามิกสำหรับตกแต่งบ้าน",
+    price: 500,
+    amount: 3,
+    img: "https://example.com/vase.png",
+    categoryId: 5,
+  },
+]);
+
+// Category data
+const category = ref<Category[]>([
+  { id: 1, name: "อาหาร", img:"" },
+  { id: 2, name: "เครื่องดื่ม", img:"" },
+  { id: 3, name: "สมุนไพร", img:"" },
+  { id: 4, name: "ผ้าและเครื่องแต่งกาย", img:""},
+  { id: 5, name: "ของใช้ ของตกแต่ง" , img:""},
 ]);
 </script>
 

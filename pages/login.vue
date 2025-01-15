@@ -33,7 +33,7 @@
           id="password"
           class="w-full h-[45px] mt-2 inputbox text-black px-3 rounded-md"
           required
-          placeholder="หรุณาใส่รหัสผ่าน"
+          placeholder="กรุณาใส่รหัสผ่าน"
         />
         <span
           class="absolute right-3 top-[38px] cursor-pointer text-black"
