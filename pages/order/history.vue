@@ -37,79 +37,58 @@
           </div>
         </div>
 
-        <!-- Selected Order Details -->
-        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
-          <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
-          <div v-if="selectedOrder">
-            <!-- Products -->
-            <div
-              v-for="product in selectedOrder.products"
-              :key="product.id"
-              class="flex items-center space-x-4 border-b pb-4"
-              :class="{
-                'bg-gray-100':
-                  selectedProduct && selectedProduct.id === product.id,
-              }"
-              @click="selectProduct(product)"
-            >
-              <div class="w-[170px] h-[120px]">
-                <img
-                  :src="product.img"
-                  alt="product"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <div class="w-full">
-                <div class="flex justify-between">
-                  <h2 class="font-bold">{{ product.name }}</h2>
-                  <p class="text-lg font-bold">฿{{ product.price }}</p>
-                </div>
-                <p class="text-gray-500 text-sm">{{ product.detail }}</p>
-                <p class="text-gray-500 text-sm">จำนวน: {{ product.amount }}</p>
-              </div>
+      <!-- Products in Selected Order -->
+      <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
+        <h2 class="font-bold mb-4">สินค้าภายในคำสั่งซื้อ</h2>
+        <div v-if="selectedOrder">
+          <div
+            v-for="product in selectedOrder.products"
+            :key="product.id"
+            class="flex items-center space-x-4 border-b pb-4 cursor-pointer"
+            :class="{
+              'bg-gray-200': isSelected(product),
+            }"
+            @click="toggleProductSelection(product)"
+          >
+            <div class="w-[120px] h-[80px]">
+              <img :src="product.img" alt="product" class="w-full h-full object-cover" />
             </div>
-
-            <!-- Address -->
-            <div class="mt-4 border-b pb-4">
-              <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <p class="text-gray-500 text-sm mt-4">
-                ชื่อผู้รับ : {{ selectedOrder.namerecipe }}
-              </p>
-              <p class="text-gray-500 text-sm">
-                ที่อยู่ : {{ selectedOrder.address }}
-              </p>
-            </div>
-
-            <!-- Return Button -->
-            <div class="mt-6">
-              <button
-                v-if="selectedProduct"
-                @click="goToReturnPage"
-                class="text-white bg-[#FCCA81] hover:bg-[#EE973C] hover:text-black rounded-lg p-3"
-              >
-                คืนสินค้า: {{ selectedProduct.name }}
-              </button>
+            <div>
+              <h2 class="font-bold">{{ product.name }}</h2>
+              <p class="text-gray-500 text-sm">฿{{ product.price }}</p>
             </div>
           </div>
 
-          <!-- No Order Selected -->
-          <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div>
+          <!-- Return Button -->
+          <div class="mt-6">
+            <button
+              v-if="selectedProducts.length"
+              @click="goToReturnPage"
+              class="text-white bg-[#FCCA81] hover:bg-[#EE973C] hover:text-black rounded-lg p-3"
+            >
+              คืนสินค้า: {{ selectedProducts.length }} รายการ
+            </button>
+          </div>
         </div>
+        <div v-else class="text-gray-500 text-center">กรุณาเลือกคำสั่งซื้อ</div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import { useOrderStore } from "@/store/orderStore";
 
 definePageMeta({
   layout: "user",
 });
 
 const router = useRouter();
+const orderStore = useOrderStore();
 
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import type { Order, Product } from "~/models/product.model";
 
 const orders = ref<Order[]>([
@@ -181,38 +160,43 @@ const orders = ref<Order[]>([
 ]);
 
 const selectedOrder = ref<Order | null>(null);
-  const selectedProduct = ref<Product | null>(null);
+const selectedProducts = ref<Product[]>([]);
 
-// Function to select an order
+// ฟังก์ชันเลือกคำสั่งซื้อ
 const selectOrder = (order: Order): void => {
   selectedOrder.value = order;
-  selectedProduct.value = null;
+  selectedProducts.value = [];
 };
 
-const selectProduct = (product: Product): void => {
-  selectedProduct.value = product;
-};
-
-const goToReturnPage = (): void => {
-  if (selectedOrder.value && selectedProduct.value) {
-    router.push({
-      name: "/order/return_order",
-      params: {
-        orderId: selectedOrder.value.id,
-        productId: selectedProduct.value.id,
-      },
-    });
+// ฟังก์ชันเพิ่ม/ลบสินค้าในรายการที่เลือก
+const toggleProductSelection = (product: Product): void => {
+  const index = selectedProducts.value.findIndex((p) => p.id === product.id);
+  if (index === -1) {
+    selectedProducts.value.push(product);
+  } else {
+    selectedProducts.value.splice(index, 1);
   }
+};
+
+// เช็คว่าสินค้านั้นถูกเลือกหรือไม่
+const isSelected = (product: Product): boolean => {
+  return selectedProducts.value.some((p) => p.id === product.id);
+};
+
+// ไปหน้าคืนสินค้า
+const goToReturnPage = (): void => {
+  orderStore.setOrderAndProducts(selectedOrder.value?.id ?? '', selectedProducts.value);
+  router.push("/order/return_order");
 };
 </script>
 
 <style scoped>
-.cursor-pointer.bg-gray-100 {
+.cursor-pointer.bg-gray-200 {
   transition: background-color 0.3s ease-in-out;
 }
 
 /* Scrollable content */
 .overflow-y-auto {
-  max-height: calc(75%); /* Adjust based on layout */
+  max-height: calc(75%);
 }
 </style>
