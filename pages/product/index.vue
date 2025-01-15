@@ -192,7 +192,7 @@ const products = ref<Product[]>([
   detail: "เสื้อโปโลภัทรพัฒน์ สีแดง มีทั้งของผู้ชาย และผู้หญิง ผลิตจากผ้า cotton 100% สวมใส่สบาย",
   price: 450,
   amount: 5,
-  img: "https://cx.lnwfile.com/_/cx/_raw/hj/c0/ii.png",
+  img: "https://th.kmsupergifts.com/uploads/202339877/ice-silk-polo-shirt0b6dde9e-b771-4ae5-bad2-886041fd6d81.jpg",
   categoryId: 4,
 },
 {

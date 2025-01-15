@@ -1,93 +1,135 @@
 <template>
-  <div class="flex p-4">
-    <!-- Sidebar -->
-    <Sidebar />
-    <div class="w-full lg:w-3/4 p-6">
-      <div class="border-b">
-        <h1 class="text-xl font-bold mb-6">คืนสินค้า</h1>
+  <div class="p-6">
+    <h1 class="text-xl font-bold mb-4">คืนสินค้า</h1>
+    <div class="bg-white p-4 rounded-lg shadow border">
+      <!-- Order Details -->
+      <div>
+        <h2 class="font-bold">รายละเอียดคำสั่งซื้อ</h2>
+        <p>หมายเลขคำสั่งซื้อ: {{ orderId }}</p>
+        <p>ชื่อสินค้า: {{ product?.name }}</p>
+        <p>ราคาสินค้า: ฿{{ product?.price }}</p>
       </div>
 
-      <div>
-        <div class="flex my-6">
-          <h1 class="font-normal px-5">หมายเลขคำสั่งซื้อ</h1>
-          <p class="text-black/40">#78965423</p>
-        </div>
+      <!-- Return Form -->
+      <div class="mt-6">
+        <label for="reason" class="font-bold">เหตุผลในการคืนสินค้า</label>
+        <textarea
+          id="reason"
+          rows="4"
+          class="w-full border p-2 mt-2 rounded-lg"
+          placeholder="กรุณาใส่เหตุผลในการคืนสินค้า"
+        ></textarea>
 
-        <div class="flex justify-between">
-          <div class="mx-10 mt-2">
-            <div>
-              <label for="productname "> ชื่อสินค้า </label> <br />
-              <input
-                type="text"
-                id="productname"
-                class="w-[400px] h-[45px] mt-2 inputbox"
-              />
-            </div>
-            <div class="mt-5">
-              <label for="productprice"> ราคาสินค้า </label> <br />
-              <input
-                type="text"
-                id="productprice"
-                class="w-[400px] h-[45px] mt-2 inputbox"
-              />
-            </div>
+        <label for="evidence" class="font-bold mt-4 block">หลักฐานการคืนสินค้า</label>
+        <input
+          id="evidence"
+          type="file"
+          class="w-full mt-2 p-2 border rounded-lg"
+        />
 
-            <div class="mt-5">
-              <label for="file_input">หลักฐานการชำระเงิน</label> <br />
-              <input
-                class="w-[400px] mt-2 inputphoto"
-                id="file_input"
-                type="file"
-              />
-            </div>
-          </div>
-
-          <div>
-            <div class="mr-10">
-              <label for="productdetail"> รายละเอียดขอคืนสินค้า </label> <br />
-              <input
-                type="text"
-                id="productdetail"
-                class="w-[450px] h-[45px] mt-4 inputbox"
-              />
-            </div>
-
-            <div class="mt-5 flex justify-between items-center">
-              <label class="text-sm" for="file_input">แนบรูปสินค้า</label>
-              <input
-                class="mr-10 w-[370px] inputphoto"
-                id="file_input"
-                type="file"
-              />
-            </div>
-
-            <!-- Login Button -->
-            <div class="mt-10">
-              <button
-                type="submit"
-                class="text-white w-full max-w-[300px] h-[45px] bg-[#FCCA81] hover:bg-[#EE973C] hover:text-black rounded-xl"
-                @click="confirmSent"
-              >
-                ยืนยันการคืนสินค้า
-              </button>
-            </div>
-          </div>
-        </div>
+        <button
+          class="bg-[#FCCA81] hover:bg-[#EE973C] text-white p-2 rounded-lg mt-4"
+          @click="submitReturn"
+        >
+          ยืนยันการคืนสินค้า
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useRoute } from "vue-router";
+import { ref, computed } from "vue";
+import type { Order, Product } from "~/models/product.model";
 
-definePageMeta({
-  layout: "user",
-});
+const route = useRoute();
 
+const orders = ref<Order[]>([
+  {
+    id: "778231342",
+    date: "26 ตุลาคม 2566",
+    total: 50878,
+    deliveryDate: "17-20 พฤศจิกายน 2566",
+    products: [
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+    ],
+    shippingStatus: [
+      {
+        text: "การจัดส่งสำเร็จ",
+        date: "23 พฤศจิกายน 2566 17:00 น.",
+        isCurrent: true,
+      },
+      {
+        text: "อยู่ระหว่างการจัดส่ง",
+        date: "23 พฤศจิกายน 2566 16:00 น.",
+        isCurrent: false,
+      },
+      {
+        text: "พัสดุอยู่ที่ศูนย์เตรียมสินค้า",
+        date: "23 พฤศจิกายน 2566 04:19 น.",
+        isCurrent: false,
+      },
+    ],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
+  },
+]);
 
-const confirmSent = () => {
-  alert("ส่งคำขอร้องคืนสินค้าเสร็จสิ้น");
-}
+// Get route params
+const orderId = route.params.orderId as string;
+const productId = Number(route.params.productId);
+
+// Find order and product by IDs
+const order = computed(() => orders.value.find((o) => o.id === orderId));
+const product = computed(() =>
+  order.value?.products.find((p) => p.id === productId)
+);
+
+const submitReturn = () => {
+  alert("การคืนสินค้าสำเร็จ");
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+textarea {
+  resize: none;
+}
+</style>

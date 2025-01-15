@@ -73,7 +73,7 @@ import type { Category, Product } from "~/models/product.model";
 // Product data
 const products = ref<Product[]>([
   {
-    id: 5,
+    id: 1,
     name: "เครื่องดื่มรังนกสำเร็จรูป",
     detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
     price: 150,
@@ -82,7 +82,7 @@ const products = ref<Product[]>([
     categoryId: 2,
   },
   {
-    id: 6,
+    id: 2,
     name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
     detail: "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
     price: 150,
@@ -91,7 +91,7 @@ const products = ref<Product[]>([
     categoryId: 2,
   },
   {
-    id: 7,
+    id: 3,
     name: "เครื่องดื่มน้ำองุ่นขาว",
     detail: "กลูต้า เคอร์คิวมา มินต์ ซี เครื่องดื่มน้ำองุ่นขาว ผสมกลูต้าไธโอนและขมิ้น",
     price: 40,
@@ -100,7 +100,7 @@ const products = ref<Product[]>([
     categoryId: 2,
   },
   {
-    id: 8,
+    id: 4,
     name: "เครื่องดื่มสมุนไพรตรีผลา",
     detail: "ชีววิถี เครื่องดื่มสมุนไพรตรีผลา สูตรเข้มข้น รสธรรมชาติ",
     price: 155,
@@ -112,41 +112,41 @@ const products = ref<Product[]>([
 
 
   {
-    id: 5,
-    name: "ข้าวหอมปทุมธานี 1",
-    detail: "ข้าวที่มีความหอม นุ่ม คล้ายข้าวหอมมะลิ",
-    price: 250,
-    amount: 5,
-    img: "https://cx.lnwfile.com/_/cx/_raw/d7/ft/u6.png",
-    categoryId: 2,
-  },
-  {
-    id: 6,
-    name: "หมูยอใบตอง",
-    detail: "หมูยอห่อใบตองสูตรต้นตำรับ หอมกลิ่นสมุนไพร สดใหม่ทุกวัน",
-    price: 120,
-    amount: 3,
-    img: "https://thaiinnofood.com/wp-content/uploads/2017/11/%E0%B8%AB%E0%B8%A1%E0%B8%B9%E0%B8%A2%E0%B8%AD%E0%B8%AB%E0%B9%88%E0%B8%AD%E0%B9%83%E0%B8%9A%E0%B8%95%E0%B8%AD%E0%B8%87.jpg",
-    categoryId: 2,
-  },
-  {
-    id: 7,
-    name: "กล้วยอบน้ำผึ้ง",
-    detail: "กล้วยอบน้ำผึ้ง หวานธรรมชาติ ไม่ใส่น้ำตาล",
-    price: 80,
-    amount: 5,
-    img: "https://down-th.img.susercontent.com/file/th-11134207-7r98t-lrsoy0wc69bxac",
-    categoryId: 2,
-  },
-  {
-    id: 8,
-    name: "น้ำพริกเผากุ้งเสียบ",
-    detail: "น้ำพริกเผาสูตรกุ้งเสียบ หอมเผ็ดหวานกำลังดี",
-    price: 80,
-    amount: 3,
-    img: "https://www.thaimanee-goodday.com/cdn/shop/products/TM1-0167-02_2048x.png?v=1619158250",
-    categoryId: 2,
-  },
+  id: 5,
+  name: "น้ำใบเตย",
+  detail: "น้ำใบเตยหอมหวาน ดื่มแล้วสดชื่น",
+  price: 45,
+  amount: 20,
+  img: "https://images.mango-prod.siammakro.cloud/SOURCE/2ec9b71eddbd47949789abb9c9131e5b",
+  categoryId: 2,
+},
+{
+  id: 6,
+  name: "น้ำเก๊กฮวย",
+  detail: "น้ำเก๊กฮวยรสชาติกลมกล่อม ช่วยบำรุงสุขภาพ",
+  price: 40,
+  amount: 18,
+  img: "https://www.seasunzone.com/wp-content/uploads/2024/04/1114.jpg",
+  categoryId: 2,
+},
+{
+  id: 7,
+  name: "น้ำกระเจี๊ยบ",
+  detail: "น้ำกระเจี๊ยบรสเปรี้ยวอมหวาน มีประโยชน์",
+  price: 55,
+  amount: 12,
+  img: "https://www.cofethai.com/wp-content/uploads/2024/11/240mL-HibiscusDrink.jpg",
+  categoryId: 2,
+},
+{
+  id: 8,
+  name: "น้ำส้มคั้นสด",
+  detail: "น้ำส้มคั้นสดแท้ 100% ไม่มีน้ำตาล",
+  price: 70,
+  amount: 25,
+  img: "https://cdn8.devgodigit.net/wp-content/uploads/2021/09/30200115/051411283_P.jpg",
+  categoryId: 2,
+},
 ]);
 
 // Category data

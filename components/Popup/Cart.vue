@@ -134,19 +134,38 @@ const cartItems = ref<Product[]>([
   {
     id: 1,
     name: "มะขาม 4 รส",
-    detail:
-      "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด ",
+    detail: "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด",
     price: 62,
-    amount: 1,
+    amount: 10,
     img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
+    categoryId: 1,
   },
   {
     id: 2,
     name: "มะขามคลุกบ๊วย 4 รส",
-    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย ",
+    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย",
     price: 62,
-    amount: 1,
+    amount: 13,
     img: "https://halal.co.th/storages/products/343928.png",
+    categoryId: 1,
+  },
+  {
+    id: 3,
+    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
+    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง",
+    price: 59,
+    amount: 10,
+    img: "https://halal.co.th/storages/products/390694.jpg",
+    categoryId: 1,
+  },
+  {
+    id: 4,
+    name: "เผือกกรอบไส้เสาวรส",
+    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส",
+    price: 58,
+    amount: 20,
+    img: "https://halal.co.th/storages/products/680694.jpg",
+    categoryId: 1,
   },
 ]);
 

@@ -29,20 +29,10 @@
         <NuxtLink
           to="/order/checkout"
           class="flex items-center space-x-2"
-          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping', '/order/receiving', '/order/review', '/order/history']) }"
+          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping', '/order/receiving', '/order/review', '/order/history', '/order/return_order']) }"
         >
           <i class="fas fa-shopping-cart"></i>
           <span>คำสั่งซื้อของฉัน</span>
-        </NuxtLink>
-      </li>
-      <li>
-        <NuxtLink
-          to="/order/return_order"
-          class="flex items-center space-x-2"
-          :class="{ 'active-btn': isActive(['/order/return_order']) }"
-        >
-          <i class="fas fa-tag"></i>
-          <span>คืนสินค้า</span>
         </NuxtLink>
       </li>
       <li>
