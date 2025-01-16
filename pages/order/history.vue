@@ -6,7 +6,7 @@
     <!-- Content -->
     <div class="w-full lg:w-3/4 p-6">
       <div class="border-b">
-        <h1 class="text-xl font-bold mb-6">คืนสินค้า</h1>
+        <h1 class="text-xl font-bold mb-6">ประวัติการซื้อ</h1>
       </div>
 
       <!-- Tabs -->
@@ -14,9 +14,9 @@
         <Tab />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[50%]">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
         <!-- Order List -->
-        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
+        <div class="bg-white p-4 rounded-lg shadow border h-[60%] overflow-y-auto">
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
             v-for="order in orders"
@@ -38,13 +38,13 @@
         </div>
 
       <!-- Products in Selected Order -->
-      <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
+      <div class="bg-white p-4 rounded-lg shadow border h-[60%] overflow-y-auto">
         <h2 class="font-bold mb-4">สินค้าภายในคำสั่งซื้อ</h2>
         <div v-if="selectedOrder">
           <div
             v-for="product in selectedOrder.products"
             :key="product.id"
-            class="flex items-center space-x-4 border-b pb-4 cursor-pointer"
+            class="flex items-center space-x-4 border-b p-4  "
             :class="{
               'bg-gray-200': isSelected(product),
             }"

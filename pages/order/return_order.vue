@@ -1,62 +1,165 @@
 <template>
-  <div class="p-6">
-    <h1 class="text-xl font-bold mb-4">คืนสินค้า</h1>
-    <div class="bg-white p-4 rounded-lg shadow border">
-      <h2 class="font-bold">รายละเอียดคำสั่งซื้อ</h2>
-      <p>หมายเลขคำสั่งซื้อ: {{ orderId }}</p>
+  <div class="flex p-4">
+    <!-- Sidebar -->
+    <Sidebar />
 
-      <div class="mt-4">
-        <h2 class="font-bold">รายการคืนสินค้า</h2>
-        <!-- รายการสินค้า -->
-        <div v-for="product in selectedProducts" :key="product.id" class="border-b p-4">
-          <h3>ชื่อสินค้า: {{ product.name }}</h3>
-          <p>ราคา: ฿{{ product.price }}</p>
+    <!-- Content -->
+    <div class="w-full lg:w-3/4 p-6">
+      <div class="border-b">
+        <h1 class="text-xl font-bold mb-6">คืนสินค้า</h1>
+      </div>
 
-          <!-- ฟอร์มสำหรับแต่ละสินค้า -->
-          <div class="mt-4">
-            <label :for="'reason-' + product.id" class="font-bold">เหตุผลในการคืนสินค้า</label>
-            <textarea
-              :id="'reason-' + product.id"
-              v-model="product.reason"
-              rows="3"
-              class="w-full border p-2 mt-2 rounded-lg"
-              placeholder="กรุณาใส่เหตุผลสำหรับการคืนสินค้า"
-            ></textarea>
+      <!-- Tabs -->
+      <div class="mt-5">
+        <Tab />
+      </div>
 
-            <label :for="'file-' + product.id" class="font-bold mt-4 block">แนบรูปภาพ</label>
-            <input
-              :id="'file-' + product.id"
-              type="file"
-              multiple
-              accept="image/*"
-              @change="handleImageUpload($event, product.id)"
-              class="w-full mt-2 p-2 border rounded-lg"
-            />
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+        <!-- รายการคืนสินค้า -->
+        <div>
+          <div class="bg-white p-4 rounded-lg shadow border h-[35%] overflow-y-auto">
+            <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
+            <p>หมายเลขคำสั่งซื้อ: {{ orderId }}</p>
 
-            <!-- แสดงไฟล์ที่แนบ -->
-            <div class="mt-4" v-if="product.files.length">
-              <h4 class="font-bold">รูปภาพที่แนบ:</h4>
-              <ul>
-                <li v-for="file in product.files" :key="file.name">
-                  {{ file.name }} ({{ (file.size / 1024).toFixed(2) }} KB)
-                </li>
-              </ul>
+            <div class="mt-4">
+              <h2 class="font-bold">รายการคืนสินค้า</h2>
+              <div
+                v-for="product in selectedProducts"
+                :key="product.id"
+                class="border-b p-4"
+              >
+                <h3>ชื่อสินค้า: {{ product.name }}</h3>
+                <p>ราคา: ฿{{ product.price }}</p>
+
+                <div class="mt-4">
+                  <!-- ช่องกรอกเหตุผลการคืนสินค้า -->
+                  <label :for="'reason-' + product.id" class="font-bold">เหตุผลในการคืนสินค้า</label>
+                  <textarea
+                    :id="'reason-' + product.id"
+                    v-model="product.reason"
+                    rows="3"
+                    class="w-full border p-2 mt-2 rounded-lg"
+                    placeholder="กรุณาใส่เหตุผลสำหรับการคืนสินค้า"
+                  ></textarea>
+
+                  <!-- ช่องแนบรูปภาพ -->
+                  <label :for="'file-' + product.id" class="font-bold mt-4 block">แนบรูปหลักฐานการชำระเงิน</label>
+                  <input
+                    :id="'file-' + product.id"
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    @change="handleImageUpload($event, product.id)"
+                    class="w-full mt-2 p-2 border rounded-lg"
+                  />
+
+                  <!-- ช่องกรอกข้อมูลการคืนเงิน -->
+                  <label :for="'paymentMethod-' + product.id" class="font-bold mt-4 block">ช่องทางการคืนเงิน</label>
+                  <select
+                    :id="'paymentMethod-' + product.id"
+                    v-model="product.paymentMethod"
+                    class="w-full border p-2 mt-2 rounded-lg"
+                  >
+                    <option disabled value="">กรุณาเลือกช่องทางการคืนเงิน</option>
+                    <option value="Bank">บัญชีธนาคาร</option>
+                    <option value="PromptPay">พร้อมเพย์</option>
+                  </select>
+
+                  <!-- ช่องกรอกข้อมูลธนาคาร -->
+                  <div v-if="product.paymentMethod === 'Bank'" class="mt-4">
+                    <label :for="'bank-' + product.id" class="font-bold">ชื่อธนาคาร</label>
+                    <input
+                      :id="'bank-' + product.id"
+                      v-model="product.bankName"
+                      type="text"
+                      class="w-full border p-2 mt-2 rounded-lg"
+                      placeholder="กรุณากรอกชื่อธนาคาร"
+                    />
+
+                    <label :for="'account-' + product.id" class="font-bold mt-4 block">เลขบัญชีธนาคาร</label>
+                    <input
+                      :id="'account-' + product.id"
+                      v-model="product.accountNumber"
+                      type="text"
+                      class="w-full border p-2 mt-2 rounded-lg"
+                      placeholder="กรุณากรอกเลขบัญชีธนาคาร"
+                    />
+                  </div>
+
+                  <!-- ช่องกรอกข้อมูลพร้อมเพย์ -->
+                  <div v-if="product.paymentMethod === 'PromptPay'" class="mt-4">
+                    <label :for="'promptpay-' + product.id" class="font-bold">หมายเลขพร้อมเพย์</label>
+                    <input
+                      :id="'promptpay-' + product.id"
+                      v-model="product.promptPayNumber"
+                      type="text"
+                      class="w-full border p-2 mt-2 rounded-lg"
+                      placeholder="กรุณากรอกหมายเลขพร้อมเพย์"
+                    />
+                  </div>
+
+                  <!-- ปุ่มยืนยัน -->
+                  <button
+                    class="bg-[#FCCA81] hover:bg-[#EE973C] text-white p-2 rounded-lg mt-4"
+                    @click="submitReturn(product.id)"
+                  >
+                    ยืนยันการคืนสินค้า
+                  </button>
+                </div>
+              </div>
+
+              <p
+                v-if="selectedProducts.length === 0"
+                class="text-center text-gray-500 mt-6"
+              >
+                ไม่มีสินค้าในรายการคืนสินค้า
+              </p>
             </div>
-
-            <!-- ปุ่มยืนยัน -->
-            <button
-              class="bg-[#FCCA81] hover:bg-[#EE973C] text-white p-2 rounded-lg mt-4"
-              @click="submitReturn(product.id)"
-            >
-              ยืนยันการคืนสินค้า
-            </button>
           </div>
         </div>
 
-        <!-- ไม่มีสินค้า -->
-        <p v-if="selectedProducts.length === 0" class="text-center text-gray-500 mt-6">
-          ไม่มีสินค้าในรายการคืนสินค้า
-        </p>
+        <!-- Products in Return History -->
+        <div class="bg-white p-4 rounded-lg shadow border h-[35%] overflow-y-auto">
+          <h2 class="font-bold mb-4">ประวัติการคืนสินค้า</h2>
+          <div v-if="returnedProducts.length">
+            <div
+              v-for="product in returnedProducts"
+              :key="product.id"
+              class="flex items-center space-x-4 border-b p-4"
+            >
+              <div class="flex items-center space-x-5">
+                <img
+                  :src="product.img"
+                  alt="product"
+                  class="w-20 h-20 object-cover border rounded"
+                />
+                <div>
+                  <h3 class="font-bold">{{ product.name }}</h3>
+                  <p>ราคา: ฿{{ product.price }}</p>
+                  <p class="text-gray-500 texthide">เหตุผล: {{ product.reason }}</p>
+                  <p v-if="product.paymentMethod === 'Bank'" class="text-gray-500">
+                    คืนเงินผ่าน: {{ product.bankName }} - {{ product.accountNumber }}
+                  </p>
+                  <p v-if="product.paymentMethod === 'PromptPay'" class="text-gray-500">
+                    คืนเงินผ่านพร้อมเพย์: {{ product.promptPayNumber }}
+                  </p>
+                  <p class="mt-2 font-bold">สถานะ: 
+                    <span
+                      :class="{
+                        'text-yellow-500': product.status === 'รออนุมัติ',
+                        'text-green-500': product.status === 'อนุมัติ',
+                        'text-red-500': product.status === 'ไม่อนุมัติ',
+                      }"
+                    >
+                      {{ product.status }}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p v-else class="text-center text-gray-500">ยังไม่มีประวัติการคืนสินค้า</p>
+        </div>
       </div>
     </div>
   </div>
@@ -66,28 +169,52 @@
 import { computed, reactive } from "vue";
 import { useOrderStore } from "@/store/orderStore";
 
-// ดึง Store
+definePageMeta({
+  layout: "user",
+});
+
+
 const orderStore = useOrderStore();
 
-// ดึงข้อมูลออเดอร์และสินค้าที่เลือก
+// ดึงข้อมูลคำสั่งซื้อและสินค้าที่คืน
 const orderId = computed(() => orderStore.selectedOrderId);
 const selectedProducts = reactive(
   orderStore.selectedProducts.map((product) => ({
     ...product,
-    reason: "", // เพิ่มฟิลด์สำหรับเหตุผลการคืนสินค้า
-    files: [] as File[], // กำหนดชนิดข้อมูลเป็น File[]
+    reason: "",
+    files: [] as File[],
+    paymentMethod: "",
+    bankName: "",
+    accountNumber: "",
+    promptPayNumber: "",
   }))
 );
 
-// ฟังก์ชันจัดการไฟล์แนบ (เฉพาะรูปภาพ)
+// รายการสินค้าที่คืน
+const returnedProducts = reactive(
+  [] as Array<{
+    id: number;
+    name: string;
+    price: number;
+    img: string;
+    reason: string;
+    files: Array<{ name: string; preview: string }>;
+    paymentMethod: string;
+    bankName?: string;
+    accountNumber?: string;
+    promptPayNumber?: string;
+    status: string; // สถานะ
+  }>
+);
+
+// ฟังก์ชันจัดการไฟล์แนบ
 const handleImageUpload = (event: Event, productId: number) => {
   const files = (event.target as HTMLInputElement).files;
   const product = selectedProducts.find((p) => p.id === productId);
   if (files && product) {
-    const imageFiles = Array.from(files).filter((file) =>
+    product.files = Array.from(files).filter((file) =>
       file.type.startsWith("image/")
-    ); // กรองเฉพาะไฟล์ที่เป็นรูปภาพ
-    product.files = imageFiles;
+    );
   }
 };
 
@@ -95,14 +222,45 @@ const handleImageUpload = (event: Event, productId: number) => {
 const submitReturn = (productId: number) => {
   const productIndex = selectedProducts.findIndex((p) => p.id === productId);
   if (productIndex !== -1) {
-    alert(`คืนสินค้าสำเร็จ: ${selectedProducts[productIndex].name}`);
-    selectedProducts.splice(productIndex, 1); // ลบสินค้าที่ส่งคืนออกจากรายการ
+    const product = selectedProducts[productIndex];
+    returnedProducts.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      img: product.img,
+      reason: product.reason || "ไม่มีเหตุผลระบุ",
+      files: product.files.map((file) => ({
+        name: file.name,
+        preview: URL.createObjectURL(file),
+      })),
+      paymentMethod: product.paymentMethod,
+      bankName: product.paymentMethod === "Bank" ? product.bankName : undefined,
+      accountNumber:
+        product.paymentMethod === "Bank" ? product.accountNumber : undefined,
+      promptPayNumber:
+        product.paymentMethod === "PromptPay" ? product.promptPayNumber : undefined,
+      status: "รออนุมัติ",
+    });
+
+    selectedProducts.splice(productIndex, 1);
+    alert(`คืนสินค้าสำเร็จ: ${product.name}`);
   }
 };
 </script>
 
 <style scoped>
-textarea {
-  resize: none;
+.text-yellow-500 {
+  color: #f59e0b;
+}
+.text-green-500 {
+  color: #10b981;
+}
+.text-red-500 {
+  color: #ef4444;
+}
+
+/* Scrollable content */
+.overflow-y-auto {
+  max-height: calc(75%);
 }
 </style>
