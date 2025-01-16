@@ -19,7 +19,7 @@
         <!-- Order List -->
         <div
           class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
-          style="max-height: 48vh;"
+          style="max-height: 48vh"
         >
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
@@ -44,7 +44,7 @@
         <!-- Selected Order Details -->
         <div
           class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
-          style="max-height: 48vh;"
+          style="max-height: 48vh"
         >
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
           <div v-if="selectedOrder">
@@ -67,9 +67,7 @@
                   <p class="text-lg font-bold">฿{{ product.price }}</p>
                 </div>
                 <p class="text-gray-500 text-sm">{{ product.detail }}</p>
-                <p class="text-gray-500 text-sm">
-                  จำนวน: {{ product.amount }}
-                </p>
+                <p class="text-gray-500 text-sm">จำนวน: {{ product.amount }}</p>
               </div>
             </div>
 
@@ -113,10 +111,27 @@
                 </span>
               </p>
             </div>
+
+            <!-- Payment Button -->
+            <div class="flex space-x-4 mt-4">
+              <button
+                class="flex-1 py-2 bg-[#FCCA81] hover:bg-[#EE973C] text-white rounded-lg"
+                @click="store.paymentAction = true"
+              >
+                ชำระเงิน
+              </button>
+            </div>
           </div>
           <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div>
         </div>
       </div>
+    </div>
+    <!-- Payment Popup -->
+    <div
+      v-if="store.paymentAction"
+      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+    >
+      <PopupPayment />
     </div>
   </div>
 </template>
@@ -124,10 +139,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { Order } from "~/models/product.model";
+import { useIndexStore } from "~/store/main";
 
 definePageMeta({
   layout: "user",
 });
+
+const store = useIndexStore();
 
 const orders = ref<Order[]>([
   {
@@ -136,7 +154,7 @@ const orders = ref<Order[]>([
     total: 164,
     deliveryDate: "19-26 พฤศจิกายน 2566",
     products: [
-    {
+      {
         id: 1,
         name: "เครื่องดื่มรังนกสำเร็จรูป",
         detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
@@ -185,7 +203,7 @@ const orders = ref<Order[]>([
     total: 117,
     deliveryDate: "12-19 ธันวาคม 2566",
     products: [
-    {
+      {
         id: 1,
         name: "เครื่องดื่มรังนกสำเร็จรูป",
         detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
@@ -234,7 +252,7 @@ const orders = ref<Order[]>([
     total: 164,
     deliveryDate: "19-26 พฤศจิกายน 2566",
     products: [
-    {
+      {
         id: 1,
         name: "เครื่องดื่มรังนกสำเร็จรูป",
         detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
@@ -283,7 +301,7 @@ const orders = ref<Order[]>([
     total: 117,
     deliveryDate: "12-19 ธันวาคม 2566",
     products: [
-    {
+      {
         id: 1,
         name: "เครื่องดื่มรังนกสำเร็จรูป",
         detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
@@ -332,7 +350,7 @@ const orders = ref<Order[]>([
     total: 164,
     deliveryDate: "19-26 พฤศจิกายน 2566",
     products: [
-    {
+      {
         id: 1,
         name: "เครื่องดื่มรังนกสำเร็จรูป",
         detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
@@ -381,7 +399,7 @@ const orders = ref<Order[]>([
     total: 117,
     deliveryDate: "12-19 ธันวาคม 2566",
     products: [
-    {
+      {
         id: 1,
         name: "เครื่องดื่มรังนกสำเร็จรูป",
         detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
@@ -434,7 +452,6 @@ const selectOrder = (order: Order) => {
 </script>
 
 <style scoped>
-/* เพิ่มเติม CSS ให้ Sticky */
 .sticky {
   position: sticky;
 }

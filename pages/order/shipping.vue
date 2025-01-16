@@ -15,15 +15,15 @@
         <Tab />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[65%]">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Order List -->
-        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
+        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
             v-for="order in orders"
             :key="order.id"
             @click="selectOrder(order)"
-            class="cursor-pointer border-b p-4 mb-4"
+            class="cursor-pointer border-b p-4"
             :class="{ 'bg-gray-100': selectedOrder && selectedOrder.id === order.id }"
           >
             <div class="flex justify-between items-center">
@@ -37,23 +37,23 @@
         </div>
 
         <!-- Selected Order Details -->
-        <div class="bg-white p-4 rounded-lg shadow border  overflow-y-auto">
+        <div class="bg-white p-4 rounded-lg shadow border  overflow-y-auto sticky top-0" style="max-height: 48vh">
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
           <div v-if="selectedOrder">
             <!-- Products -->
             <div
               v-for="product in selectedOrder.products"
               :key="product.id"
-              class="flex items-center space-x-4 border-b pb-4"
+              class="flex items-center space-x-4 border-b pb-4 cursor-pointer"
             >
-              <div class="w-[170px] h-[120px]">
+              <div class="w-24 h-24">
                 <img
                   :src="product.img"
                   alt="product"
                   class="w-full h-full object-cover"
                 />
               </div>
-              <div class="w-full">
+              <div class="flex-grow">
                 <div class="flex justify-between">
                   <h2 class="font-bold">{{ product.name }}</h2>
                   <p class="text-lg font-bold">฿{{ product.price }}</p>
@@ -90,7 +90,7 @@
             </div>
 
             <!-- Payment -->
-            <div class="mt-4 space-y-4 border-b pb-4">
+            <div class="mt-4 space-y-4">
               <h3 class="font-bold">การชำระเงิน</h3>
               <p class="text-sm font-medium">
                 OR Code Prompt Pay <br />
@@ -101,7 +101,6 @@
             </div>
           </div>
 
-          <!-- No Order Selected -->
           <div v-else class="text-center text-gray-500">
             เลือกคำสั่งซื้อ
           </div>
@@ -123,50 +122,296 @@ import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 
-// Sample orders data
 const orders = ref<Order[]>([
   {
     id: "778231342",
     date: "26 ตุลาคม 2566",
-    total: 124,
-    deliveryDate: "17-20 พฤศจิกายน 2566",
+    total: 164,
+    deliveryDate: "19-26 พฤศจิกายน 2566",
     products: [
-    {
-    id: 5,
-    name: "เครื่องดื่มรังนกสำเร็จรูป",
-    detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-    price: 150,
-    amount: 5,
-    img: "https://halal.co.th/storages/products/679578.jpg",
-    categoryId: 2,
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+    ],
+    shippingStatus: [],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
   },
   {
-    id: 6,
-    name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-    detail: "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-    price: 150,
-    amount: 3,
-    img: "https://halal.co.th/storages/products/p135225.jpg",
-    categoryId: 2,
+    id: "10292348935",
+    date: "29 ตุลาคม 2566",
+    total: 117,
+    deliveryDate: "12-19 ธันวาคม 2566",
+    products: [
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+    ],
+    shippingStatus: [],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
   },
   {
-    id: 7,
-    name: "เครื่องดื่มน้ำองุ่นขาว",
-    detail: "กลูต้า เคอร์คิวมา มินต์ ซี เครื่องดื่มน้ำองุ่นขาว ผสมกลูต้าไธโอนและขมิ้น",
-    price: 40,
-    amount: 3,
-    img: "https://farmfoodsmart.com/upload/products/1634/637982414838759739.png",
-    categoryId: 2,
+    id: "29498364883",
+    date: "26 ตุลาคม 2566",
+    total: 164,
+    deliveryDate: "19-26 พฤศจิกายน 2566",
+    products: [
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+    ],
+    shippingStatus: [],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
   },
   {
-    id: 8,
-    name: "เครื่องดื่มสมุนไพรตรีผลา",
-    detail: "ชีววิถี เครื่องดื่มสมุนไพรตรีผลา สูตรเข้มข้น รสธรรมชาติ",
-    price: 155,
-    amount: 3,
-    img: "https://obs-ect.line-scdn.net/r/ect/ect/image_1695790690327236876b5788947t124fdd52",
-    categoryId: 2,
+    id: "948847419745",
+    date: "29 ตุลาคม 2566",
+    total: 117,
+    deliveryDate: "12-19 ธันวาคม 2566",
+    products: [
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+    ],
+    shippingStatus: [],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
   },
+  {
+    id: "84847366635",
+    date: "26 ตุลาคม 2566",
+    total: 164,
+    deliveryDate: "19-26 พฤศจิกายน 2566",
+    products: [
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+    ],
+    shippingStatus: [],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
+  },
+  {
+    id: "10292348935",
+    date: "29 ตุลาคม 2566",
+    total: 117,
+    deliveryDate: "12-19 ธันวาคม 2566",
+    products: [
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
     ],
     shippingStatus: [],
     namerecipe: "คมเข้ม คำเกษ 098 765 4321",
@@ -176,15 +421,13 @@ const orders = ref<Order[]>([
 
 const selectedOrder = ref<Order | null>(null);
 
-// Function to select an order
 const selectOrder = (order: Order): void => {
   selectedOrder.value = order;
 };
 </script>
 
 <style scoped>
-/* Scrollable content */
-.overflow-y-auto {
-  max-height: calc(75%); /* Adjust based on layout */
+.sticky {
+  position: sticky;
 }
 </style>

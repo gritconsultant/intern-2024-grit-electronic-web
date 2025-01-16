@@ -14,15 +14,15 @@
         <Tab />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Order List -->
-        <div class="bg-white p-4 rounded-lg shadow border h-[60%] overflow-y-auto">
+        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
             v-for="order in orders"
             :key="order.id"
             @click="selectOrder(order)"
-            class="cursor-pointer border-b p-4 mb-4"
+            class="cursor-pointer border-b p-4"
             :class="{
               'bg-gray-100': selectedOrder && selectedOrder.id === order.id,
             }"
@@ -38,25 +38,29 @@
         </div>
 
       <!-- Products in Selected Order -->
-      <div class="bg-white p-4 rounded-lg shadow border h-[60%] overflow-y-auto">
+      <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
         <h2 class="font-bold mb-4">สินค้าภายในคำสั่งซื้อ</h2>
         <div v-if="selectedOrder">
           <div
             v-for="product in selectedOrder.products"
             :key="product.id"
-            class="flex items-center space-x-4 border-b p-4  "
+            class="flex items-center space-x-4 border-b p-4 cursor-pointer "
             :class="{
               'bg-gray-200': isSelected(product),
             }"
             @click="toggleProductSelection(product)"
           >
-            <div class="w-[120px] h-[80px]">
+            <div class="w-24 h-24">
               <img :src="product.img" alt="product" class="w-full h-full object-cover" />
             </div>
-            <div>
-              <h2 class="font-bold">{{ product.name }}</h2>
-              <p class="text-gray-500 text-sm">฿{{ product.price }}</p>
-            </div>
+            <div class="flex-grow">
+                <div class="flex justify-between">
+                  <h2 class="font-bold">{{ product.name }}</h2>
+                  <p class="text-lg font-bold">฿{{ product.price }}</p>
+                </div>
+                <p class="text-gray-500 text-sm">{{ product.detail }}</p>
+                <p class="text-gray-500 text-sm">จำนวน: {{ product.amount }}</p>
+              </div>
           </div>
 
           <!-- Return Button -->
@@ -191,12 +195,7 @@ const goToReturnPage = (): void => {
 </script>
 
 <style scoped>
-.cursor-pointer.bg-gray-200 {
-  transition: background-color 0.3s ease-in-out;
-}
-
-/* Scrollable content */
-.overflow-y-auto {
-  max-height: calc(75%);
+.sticky {
+  position: sticky;
 }
 </style>

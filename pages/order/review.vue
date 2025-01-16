@@ -14,15 +14,18 @@
         <Tab />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[65%] ">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Order List -->
-        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
+        <div
+          class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+          style="max-height: 48vh"
+        >
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
             v-for="order in orders"
             :key="order.id"
             @click="selectOrder(order)"
-            class="cursor-pointer] p-4"
+            class="cursor-pointer border-b p-4"
             :class="{
               'bg-gray-100': selectedOrder && selectedOrder.id === order.id,
             }"
@@ -34,45 +37,52 @@
               </div>
               <p class="text-lg font-bold">฿{{ order.total }}</p>
             </div>
-
-            <div class="flex justify-between items-center mt-4 border-t pt-4">
-              <p class="text-lg">รีวิวและให้คะแนน</p>
-              <div>
-                <button
-                  class="fas fa-star p-2 bg-[#FCCA81] hover:bg-[#EE973C] hover:text-black text-white rounded-lg"
-                  @click="store.reviewAction = !store.reviewAction"
-                >
-                  รีวิวสินค้า
-                </button>
-              </div>
-            </div>
           </div>
         </div>
 
         <!-- Selected Order Details -->
-        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto">
+        <div
+          class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+          style="max-height: 48vh"
+        >
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
           <div v-if="selectedOrder">
             <!-- Products -->
             <div
               v-for="product in selectedOrder.products"
               :key="product.id"
-              class="flex items-center space-x-4 border-b pb-4"
+              class="flex items-center space-x-4 border-b pb-4 cursor-pointer"
             >
-              <div class="w-[170px] h-[120px]">
+              <div class="w-24 h-24">
                 <img
                   :src="product.img"
                   alt="product"
                   class="w-full h-full object-cover"
                 />
               </div>
-              <div class="w-full">
+              <div class="flex-grow">
                 <div class="flex justify-between">
                   <h2 class="font-bold">{{ product.name }}</h2>
                   <p class="text-lg font-bold">฿{{ product.price }}</p>
                 </div>
-                <p class="text-gray-500 text-sm">{{ product.detail }}</p>
-                <p class="text-gray-500 text-sm">จำนวน: {{ product.amount }}</p>
+                <div class="flex justify-between mt-2">
+                  <div>
+                    <p class="text-gray-500 text-sm texthide">
+                      {{ product.detail }}
+                    </p>
+                    <p class="text-gray-500 text-sm">
+                      จำนวน: {{ product.amount }}
+                    </p>
+                  </div>
+                  <div>
+                    <button
+                      class="bg-[#FCCA81] hover:bg-[#EE973C] text-white p-2 rounded-lg"
+                      @click="openReviewPopup(product)"
+                    >
+                      รีวิวสินค้า
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -86,36 +96,6 @@
                 ที่อยู่ : {{ selectedOrder.address }}
               </p>
             </div>
-
-            <!-- Delivery Method -->
-            <div class="mt-4 space-y-4 border-b pb-4">
-              <h3 class="font-bold">จัดส่งโดย</h3>
-              <div class="border flex items-center rounded-lg">
-                <div class="w-20 h-20 rounded-lg">
-                  <img
-                    src="https://file.thailandpost.com/upload/content/cs4_New%20logo%20THP%20-04_63bce2f853fe8_63f8243acc06e.jpg"
-                    class="w-full h-full object-cover rounded-lg"
-                  />
-                </div>
-                <p class="text-md font-medium">
-                  ไปรษณีย์ไทย <br />
-                  <span class="text-sm font-normal text-gray-500">
-                    จัดส่งแล้ววันที่ {{ selectedOrder.date }}
-                  </span>
-                </p>
-              </div>
-            </div>
-
-            <!-- Payment -->
-            <div class="mt-4 space-y-4 border-b pb-4">
-              <h3 class="font-bold">การชำระเงิน</h3>
-              <p class="text-sm font-medium">
-                OR Code Prompt Pay <br />
-                <span class="text-sm font-normal text-gray-500">
-                  ทำการชำระเงินด้วย OR Code Prompt Pay
-                </span>
-              </p>
-            </div>
           </div>
 
           <!-- No Order Selected -->
@@ -123,72 +103,266 @@
         </div>
       </div>
     </div>
+
     <!-- Review Popup -->
     <div
       v-if="store.reviewAction"
       class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+      @click="closeReviewPopup"
     >
-      <PopupReview />
+      <PopupReview :product="selectedProduct" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-
-definePageMeta({
-  layout: "user",
-});
-
 import { ref } from "vue";
-import type { Order } from "~/models/product.model";
+import type { Order, Product } from "~/models/product.model";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 
-// Sample orders data
 const orders = ref<Order[]>([
   {
     id: "778231342",
     date: "26 ตุลาคม 2566",
-    total: 124,
+    total: 164,
     deliveryDate: "19-26 พฤศจิกายน 2566",
     products: [
-    {
-    id: 1,
-    name: "มะขาม 4 รส",
-    detail: "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด",
-    price: 62,
-    amount: 10,
-    img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
-    categoryId: 1,
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+    ],
+    shippingStatus: [],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
   },
   {
-    id: 2,
-    name: "มะขามคลุกบ๊วย 4 รส",
-    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย",
-    price: 62,
-    amount: 13,
-    img: "https://halal.co.th/storages/products/343928.png",
-    categoryId: 1,
+    id: "10292348935",
+    date: "29 ตุลาคม 2566",
+    total: 117,
+    deliveryDate: "12-19 ธันวาคม 2566",
+    products: [
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+    ],
+    shippingStatus: [],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
   },
   {
-    id: 3,
-    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
-    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง",
-    price: 59,
-    amount: 10,
-    img: "https://halal.co.th/storages/products/390694.jpg",
-    categoryId: 1,
+    id: "29498364883",
+    date: "26 ตุลาคม 2566",
+    total: 164,
+    deliveryDate: "19-26 พฤศจิกายน 2566",
+    products: [
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+    ],
+    shippingStatus: [],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
   },
   {
-    id: 4,
-    name: "เผือกกรอบไส้เสาวรส",
-    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส",
-    price: 58,
-    amount: 20,
-    img: "https://halal.co.th/storages/products/680694.jpg",
-    categoryId: 1,
+    id: "948847419745",
+    date: "29 ตุลาคม 2566",
+    total: 117,
+    deliveryDate: "12-19 ธันวาคม 2566",
+    products: [
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+    ],
+    shippingStatus: [],
+    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
   },
+  {
+    id: "84847366635",
+    date: "26 ตุลาคม 2566",
+    total: 164,
+    deliveryDate: "19-26 พฤศจิกายน 2566",
+    products: [
+      {
+        id: 1,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 2,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 3,
+        name: "เครื่องดื่มรังนกสำเร็จรูป",
+        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+        price: 150,
+        amount: 5,
+        img: "https://halal.co.th/storages/products/679578.jpg",
+        categoryId: 2,
+      },
+      {
+        id: 4,
+        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+        detail:
+          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+        price: 150,
+        amount: 3,
+        img: "https://halal.co.th/storages/products/p135225.jpg",
+        categoryId: 2,
+      },
     ],
     shippingStatus: [],
     namerecipe: "คมเข้ม คำเกษ 098 765 4321",
@@ -197,20 +371,38 @@ const orders = ref<Order[]>([
 ]);
 
 const selectedOrder = ref<Order | null>(null);
+const selectedProduct = ref<Product | null>(null);
 
-// Function to select an order
+// เลือกคำสั่งซื้อ
 const selectOrder = (order: Order): void => {
   selectedOrder.value = order;
+};
+
+// เปิด Popup รีวิวสินค้า
+const openReviewPopup = (product: Product): void => {
+  selectedProduct.value = product;
+  store.reviewAction = true;
+};
+
+// ปิด Popup
+const closeReviewPopup = (): void => {
+  store.reviewAction = false;
+};
+
+// ยืนยันการรีวิว
+const submitReview = (reviewData: {
+  productId: number;
+  rating: number;
+  comment: string;
+}) => {
+  console.log("รีวิวสำเร็จ:", reviewData);
+  store.reviewAction = false;
 };
 </script>
 
 <style scoped>
-.cursor-pointer.bg-gray-100 {
-  transition: background-color 0.3s ease-in-out;
-}
-
-/* Scrollable content */
-.overflow-y-auto {
-  max-height: calc(75%); /* Adjust based on layout */
+.sticky {
+  position: sticky;
 }
 </style>
+
