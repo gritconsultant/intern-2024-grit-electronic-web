@@ -29,7 +29,7 @@
         <NuxtLink
           to="/order/checkout"
           class="flex items-center space-x-2"
-          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping', '/order/receiving', '/order/review', '/order/history', '/order/return_order', '/test']) }"
+          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping', '/order/receiving', '/order/review', '/order/history', '/order/return_order']) }"
         >
           <i class="fas fa-shopping-cart"></i>
           <span>คำสั่งซื้อของฉัน</span>
@@ -57,7 +57,7 @@ definePageMeta({
 
 const route = useRoute();
 
-// ฟังก์ชันตรวจสอบ active state รองรับหลาย path
+// active รองรับหลาย path
 const isActive = (paths: string[]) => {
   return paths.includes(route.path);
 };

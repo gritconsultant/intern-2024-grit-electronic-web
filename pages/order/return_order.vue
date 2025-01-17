@@ -14,10 +14,11 @@
         <Tab />
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- รายการคืนสินค้า -->
         <div>
-          <div class="bg-white p-4 rounded-lg shadow border h-[35%] overflow-y-auto">
+          <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+          style="max-height: 48vh">
             <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
             <p>หมายเลขคำสั่งซื้อ: {{ orderId }}</p>
 
@@ -33,9 +34,9 @@
 
                 <div class="mt-4">
                   <!-- ช่องกรอกเหตุผลการคืนสินค้า -->
-                  <label :for="'reason-' + product.id" class="font-bold">เหตุผลในการคืนสินค้า</label>
+                  <label :for="'reason' + product.id" class="font-bold">เหตุผลในการคืนสินค้า</label>
                   <textarea
-                    :id="'reason-' + product.id"
+                    :id="'reason' + product.id"
                     v-model="product.reason"
                     rows="3"
                     class="w-full border p-2 mt-2 rounded-lg"
@@ -43,9 +44,9 @@
                   ></textarea>
 
                   <!-- ช่องแนบรูปภาพ -->
-                  <label :for="'file-' + product.id" class="font-bold mt-4 block">แนบรูปหลักฐานการชำระเงิน</label>
+                  <label :for="'file' + product.id" class="font-bold mt-4 block">แนบรูปหลักฐานการชำระเงิน</label>
                   <input
-                    :id="'file-' + product.id"
+                    :id="'file' + product.id"
                     type="file"
                     multiple
                     accept="image/*"
@@ -54,9 +55,9 @@
                   />
 
                   <!-- ช่องกรอกข้อมูลการคืนเงิน -->
-                  <label :for="'paymentMethod-' + product.id" class="font-bold mt-4 block">ช่องทางการคืนเงิน</label>
+                  <label :for="'paymentMethod' + product.id" class="font-bold mt-4 block">ช่องทางการคืนเงิน</label>
                   <select
-                    :id="'paymentMethod-' + product.id"
+                    :id="'paymentMethod' + product.id"
                     v-model="product.paymentMethod"
                     class="w-full border p-2 mt-2 rounded-lg"
                   >
@@ -67,18 +68,18 @@
 
                   <!-- ช่องกรอกข้อมูลธนาคาร -->
                   <div v-if="product.paymentMethod === 'Bank'" class="mt-4">
-                    <label :for="'bank-' + product.id" class="font-bold">ชื่อธนาคาร</label>
+                    <label :for="'bank' + product.id" class="font-bold">ชื่อธนาคาร</label>
                     <input
-                      :id="'bank-' + product.id"
+                      :id="'bank' + product.id"
                       v-model="product.bankName"
                       type="text"
                       class="w-full border p-2 mt-2 rounded-lg"
                       placeholder="กรุณากรอกชื่อธนาคาร"
                     />
 
-                    <label :for="'account-' + product.id" class="font-bold mt-4 block">เลขบัญชีธนาคาร</label>
+                    <label :for="'account' + product.id" class="font-bold mt-4 block">เลขบัญชีธนาคาร</label>
                     <input
-                      :id="'account-' + product.id"
+                      :id="'account' + product.id"
                       v-model="product.accountNumber"
                       type="text"
                       class="w-full border p-2 mt-2 rounded-lg"
@@ -88,9 +89,9 @@
 
                   <!-- ช่องกรอกข้อมูลพร้อมเพย์ -->
                   <div v-if="product.paymentMethod === 'PromptPay'" class="mt-4">
-                    <label :for="'promptpay-' + product.id" class="font-bold">หมายเลขพร้อมเพย์</label>
+                    <label :for="'promptpay' + product.id" class="font-bold">หมายเลขพร้อมเพย์</label>
                     <input
-                      :id="'promptpay-' + product.id"
+                      :id="'promptpay' + product.id"
                       v-model="product.promptPayNumber"
                       type="text"
                       class="w-full border p-2 mt-2 rounded-lg"
@@ -119,7 +120,7 @@
         </div>
 
         <!-- Products in Return History -->
-        <div class="bg-white p-4 rounded-lg shadow border h-[35%] overflow-y-auto">
+        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
           <h2 class="font-bold mb-4">ประวัติการคืนสินค้า</h2>
           <div v-if="returnedProducts.length">
             <div
@@ -239,7 +240,7 @@ const submitReturn = (productId: number) => {
         product.paymentMethod === "Bank" ? product.accountNumber : undefined,
       promptPayNumber:
         product.paymentMethod === "PromptPay" ? product.promptPayNumber : undefined,
-      status: "รออนุมัติ",
+      status: "อนุมัติ",
     });
 
     selectedProducts.splice(productIndex, 1);
@@ -260,7 +261,7 @@ const submitReturn = (productId: number) => {
 }
 
 /* Scrollable content */
-.overflow-y-auto {
-  max-height: calc(75%);
+.sticky {
+  position: sticky;
 }
 </style>

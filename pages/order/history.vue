@@ -82,6 +82,10 @@
 </template>
 
 <script setup lang="ts">
+
+definePageMeta({
+  layout: "user",
+});
 import { useRouter } from "vue-router";
 import { useOrderStore } from "@/store/orderStore";
 

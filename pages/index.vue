@@ -6,48 +6,48 @@
     <div class="grid grid-cols-1 text-center mt-12">
       <h1 class="my-[50px] lg:my-[70px] fontheader">หมวดหมู่สินค้า</h1>
       <div class="flex flex-wrap justify-center">
-        <!-- Category Selection -->
+        <!-- เลือก Category -->
         <div
-          v-for="cat in category"
-          :key="cat.id"
+          v-for="cate in category"
+          :key="cate.id"
           class="text-center w-[90px] lg:w-[200px] cursor-pointer"
-          @click="selectedCategoryId = cat.id"
+          @click="selectedCategoryId = cate.id"
         >
           <div class="flex justify-center">
             <div
               :class="{
-                'border-2 border-[#EE973C]': selectedCategoryId === cat.id,
-                'border-2': selectedCategoryId !== cat.id,
+                'border-2 border-[#EE973C]': selectedCategoryId === cate.id,
+                'border-2': selectedCategoryId !== cate.id,
               }"
               class="rounded-full p-1 w-[60px] h-[60px] lg:w-[80px] lg:h-[80px]"
             >
               <div class="w-full h-full object-cover place-content-center p-1 bg-slate-300/5">
-                <img :src="cat.img" />
+                <img :src="cate.img" />
               </div>
             </div>
           </div>
           <h1 class="fontsubheader mt-[10px] lg:mt-[20px] lg:text-base">
-            {{ cat.name }}
+            {{ cate.name }}
           </h1>
         </div>
       </div>
     </div>
 
-    <!-- Recommended Products -->
+    <!-- Products -->
     <div class="mt-[50px] lg:mt-[70px] mx-[20px] lg:mx-[50px]">
       <h1 class="fontheader">สินค้าแนะนำ - Recommend</h1>
       <div class="grid gap-5 mt-[10px]">
-        <div v-for="cat in category" :key="cat.id">
+        <div v-for="cate in category" :key="cate.id">
           <!-- Check Selected Category -->
-          <div v-if="selectedCategoryId === cat.id || selectedCategoryId === 0">
+          <div v-if="selectedCategoryId === cate.id || selectedCategoryId === 0">
             <div class="flex justify-between px-10">
-              <h1 class="fontsubheader mt-[3px]">{{ cat.name }}</h1>
+              <h1 class="fontsubheader mt-[3px]">{{ cate.name }}</h1>
               <div class="text-black/40 cursor-pointer">ทั้งหมด -></div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 my-5 mt-4">
               <!-- Display Products by Category -->
               <div
-                v-for="item in getProductsByCategory(cat.id)"
+                v-for="item in getProductsByCategory(cate.id)"
                 :key="item.id"
                 class="flex justify-center"
               >
@@ -293,27 +293,15 @@ const category = ref<Category[]>([
   },
 ]);
 
-// Selected Category
+//เลือก Category ด้วยid
 const selectedCategoryId = ref(0); // 0 = All categories
 
-// Function to Filter Products by Category
+//ให้โชว์ Products by Category
 const getProductsByCategory = (categoryId: number): Product[] => {
   return products.value.filter((product) => product.categoryId === categoryId);
 };
 </script>
 
 <style scoped>
-@media (max-width: 768px) {
-  .fontheader {
-    font-size: 1.25rem;
-  }
-}
-@media (min-width: 1024px) {
-  .fontheader {
-    font-size: 2rem;
-  }
-  .fontsubheader {
-    font-size: 1.125rem;
-  }
-}
+
 </style>

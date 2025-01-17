@@ -1,27 +1,26 @@
 <template>
   <div
-    class="min-h-screen bg-[url('/images/Loginbg.jpg')] bg-cover bg-center flex justify-center items-center px-4"
+    class="min-h-screen bg-[url('https://static.vecteezy.com/system/resources/thumbnails/042/345/355/small/pastel-gradient-blur-background-vector.jpg')] bg-cover bg-center flex justify-center items-center px-4"
   >
-    <div class="rounded-2xl w-full max-w-[450px] bg-gray-500/40 p-6">
+    <div class="rounded-2xl w-full max-w-[450px] drop-shadow-2xl  bg-white p-6">
       <!-- Logo -->
       <div class="flex justify-center mt-4">
         <img
           src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png"
           class="w-[120px] sm:w-[150px] md:w-[200px] lg:w-[230px]"
-          alt="Logo"
         />
       </div>
-      <div class="flex justify-center font-normal text-lg sm:text-xl lg:text-2xl text-white mt-4">
+      <div class="flex justify-center font-normal text-xl mt-6">
         <h1>ลืมรหัสผ่าน</h1>
       </div>
 
       <!-- Email Input -->
-      <div class="text-sm sm:text-base text-white mt-6">
+      <div class="text-base mt-10">
         <label for="email"> อีเมล </label>
         <input
           type="text"
           id="email"
-          class="w-full h-[45px] mt-4 inputbox text-black px-3 rounded-md"
+          class="inputbox inputboxform"
           v-model="email"
           required
           placeholder="กรุณาใส่อีเมล"
@@ -29,20 +28,20 @@
       </div>
 
       <!-- Send Button -->
-      <div class="mt-10 flex justify-center">
+      <div class="mt-12 flex justify-center">
         <button
           @click="handleSend"
-          class="w-full max-w-[300px] h-[45px] bg-[#FCCA81] hover:bg-[#EE973C] rounded-xl text-white"
+          class="w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl text-white text-lg"
         >
           ส่งลืมรหัสผ่าน
         </button>
       </div>
 
       <!-- Back to Log in -->
-      <div class="flex justify-center mt-6 text-sm sm:text-base text-white">
+      <div class="flex justify-center mt-6 text-sm sm:text-base">
         <NuxtLink
           to="/login"
-          class="text-red-500 ml-2 font-semibold underline"
+          class="hover:text-[#FD8C35] ml-2 font-normal hover:underline"
         >
           เข้าสู่ระบบ
         </NuxtLink>

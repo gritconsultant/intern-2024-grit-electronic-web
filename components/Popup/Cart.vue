@@ -13,7 +13,7 @@
       >
         ลบทั้งหมด
       </h2>
-      <button @click="closeCart">
+      <button @click="store.cartAction = !store.cartAction">
         <svg
           class="w-5 h-5 md:w-6 md:h-6 hover:text-red-500"
           aria-hidden="true"
@@ -106,7 +106,7 @@
           สั่งซื้อสินค้า
         </button>
         <button
-          @click="closeCart"
+          @click="store.cartAction = !store.cartAction"
           class="w-full text-gray-500 text-xs md:text-sm hover:underline mt-2 md:mt-5"
         >
           เลือกซื้อสินค้าต่อ →
@@ -196,14 +196,10 @@ const clearCart = () => {
   cartItems.value = [];
 };
 
-// ปิด Popup
-const closeCart = () => {
-  store.cartAction = false;
-};
 
 // ไปหน้า test.vue
 const checkout = () => {
-  closeCart();
+  store.cartAction = false;
   router.push("/order/checkout");
 };
 </script>

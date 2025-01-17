@@ -7,9 +7,9 @@
           <img class="w-[150px]" src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" alt="Logo" />
         </NuxtLink>
 
-        <!-- Navigation and Icons -->
+        <!-- Nav and Icons -->
         <div class="flex items-center justify-between w-full">
-          <!-- Navigation Menu -->
+          <!-- Nav Menu -->
           <div class="flex items-center fonsubtheader">
             <div class="mx-4">
               <NuxtLink
@@ -46,7 +46,7 @@
               @click="store.notificationAction = !store.notificationAction"
             />
             <div>
-              <ProfileDropdown/>
+              <DropdownProfile/>
             </div>
           </div>
 
@@ -75,7 +75,7 @@
     </div>
 
     <!-- Mobile Icon Menu (Visible only in Mobile) -->
-    <IconDropdown v-show="mobileMenuOpen" class="md:hidden" />
+    <DropdownIcon v-show="mobileMenuOpen"/>
 
 
     <!-- Cart Popup -->
@@ -113,9 +113,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useIndexStore } from "~/store/main";
- // Dropdown for categories
-import ProfileDropdown from "~/components/Dropdown/Profile.vue"; // Dropdown for profile
-import IconDropdown from "~/components/Dropdown/Icon.vue"; // Dropdown for icons
 
 const store = useIndexStore();
 const mobileMenuOpen = ref(false);
@@ -126,10 +123,4 @@ const toggleMobileMenu = () => {
 </script>
 
 <style scoped>
-.icons {
-  transition: transform 0.2s;
-}
-.icons:hover {
-  transform: scale(1.1);
-}
 </style>

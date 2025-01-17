@@ -116,9 +116,15 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: "user",
+});
+
 import { ref } from "vue";
 import type { Order, Product } from "~/models/product.model";
 import { useIndexStore } from "~/store/main";
+
+
 
 const store = useIndexStore();
 
@@ -389,15 +395,6 @@ const closeReviewPopup = (): void => {
   store.reviewAction = false;
 };
 
-// ยืนยันการรีวิว
-const submitReview = (reviewData: {
-  productId: number;
-  rating: number;
-  comment: string;
-}) => {
-  console.log("รีวิวสำเร็จ:", reviewData);
-  store.reviewAction = false;
-};
 </script>
 
 <style scoped>
