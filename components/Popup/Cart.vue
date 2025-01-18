@@ -16,7 +16,6 @@
       <button @click="store.cartAction = !store.cartAction">
         <svg
           class="w-5 h-5 md:w-6 md:h-6 hover:text-red-500"
-          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -39,6 +38,13 @@
         :key="item.id"
         class="flex justify-between items-center border-b py-2"
       >
+        <!-- Checkbox -->
+        <input
+          type="checkbox"
+          class="mr-2"
+          v-model="item.selected"
+        />
+
         <img
           :src="item.img"
           alt="product"
@@ -47,7 +53,13 @@
         <div class="flex-1 ml-2 md:ml-4">
           <div class="flex justify-between">
             <div>
-              <p class="text-sm md:text-md font-normal">{{ item.name }}</p>
+              <!-- Link to product detail -->
+              <router-link
+                :to="`/product/${item.id}`"
+                class="text-sm md:text-md font-normal text-blue-500 hover:underline"
+              >
+                {{ item.name }}
+              </router-link>
               <div class="font-normal text-xs text-black/50">
                 <p class="texthide">{{ item.detail }}</p>
               </div>
@@ -56,7 +68,6 @@
               <button @click="removeItem(index)" class="text-red-500">
                 <svg
                   class="w-[15px] h-[15px] md:w-[17px] md:h-[17px] hover:text-red-500"
-                  aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -74,14 +85,22 @@
           </div>
 
           <div class="flex justify-between items-center">
-            <div class="flex items-center gap-2 mt-2 md:mt-3 border border-1 rounded">
-              <button @click="decreaseQuantity(index)" class="px-2 text-xs md:text-sm">
+            <!-- Buttons for increasing/decreasing quantity -->
+            <div class="flex items-center gap-2 mt-2 md:mt-3">
+              <button
+                @click="decreaseSelectedAmount(index)"
+                class="px-2 text-xs md:text-sm border rounded"
+              >
                 -
               </button>
-              <span class="text-sm md:text-base">{{ item.amount }}</span>
-              <button @click="increaseQuantity(index)" class="px-2 text-xs md:text-sm">
+              <span class="text-sm md:text-base">{{ item.selectedAmount }}</span>
+              <button
+                @click="increaseSelectedAmount(index)"
+                class="px-2 text-xs md:text-sm border rounded"
+              >
                 +
               </button>
+              <span class="text-xs text-gray-500">/ {{ item.amount }}</span>
             </div>
 
             <div class="mt-2 md:mt-3">
@@ -96,14 +115,14 @@
     <div class="p-4 border-t mt-4 bg-gray-100">
       <div class="flex justify-between font-medium">
         <span class="text-sm md:text-base">ราคารวม:</span>
-        <span class="text-sm md:text-base">฿{{ totalPrice }}</span>
+        <span class="text-sm md:text-base">฿{{ selectedTotalPrice }}</span>
       </div>
       <div class="flex flex-col items-center mt-5 md:mt-10">
         <button
           @click="checkout"
           class="popupbtn w-full mb-2 text-sm md:text-base py-2"
         >
-          สั่งซื้อสินค้า
+          ชำระเงิน ({{ selectedCount }} รายการ)
         </button>
         <button
           @click="store.cartAction = !store.cartAction"
@@ -117,20 +136,14 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: "auth",
-});
-
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useIndexStore } from "~/store/main";
-import type { Product } from "~/models/product.model";
 
 const store = useIndexStore();
 const router = useRouter();
 
-// State สำหรับสินค้าในตะกร้า
-const cartItems = ref<Product[]>([
+const cartItems = ref([
   {
     id: 1,
     name: "มะขาม 4 รส",
@@ -139,6 +152,8 @@ const cartItems = ref<Product[]>([
     amount: 10,
     img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
     categoryId: 1,
+    selected: false,
+    selectedAmount: 1,
   },
   {
     id: 2,
@@ -148,41 +163,38 @@ const cartItems = ref<Product[]>([
     amount: 13,
     img: "https://halal.co.th/storages/products/343928.png",
     categoryId: 1,
-  },
-  {
-    id: 3,
-    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
-    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง",
-    price: 59,
-    amount: 10,
-    img: "https://halal.co.th/storages/products/390694.jpg",
-    categoryId: 1,
-  },
-  {
-    id: 4,
-    name: "เผือกกรอบไส้เสาวรส",
-    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส",
-    price: 58,
-    amount: 20,
-    img: "https://halal.co.th/storages/products/680694.jpg",
-    categoryId: 1,
+    selected: false,
+    selectedAmount: 1,
   },
 ]);
 
-// คำนวณราคารวม
-const totalPrice = computed(() =>
-  cartItems.value.reduce((sum, item) => sum + item.price * item.amount, 0)
+// คำนวณราคารวมเฉพาะสินค้าที่เลือก
+const selectedTotalPrice = computed(() =>
+  cartItems.value.reduce(
+    (sum, item) =>
+      item.selected ? sum + item.price * item.selectedAmount : sum,
+    0
+  )
 );
 
-// เพิ่มจำนวนสินค้า
-const increaseQuantity = (index: number) => {
-  cartItems.value[index].amount++;
+// จำนวนสินค้าที่เลือก
+const selectedCount = computed(() =>
+  cartItems.value.filter((item) => item.selected).length
+);
+
+// เพิ่มจำนวนสินค้าที่เลือก
+const increaseSelectedAmount = (index: number) => {
+  const item = cartItems.value[index];
+  if (item.selectedAmount < item.amount) {
+    item.selectedAmount++;
+  }
 };
 
-// ลดจำนวนสินค้า
-const decreaseQuantity = (index: number) => {
-  if (cartItems.value[index].amount > 1) {
-    cartItems.value[index].amount--;
+// ลดจำนวนสินค้าที่เลือก
+const decreaseSelectedAmount = (index: number) => {
+  const item = cartItems.value[index];
+  if (item.selectedAmount > 1) {
+    item.selectedAmount--;
   }
 };
 
@@ -196,20 +208,19 @@ const clearCart = () => {
   cartItems.value = [];
 };
 
-
-// ไปหน้า test.vue
+// ชำระเงินเฉพาะสินค้าที่เลือก
 const checkout = () => {
+  const selectedItems = cartItems.value.filter((item) => item.selected);
+  if (selectedItems.length === 0) {
+    alert("กรุณาเลือกสินค้า");
+    return;
+  }
+  console.log("ชำระเงินสำหรับสินค้า:", selectedItems);
   store.cartAction = false;
   router.push("/order/checkout");
 };
 </script>
 
 <style scoped>
-/* Responsive styling */
-@media (max-width: 768px) {
-  .popupbtn {
-    font-size: 12px;
-    padding: 8px;
-  }
-}
+/* เพิ่มการออกแบบตามต้องการ */
 </style>

@@ -17,8 +17,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- รายการคืนสินค้า -->
         <div>
-          <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
-          style="max-height: 48vh">
+          <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
             <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
             <p>หมายเลขคำสั่งซื้อ: {{ orderId }}</p>
 
@@ -155,6 +154,22 @@
                       {{ product.status }}
                     </span>
                   </p>
+                  <div v-if="product.status === 'อนุมัติ'" class="mt-2">
+                    <label :for="'tracking' + product.id" class="font-bold">กรุณาใส่เลขแทร็ก</label>
+                    <input
+                      :id="'tracking' + product.id"
+                      v-model="product.trackingNumber"
+                      type="text"
+                      class="w-full border p-2 mt-2 rounded-lg"
+                      placeholder="ใส่เลขแทร็ก"
+                    />
+                    <button
+                      class="bg-[#FCCA81] hover:bg-[#EE973C] text-white p-2 rounded-lg mt-4"
+                      @click="confirmTrackingNumber(product.id)"
+                    >
+                      ยืนยันเลขแทร็ก
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -174,7 +189,6 @@ definePageMeta({
   layout: "user",
 });
 
-
 const orderStore = useOrderStore();
 
 // ดึงข้อมูลคำสั่งซื้อและสินค้าที่คืน
@@ -188,6 +202,7 @@ const selectedProducts = reactive(
     bankName: "",
     accountNumber: "",
     promptPayNumber: "",
+    trackingNumber: "",
   }))
 );
 
@@ -204,6 +219,7 @@ const returnedProducts = reactive(
     bankName?: string;
     accountNumber?: string;
     promptPayNumber?: string;
+    trackingNumber?: string;
     status: string; // สถานะ
   }>
 );
@@ -240,11 +256,22 @@ const submitReturn = (productId: number) => {
         product.paymentMethod === "Bank" ? product.accountNumber : undefined,
       promptPayNumber:
         product.paymentMethod === "PromptPay" ? product.promptPayNumber : undefined,
+      trackingNumber: "",
       status: "อนุมัติ",
     });
 
     selectedProducts.splice(productIndex, 1);
     alert(`คืนสินค้าสำเร็จ: ${product.name}`);
+  }
+};
+
+// ฟังก์ชันยืนยันเลขแทร็ก
+const confirmTrackingNumber = (productId: number) => {
+  const product = returnedProducts.find((p) => p.id === productId);
+  if (product && product.trackingNumber) {
+    alert(`เลขแทร็กสำหรับสินค้า ${product.name}: ${product.trackingNumber} ได้รับการยืนยันแล้ว`);
+  } else {
+    alert("กรุณากรอกเลขแทร็กก่อนยืนยัน");
   }
 };
 </script>

@@ -8,6 +8,7 @@ interface State {
     notificationAction : boolean
     paymentAction : boolean
     reviewAction : boolean
+    cartItems: any[]; // เพิ่ม cartItems สำหรับเก็บสินค้าที่อยู่ในตะกร้า
 }
 
 export const useIndexStore = defineStore('index',{
@@ -19,5 +20,16 @@ export const useIndexStore = defineStore('index',{
         notificationAction: false,
         paymentAction: false,
         reviewAction: false,
-    })
-})
+        cartItems: [], // สร้าง array สำหรับตะกร้าสินค้า
+    }),
+    actions: {
+        addToCart(item: any) {
+          const existingItem = this.cartItems.find((i) => i.id === item.id);
+          if (existingItem) {
+            existingItem.selectedAmount += item.selectedAmount;
+          } else {
+            this.cartItems.push(item);
+        }
+      },
+    },
+  });

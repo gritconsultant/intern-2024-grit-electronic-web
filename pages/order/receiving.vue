@@ -54,7 +54,7 @@
             <div
               v-for="product in selectedOrder.products"
               :key="product.id"
-              class="flex items-center space-x-4 border-b pb-4 cursor-pointer"
+              class="flex items-center space-x-4 border-b pb-4"
             >
               <div class="w-24 h-24">
                 <img
@@ -83,23 +83,45 @@
                 ที่อยู่ : {{ selectedOrder.address }}
               </p>
             </div>
+
             <!-- Shipping Status -->
             <div class="mt-4 space-y-4 border-b pb-4">
               <h3 class="font-bold">สถานะการจัดส่ง</h3>
               <div
                 v-for="status in selectedOrder.shippingStatus"
                 :key="status.text"
-                class="flex items-center"
+                class="flex items-center justify-between"
               >
-                <input
-                  type="radio"
-                  :checked="status.isCurrent"
-                  class="mr-2"
-                  disabled
-                />
                 <div>
                   <p>{{ status.text }}</p>
                   <p class="text-gray-500 text-sm">{{ status.date }}</p>
+                </div>
+                <!-- Show Tracking Number -->
+                <div v-if="status.isCurrent && status.text === 'การจัดส่งสำเร็จ'">
+                  <div class="mt-2">
+                    <p class="text-gray-500 text-sm">เลขแทร็ก: <span class="font-bold">{{ trackingNumber }}</span></p>
+                    <div class="flex items-center mt-2 space-x-2">
+                      <button
+                        @click="copyToClipboard(trackingNumber)"
+                        class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+                      >
+                        คัดลอกเลขแทร็ก
+                      </button>
+                      <a
+                        :href="`https://track.thailandpost.co.th/?trackNumber=${trackingNumber}`"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-blue-500 underline flex items-center"
+                      >
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Thailand_Post_Logo.svg/2560px-Thailand_Post_Logo.svg.png"
+                          alt="Thailand Post"
+                          class="w-6 h-6"
+                        />
+                        <span class="ml-1">ตรวจสอบ</span>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -114,15 +136,10 @@
 </template>
 
 <script setup lang="ts">
-
-definePageMeta({
-  layout: "user",
-});
-
 import { ref } from "vue";
 import type { Order } from "~/models/product.model";
 
-
+// Mock คำสั่งซื้อ
 const orders = ref<Order[]>([
   {
     id: "778231342",
@@ -139,311 +156,12 @@ const orders = ref<Order[]>([
         img: "https://halal.co.th/storages/products/679578.jpg",
         categoryId: 2,
       },
-      {
-        id: 2,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 3,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 4,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
     ],
     shippingStatus: [
       {
         text: "การจัดส่งสำเร็จ",
         date: "23 พฤศจิกายน 2566 17:00 น.",
         isCurrent: true,
-      },
-      {
-        text: "อยู่ระหว่างการจัดส่ง",
-        date: "23 พฤศจิกายน 2566 16:00 น.",
-        isCurrent: false,
-      },
-      {
-        text: "พัสดุอยู่ที่ศูนย์เตรียมสินค้า",
-        date: "23 พฤศจิกายน 2566 04:19 น.",
-        isCurrent: false,
-      },
-    ],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-  {
-    id: "137782342",
-    date: "26 ตุลาคม 2566",
-    total: 124,
-    deliveryDate: "17-20 พฤศจิกายน 2566",
-    products: [
-      {
-        id: 1,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 2,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 3,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 4,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-    ],
-    shippingStatus: [
-      {
-        text: "การจัดส่งสำเร็จ",
-        date: "23 พฤศจิกายน 2566 17:00 น.",
-        isCurrent: true,
-      },
-      {
-        text: "อยู่ระหว่างการจัดส่ง",
-        date: "23 พฤศจิกายน 2566 16:00 น.",
-        isCurrent: false,
-      },
-      {
-        text: "พัสดุอยู่ที่ศูนย์เตรียมสินค้า",
-        date: "23 พฤศจิกายน 2566 04:19 น.",
-        isCurrent: false,
-      },
-    ],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-  {
-    id: "342778231",
-    date: "26 ตุลาคม 2566",
-    total: 124,
-    deliveryDate: "17-20 พฤศจิกายน 2566",
-    products: [
-      {
-        id: 1,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 2,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 3,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 4,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-    ],
-    shippingStatus: [
-      {
-        text: "การจัดส่งสำเร็จ",
-        date: "23 พฤศจิกายน 2566 17:00 น.",
-        isCurrent: true,
-      },
-      {
-        text: "อยู่ระหว่างการจัดส่ง",
-        date: "23 พฤศจิกายน 2566 16:00 น.",
-        isCurrent: false,
-      },
-      {
-        text: "พัสดุอยู่ที่ศูนย์เตรียมสินค้า",
-        date: "23 พฤศจิกายน 2566 04:19 น.",
-        isCurrent: false,
-      },
-    ],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-  {
-    id: "177823342",
-    date: "26 ตุลาคม 2566",
-    total: 124,
-    deliveryDate: "17-20 พฤศจิกายน 2566",
-    products: [
-      {
-        id: 1,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 2,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 3,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 4,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-    ],
-    shippingStatus: [
-      {
-        text: "การจัดส่งสำเร็จ",
-        date: "23 พฤศจิกายน 2566 17:00 น.",
-        isCurrent: true,
-      },
-      {
-        text: "อยู่ระหว่างการจัดส่ง",
-        date: "23 พฤศจิกายน 2566 16:00 น.",
-        isCurrent: false,
-      },
-      {
-        text: "พัสดุอยู่ที่ศูนย์เตรียมสินค้า",
-        date: "23 พฤศจิกายน 2566 04:19 น.",
-        isCurrent: false,
-      },
-    ],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-  {
-    id: "998231342",
-    date: "26 ตุลาคม 2566",
-    total: 124,
-    deliveryDate: "17-20 พฤศจิกายน 2566",
-    products: [
-      {
-        id: 1,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 2,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 3,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 4,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-    ],
-    shippingStatus: [
-      {
-        text: "การจัดส่งสำเร็จ",
-        date: "23 พฤศจิกายน 2566 17:00 น.",
-        isCurrent: true,
-      },
-      {
-        text: "อยู่ระหว่างการจัดส่ง",
-        date: "23 พฤศจิกายน 2566 16:00 น.",
-        isCurrent: false,
-      },
-      {
-        text: "พัสดุอยู่ที่ศูนย์เตรียมสินค้า",
-        date: "23 พฤศจิกายน 2566 04:19 น.",
-        isCurrent: false,
       },
     ],
     namerecipe: "คมเข้ม คำเกษ 098 765 4321",
@@ -451,10 +169,22 @@ const orders = ref<Order[]>([
   },
 ]);
 
+// คำสั่งซื้อที่เลือก
 const selectedOrder = ref<Order | null>(null);
 
-const selectOrder = (order: Order): void => {
+// เลขแทร็กสำหรับตัวอย่าง
+const trackingNumber = "1234567890123";
+
+// เลือกคำสั่งซื้อ
+const selectOrder = (order: Order) => {
   selectedOrder.value = order;
+};
+
+// คัดลอกข้อความไปยังคลิปบอร์ด
+const copyToClipboard = (text: string) => {
+  navigator.clipboard.writeText(text).then(() => {
+    alert("คัดลอกเลขแทร็กเรียบร้อย!");
+  });
 };
 </script>
 
