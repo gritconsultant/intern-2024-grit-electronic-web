@@ -13,7 +13,7 @@
         <h1>เข้าสู่ระบบ</h1>
       </div>
 
-      <!-- Username Input -->
+      <!-- email Input -->
       <div class=" text-base mt-10">
         <label for="email"> อีเมล </label>
         <input
@@ -84,12 +84,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+
 definePageMeta({
   layout: "auth",
 });
 
 const passwordVisible = ref(false);
 const router = useRouter();
+import { useIndexStore } from "~/store/main";
+const store = useIndexStore();
+
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
@@ -99,6 +103,7 @@ const togglePasswordVisibility = () => {
 const redirectToIndex = () => {
   router.push("/"); // เปลี่ยนไปหน้า index
 };
+
 </script>
 
 <style scoped>

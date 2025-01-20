@@ -8,7 +8,7 @@
       </h1>
       <h2
         @click="clearFavorites"
-        class="text-red-500 cursor-pointer ml-auto text-xs md:text-sm"
+        class="text-red-500 cursor-pointer text-xs md:text-sm ml-56"
       >
         ลบทั้งหมด
       </h2>
@@ -38,6 +38,7 @@
         :key="item.id"
         class="flex justify-between items-center border-b py-2"
       >
+
         <img
           :src="item.img"
           alt="product"
@@ -46,15 +47,21 @@
         <div class="flex-1 ml-2">
           <div class="flex justify-between">
             <div>
-              <p class="text-xs md:text-sm font-medium">{{ item.name }}</p>
+                            <!-- link ไปหน้า product -->
+                            <router-link
+                :to="`/product/${item.id}`"
+                class="text-sm md:text-md font-normal text-blue-500 hover:underline"
+              >
+                {{ item.name }}
+              </router-link>
             </div>
           </div>
 
           <div class="flex justify-between">
             <!-- detail -->
             <div class="font-normal text-xs text-black/50">
-              <p class="texthide">{{ item.detail }}</p>
-            </div>
+                <p class="texthide">{{ item.detail }}</p>
+              </div>
 
             <!-- fav -->
             <div>
@@ -89,7 +96,7 @@
             </div>
           </div>
           <div>
-            <div class="flex justify-between items-center gap-2 mt-2">
+            <div class="flex justify-between items-center gap-2 mt-1">
               <div>
                 <p class="fontsubheader">฿{{ item.price }}</p>
               </div>
@@ -139,6 +146,68 @@ const favoriteItems = ref([
     price: 62,
     amount: 1,
     img: "https://halal.co.th/storages/products/343928.png",
+    isFavorite: true,
+  },
+  {
+    id: 3,
+    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
+    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง",
+    price: 59,
+    amount: 10,
+    img: "https://halal.co.th/storages/products/390694.jpg",
+    categoryId: 1,
+    isFavorite: true,
+  },
+  {
+    id: 4,
+    name: "เผือกกรอบไส้เสาวรส",
+    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส",
+    price: 58,
+    amount: 20,
+    img: "https://halal.co.th/storages/products/680694.jpg",
+    categoryId: 1,
+    isFavorite: true,
+  },
+
+
+  {
+    id: 5,
+    name: "เครื่องดื่มรังนกสำเร็จรูป",
+    detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+    price: 150,
+    amount: 5,
+    img: "https://halal.co.th/storages/products/679578.jpg",
+    categoryId: 2,
+    isFavorite: true,
+  },
+  {
+    id: 6,
+    name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+    detail: "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+    price: 150,
+    amount: 3,
+    img: "https://halal.co.th/storages/products/p135225.jpg",
+    categoryId: 2,
+    isFavorite: true,
+  },
+  {
+    id: 7,
+    name: "เครื่องดื่มน้ำองุ่นขาว",
+    detail: "กลูต้า เคอร์คิวมา มินต์ ซี เครื่องดื่มน้ำองุ่นขาว ผสมกลูต้าไธโอนและขมิ้น",
+    price: 40,
+    amount: 3,
+    img: "https://farmfoodsmart.com/upload/products/1634/637982414838759739.png",
+    categoryId: 2,
+    isFavorite: true,
+  },
+  {
+    id: 8,
+    name: "เครื่องดื่มสมุนไพรตรีผลา",
+    detail: "ชีววิถี เครื่องดื่มสมุนไพรตรีผลา สูตรเข้มข้น รสธรรมชาติ",
+    price: 155,
+    amount: 3,
+    img: "https://obs-ect.line-scdn.net/r/ect/ect/image_1695790690327236876b5788947t124fdd52",
+    categoryId: 2,
     isFavorite: true,
   },
 ]);

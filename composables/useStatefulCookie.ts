@@ -1,15 +1,13 @@
-import type { CookieOptions } from "#app";
+import type { CookieOptions } from "#app"
 
-export const useStatefulCookie = <T>(
-  key: string,
-  options?: CookieOptions<T>
-) => {
-  const cookie = useCookie<T | undefined>(key);
+export const useStatefulCookie = <T>(key: string, options?: CookieOptions<T>) => {
+  const cookie = useCookie<T | undefined>(key)
 
-  const state = useState<T | undefined>(key, () => cookie.value);
 
-  watch(state, () => {
-    cookie.value = state.value;
-  });
-  return state;
-};
+  const state = useState<T | undefined>(key, ()=> cookie.value)
+
+  watch (state, ()=> {
+    cookie.value = state.value
+  })
+  return state
+}

@@ -49,66 +49,44 @@
             </div>
           </div>
 
-          <!-- Mobile Menu Button -->
-          <button
-            class="block md:hidden text-black hover:text-gray-700 focus:outline-none"
-            @click="toggleMobileMenu"
-          >
-            <svg
-              class="w-6 h-6"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 6h16M4 12h16m-7 6h7"
-              />
-            </svg>
-          </button>
         </div>
       </div>
     </div>
 
-    <!-- Mobile Icon Menu (Visible only in Mobile) -->
-    <DropdownIcon v-show="mobileMenuOpen"/>
 
+<!-- Cart Popup -->
+<div
+  v-if="store.cartAction"
+  @click="store.cartAction = !store.cartAction"
+  class="fixed inset-0 bg-black/50 flex justify-end z-50"
+>
+  <div @click.stop>
+    <PopupCart />
+  </div>
+</div>
 
-    <!-- Cart Popup -->
-    <div
-      v-if="store.cartAction"
-      @click="store.cartAction = !store.cartAction"
-      class="fixed inset-0 bg-black/50 flex justify-end z-50 "
-    >
-      <div>
-        <PopupCart />
-      </div>
-    </div>
+<!-- Fav Popup -->
+<div
+  v-if="store.favouriteAction"
+  @click="store.favouriteAction = !store.favouriteAction"
+  class="fixed inset-0 bg-black/50 flex justify-end z-50"
+>
+  <div @click.stop>
+    <PopupFavorite />
+  </div>
+</div>
 
-    <!-- Fav Popup -->
-    <div
-      v-if="store.favouriteAction"
-      @click="store.favouriteAction = !store.favouriteAction"
-      class="fixed inset-0 bg-black/50 flex justify-end z-50"
-    >
-      <div>
-        <PopupFavorite />
-      </div>
-    </div>
+<!-- Noti Popup -->
+<div
+  v-if="store.notificationAction"
+  @click="store.notificationAction = !store.notificationAction"
+  class="fixed inset-0 bg-black/50 flex justify-end z-50"
+>
+  <div @click.stop>
+    <PopupNotification />
+  </div>
+</div>
 
-        <!-- Noti Popup -->
-        <div
-      v-if="store.notificationAction"
-      @click="store.notificationAction = !store.notificationAction"
-      class="fixed inset-0 bg-black/50 flex justify-end z-50"
-    >
-      <div>
-        <PopupNotification />
-      </div>
-    </div>
   </div>
 </template>
 

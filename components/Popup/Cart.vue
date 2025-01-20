@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full md:w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
+    class="w-full md:w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden "
   >
 
     <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
@@ -9,7 +9,7 @@
       </h1>
       <h2
         @click="clearCart"
-        class="text-red-500 cursor-pointer text-xs md:text-sm ml-auto"
+        class="text-red-500 cursor-pointer text-xs md:text-sm ml-56"
       >
         ลบทั้งหมด
       </h2>
@@ -100,7 +100,6 @@
               >
                 +
               </button>
-              <span class="text-xs text-gray-500">/ {{ item.amount }}</span>
             </div>
 
             <div class="mt-2 md:mt-3">
@@ -163,6 +162,74 @@ const cartItems = ref([
     amount: 13,
     img: "https://halal.co.th/storages/products/343928.png",
     categoryId: 1,
+    selected: false,
+    selectedAmount: 1,
+  },
+  {
+    id: 3,
+    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
+    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง",
+    price: 59,
+    amount: 10,
+    img: "https://halal.co.th/storages/products/390694.jpg",
+    categoryId: 1,
+    selected: false,
+    selectedAmount: 1,
+  },
+  {
+    id: 4,
+    name: "เผือกกรอบไส้เสาวรส",
+    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส",
+    price: 58,
+    amount: 20,
+    img: "https://halal.co.th/storages/products/680694.jpg",
+    categoryId: 1,
+    selected: false,
+    selectedAmount: 1,
+  },
+
+
+  {
+    id: 5,
+    name: "เครื่องดื่มรังนกสำเร็จรูป",
+    detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
+    price: 150,
+    amount: 5,
+    img: "https://halal.co.th/storages/products/679578.jpg",
+    categoryId: 2,
+    selected: false,
+    selectedAmount: 1,
+  },
+  {
+    id: 6,
+    name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
+    detail: "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
+    price: 150,
+    amount: 3,
+    img: "https://halal.co.th/storages/products/p135225.jpg",
+    categoryId: 2,
+    selected: false,
+    selectedAmount: 1,
+  },
+  {
+    id: 7,
+    name: "เครื่องดื่มน้ำองุ่นขาว",
+    detail: "กลูต้า เคอร์คิวมา มินต์ ซี เครื่องดื่มน้ำองุ่นขาว ผสมกลูต้าไธโอนและขมิ้น",
+    price: 40,
+    amount: 3,
+    img: "https://farmfoodsmart.com/upload/products/1634/637982414838759739.png",
+    categoryId: 2,
+    selected: false,
+    selectedAmount: 1,
+  },
+  {
+    id: 8,
+    name: "เครื่องดื่มสมุนไพรตรีผลา",
+    detail: "ชีววิถี เครื่องดื่มสมุนไพรตรีผลา สูตรเข้มข้น รสธรรมชาติ",
+    price: 155,
+    amount: 3,
+    img: "https://obs-ect.line-scdn.net/r/ect/ect/image_1695790690327236876b5788947t124fdd52",
+    categoryId: 2,
     selected: false,
     selectedAmount: 1,
   },

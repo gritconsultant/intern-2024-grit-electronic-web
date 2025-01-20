@@ -16,7 +16,7 @@
   
           <!-- Dropdown Menu -->
           <div
-            class="absolute bg-white rounded-lg border shadow w-44 hidden group-hover:block -right-4 mt-1"
+            class=" bg-white rounded-lg border shadow  hidden group-hover:block absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y"
           >
             <ul class="py-2 text-sm text-gray-700">
               <li>
