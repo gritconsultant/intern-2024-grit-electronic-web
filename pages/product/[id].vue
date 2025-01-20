@@ -42,11 +42,9 @@
 import { useRoute } from "vue-router";
 import { useIndexStore } from "~/store/main";
 
-// เรียกใช้ route และ store
 const route = useRoute();
 const store = useIndexStore();
 
-// Mock Product Data
 const products = [
   {
     id: 1,

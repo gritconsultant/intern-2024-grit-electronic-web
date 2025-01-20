@@ -33,6 +33,5 @@
   </script>
   
   <style scoped>
-  /* Optional: Add some margin or padding */
   </style>
   

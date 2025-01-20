@@ -118,9 +118,6 @@ definePageMeta({
 
 import { ref } from "vue";
 import type { Order } from "~/models/product.model";
-import { useIndexStore } from "~/store/main";
-
-const store = useIndexStore();
 
 const orders = ref<Order[]>([
   {

@@ -127,7 +127,7 @@
             </div>
           </div>
 
-          <!-- No Order Selected -->
+
           <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div>
         </div>
       </div>
@@ -139,7 +139,10 @@
 import { ref } from "vue";
 import type { Order } from "~/models/product.model";
 
-// Mock คำสั่งซื้อ
+definePageMeta({
+  layout: "user",
+});
+
 const orders = ref<Order[]>([
   {
     id: "778231342",
@@ -172,7 +175,7 @@ const orders = ref<Order[]>([
 // คำสั่งซื้อที่เลือก
 const selectedOrder = ref<Order | null>(null);
 
-// เลขแทร็กสำหรับตัวอย่าง
+// เลขแทร็ก
 const trackingNumber = "1234567890123";
 
 // เลือกคำสั่งซื้อ
@@ -180,7 +183,8 @@ const selectOrder = (order: Order) => {
   selectedOrder.value = order;
 };
 
-// คัดลอกข้อความไปยังคลิปบอร์ด
+
+// คัดลอกเลขแทร็ก
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text).then(() => {
     alert("คัดลอกเลขแทร็กเรียบร้อย!");

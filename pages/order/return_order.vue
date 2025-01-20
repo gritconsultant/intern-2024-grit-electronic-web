@@ -287,7 +287,7 @@ const confirmTrackingNumber = (productId: number) => {
   color: #ef4444;
 }
 
-/* Scrollable content */
+
 .sticky {
   position: sticky;
 }

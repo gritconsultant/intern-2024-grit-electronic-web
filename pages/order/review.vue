@@ -108,7 +108,7 @@
     <div
       v-if="store.reviewAction"
       class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-      @click="closeReviewPopup"
+      @click="store.reviewAction = !store.reviewAction"
     >
       <PopupReview :product="selectedProduct" />
     </div>
@@ -388,11 +388,6 @@ const selectOrder = (order: Order): void => {
 const openReviewPopup = (product: Product): void => {
   selectedProduct.value = product;
   store.reviewAction = true;
-};
-
-// ปิด Popup
-const closeReviewPopup = (): void => {
-  store.reviewAction = false;
 };
 
 </script>

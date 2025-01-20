@@ -112,22 +112,4 @@ const handleSend = async () => {
 </script>
 
 <style scoped>
-.inputbox {
-  border: 1px solid #ccc;
-  padding: 0.5rem;
-  font-size: 1rem;
-}
-
-@media (max-width: 768px) {
-  .inputbox {
-    height: 40px;
-    font-size: 0.875rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .inputbox {
-    font-size: 1rem;
-  }
-}
 </style>

@@ -22,24 +22,24 @@
           หมวดหมู่
           <select class="border p-1 rounded">
             <option value="">ทั้งหมด</option>
-            <option v-for="cat in category" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+            <option v-for="cate in category" :key="cate.id" :value="cate.id">{{ cate.name }}</option>
           </select>
         </div>
       </div>
       <hr class="mt-[10px] mb-[50px] lg:mb-[100px]" />
       <!-- Category Display -->
       <div class="grid gap-10 lg:gap-20">
-        <div v-for="cat in category" :key="cat.id" class="gap-10">
+        <div v-for="cate in category" :key="cate.id" class="gap-10">
           <div class="grid justify-center">
             <div class="flex justify-between">
-              <h1 class="headercategory">{{ cat.name }}</h1>
+              <h1 class="headercategory">{{ cate.name }}</h1>
               <div class="mt-[10px] text-black/40 cursor-pointer">ทั้งหมด -></div>
             </div>
             <div>
               <div class="mt-[10px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-32">
-                <!-- Filter and display products by category -->
+
                 <div
-                  v-for="item in getProductsByCategory(cat.id)"
+                  v-for="item in getProductsByCategory(cate.id)"
                   :key="item.id"
                   class="flex justify-center"
                 >
@@ -57,7 +57,7 @@
 <script setup lang="ts">
 import type { Category, Product } from "~/models/product.model";
 
-// Product data
+
 const products = ref<Product[]>([
   // cate 1
   {
@@ -256,7 +256,7 @@ const products = ref<Product[]>([
 
 ]);
 
-// Category data
+
 const category = ref<Category[]>([
   { id: 1, name: "อาหาร", img:"" },
   { id: 2, name: "เครื่องดื่ม", img:"" },
@@ -265,21 +265,12 @@ const category = ref<Category[]>([
   { id: 5, name: "ของใช้ ของตกแต่ง" , img:""},
 ]);
 
-// Function to get products by category
+// get products by category
 const getProductsByCategory = (categoryId: number): Product[] => {
   return products.value.filter((product) => product.categoryId === categoryId).slice(0, 4);
 };
 </script>
 
 <style scoped>
-@media (max-width: 768px) {
-  .headercategory {
-    font-size: 1.25rem;
-  }
-}
-@media (min-width: 1024px) {
-  .headercategory {
-    font-size: 1.5rem;
-  }
-}
+
 </style>

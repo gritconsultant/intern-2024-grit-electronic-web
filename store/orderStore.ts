@@ -9,7 +9,7 @@ export const useOrderStore = defineStore("order", {
         id: number;
         name: string;
         price: number;
-        img: string; // เพิ่มฟิลด์ img
+        img: string; // เพิ่ม img
       }>;
     }>,
     selectedOrderId: null as string | null,
@@ -18,7 +18,7 @@ export const useOrderStore = defineStore("order", {
       name: string;
       price: number;
       img: string; // เพิ่ม img
-      reason?: string; // เพิ่ม reason
+      reason?: string; // เพิ่ม เหตุผม
       files?: File[]; // เพิ่ม files สำหรับแนบไฟล์
     }>,
     returnedProducts: [] as Array<{

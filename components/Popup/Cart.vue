@@ -2,7 +2,7 @@
   <div
     class="w-full md:w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
   >
-    <!-- Header -->
+
     <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
       <h1 class="text-sm md:text-base font-bold">
         ตะกร้าสินค้า ({{ cartItems.length }})
@@ -38,7 +38,7 @@
         :key="item.id"
         class="flex justify-between items-center border-b py-2"
       >
-        <!-- Checkbox -->
+
         <input
           type="checkbox"
           class="mr-2"
@@ -53,7 +53,7 @@
         <div class="flex-1 ml-2 md:ml-4">
           <div class="flex justify-between">
             <div>
-              <!-- Link to product detail -->
+              <!-- link ไปหน้า product -->
               <router-link
                 :to="`/product/${item.id}`"
                 class="text-sm md:text-md font-normal text-blue-500 hover:underline"
@@ -85,7 +85,7 @@
           </div>
 
           <div class="flex justify-between items-center">
-            <!-- Buttons for increasing/decreasing quantity -->
+            <!-- ปุ่ม ลบ เพิ่ม -->
             <div class="flex items-center gap-2 mt-2 md:mt-3">
               <button
                 @click="decreaseSelectedAmount(index)"
@@ -111,7 +111,7 @@
       </div>
     </div>
 
-    <!-- Footer -->
+
     <div class="p-4 border-t mt-4 bg-gray-100">
       <div class="flex justify-between font-medium">
         <span class="text-sm md:text-base">ราคารวม:</span>
@@ -203,7 +203,7 @@ const removeItem = (index: number) => {
   cartItems.value.splice(index, 1);
 };
 
-// ล้างตะกร้าสินค้า
+// ลบตะกร้าสินค้า
 const clearCart = () => {
   cartItems.value = [];
 };
@@ -222,5 +222,4 @@ const checkout = () => {
 </script>
 
 <style scoped>
-/* เพิ่มการออกแบบตามต้องการ */
 </style>

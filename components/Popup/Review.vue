@@ -5,7 +5,6 @@
     <div
       class="w-[95%] sm:w-[90%] md:w-[500px] h-auto border-2 flex flex-col rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
     >
-      <!-- Header -->
       <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
         <h1 class="text-sm md:text-base font-bold">รีวิวสินค้า</h1>
         <button @click="store.reviewAction = !store.reviewAction">
@@ -25,10 +24,7 @@
           </svg>
         </button>
       </div>
-
-      <!-- Content -->
       <div>
-        <!-- Review Section -->
         <div class="px-4 mt-5">
           <h2 class="text-center font-bold text-lg mb-4">รีวิวและให้คะแนน</h2>
           <div class="text-center">
@@ -91,10 +87,9 @@
           </div>
         </div>
       </div>
-      <!-- Actions -->
       <div class="flex justify-center mt-4 px-4 pb-6">
         <button
-          class="popupbtn w-full md:w-auto py-2 px-4 bg-[#FCCA81] hover:bg-[#EE973C] text-white rounded-md"
+          class="popupbtn w-full md:w-auto py-2 px-4 bg-[#FCCA81] hover:bg-[#EE973C] text-white rounded-md outline-none"
           @click="confirmReview"
         >
           รีวิว
@@ -124,7 +119,7 @@ const reviewText = ref("");
 // Image Upload
 const uploadedImages = ref<string[]>([]);
 
-// Confirm Order and Review
+
 const confirmReview = () => {
   alert(
     `รีวิวของคุณ: ${reviewText.value}\nคะแนน: ${rating.value}\nรูปภาพ: ${uploadedImages.value.length}`
@@ -133,12 +128,13 @@ const confirmReview = () => {
   router.push("/order/review");
 };
 
-// Set Rating
+
 const setRating = (value: number) => {
   rating.value = value;
 };
 
-// Handle Image Upload
+
+// Image Upload
 const handleImageUpload = (event: Event) => {
   const input = event.target as HTMLInputElement;
   const files = input.files;
@@ -157,7 +153,7 @@ const handleImageUpload = (event: Event) => {
   }
 };
 
-// Remove Uploaded Image
+// ลบ Uploaded Image
 const removeImage = (index: number) => {
   uploadedImages.value.splice(index, 1);
 };
@@ -166,27 +162,5 @@ const removeImage = (index: number) => {
 <style scoped>
 textarea {
   resize: none;
-}
-
-button {
-  outline: none;
-}
-
-@media (max-width: 768px) {
-  .popupbtn {
-    font-size: 14px;
-  }
-  .w-24 {
-    width: 90px; /* ปรับขนาดรูปให้เล็กลง */
-  }
-  .h-24 {
-    height: 90px; /* ปรับขนาดรูปให้เล็กลง */
-  }
-}
-
-@media (min-width: 769px) {
-  .popupbtn {
-    font-size: 16px;
-  }
 }
 </style>

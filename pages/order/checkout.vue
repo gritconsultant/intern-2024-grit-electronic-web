@@ -14,8 +14,8 @@
         <Tab />
       </div>
 
-      <!-- Content Section -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
         <!-- Order List -->
         <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
@@ -250,7 +250,6 @@ const selectOrder = (order: Order) => {
 </script>
 
 <style scoped>
-/* Scrollable content */
 .sticky {
   position: sticky;
 }

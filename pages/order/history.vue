@@ -82,12 +82,11 @@
 </template>
 
 <script setup lang="ts">
-
-definePageMeta({
-  layout: "user",
-});
 import { useRouter } from "vue-router";
 import { useOrderStore } from "@/store/orderStore";
+import { computed, ref } from "vue";
+import type { Order, Product } from "~/models/product.model";
+
 
 definePageMeta({
   layout: "user",
@@ -96,8 +95,6 @@ definePageMeta({
 const router = useRouter();
 const orderStore = useOrderStore();
 
-import { computed, ref } from "vue";
-import type { Order, Product } from "~/models/product.model";
 
 const orders = ref<Order[]>([
   {
@@ -170,7 +167,7 @@ const orders = ref<Order[]>([
 const selectedOrder = ref<Order | null>(null);
 const selectedProducts = ref<Product[]>([]);
 
-// ฟังก์ชันเลือกคำสั่งซื้อ
+// เลือกคำสั่งซื้อ
 const selectOrder = (order: Order): void => {
   selectedOrder.value = order;
   selectedProducts.value = [];

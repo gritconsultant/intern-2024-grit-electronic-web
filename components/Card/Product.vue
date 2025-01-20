@@ -16,9 +16,8 @@
           <i class="fa-regular fa-heart"></i>
         </div>
       </div>
-      <!-- กรอบรูปภาพ -->
+
       <div class="flex justify-center items-center h-[300px] w-full overflow-hidden rounded-md">
-        <!-- ใช้ object-contain เพื่อไม่ตัดส่วนใดส่วนหนึ่งของภาพ -->
         <img :src="product.img" alt="Product Image" class="w-full h-full object-cover rounded-md "/>
       </div>
       <div class="flex justify-between mt-1">

@@ -12,7 +12,7 @@
       >
         ลบทั้งหมด
       </h2>
-      <button @click="closeFavorites">
+      <button @click="store.favouriteAction = !store.favouriteAction">
         <svg
           class="w-5 h-5 md:w-6 md:h-6 hover:text-red-500"
           aria-hidden="true"
@@ -99,10 +99,10 @@
       </div>
     </div>
 
-    <!-- Footer -->
+
     <div class="p-3 md:p-4 border-t bg-gray-100">
       <button
-        @click="closeFavorites"
+        @click="store.favouriteAction = !store.favouriteAction"
         class="w-full mt-2 text-sm md:text-base text-gray-500 hover:underline"
       >
         เลือกซื้อสินค้าต่อ →
@@ -112,16 +112,15 @@
 </template>
 
 <script setup lang="ts">
+
 definePageMeta({
   layout: "auth",
 });
 
-const store = useIndexStore();
-
 import { ref } from "vue";
 import { useIndexStore } from "~/store/main";
 
-// State สำหรับสินค้าในตะกร้า
+const store = useIndexStore();
 const favoriteItems = ref([
 {
     id: 1,
@@ -159,28 +158,7 @@ const clearFavorites = () => {
   favoriteItems.value = [];
 };
 
-// ปิด Popup
-const closeFavorites = () => {
-  store.favouriteAction = false;
-};
 </script>
 
 <style scoped>
-/* Responsive styling */
-@media (max-width: 768px) {
-  .fontsubheader {
-    font-size: 12px;
-  }
-  .texthide {
-    display: none;
-  }
-}
-@media (min-width: 769px) {
-  .fontsubheader {
-    font-size: 16px;
-  }
-  .texthide {
-    display: block;
-  }
-}
 </style>

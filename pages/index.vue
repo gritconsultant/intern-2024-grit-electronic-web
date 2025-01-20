@@ -38,7 +38,7 @@
       <h1 class="fontheader">สินค้าแนะนำ - Recommend</h1>
       <div class="grid gap-5 mt-[10px]">
         <div v-for="cate in category" :key="cate.id">
-          <!-- Check Selected Category -->
+          <!-- Selected Category -->
           <div v-if="selectedCategoryId === cate.id || selectedCategoryId === 0">
             <div class="flex justify-between px-10">
               <h1 class="fontsubheader mt-[3px]">{{ cate.name }}</h1>
@@ -67,7 +67,7 @@
 import { ref } from "vue";
 import type { Category, Product } from "~/models/product.model";
 
-// Products Data
+
 const products = ref<Product[]>([
   // cate 1
   {
@@ -264,7 +264,7 @@ const products = ref<Product[]>([
 },
 ]);
 
-// Category Data
+
 const category = ref<Category[]>([
   {
     id: 1,

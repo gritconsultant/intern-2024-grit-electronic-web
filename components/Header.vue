@@ -2,7 +2,6 @@
   <div>
     <div class="h-[80px] pt-[5px] border border-b-black grid items-center">
       <div class="flex items-center justify-between">
-        <!-- Logo -->
         <NuxtLink to="/" class="pl-[30px]">
           <img class="w-[150px]" src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" alt="Logo" />
         </NuxtLink>
@@ -81,6 +80,7 @@
     <!-- Cart Popup -->
     <div
       v-if="store.cartAction"
+      @click="store.cartAction = !store.cartAction"
       class="fixed inset-0 bg-black/50 flex justify-end z-50 "
     >
       <div>
@@ -91,6 +91,7 @@
     <!-- Fav Popup -->
     <div
       v-if="store.favouriteAction"
+      @click="store.favouriteAction = !store.favouriteAction"
       class="fixed inset-0 bg-black/50 flex justify-end z-50"
     >
       <div>
@@ -101,6 +102,7 @@
         <!-- Noti Popup -->
         <div
       v-if="store.notificationAction"
+      @click="store.notificationAction = !store.notificationAction"
       class="fixed inset-0 bg-black/50 flex justify-end z-50"
     >
       <div>

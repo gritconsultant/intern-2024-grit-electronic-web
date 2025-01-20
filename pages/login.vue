@@ -89,12 +89,12 @@ definePageMeta({
 });
 
 const passwordVisible = ref(false);
+const router = useRouter();
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
-const router = useRouter();
 
 const redirectToIndex = () => {
   router.push("/"); // เปลี่ยนไปหน้า index

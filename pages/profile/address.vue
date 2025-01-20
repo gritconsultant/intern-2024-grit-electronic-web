@@ -34,7 +34,7 @@ definePageMeta({
 
 import type { Address } from '~/models/product.model';
 
-// Mock ข้อมูลสำหรับตัวอย่าง
+
 const addresses: Address[] = [
   {
     title: 'หอพัก',

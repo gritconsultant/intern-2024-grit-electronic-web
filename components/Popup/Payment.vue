@@ -5,10 +5,10 @@
     <div
       class="w-full md:w-[500px] h-auto border-2 flex flex-col rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
     >
-      <!-- Header -->
+
       <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
         <h1 class="text-sm md:text-base font-bold">สรุปราคาสินค้า</h1>
-        <button @click="closePayment">
+        <button @click="store.paymentAction = !store.paymentAction">
           <svg
             class="w-6 h-6 hover:text-red-500"
             xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,6 @@
         </button>
       </div>
 
-      <!-- Content Wrapper -->
       <div class="flex flex-col items-center justify-center py-6 px-4 md:px-8">
         <!-- QR Code -->
         <div class="w-[80%] max-w-[300px] mb-6">
@@ -105,11 +104,8 @@ import { useIndexStore } from "~/store/main";
 
 // Router สำหรับเปลี่ยนหน้า
 const router = useRouter();
-
-// Store หลัก
 const store = useIndexStore();
 
-// State เก็บข้อมูลการชำระเงิน
 const payment = ref({
   qrCodeUrl:
     "https://www.kasikornbank.com/SiteCollectionDocuments/business/sme/digital-banking/kshop/img-revamp/kplusshop_qr.png",
@@ -120,10 +116,7 @@ const payment = ref({
   transferDateTime: "", //  สำหรับวันที่และเวลาการโอน
 });
 
-// ฟังก์ชันปิด Popup
-const closePayment = () => {
-  store.paymentAction = false;
-};
+
 
 // ฟังก์ชันยืนยันคำสั่งซื้อ
 const confirmOrder = () => {
@@ -131,26 +124,10 @@ const confirmOrder = () => {
     alert("กรุณาเลือกวันที่และเวลาที่โอน");
     return;
   }
-  closePayment();
+  store.paymentAction = false;
   router.push("/order/shipping"); // ไปที่หน้า shipping
 };
 </script>
 
 <style scoped>
-/* Responsive styling */
-@media (max-width: 768px) {
-  .popupbtn {
-    font-size: 14px;
-  }
-  img {
-    width: 90%;
-    height: auto;
-  }
-}
-
-@media (min-width: 769px) {
-  .popupbtn {
-    font-size: 16px;
-  }
-}
 </style>

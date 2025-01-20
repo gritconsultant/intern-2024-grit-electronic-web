@@ -119,11 +119,13 @@
 </template>
 
 <script setup lang="ts">
+import type { Register } from "~/models/page.model";
+
 definePageMeta({
   layout: "user",
 });
 
-import type { Register } from "~/models/page.model";
+
 
 const register = ref<Register>({
   firstname: "",
@@ -164,12 +166,4 @@ const confirmChange = () => {
 </script>
 
 <style scoped>
-@media (max-width: 768px) {
-  .boxprofile {
-    margin: 0;
-  }
-  .inputbox {
-    width: 100%;
-  }
-}
 </style>

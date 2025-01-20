@@ -49,5 +49,4 @@
 </script>
 
 <style scoped>
-/* Add necessary styling here */
 </style>

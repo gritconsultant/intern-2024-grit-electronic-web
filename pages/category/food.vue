@@ -70,7 +70,7 @@
 <script setup lang="ts">
 import type { Category, Product } from "~/models/product.model";
 
-// Product data
+
 const products = ref<Product[]>([
   {
     id: 1,
@@ -149,7 +149,7 @@ const products = ref<Product[]>([
   },
 ]);
 
-// Category data
+
 const category = ref<Category[]>([
   { id: 1, name: "อาหาร", img: "" },
   { id: 2, name: "เครื่องดื่ม", img: "" },
@@ -160,14 +160,5 @@ const category = ref<Category[]>([
 </script>
 
 <style scoped>
-@media (max-width: 768px) {
-  .headercategory {
-    font-size: 1.25rem;
-  }
-}
-@media (min-width: 1024px) {
-  .headercategory {
-    font-size: 1.5rem;
-  }
-}
+
 </style>
