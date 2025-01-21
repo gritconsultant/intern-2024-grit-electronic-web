@@ -83,7 +83,7 @@
       <!-- Actions -->
       <div class="flex justify-center mt-4 px-4 pb-6">
         <button
-          class="popupbtn w-full md:w-auto py-2 px-4 bg-[#FCCA81] hover:bg-[#EE973C] text-white rounded-md"
+          class="popupbtn w-full md:w-auto py-2 px-4 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-md"
           @click="confirmOrder"
         >
           ยืนยันคำสั่งซื้อ

@@ -91,15 +91,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
-const mobileMenuOpen = ref(false);
 
-const toggleMobileMenu = () => {
-  mobileMenuOpen.value = !mobileMenuOpen.value;
-};
 </script>
 
 <style scoped>

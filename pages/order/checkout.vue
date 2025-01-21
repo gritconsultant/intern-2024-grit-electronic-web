@@ -109,7 +109,7 @@
             <!-- Payment Button -->
             <div class="flex space-x-4 mt-4">
               <button
-                class="flex-1 py-2 bg-[#FCCA81] hover:bg-[#EE973C] text-white rounded-lg"
+                class="flex-1 py-2 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-lg"
                 @click="store.paymentAction = true"
               >
                 ชำระเงิน

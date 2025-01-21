@@ -152,7 +152,7 @@ const page = ref<Page[]>([
   },
   {
     name: "คืนสินค้า",
-    path: "/order/return_order",
+    path: "/order/refund_order",
     active: false,
   },
   {

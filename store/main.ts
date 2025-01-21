@@ -8,6 +8,7 @@ interface State {
     notificationAction : boolean
     paymentAction : boolean
     reviewAction : boolean
+    addressAction : boolean
     cartItems: any[]; // เพิ่ม cartItems สำหรับเก็บสินค้าที่อยู่ในตะกร้า
 }
 
@@ -20,6 +21,7 @@ export const useIndexStore = defineStore('index',{
         notificationAction: false,
         paymentAction: false,
         reviewAction: false,
+        addressAction: false,
         cartItems: [], // สร้าง array สำหรับตะกร้าสินค้า
     }),
     actions: {

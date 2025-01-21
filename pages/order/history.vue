@@ -67,7 +67,7 @@
           <div class="mt-6">
             <button
               v-if="selectedProducts.length"
-              @click="goToReturnPage"
+              @click="goToRefundPage"
               class="text-white bg-[#FCCA81] hover:bg-[#EE973C] hover:text-black rounded-lg p-3"
             >
               คืนสินค้า: {{ selectedProducts.length }} รายการ
@@ -189,9 +189,9 @@ const isSelected = (product: Product): boolean => {
 };
 
 // ไปหน้าคืนสินค้า
-const goToReturnPage = (): void => {
+const goToRefundPage = (): void => {
   orderStore.setOrderAndProducts(selectedOrder.value?.id ?? '', selectedProducts.value);
-  router.push("/order/return_order");
+  router.push("/order/refundOrder");
 };
 </script>
 

@@ -85,7 +85,7 @@
             </div>
 
             <!-- Shipping Status -->
-            <div class="mt-4 space-y-4 border-b pb-4">
+            <div class="mt-4 border-b pb-4">
               <h3 class="font-bold">สถานะการจัดส่ง</h3>
               <div
                 v-for="status in selectedOrder.shippingStatus"
@@ -96,37 +96,58 @@
                   <p>{{ status.text }}</p>
                   <p class="text-gray-500 text-sm">{{ status.date }}</p>
                 </div>
+
                 <!-- Show Tracking Number -->
-                <div v-if="status.isCurrent && status.text === 'การจัดส่งสำเร็จ'">
-                  <div class="mt-2">
-                    <p class="text-gray-500 text-sm">เลขแทร็ก: <span class="font-bold">{{ trackingNumber }}</span></p>
-                    <div class="flex items-center mt-2 space-x-2">
-                      <button
-                        @click="copyToClipboard(trackingNumber)"
-                        class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
+                <div
+                  v-if="status.isCurrent && status.text === 'การจัดส่งสำเร็จ'"
+                  class="mt-4"
+                >
+                  <label for="trackingNumber" class="block font-medium">
+                    เลขแทร็ก
+                  </label>
+                  <div class="flex items-center mt-2">
+                    <input
+                      id="trackingNumber"
+                      type="text"
+                      class="border p-2 rounded-lg w-full mr-2"
+                      :value="trackingNumber"
+                      readonly
+                    />
+                    <button
+                      @click="copyToClipboard(trackingNumber)"
+                      class="text-blue-500 text-xl"
+                      title="คัดลอกเลขแทร็ก"
+                    >
+                      <svg
+                        class="w-[22px] h-[22px] text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
                       >
-                        คัดลอกเลขแทร็ก
-                      </button>
-                      <a
-                        :href="`https://track.thailandpost.co.th/?trackNumber=${trackingNumber}`"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-blue-500 underline flex items-center"
-                      >
-                        <img
-                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Thailand_Post_Logo.svg/2560px-Thailand_Post_Logo.svg.png"
-                          alt="Thailand Post"
-                          class="w-6 h-6"
+                        <path
+                          stroke="currentColor"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 8v3a1 1 0 0 1-1 1H5m11 4h2a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-7a1 1 0 0 0-1 1v1m4 3v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7.13a1 1 0 0 1 .24-.65L7.7 8.35A1 1 0 0 1 8.46 8H13a1 1 0 0 1 1 1Z"
                         />
-                        <span class="ml-1">ตรวจสอบ</span>
-                      </a>
-                    </div>
+                      </svg>
+                    </button>
                   </div>
+                  <a
+                    :href="`https://track.thailandpost.co.th/?trackNumber=${trackingNumber}`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-500 underline flex items-center mt-2"
+                  >
+                    <span class="ml-2">ตรวจสอบสถานะ</span>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
-
 
           <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div>
         </div>
@@ -182,7 +203,6 @@ const trackingNumber = "1234567890123";
 const selectOrder = (order: Order) => {
   selectedOrder.value = order;
 };
-
 
 // คัดลอกเลขแทร็ก
 const copyToClipboard = (text: string) => {

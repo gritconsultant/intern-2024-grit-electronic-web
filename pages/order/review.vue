@@ -76,7 +76,7 @@
                   </div>
                   <div>
                     <button
-                      class="bg-[#FCCA81] hover:bg-[#EE973C] text-white p-2 rounded-lg"
+                      class="bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white p-2 rounded-lg"
                       @click="openReviewPopup(product)"
                     >
                       รีวิวสินค้า

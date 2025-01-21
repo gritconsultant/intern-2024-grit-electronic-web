@@ -121,9 +121,9 @@
         <!-- Products in Return History -->
         <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
           <h2 class="font-bold mb-4">ประวัติการคืนสินค้า</h2>
-          <div v-if="returnedProducts.length">
+          <div v-if="refundProducts.length">
             <div
-              v-for="product in returnedProducts"
+              v-for="product in refundProducts"
               :key="product.id"
               class="flex items-center space-x-4 border-b p-4"
             >
@@ -136,25 +136,21 @@
                 <div>
                   <h3 class="font-bold">{{ product.name }}</h3>
                   <p>ราคา: ฿{{ product.price }}</p>
-                  <p class="text-gray-500 texthide">เหตุผล: {{ product.reason }}</p>
-                  <p v-if="product.paymentMethod === 'Bank'" class="text-gray-500">
-                    คืนเงินผ่าน: {{ product.bankName }} - {{ product.accountNumber }}
-                  </p>
-                  <p v-if="product.paymentMethod === 'PromptPay'" class="text-gray-500">
-                    คืนเงินผ่านพร้อมเพย์: {{ product.promptPayNumber }}
-                  </p>
+                  <p class="text-gray-500">เหตุผล: {{ product.reason }}</p>
                   <p class="mt-2 font-bold">สถานะ: 
                     <span
                       :class="{
-                        'text-yellow-500': product.status === 'รออนุมัติ',
-                        'text-green-500': product.status === 'อนุมัติ',
-                        'text-red-500': product.status === 'ไม่อนุมัติ',
+                        'text-yellow-500': product.status === 'รอดำเนินการ',
+                        'text-green-500': product.status === 'สำเร็จ',
+                        'text-red-500': product.status === 'ยกเลิก',
                       }"
                     >
                       {{ product.status }}
                     </span>
                   </p>
-                  <div v-if="product.status === 'อนุมัติ'" class="mt-2">
+
+                  <!-- กรอกเลขแทรค -->
+                  <div v-if="product.status === 'สำเร็จ'" class="mt-4">
                     <label :for="'tracking' + product.id" class="font-bold">กรุณาใส่เลขแทร็ก</label>
                     <input
                       :id="'tracking' + product.id"
@@ -168,6 +164,16 @@
                       @click="confirmTrackingNumber(product.id)"
                     >
                       ยืนยันเลขแทร็ก
+                    </button>
+                  </div>
+
+                  <!-- ปุ่มยกเลิก -->
+                  <div v-if="product.status === 'รอดำเนินการ'" class="mt-4">
+                    <button
+                      @click="cancelRefund(product.id)"
+                      class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                    >
+                      ยกเลิกการคืนสินค้า
                     </button>
                   </div>
                 </div>
@@ -197,7 +203,6 @@ const selectedProducts = reactive(
   orderStore.selectedProducts.map((product) => ({
     ...product,
     reason: "",
-    files: [] as File[],
     paymentMethod: "",
     bankName: "",
     accountNumber: "",
@@ -207,32 +212,22 @@ const selectedProducts = reactive(
 );
 
 // รายการสินค้าที่คืน
-const returnedProducts = reactive(
+const refundProducts = reactive(
   [] as Array<{
     id: number;
     name: string;
     price: number;
     img: string;
     reason: string;
-    files: Array<{ name: string; preview: string }>;
-    paymentMethod: string;
-    bankName?: string;
-    accountNumber?: string;
-    promptPayNumber?: string;
-    trackingNumber?: string;
-    status: string; // สถานะ
+    trackingNumber: string;
+    status: string;
   }>
 );
 
 // ฟังก์ชันจัดการไฟล์แนบ
 const handleImageUpload = (event: Event, productId: number) => {
   const files = (event.target as HTMLInputElement).files;
-  const product = selectedProducts.find((p) => p.id === productId);
-  if (files && product) {
-    product.files = Array.from(files).filter((file) =>
-      file.type.startsWith("image/")
-    );
-  }
+  console.log("Files uploaded:", files);
 };
 
 // ฟังก์ชันส่งคืนสินค้า
@@ -240,24 +235,14 @@ const submitReturn = (productId: number) => {
   const productIndex = selectedProducts.findIndex((p) => p.id === productId);
   if (productIndex !== -1) {
     const product = selectedProducts[productIndex];
-    returnedProducts.push({
+    refundProducts.push({
       id: product.id,
       name: product.name,
       price: product.price,
       img: product.img,
       reason: product.reason || "ไม่มีเหตุผลระบุ",
-      files: product.files.map((file) => ({
-        name: file.name,
-        preview: URL.createObjectURL(file),
-      })),
-      paymentMethod: product.paymentMethod,
-      bankName: product.paymentMethod === "Bank" ? product.bankName : undefined,
-      accountNumber:
-        product.paymentMethod === "Bank" ? product.accountNumber : undefined,
-      promptPayNumber:
-        product.paymentMethod === "PromptPay" ? product.promptPayNumber : undefined,
       trackingNumber: "",
-      status: "อนุมัติ",
+      status: "สำเร็จ",
     });
 
     selectedProducts.splice(productIndex, 1);
@@ -267,11 +252,20 @@ const submitReturn = (productId: number) => {
 
 // ฟังก์ชันยืนยันเลขแทร็ก
 const confirmTrackingNumber = (productId: number) => {
-  const product = returnedProducts.find((p) => p.id === productId);
+  const product = refundProducts.find((p) => p.id === productId);
   if (product && product.trackingNumber) {
     alert(`เลขแทร็กสำหรับสินค้า ${product.name}: ${product.trackingNumber} ได้รับการยืนยันแล้ว`);
   } else {
     alert("กรุณากรอกเลขแทร็กก่อนยืนยัน");
+  }
+};
+
+// ฟังก์ชันยกเลิกการคืนสินค้า
+const cancelRefund = (productId: number) => {
+  const index = refundProducts.findIndex((p) => p.id === productId);
+  if (index !== -1 && refundProducts[index].status === "รอดำเนินการ") {
+    refundProducts[index].status = "ยกเลิก";
+    alert(`การคืนสินค้าสำหรับ ${refundProducts[index].name} ถูกยกเลิกแล้ว`);
   }
 };
 </script>
@@ -286,8 +280,6 @@ const confirmTrackingNumber = (productId: number) => {
 .text-red-500 {
   color: #ef4444;
 }
-
-
 .sticky {
   position: sticky;
 }

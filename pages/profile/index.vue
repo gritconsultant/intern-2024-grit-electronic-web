@@ -89,7 +89,7 @@
                   <div class="mt-10">
                     <button
                       type="submit"
-                      class="text-white w-full max-w-[300px] h-[45px] bg-[#FCCA81] hover:bg-[#EE973C] hover:text:black rounded-xl"
+                      class="text-white w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 hover:text:black rounded-xl"
                       @click="confirmChange"
                     >
                       ยืนยันการเปลี่ยนรหัสผ่าน

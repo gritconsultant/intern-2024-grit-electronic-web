@@ -29,7 +29,7 @@
               </div>
             </div>
             <button
-              class="bg-[#FCCA81] text-white p-4 rounded-lg w-full lg:w-[350px] mt-10 hover:bg-[#EE973C] transition"
+              class="bg-[#EE973C] text-white p-4 rounded-lg w-full lg:w-[350px] mt-10 hover:bg-[#FD8C35]/70 transition"
               @click="addToCart"
             >
               เพิ่มใส่ตะกร้า
@@ -92,7 +92,7 @@
               :key="page"
               @click="changePage(page)"
               :class="{
-                'bg-[#FCCA81] text-white': page === currentPage,
+                'bg-[#EE973C] text-white': page === currentPage,
                 'bg-gray-200': page !== currentPage,
               }"
               class="px-4 py-2 mx-1 rounded"
