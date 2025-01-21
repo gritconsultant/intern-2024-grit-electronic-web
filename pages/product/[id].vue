@@ -145,11 +145,11 @@ const products = [
   },
   {
     id: 3,
-    name: "มะขาม 4 รส",
-    detail: "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด",
-    price: 62,
+    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
+    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง",
+    price: 59,
     amount: 10,
-    img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
+    img: "https://halal.co.th/storages/products/390694.jpg",
     categoryId: 1,
   },
   {
@@ -210,7 +210,11 @@ const reviews = ref([
     date: "2025-01-03",
     rating: 3,
     detail: "It's okay.",
-    images: [],
+    images: [
+      "https://halal.co.th/storages/products/343928.png",
+      "https://halal.co.th/storages/products/343928.png",
+      "https://halal.co.th/storages/products/343928.png",
+    ],
   },
   {
     id: 6,

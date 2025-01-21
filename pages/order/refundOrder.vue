@@ -242,7 +242,7 @@ const submitReturn = (productId: number) => {
       img: product.img,
       reason: product.reason || "ไม่มีเหตุผลระบุ",
       trackingNumber: "",
-      status: "สำเร็จ",
+      status: "รอดำเนินการ",
     });
 
     selectedProducts.splice(productIndex, 1);

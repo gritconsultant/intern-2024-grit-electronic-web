@@ -65,6 +65,11 @@
 </template>
 
 <script setup lang="ts">
+
+definePageMeta({
+  layout: "user",
+});
+
 import { reactive } from "vue";
 import { useIndexStore } from "~/store/main";
 const store = useIndexStore();

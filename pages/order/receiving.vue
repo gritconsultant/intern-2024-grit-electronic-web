@@ -35,7 +35,7 @@
                 <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
                 <p class="text-gray-500 text-sm">{{ order.date }}</p>
                 <p class="text-gray-500 text-sm">
-                  ได้รับภายในวันที่ {{ order.deliveryDate }}
+                  จัดส่งแล้ววันที่ {{ order.deliveryDate }}
                 </p>
               </div>
               <p class="text-lg font-bold">฿{{ order.total }}</p>
@@ -169,22 +169,32 @@ const orders = ref<Order[]>([
     id: "778231342",
     date: "26 ตุลาคม 2566",
     total: 124,
-    deliveryDate: "17-20 พฤศจิกายน 2566",
+    deliveryDate: "26 ตุลาคม 2566",
     products: [
       {
         id: 1,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
+        name: "มะขาม 4 รส",
+        detail: "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด",
+        price: 62,
+        amount: 1,
+        img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
+        categoryId: 1,
+      },
+      {
+        id: 2,
+        name: "มะขามคลุกบ๊วย 4 รส",
+        detail:
+          "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย",
+        price: 62,
+        amount: 1,
+        img: "https://halal.co.th/storages/products/343928.png",
+        categoryId: 1,
       },
     ],
     shippingStatus: [
       {
         text: "การจัดส่งสำเร็จ",
-        date: "23 พฤศจิกายน 2566 17:00 น.",
+        date: "26 พฤศจิกายน 2566 17:00 น.",
         isCurrent: true,
       },
     ],

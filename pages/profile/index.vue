@@ -15,7 +15,7 @@
               <div class="mt-10 ml-10">
                 <div>
                   <label for="username"> ชื่อ - นามสกุล </label> <br />
-                  <h1 class="font-bold text-lg">Komkem kku</h1>
+                  <h1 class="font-bold text-lg">hello world</h1>
                 </div>
 
                 <!-- change password -->
@@ -102,12 +102,12 @@
                 <div class="mt-10">
                   <label for="email"> Email </label>
                   <br />
-                  <h1 class="font-bold text-lg">Komkem.k@kkumail.com</h1>
+                  <h1 class="font-bold text-lg">helloworld@gmail.com</h1>
                 </div>
 
                 <div class="mt-5">
                   <label for="phone">เบอร์โทรศัพท์</label> <br />
-                  <h1 class="font-bold text-lg">0847765928</h1>
+                  <h1 class="font-bold text-lg">0987654567</h1>
                 </div>
               </div>
             </div>

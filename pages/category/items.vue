@@ -56,7 +56,9 @@
                   :key="index"
                   class="flex justify-center"
                 >
+                <NuxtLink :to="`/product/${item.id}`">
                   <CardProduct :product="item" />
+                </NuxtLink>
                 </div>
               </div>
             </div>
