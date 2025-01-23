@@ -7,7 +7,7 @@
     >
       <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
         <h1 class="text-sm md:text-base font-bold">รีวิวสินค้า</h1>
-        <button @click="store.reviewAction = !store.reviewAction">
+        <button @click="store.reviewAction = true">
           <svg
             class="w-6 h-6 hover:text-red-500"
             xmlns="http://www.w3.org/2000/svg"

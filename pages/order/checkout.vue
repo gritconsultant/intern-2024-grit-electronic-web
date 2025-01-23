@@ -124,6 +124,7 @@
     <div
       v-if="store.paymentAction"
       class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+      @click="store.paymentAction = !store.paymentAction"
     >
       <PopupPayment />
     </div>
