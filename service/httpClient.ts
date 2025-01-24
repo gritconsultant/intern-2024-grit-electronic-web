@@ -1,36 +1,36 @@
 // เรียนใช้ axios
 
 import axios from "axios";
-// import type { Option } from "~/models/client.model";
+import type { Option } from "~/models/client.model";
 
-    // export const client = (ops: Option) => {
-    //     const config: any = useRuntimeConfig()
+    export const client = (ops: Option) => {
+        const config: any = useRuntimeConfig()
 
-    //     let api: any = axios.create()
+        let api: any = axios.create()
 
-    //     api.defaults.baseURL = config.public.BASE_URL
-    //     api.defaults.headers.common['Content-Type'] = 'application/json'
+        api.defaults.baseURL = config.public.BASE_URL
+        api.defaults.headers.common['Content-Type'] = 'application/json'
 
-    //     // ตรวจสอบ Token
-    //     api.interceptors.request.use(
-    //         async function (config: any) {
-    //             let token = await useCookie('token')
-    //             config.headers['Authorization'] = 'Bearer ' + token.value
-    //             return config
-    //         },
-    //                 // ถ้าเกิดerror
-    //     function(error: any){
-    //         // console.log
-    //     }
-    //     )
+        // ตรวจสอบ Token
+        api.interceptors.request.use(
+            async function (config: any) {
+                let token = await useCookie('token')
+                config.headers['Authorization'] = 'Bearer ' + token.value
+                return config
+            },
+                    // ถ้าเกิดerror
+        function(error: any){
+            // console.log
+        }
+        )
 
-    //     api.defaults.validaStatus = false
-    //     ops.method = ops.method.toLowerCase()
+        api.defaults.validaStatus = false
+        ops.method = ops.method.toLowerCase()
 
-    //     return api({
-    //         ...ops,
-    //     })
+        return api({
+            ...ops,
+        })
 
 
 
-    // }
+    }

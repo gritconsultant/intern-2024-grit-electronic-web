@@ -19,6 +19,7 @@
         <input
           type="text"
           id="email"
+          v-model="logins.email"
           class="inputbox inputboxform"
           required
           placeholder="กรุณาใส่อีเมล"
@@ -31,6 +32,7 @@
         <input
           :type="passwordVisible ? 'text' : 'password'"
           id="password"
+          v-model="logins.password"
           class="inputbox inputboxform"
           required
           placeholder="กรุณาใส่รหัสผ่าน"
@@ -56,9 +58,9 @@
       <!-- Login Button -->
       <div class="mt-12 flex justify-center">
         <button
-          type="submit"
+          type="button"
           class=" w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl text-white text-lg"
-          @click="redirectToIndex"
+          @click="login"
         >
           เข้าสู่ระบบ
         </button>
@@ -83,7 +85,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-
+import type { Login } from "~/models/page.model";
+import service from "~/service";
+import { useIndexStore } from "~/store/main";
 
 definePageMeta({
   layout: "auth",
@@ -91,18 +95,39 @@ definePageMeta({
 
 const passwordVisible = ref(false);
 const router = useRouter();
-import { useIndexStore } from "~/store/main";
 const store = useIndexStore();
+
+const logins = ref<Login>({
+  email: "",
+  password: "",
+});
+
+const login = async () => {
+  await service.auth.login(logins.value)
+    .then((resp: any) => {
+
+      
+      const refToken = useStatefulCookie("token");
+      refToken.value = resp.data.token;
+      console.log(resp.data);
+      store.$state.token = resp.data.token;
+
+
+      if (store.$state.token != null) {
+        router.push("/");
+      }
+    })
+    .catch((error: any) => {
+      console.log(error.data);
+    })
+    .finally(() => {});
+};
 
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
-
-const redirectToIndex = () => {
-  router.push("/"); // เปลี่ยนไปหน้า index
-};
 
 </script>
 

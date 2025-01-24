@@ -1,7 +1,7 @@
 import * as product from "@/service/product.service"
-import * as login from "@/service/login.service"
+import * as auth from "~/service/auth.service"
 
 export default {
     product,
-    login
+    auth
 }

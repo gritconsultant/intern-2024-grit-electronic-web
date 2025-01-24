@@ -4,7 +4,6 @@
   >
     <form
       class="rounded-2xl w-full drop-shadow-2xl max-w-[570px] bg-white p-6 h-auto m-10"
-      @submit.prevent="handleRegister"
     >
       <!-- Logo -->
       <div class="flex justify-center">
@@ -21,7 +20,7 @@
           <input
             type="text"
             id="firstname"
-            v-model="register.firstname"
+            v-model="registers.firstname"
             class="inputbox inputboxform"
             required
             placeholder="กรุณาใส่ชื่อ"
@@ -32,7 +31,7 @@
           <input
             type="text"
             id="lastname"
-            v-model="register.lastname"
+            v-model="registers.lastname"
             class="inputbox inputboxform"
             required
             placeholder="กรุณาใส่นามสกุล"
@@ -47,7 +46,7 @@
           <input
             type="text"
             id="username"
-            v-model="register.username"
+            v-model="registers.username"
             class="inputbox inputboxform"
             required
             placeholder="กรุณาใส่ชื่อผู้ใช้"
@@ -58,7 +57,7 @@
           <input
             type="text"
             id="phone"
-            v-model="register.phone"
+            v-model="registers.phone"
             class="inputbox inputboxform"
             required
             placeholder="กรุณาใส่เบอร์โทรศัพท์"
@@ -72,7 +71,7 @@
         <input
           type="email"
           id="email"
-          v-model="register.email"
+          v-model="registers.email"
           class="inputbox inputboxform"
           required
           placeholder="กรุณาใส่อีเมล"
@@ -86,7 +85,7 @@
           <input
             :type="passwordVisible ? 'text' : 'password'"
             id="password"
-            v-model="register.password"
+            v-model="registers.password"
             class="inputbox inputboxform"
             :class="{ 'border-red-500': passwordError }"
             required
@@ -102,7 +101,7 @@
         <div>
           <label for="confirmPassword"> ยืนยันรหัสผ่าน </label>
           <input
-            v-model="register.confirmPassword"
+            v-model="registers.confirmPassword"
             type="password"
             id="confirmPassword"
             class="inputbox inputboxform"
@@ -118,9 +117,10 @@
       <!-- Register Button -->
       <div class="mt-14 flex justify-center">
         <button
-          type="submit"
+          type="button"
           class="w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl text-white text-lg"
-        >
+        @click="register"
+          >
           ลงทะเบียน
         </button>
       </div>
@@ -144,20 +144,45 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import type { Register } from "~/models/page.model";
+import service from "~/service";
 
 definePageMeta({
   layout: "auth",
 });
 
-const register = ref({
+const router = useRouter();
+const registers = ref<Register>({
   firstname: "",
   lastname: "",
   username: "",
-  phone: "",
+  phone: 0,
   email: "",
   password: "",
   confirmPassword: "",
 });
+
+const register = async () => {
+  console.log(registers.value)
+  await service.auth.register(registers.value)
+  .then((resp: any) => {
+    console.log(resp)
+
+  if (resp.status == 200) {
+    alert("Registration successful!");
+    router.push("/login");
+  }
+
+
+  })
+  .catch((error: any) => {
+    console.error(error);
+    alert("Registration failed. Please try again later.");
+    return;
+  })
+  .finally(() => {})
+}
+
 
 const passwordVisible = ref(false);
 const passwordError = ref(false);
@@ -167,21 +192,21 @@ const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
-const handleRegister = () => {
-  if (!register.value.firstname || !register.value.lastname) {
-    alert("Please fill in all fields");
-    return;
-  }
-  if (register.value.password !== register.value.confirmPassword) {
-    passwordMismatch.value = true;
-    alert("Passwords do not match.");
-    return;
-  }
-  passwordMismatch.value = false;
+// const handleRegister = () => {
+//   if (!register.value.firstname || !register.value.lastname) {
+//     alert("Please fill in all fields");
+//     return;
+//   }
+//   if (register.value.password !== register.value.confirmPassword) {
+//     passwordMismatch.value = true;
+//     alert("Passwords do not match.");
+//     return;
+//   }
+//   passwordMismatch.value = false;
 
-  console.log("Registration successful", register.value);
-  alert("Registration successful!");
-};
+//   console.log("Registration successful", register.value);
+//   alert("Registration successful!");
+// };
 </script>
 
 <style scoped>

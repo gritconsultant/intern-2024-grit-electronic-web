@@ -9,6 +9,57 @@
         <h1 class="text-xl font-bold mb-6">คืนสินค้า</h1>
       </div>
 
+      <div class="my-4">
+            <label
+              for="filterRefund"
+              class="block text-sm font-medium text-gray-700"
+              >กรองการคืนสินค้า</label
+            >
+            <select
+              id="filterRefund"
+              v-model="refundFilter"
+              class="w-full lg:w-1/3 border p-2 rounded"
+            >
+              <option value="">ทั้งหมด</option>
+              <option value="สำเร็จ">สำเร็จ</option>
+              <option value="ยกเลิก">ไม่สำเร็จ</option>
+              <option value="รอดำเนินการ">รอดำเนินการ</option>
+            </select>
+          </div>
+
+          <div v-if="filteredRefundProducts.length">
+            <div
+              v-for="product in filteredRefundProducts"
+              :key="product.id"
+              class="flex items-center space-x-4 border-b p-4"
+            >
+              <div class="flex items-center space-x-5">
+                <img
+                  :src="product.img"
+                  alt="product"
+                  class="w-20 h-20 object-cover border rounded"
+                />
+                <div>
+                  <h3 class="font-bold">{{ product.name }}</h3>
+                  <p>ราคา: ฿{{ product.price }}</p>
+                  <p class="text-gray-500">เหตุผล: {{ product.reason }}</p>
+                  <p class="mt-2 font-bold">
+                    สถานะ:
+                    <span
+                      :class="{
+                        'text-yellow-500': product.status === 'รอดำเนินการ',
+                        'text-green-500': product.status === 'สำเร็จ',
+                        'text-red-500': product.status === 'ยกเลิก',
+                      }"
+                    >
+                      {{ product.status }}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
       <!-- Tabs -->
       <div class="mt-5">
         <Tab />
@@ -17,7 +68,10 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- รายการคืนสินค้า -->
         <div>
-          <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
+          <div
+            class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+            style="max-height: 48vh"
+          >
             <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
             <p>หมายเลขคำสั่งซื้อ: {{ orderId }}</p>
 
@@ -33,7 +87,9 @@
 
                 <div class="mt-4">
                   <!-- ช่องกรอกเหตุผลการคืนสินค้า -->
-                  <label :for="'reason' + product.id" class="font-bold">เหตุผลในการคืนสินค้า</label>
+                  <label :for="'reason' + product.id" class="font-bold"
+                    >เหตุผลในการคืนสินค้า</label
+                  >
                   <textarea
                     :id="'reason' + product.id"
                     v-model="product.reason"
@@ -43,7 +99,9 @@
                   ></textarea>
 
                   <!-- ช่องแนบรูปภาพ -->
-                  <label :for="'file' + product.id" class="font-bold mt-4 block">แนบรูปหลักฐานการชำระเงิน</label>
+                  <label :for="'file' + product.id" class="font-bold mt-4 block"
+                    >แนบรูปหลักฐานการชำระเงิน</label
+                  >
                   <input
                     :id="'file' + product.id"
                     type="file"
@@ -54,20 +112,28 @@
                   />
 
                   <!-- ช่องกรอกข้อมูลการคืนเงิน -->
-                  <label :for="'paymentMethod' + product.id" class="font-bold mt-4 block">ช่องทางการคืนเงิน</label>
+                  <label
+                    :for="'paymentMethod' + product.id"
+                    class="font-bold mt-4 block"
+                    >ช่องทางการคืนเงิน</label
+                  >
                   <select
                     :id="'paymentMethod' + product.id"
                     v-model="product.paymentMethod"
                     class="w-full border p-2 mt-2 rounded-lg"
                   >
-                    <option disabled value="">กรุณาเลือกช่องทางการคืนเงิน</option>
+                    <option disabled value="">
+                      กรุณาเลือกช่องทางการคืนเงิน
+                    </option>
                     <option value="Bank">บัญชีธนาคาร</option>
                     <option value="PromptPay">พร้อมเพย์</option>
                   </select>
 
                   <!-- ช่องกรอกข้อมูลธนาคาร -->
                   <div v-if="product.paymentMethod === 'Bank'" class="mt-4">
-                    <label :for="'bank' + product.id" class="font-bold">ชื่อธนาคาร</label>
+                    <label :for="'bank' + product.id" class="font-bold"
+                      >ชื่อธนาคาร</label
+                    >
                     <input
                       :id="'bank' + product.id"
                       v-model="product.bankName"
@@ -76,7 +142,11 @@
                       placeholder="กรุณากรอกชื่อธนาคาร"
                     />
 
-                    <label :for="'account' + product.id" class="font-bold mt-4 block">เลขบัญชีธนาคาร</label>
+                    <label
+                      :for="'account' + product.id"
+                      class="font-bold mt-4 block"
+                      >เลขบัญชีธนาคาร</label
+                    >
                     <input
                       :id="'account' + product.id"
                       v-model="product.accountNumber"
@@ -87,8 +157,13 @@
                   </div>
 
                   <!-- ช่องกรอกข้อมูลพร้อมเพย์ -->
-                  <div v-if="product.paymentMethod === 'PromptPay'" class="mt-4">
-                    <label :for="'promptpay' + product.id" class="font-bold">หมายเลขพร้อมเพย์</label>
+                  <div
+                    v-if="product.paymentMethod === 'PromptPay'"
+                    class="mt-4"
+                  >
+                    <label :for="'promptpay' + product.id" class="font-bold"
+                      >หมายเลขพร้อมเพย์</label
+                    >
                     <input
                       :id="'promptpay' + product.id"
                       v-model="product.promptPayNumber"
@@ -119,7 +194,10 @@
         </div>
 
         <!-- Products in Return History -->
-        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
+        <div
+          class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+          style="max-height: 48vh"
+        >
           <h2 class="font-bold mb-4">ประวัติการคืนสินค้า</h2>
           <div v-if="refundProducts.length">
             <div
@@ -137,7 +215,8 @@
                   <h3 class="font-bold">{{ product.name }}</h3>
                   <p>ราคา: ฿{{ product.price }}</p>
                   <p class="text-gray-500">เหตุผล: {{ product.reason }}</p>
-                  <p class="mt-2 font-bold">สถานะ: 
+                  <p class="mt-2 font-bold">
+                    สถานะ:
                     <span
                       :class="{
                         'text-yellow-500': product.status === 'รอดำเนินการ',
@@ -151,7 +230,9 @@
 
                   <!-- กรอกเลขแทรค -->
                   <div v-if="product.status === 'สำเร็จ'" class="mt-4">
-                    <label :for="'tracking' + product.id" class="font-bold">กรุณาใส่เลขแทร็ก</label>
+                    <label :for="'tracking' + product.id" class="font-bold"
+                      >กรุณาใส่เลขแทร็ก</label
+                    >
                     <input
                       :id="'tracking' + product.id"
                       v-model="product.trackingNumber"
@@ -176,11 +257,16 @@
                       ยกเลิกการคืนสินค้า
                     </button>
                   </div>
+                  
                 </div>
+                
               </div>
+              
             </div>
           </div>
-          <p v-else class="text-center text-gray-500">ยังไม่มีประวัติการคืนสินค้า</p>
+          <p v-else class="text-center text-gray-500">
+            ไม่มีข้อมูลการคืนสินค้า
+          </p>
         </div>
       </div>
     </div>
@@ -209,6 +295,14 @@ const selectedProducts = reactive(
     promptPayNumber: "",
     trackingNumber: "",
   }))
+);
+
+const refundFilter = ref<string>(""); // สำหรับสถานะที่เลือก
+
+const filteredRefundProducts = computed(() =>
+  refundFilter.value
+    ? refundProducts.filter((product) => product.status === refundFilter.value)
+    : refundProducts
 );
 
 // รายการสินค้าที่คืน
@@ -254,7 +348,9 @@ const submitReturn = (productId: number) => {
 const confirmTrackingNumber = (productId: number) => {
   const product = refundProducts.find((p) => p.id === productId);
   if (product && product.trackingNumber) {
-    alert(`เลขแทร็กสำหรับสินค้า ${product.name}: ${product.trackingNumber} ได้รับการยืนยันแล้ว`);
+    alert(
+      `เลขแทร็กสำหรับสินค้า ${product.name}: ${product.trackingNumber} ได้รับการยืนยันแล้ว`
+    );
   } else {
     alert("กรุณากรอกเลขแทร็กก่อนยืนยัน");
   }
