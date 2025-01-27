@@ -2,16 +2,29 @@
   <div>
     <div class="flex justify-between border-b-2 m-4 p-3">
       <div>
+        <!-- ชื่อที่อยู่ -->
         <div class="mb-3 font-semibold text-lg">
-            <h3>{{ address.title }}</h3>
+          <h3>{{ address.title }}</h3>
         </div>
-        <p> <span class="text-black/70">ชื่อผู้รับ: </span>{{ address.name }}</p>
-        <p> <span class="text-black/70">ที่อยู่: </span> {{ address.address }}</p>
-        <p><span class="text-black/70">เบอร์โทร: </span> {{ address.phone }}</p>
+        
+        <!-- รายละเอียดผู้รับ -->
+        <p><span class="text-black/70">ชื่อผู้รับ: </span>{{ address.name }}</p>
+        <p>
+          <span class="text-black/70">ที่อยู่: </span>
+          บ้านเลขที่ {{ address.houseNo }},
+          หมู่บ้าน {{ address.village }},
+          ตำบล {{ address.subDistrict }},
+          อำเภอ {{ address.district }},
+          จังหวัด {{ address.province }},
+          {{ address.postalCode }}
+        </p>
+        <p><span class="text-black/70">เบอร์โทร: </span>{{ address.phone }}</p>
       </div>
+      
+      <!-- ไอคอนแก้ไข -->
       <div class="flex items-center mx-10">
         <svg
-          class="w-6 h-6 text-gray-800 dark:text-white"
+          class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="24"

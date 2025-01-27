@@ -1,49 +1,127 @@
 <template>
-  <div>
-    <div class="p-[20px] lg:p-[50px]">
-      <div>tack pages</div>
-      <div class="flex flex-col lg:flex-row gap-2 my-6">
-        <h1 class="font-bold text-2xl lg:text-3xl">สินค้าทั้งหมด</h1>
-        <p class="mt-2 lg:mt-[10px] text-black/40">
-          (สินค้าทั้งหมด {{ products.length }} รายการ)
-        </p>
+  <div class="flex p-4">
+    <!-- Sidebar -->
+    <Sidebar />
+    <div class="w-full lg:w-3/4 p-6">
+      <div class="flex justify-between border-b">
+        <h1 class="text-xl font-bold mb-6">ที่อยู่</h1>
+        <button class="text-black/50 hover:underline" @click="store.addressAction = !store.addressAction">เพิ่มที่อยู่ใหม่</button>
       </div>
 
-      <!-- Product List -->
-      <div class="gap-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4 px-20 ml-10">
-        <div v-for="item in products" :key="item.id">
-          <CardProduct :product="item" />
+      <div>
+        <div class="flex justify-center mt-5">
+          <div class="w-[500px]">
+            <div
+              v-for="(address, index) in addresses"
+              :key="index"
+              class="mb-4 p-4 border rounded-lg transition-colors"
+              :class="{
+                'bg-gray-100': address.isDefault,
+                'bg-white': !address.isDefault,
+              }"
+            >
+              <!-- ที่อยู่ -->
+              <h2 class="font-bold text-lg">{{ address.title }}</h2>
+              <p>ชื่อ: {{ address.name }}</p>
+              <p>บ้านเลขที่: {{ address.houseNo }}</p>
+              <p>หมู่: {{ address.village }}</p>
+              <p>ตำบล: {{ address.subDistrict }}</p>
+              <p>อำเภอ: {{ address.district }}</p>
+              <p>จังหวัด: {{ address.province }}</p>
+              <p>รหัสไปรษณีย์: {{ address.postalCode }}</p>
+              <p>โทรศัพท์: {{ address.phone }}</p>
+
+              <!-- ปุ่มตั้งค่าเริ่มต้น -->
+              <div class="mt-4 flex items-center justify-between">
+                <button
+                  class="text-blue-500 hover:underline"
+                  @click="handleEdit(address)"
+                >
+                  แก้ไข
+                </button>
+                <button
+                  v-if="!address.isDefault"
+                  class="text-sm text-gray-700 bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
+                  @click="setDefaultAddress(index)"
+                >
+                  ตั้งเป็นค่าเริ่มต้น
+                </button>
+                <span v-else class="text-sm text-green-500 font-semibold">
+                  ค่าเริ่มต้น
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Payment Popup -->
+    <div
+      v-if="store.addressAction"
+      @click="store.addressAction = !store.addressAction"
+      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+    >
+      <div @click.stop>
+        <PopupAddress />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import type { Product } from "~/models/product.model";
-import service from "~/service";
-
-const products = ref<Product[]>([]);
-
-const getProductList = async () => {
-  try {
-    const response = await service.product.getProductList();
-    products.value = response.data.map((e: any) => ({
-      id: e.id,
-      name: e.name,
-      price: e.price,
-      amount: e.stock,
-      detail: e.description,
-      img: e.Image?.description,
-      categoryId: e.category.id,
-    }));
-  } catch (error) {
-    console.error("Error fetching product list:", error);
-  }
-};
-
-onMounted(async () => {
-  await getProductList();
+definePageMeta({
+  layout: "user",
 });
+
+import { reactive } from "vue";
+import { useIndexStore } from "~/store/main";
+const store = useIndexStore();
+
+const addresses = reactive([
+  {
+    title: "หอพัก",
+    name: "kk kub",
+    houseNo: "12/34",
+    village: "หมู่บ้าน kk condo",
+    subDistrict: "ตำบลศิลา",
+    district: "อำเภอเมือง",
+    province: "จังหวัดขอนแก่น",
+    postalCode: "40000",
+    phone: "065-094-5399",
+    isDefault: true,
+  },
+  {
+    title: "บ้าน",
+    name: "สวัสดี ครับ",
+    houseNo: "123",
+    village: "หมู่บ้าน ABC",
+    subDistrict: "ตำบลในเมือง",
+    district: "อำเภอเมือง",
+    province: "จังหวัดขอนแก่น",
+    postalCode: "40000",
+    phone: "065-094-5399",
+    isDefault: false,
+  },
+]);
+
+function handleEdit(address: typeof addresses[number]) {
+  console.log("กำลังแก้ไข:", address);
+}
+
+function setDefaultAddress(index: number) {
+  addresses.forEach((address, i) => {
+    address.isDefault = i === index;
+  });
+  alert(`ตั้งที่อยู่ "${addresses[index].title}" เป็นค่าเริ่มต้นเรียบร้อยแล้ว`);
+}
 </script>
+
+<style scoped>
+.bg-gray-100 {
+  background-color: #f3f4f6;
+}
+.bg-white {
+  background-color: #ffffff;
+}
+</style>

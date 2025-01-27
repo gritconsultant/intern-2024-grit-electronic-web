@@ -23,11 +23,17 @@ export interface paymentInfo {
 }
 
 export interface Address {
-    title: string;
-    name: string;
-    address: string;
-    phone: string;
-}
+    title: string;        // ชื่อสถานที่ (บ้าน, หอพัก ฯลฯ)
+    name: string;         // ชื่อผู้รับ
+    houseNo: string;      // บ้านเลขที่
+    village: string;      // หมู่บ้าน/อาคาร
+    subDistrict: string;  // ตำบล/แขวง
+    district: string;     // อำเภอ/เขต
+    province: string;     // จังหวัด
+    postalCode: string;   // รหัสไปรษณีย์
+    phone: string;        
+  }
+  
 
 export interface Order {
     id: string;

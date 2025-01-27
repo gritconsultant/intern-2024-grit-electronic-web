@@ -1,5 +1,5 @@
 <template>
-  <div class="flex p-4">
+  <div class="flex p-4 h-full overflow-y-auto">
     <!-- Sidebar -->
     <Sidebar />
     <div class="w-full lg:w-3/4 p-6">
@@ -10,7 +10,7 @@
 
       <div>
         <div class="flex justify-center mt-5">
-          <div>
+          <div class="w-[500px]">
             <div
               v-for="(address, index) in addresses"
               :key="index"
@@ -22,9 +22,13 @@
             >
               <!-- ที่อยู่ -->
               <h2 class="font-bold text-lg">{{ address.title }}</h2>
-              <p>{{ address.name }}</p>
-              <p>{{ address.address }}</p>
-              <p>{{ address.phone }}</p>
+              <p>ชื่อ: {{ address.name }}</p>
+              <p>บ้านเลขที่: {{ address.houseNo }}</p>
+              <p>หมู่: {{ address.village }}</p>
+              <p>ตำบล: {{ address.subDistrict }}</p>
+              <p>อำเภอ: {{ address.district }}</p>
+              <p>จังหวัด: {{ address.province }} <span>รหัสไปรษณีย์: {{ address.postalCode }}</span></p>
+              <p>โทรศัพท์: {{ address.phone }}</p>
 
               <!-- ปุ่มตั้งค่าเริ่มต้น -->
               <div class="mt-4 flex items-center justify-between">
@@ -50,22 +54,21 @@
         </div>
       </div>
     </div>
-        <!-- Payment Popup -->
-        <div
+
+    <!-- Payment Popup -->
+    <div
       v-if="store.addressAction"
       @click="store.addressAction = !store.addressAction"
       class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
     >
-    <div @click.stop>
-      <PopupAddress />
-    </div>
-
+      <div @click.stop>
+        <PopupAddress />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-
 definePageMeta({
   layout: "user",
 });
@@ -78,15 +81,25 @@ const addresses = reactive([
   {
     title: "หอพัก",
     name: "kk kub",
-    address: "condo kk หมู่ 12 ตำบลศิลา อำเภอเมือง จังหวัดขอนแก่น 40000",
-    phone: "0 65 094 5399",
+    houseNo: "12/34",
+    village: "หมู่บ้าน kk condo",
+    subDistrict: "ตำบลศิลา",
+    district: "อำเภอเมือง",
+    province: "จังหวัดขอนแก่น",
+    postalCode: "40000",
+    phone: "065-094-5399",
     isDefault: true,
   },
   {
     title: "บ้าน",
     name: "สวัสดี ครับ",
-    address: "000/000 โครงการหมู่บ้านเนื้ออาคาร หมู่ 7 ตำบลในเมือง อำเภอเมือง จังหวัดขอนแก่น 40000",
-    phone: "0 65 094 5399",
+    houseNo: "123",
+    village: "หมู่บ้าน ABC",
+    subDistrict: "ตำบลในเมือง",
+    district: "อำเภอเมือง",
+    province: "จังหวัดขอนแก่น",
+    postalCode: "40000",
+    phone: "065-094-5399",
     isDefault: false,
   },
 ]);
@@ -101,14 +114,15 @@ function setDefaultAddress(index: number) {
   });
   alert(`ตั้งที่อยู่ "${addresses[index].title}" เป็นค่าเริ่มต้นเรียบร้อยแล้ว`);
 }
-
 </script>
 
 <style scoped>
-.bg-gray-100 {
-  background-color: #f3f4f6;
+
+.overflow-hidden {
+  overflow: hidden;
 }
-.bg-white {
-  background-color: #ffffff;
+
+.overflow-y-auto {
+  overflow-y: auto;
 }
 </style>
