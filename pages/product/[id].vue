@@ -5,11 +5,11 @@
         <!-- Product Details -->
         <div class="flex flex-col lg:flex-row justify-between gap-4">
           <div class="w-full p-2 flex justify-center">
-            <img
+            <!-- <img
               class="object-cover max-w-full w-[650px] h-[650px]"
               :src="product.img"
               :alt="product.name"
-            />
+            /> -->
           </div>
           <div class="w-full lg:w-3/6 p-5">
             <h1 class="font-bold text-2xl">{{ product.name }}</h1>
@@ -25,9 +25,20 @@
               <div
                 class="h-[350px] w-full p-4 overflow-y-auto border rounded-md mt-4"
               >
-                <p>{{ product.detail }}</p>
+                <p>{{ product.description }}</p>
               </div>
             </div>
+            <!-- Quantity Control -->
+            <div class="flex items-center gap-4 mt-4 ">
+              <button class="px-4 py-2 rounded border" @click="decreaseQuantity">
+                -
+              </button>
+              <span class="text-lg font-semibold">{{ selectedAmount }}</span>
+              <button class="px-4 py-2 rounded border" @click="increaseQuantity">
+                +
+              </button>
+            </div>
+
             <button
               class="bg-[#EE973C] text-white p-4 rounded-lg w-full lg:w-[350px] mt-10 hover:bg-[#FD8C35]/70 transition"
               @click="addToCart"
@@ -43,12 +54,12 @@
         <div>
           <h1 class="text-2xl font-bold">รีวิวสินค้า</h1>
           <div class="flex gap-5 mt-4">
-            <p>จำนวนรีวิวทั้งหมด: {{ reviews.length }}</p>
+            <p>จำนวนรีวิวทั้งหมด: {{ product.Review.length }}</p>
           </div>
 
           <div class="flex justify-center gap-20 mt-10">
             <!-- Reviews -->
-            <div
+            <!-- <div
               v-for="review in paginatedReviews"
               :key="review.id"
               class="border rounded-lg p-4 w-[480px]"
@@ -75,18 +86,18 @@
               </p>
               <div class="mt-4 flex flex-wrap gap-2">
                 <img
-                  v-for="(image, index) in review.images.slice(0, 4)"
+                  v-for="(image, index) in product.Review.image.slice(0, 4)"
                   :key="index"
                   :src="image"
                   class="w-[80px] h-[80px] object-cover rounded-md"
                   alt="Review Image"
                 />
               </div>
-            </div>
+            </div> -->
           </div>
 
           <!-- Pagination -->
-          <div class="flex justify-center mt-6">
+          <!-- <div class="flex justify-center mt-6">
             <button
               v-for="page in totalPages"
               :key="page"
@@ -99,7 +110,7 @@
             >
               {{ page }}
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -122,130 +133,116 @@
 <script lang="ts" setup>
 import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
+import { errorMessages } from "vue/compiler-sfc";
+import type { Product } from "~/models/product.model";
+import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
-const products = [
+const products = ref<Product[]>([
   {
-    id: 1,
-    name: "มะขาม 4 รส",
-    detail: "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด",
-    price: 62,
-    amount: 10,
-    img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
-    categoryId: 1,
-  },
-  {
-    id: 2,
-    name: "มะขามคลุกบ๊วย 4 รส",
-    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย",
-    price: 62,
-    amount: 13,
-    img: "https://halal.co.th/storages/products/343928.png",
-    categoryId: 1,
-  },
-  {
-    id: 3,
-    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
-    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง",
-    price: 59,
-    amount: 10,
-    img: "https://halal.co.th/storages/products/390694.jpg",
-    categoryId: 1,
-  },
-  {
-    id: 4,
-    name: "มะขามคลุกบ๊วย 4 รส",
-    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย",
-    price: 62,
-    amount: 13,
-    img: "https://halal.co.th/storages/products/343928.png",
-    categoryId: 1,
-  },
-];
-
-const reviews = ref([
-  {
-    id: 1,
-    name: "John",
-    date: "2025-01-01",
-    rating: 4,
-    detail: "Good product!",
-    images: [
-      "https://halal.co.th/storages/products/343928.png",
-      "https://halal.co.th/storages/products/343928.png",
-    ],
-  },
-  {
-    id: 2,
-    name: "Jane",
-    date: "2025-01-02",
-    rating: 5,
-    detail: "Excellent quality!",
-    images: [
-      "https://halal.co.th/storages/products/343928.png",
-      "https://halal.co.th/storages/products/343928.png",
-      "https://halal.co.th/storages/products/343928.png",
-      "https://halal.co.th/storages/products/343928.png",
-    ],
-  },
-  {
-    id: 3,
-    name: "Alex",
-    date: "2025-01-03",
-    rating: 3,
-    detail: "It's okay.",
-    images: [],
-  },
-  {
-    id: 4,
-    name: "Alex",
-    date: "2025-01-03",
-    rating: 3,
-    detail: "It's okay.",
-    images: [],
-  },
-  {
-    id: 5,
-    name: "Alex",
-    date: "2025-01-03",
-    rating: 3,
-    detail: "It's okay.",
-    images: [
-      "https://halal.co.th/storages/products/343928.png",
-      "https://halal.co.th/storages/products/343928.png",
-      "https://halal.co.th/storages/products/343928.png",
-    ],
-  },
-  {
-    id: 6,
-    name: "Alex",
-    date: "2025-01-03",
-    rating: 3,
-    detail: "It's okay.",
-    images: [],
+    id: 0,
+    name: "",
+    price: 0,
+    stock: 0,
+    description: "",
+    Image: {
+      id: 0,
+      ref_id: 0,
+      type: "",
+      description: "",
+    }, // ถูกต้อง
+    category: { id: 0, name: "" },
+    Review: [{ id: 0, rating: 0 }, { id: 0, rating: 0 }],
+    is_active: true,
+    created_at: 0,
+    updated_at: 0,
   },
 ]);
 
-// Paginate
-const reviewsPerPage = 3;
-const currentPage = ref(1);
-const paginatedReviews = computed(() => {
-  const start = (currentPage.value - 1) * reviewsPerPage;
-  return reviews.value.slice(start, start + reviewsPerPage);
+const getProductList = async () => {
+  await service.product.getProductList()
+    .then((resp: any) => {
+      const data = resp.data;
+      console.log(resp.data);
+
+      
+      const productList: Product[] = [];
+
+      console.log(data);
+
+      for (let i = 0; i < data.length; i++) {
+        const product = data[i];
+        productList.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          stock: product.stock,
+          description: product.description,
+          Image: {
+            id: product.image.id,
+            ref_id: product.image.ref_id,
+            type: product.image.type,
+            description: product.image.description,
+          },
+          category: { id: product.category.id, name: product.category.name },
+          Review: product.review,
+          is_active: product.is_active,
+          created_at: product.created_at,
+          updated_at: product.updated_at,
+        });
+        products.value = productList;
+      }
+    })
+    .catch((error: any) => {
+      console.log(errorMessages);
+    })
+    .finally(() => {});
+};
+
+onMounted(async () => {
+  await getProductList();
 });
-const totalPages = computed(() =>
-  Math.ceil(reviews.value.length / reviewsPerPage)
-);
-const changePage = (page: number) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
+
+
+// Selected amount for the product
+const selectedAmount = ref(1);
+
+// Increase quantity
+const increaseQuantity = () => {
+  if (product && selectedAmount.value < product.stock) {
+    selectedAmount.value++;
+  } else {
+    alert("ไม่สามารถเพิ่มจำนวนได้");
   }
 };
+
+// Decrease quantity
+const decreaseQuantity = () => {
+  if (selectedAmount.value > 1) {
+    selectedAmount.value--;
+  }
+};
+
+// Paginate
+// const reviewsPerPage = 3;
+// const currentPage = ref(1);
+// const paginatedReviews = computed(() => {
+//   const start = (currentPage.value - 1) * reviewsPerPage;
+//   return products.Review.value.slice(start, start + reviewsPerPage);
+// });
+// const totalPages = computed(() =>
+//   Math.ceil(products.Review.value.length / reviewsPerPage)
+// );
+// const changePage = (page: number) => {
+//   if (page >= 1 && page <= totalPages.value) {
+//     currentPage.value = page;
+//   }
+// };
 
 // Product
 const route = useRoute();
 const store = useIndexStore();
-const product = products.find((item) => item.id === Number(route.params.id));
+const product = products.value.find((item) => item.id === Number(route.params.id));
 const addToCart = () => {
   if (!product) return;
   store.addToCart({ ...product, selectedAmount: 1 });

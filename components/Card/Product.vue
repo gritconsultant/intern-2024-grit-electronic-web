@@ -17,9 +17,9 @@
         </div>
       </div>
 
-      <!-- <div class="flex justify-center items-center h-[300px] w-full overflow-hidden rounded-md">
-        <img :src="product.img" alt="Product Image" class="w-full h-full object-cover rounded-md "/>
-      </div> -->
+      <div class="flex justify-center items-center h-[300px] w-full overflow-hidden rounded-md">
+        <img :src="product.Image.description" alt="product" class="w-full h-full object-cover rounded-md "/>
+      </div>
       <div class="flex justify-between mt-1">
         <div>
           <span class="font-bold text-base truncate"> {{ product.name }} </span>
@@ -28,11 +28,11 @@
       </div>
       <div>
         <span class=" font-medium text-sm ">รายละเอียด</span>
-        <!-- <div
+        <div
           class="h-[35px] w-full detail truncate break-words text-wrap"
         >
-          {{ product.detail }}
-        </div> -->
+          {{ product.description }}
+        </div>
       </div>
     </div>
   </div>

@@ -33,8 +33,7 @@
                 class="mt-[10px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-32"
               >
                 <div
-                  v-for="item in products"
-                  :key="item.id"
+                  v-for="(item, index) in products" :key="index"
                   class="flex justify-center"
                 >
                   <CardProduct :product="item" />
@@ -76,42 +75,42 @@ const products = ref<Product[]>([
 
 const getProductList = async () => {
   await service.product.getProductList()
-    // .then((resp: any) => {
-    //   const data = resp.data;
-    //   console.log(resp.data);
+    .then((resp: any) => {
+      const data = resp.data;
+      console.log(resp.data);
 
       
-    //   const productList: Product[] = [];
+      const productList: Product[] = [];
 
-    //   console.log(data);
+      console.log(data);
 
-    //   for (let i = 0; i < data.length; i++) {
-    //     const product = data[i];
-    //     productList.push({
-    //       id: product.id,
-    //       name: product.name,
-    //       price: product.price,
-    //       stock: product.stock,
-    //       description: product.description,
-    //       Image: {
-    //         id: product.image.id,
-    //         ref_id: product.image.ref_id,
-    //         type: product.image.type,
-    //         description: product.image.description,
-    //       },
-    //       category: { id: product.category.id, name: product.category.name },
-    //       Review: product.review,
-    //       is_active: product.is_active,
-    //       created_at: product.created_at,
-    //       updated_at: product.updated_at,
-    //     });
-    //     products.value = productList;
-    //   }
-    // })
-    // .catch((error: any) => {
-    //   console.log(errorMessages);
-    // })
-    // .finally(() => {});
+      for (let i = 0; i < data.length; i++) {
+        const product = data[i];
+        productList.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          stock: product.stock,
+          description: product.description,
+          Image: {
+            id: product.image.id,
+            ref_id: product.image.ref_id,
+            type: product.image.type,
+            description: product.image.description,
+          },
+          category: { id: product.category.id, name: product.category.name },
+          Review: product.review,
+          is_active: product.is_active,
+          created_at: product.created_at,
+          updated_at: product.updated_at,
+        });
+        products.value = productList;
+      }
+    })
+    .catch((error: any) => {
+      console.log(errorMessages);
+    })
+    .finally(() => {});
 };
 
 onMounted(async () => {

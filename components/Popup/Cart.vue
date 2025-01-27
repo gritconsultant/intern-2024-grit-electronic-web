@@ -2,7 +2,6 @@
   <div
     class="w-full md:w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden "
   >
-
     <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
       <h1 class="text-sm md:text-base font-bold">
         ตะกร้าสินค้า ({{ cartItems.length }})
@@ -38,7 +37,6 @@
         :key="item.id"
         class="flex justify-between items-center border-b py-2"
       >
-
         <input
           type="checkbox"
           class="mr-2"
@@ -86,7 +84,7 @@
 
           <div class="flex justify-between items-center">
             <!-- ปุ่ม ลบ เพิ่ม -->
-            <div class="flex items-center gap-2 mt-2 md:mt-3">
+            <div v-if="isEditing" class="flex items-center gap-2 mt-2 md:mt-3">
               <button
                 @click="decreaseSelectedAmount(index)"
                 class="px-2 text-xs md:text-sm border rounded"
@@ -101,6 +99,9 @@
                 +
               </button>
             </div>
+            <div v-else class="mt-2 md:mt-3">
+              <span class="text-sm md:text-base">จำนวน: {{ item.selectedAmount }}</span>
+            </div>
 
             <div class="mt-2 md:mt-3">
               <p class="font-semibold text-sm md:text-lg">฿{{ item.price }}</p>
@@ -110,7 +111,6 @@
       </div>
     </div>
 
-
     <div class="p-4 border-t mt-4 bg-gray-100">
       <div class="flex justify-between font-medium">
         <span class="text-sm md:text-base">ราคารวม:</span>
@@ -118,8 +118,15 @@
       </div>
       <div class="flex flex-col items-center mt-5 md:mt-10">
         <button
+          @click="toggleEditMode"
+          class="popupbtn w-full mb-2 text-sm md:text-base py-2"
+        >
+          {{ isEditing ? "บันทึกการเปลี่ยนแปลง" : "แก้ไขสินค้า" }}
+        </button>
+        <button
           @click="checkout"
           class="popupbtn w-full mb-2 text-sm md:text-base py-2"
+          :disabled="isEditing"
         >
           ชำระเงิน ({{ selectedCount }} รายการ)
         </button>
@@ -235,7 +242,8 @@ const cartItems = ref([
   },
 ]);
 
-// คำนวณราคารวมเฉพาะสินค้าที่เลือก
+const isEditing = ref(false);
+
 const selectedTotalPrice = computed(() =>
   cartItems.value.reduce(
     (sum, item) =>
@@ -244,10 +252,13 @@ const selectedTotalPrice = computed(() =>
   )
 );
 
-// จำนวนสินค้าที่เลือก
 const selectedCount = computed(() =>
   cartItems.value.filter((item) => item.selected).length
 );
+
+const toggleEditMode = () => {
+  isEditing.value = !isEditing.value;
+};
 
 // เพิ่มจำนวนสินค้าที่เลือก
 const increaseSelectedAmount = (index: number) => {
@@ -277,15 +288,14 @@ const clearCart = () => {
 
 // ชำระเงินเฉพาะสินค้าที่เลือก
 const checkout = () => {
+  if (isEditing.value) return alert("กรุณาบันทึกก่อนชำระเงิน");
   const selectedItems = cartItems.value.filter((item) => item.selected);
-  if (selectedItems.length === 0) {
-    alert("กรุณาเลือกสินค้า");
-    return;
-  }
   console.log("ชำระเงินสำหรับสินค้า:", selectedItems);
-  store.cartAction = false;
-  router.push("/order/checkout");
 };
+//   console.log("ชำระเงินสำหรับสินค้า:", selectedItems);
+//   store.cartAction = false;
+//   router.push("/order/checkout");
+// };
 </script>
 
 <style scoped>

@@ -65,15 +65,15 @@
               @click="toggleProductSelection(product)"
             >
               <div class="w-24 h-24">
-                <img :src="product.img" alt="product" class="w-full h-full object-cover" />
+                <img :src="product.Image.description" alt="product" class="w-full h-full object-cover" />
               </div>
               <div class="flex-grow">
                   <div class="flex justify-between">
                     <h2 class="font-bold">{{ product.name }}</h2>
                     <p class="text-lg font-bold">฿{{ product.price }}</p>
                   </div>
-                  <p class="text-gray-500 text-sm">{{ product.detail }}</p>
-                  <p class="text-gray-500 text-sm">จำนวน: {{ product.amount }}</p>
+                  <p class="text-gray-500 text-sm">{{ product.description }}</p>
+                  <p class="text-gray-500 text-sm">จำนวน: {{ product.stock }}</p>
                 </div>
             </div>
 
@@ -108,49 +108,49 @@ definePageMeta({
 const router = useRouter();
 const orderStore = useOrderStore();
 const orders = ref<(Order & { status?: "completed" | "cancelled" })[]>([
-  {
-    id: "778231342",
-    date: "26 ตุลาคม 2566",
-    total: 124,
-    deliveryDate: "",
-    products: [
-      {
-        id: 1,
-        name: "มะขาม 4 รส",
-        detail: "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด",
-        price: 62,
-        amount: 1,
-        img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
-        categoryId: 1,
-      },
-    ],
-    shippingStatus: [],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-    status: "completed", // เพิ่มสถานะ
-  },
-  {
-    id: "10292348935",
-    date: "29 ตุลาคม 2566",
-    total: 390,
-    deliveryDate: "",
-    products: [
-      {
-        id: 2,
-        name: "มะขามคลุกบ๊วย 4 รส",
-        detail:
-          "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย",
-        price: 62,
-        amount: 1,
-        img: "https://halal.co.th/storages/products/343928.png",
-        categoryId: 1,
-      },
-    ],
-    shippingStatus: [],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-    status: "cancelled", // เพิ่มสถานะ
-  },
+  // {
+  //   id: "778231342",
+  //   date: "26 ตุลาคม 2566",
+  //   total: 124,
+  //   deliveryDate: "",
+  //   products: [
+  //     {
+  //       id: 1,
+  //       name: "มะขาม 4 รส",
+  //       detail: "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด",
+  //       price: 62,
+  //       amount: 1,
+  //       img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
+  //       categoryId: 1,
+  //     },
+  //   ],
+  //   shippingStatus: [],
+  //   namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+  //   address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
+  //   status: "completed", // เพิ่มสถานะ
+  // },
+  // {
+  //   id: "10292348935",
+  //   date: "29 ตุลาคม 2566",
+  //   total: 390,
+  //   deliveryDate: "",
+  //   products: [
+  //     {
+  //       id: 2,
+  //       name: "มะขามคลุกบ๊วย 4 รส",
+  //       detail:
+  //         "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย",
+  //       price: 62,
+  //       amount: 1,
+  //       img: "https://halal.co.th/storages/products/343928.png",
+  //       categoryId: 1,
+  //     },
+  //   ],
+  //   shippingStatus: [],
+  //   namerecipe: "คมเข้ม คำเกษ 098 765 4321",
+  //   address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
+  //   status: "cancelled", // เพิ่มสถานะ
+  // },
 ]);
 
 
@@ -183,7 +183,7 @@ const isSelected = (product: Product): boolean =>
   selectedProducts.value.some((p) => p.id === product.id);
 
 const goToRefundPage = (): void => {
-  orderStore.setOrderAndProducts(selectedOrder.value?.id ?? "", selectedProducts.value);
+  // orderStore.setOrderAndProducts(selectedOrder.value?.id ?? "", selectedProducts.value);
   router.push("/order/refundOrder");
 };
 </script>
