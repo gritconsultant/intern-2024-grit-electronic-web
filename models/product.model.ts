@@ -1,11 +1,32 @@
-export interface Product {
+ export interface Product {
     id: number;
     name: string;
-    detail: string;
     price: number;
-    amount: number;
-    img: string;
-    categoryId: number;
+    stock: number;
+    description: string;
+    Image: ProductImage;
+    category: ProductCategory;
+    Review: ProductReview[];
+    is_active: boolean;
+    created_at: number;
+    updated_at: number;
+}
+
+export interface ProductReview {
+    id: number;
+    rating: number;
+}
+
+export interface ProductCategory {
+    id: number;
+    name: string;
+}
+    
+export interface ProductImage {
+    id: number;
+    ref_id: number;
+    type: string;
+    description: string;
 }
 
 export interface Category {

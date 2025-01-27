@@ -1,127 +1,122 @@
 <template>
-  <div class="flex p-4">
-    <!-- Sidebar -->
-    <Sidebar />
-    <div class="w-full lg:w-3/4 p-6">
-      <div class="flex justify-between border-b">
-        <h1 class="text-xl font-bold mb-6">ที่อยู่</h1>
-        <button class="text-black/50 hover:underline" @click="store.addressAction = !store.addressAction">เพิ่มที่อยู่ใหม่</button>
+  <div>
+    <div class="p-[20px] lg:p-[50px]">
+      <div>tack pages</div>
+      <div class="flex flex-col lg:flex-row gap-2 my-6">
+        <h1 class="font-bold text-2xl lg:text-3xl">สินค้าทั้งหมด</h1>
+        <p class="mt-2 lg:mt-[10px] text-black/40">(สินค้าทั้งหมด รายการ)</p>
       </div>
-
-      <div>
-        <div class="flex justify-center mt-5">
-          <div class="w-[500px]">
-            <div
-              v-for="(address, index) in addresses"
-              :key="index"
-              class="mb-4 p-4 border rounded-lg transition-colors"
-              :class="{
-                'bg-gray-100': address.isDefault,
-                'bg-white': !address.isDefault,
-              }"
-            >
-              <!-- ที่อยู่ -->
-              <h2 class="font-bold text-lg">{{ address.title }}</h2>
-              <p>ชื่อ: {{ address.name }}</p>
-              <p>บ้านเลขที่: {{ address.houseNo }}</p>
-              <p>หมู่: {{ address.village }}</p>
-              <p>ตำบล: {{ address.subDistrict }}</p>
-              <p>อำเภอ: {{ address.district }}</p>
-              <p>จังหวัด: {{ address.province }}</p>
-              <p>รหัสไปรษณีย์: {{ address.postalCode }}</p>
-              <p>โทรศัพท์: {{ address.phone }}</p>
-
-              <!-- ปุ่มตั้งค่าเริ่มต้น -->
-              <div class="mt-4 flex items-center justify-between">
-                <button
-                  class="text-blue-500 hover:underline"
-                  @click="handleEdit(address)"
+      <!-- Filter -->
+      <div
+        class="flex flex-wrap gap-5 mt-[30px] lg:mt-[50px] pl-3 text-black/40"
+      >
+        <div>
+          หมวดหมู่
+          <select class="border p-1 rounded">
+            <option value="">ทั้งหมด</option>
+          </select>
+        </div>
+      </div>
+      <hr class="mt-[10px] mb-[50px] lg:mb-[100px]" />
+      <!-- Category Display -->
+      <div class="grid gap-10 lg:gap-20">
+        <div>
+          <div class="grid justify-center">
+            <div class="flex justify-between">
+              <h1 class="headercategory"></h1>
+              <div class="mt-[10px] text-black/40 cursor-pointer">
+                ทั้งหมด ->
+              </div>
+            </div>
+            <div>
+              <div
+                class="mt-[10px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-32"
+              >
+                <div
+                  v-for="item in products"
+                  :key="item.id"
+                  class="flex justify-center"
                 >
-                  แก้ไข
-                </button>
-                <button
-                  v-if="!address.isDefault"
-                  class="text-sm text-gray-700 bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
-                  @click="setDefaultAddress(index)"
-                >
-                  ตั้งเป็นค่าเริ่มต้น
-                </button>
-                <span v-else class="text-sm text-green-500 font-semibold">
-                  ค่าเริ่มต้น
-                </span>
+                  <CardProduct :product="item" />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Payment Popup -->
-    <div
-      v-if="store.addressAction"
-      @click="store.addressAction = !store.addressAction"
-      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-    >
-      <div @click.stop>
-        <PopupAddress />
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: "user",
-});
+import { errorMessages } from "vue/compiler-sfc";
+import type { Product } from "~/models/product.model";
+import service from "~/service";
 
-import { reactive } from "vue";
-import { useIndexStore } from "~/store/main";
-const store = useIndexStore();
-
-const addresses = reactive([
+const products = ref<Product[]>([
   {
-    title: "หอพัก",
-    name: "kk kub",
-    houseNo: "12/34",
-    village: "หมู่บ้าน kk condo",
-    subDistrict: "ตำบลศิลา",
-    district: "อำเภอเมือง",
-    province: "จังหวัดขอนแก่น",
-    postalCode: "40000",
-    phone: "065-094-5399",
-    isDefault: true,
-  },
-  {
-    title: "บ้าน",
-    name: "สวัสดี ครับ",
-    houseNo: "123",
-    village: "หมู่บ้าน ABC",
-    subDistrict: "ตำบลในเมือง",
-    district: "อำเภอเมือง",
-    province: "จังหวัดขอนแก่น",
-    postalCode: "40000",
-    phone: "065-094-5399",
-    isDefault: false,
+    id: 0,
+    name: "",
+    price: 0,
+    stock: 0,
+    description: "",
+    Image: {
+      id: 0,
+      ref_id: 0,
+      type: "",
+      description: "",
+    }, // ถูกต้อง
+    category: { id: 0, name: "" },
+    Review: [],
+    is_active: true,
+    created_at: 0,
+    updated_at: 0,
   },
 ]);
 
-function handleEdit(address: typeof addresses[number]) {
-  console.log("กำลังแก้ไข:", address);
-}
+const getProductList = async () => {
+  await service.product.getProductList()
+    // .then((resp: any) => {
+    //   const data = resp.data;
+    //   console.log(resp.data);
 
-function setDefaultAddress(index: number) {
-  addresses.forEach((address, i) => {
-    address.isDefault = i === index;
-  });
-  alert(`ตั้งที่อยู่ "${addresses[index].title}" เป็นค่าเริ่มต้นเรียบร้อยแล้ว`);
-}
+      
+    //   const productList: Product[] = [];
+
+    //   console.log(data);
+
+    //   for (let i = 0; i < data.length; i++) {
+    //     const product = data[i];
+    //     productList.push({
+    //       id: product.id,
+    //       name: product.name,
+    //       price: product.price,
+    //       stock: product.stock,
+    //       description: product.description,
+    //       Image: {
+    //         id: product.image.id,
+    //         ref_id: product.image.ref_id,
+    //         type: product.image.type,
+    //         description: product.image.description,
+    //       },
+    //       category: { id: product.category.id, name: product.category.name },
+    //       Review: product.review,
+    //       is_active: product.is_active,
+    //       created_at: product.created_at,
+    //       updated_at: product.updated_at,
+    //     });
+    //     products.value = productList;
+    //   }
+    // })
+    // .catch((error: any) => {
+    //   console.log(errorMessages);
+    // })
+    // .finally(() => {});
+};
+
+onMounted(async () => {
+  await getProductList();
+});
 </script>
 
-<style scoped>
-.bg-gray-100 {
-  background-color: #f3f4f6;
-}
-.bg-white {
-  background-color: #ffffff;
-}
-</style>
+<style scoped></style>
