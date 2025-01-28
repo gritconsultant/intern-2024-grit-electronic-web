@@ -3,7 +3,7 @@
     <div class="p-[20px] lg:p-[50px]">
       <div>tack pages</div>
       <div class="flex flex-col lg:flex-row gap-2 my-6">
-        <h1 class="font-bold text-2xl lg:text-3xl">Drink</h1>
+        <h1 class="font-bold text-2xl lg:text-3xl">Fruit</h1>
         <p class="mt-2 lg:mt-[10px] text-black/40">
           (สินค้าทั้งหมด {{ filteredProducts.length }} รายการ)
         </p>
@@ -80,7 +80,7 @@ const getProductList = async () => {
 // กรองสินค้าที่อยู่ในหมวดหมู่ `dress`
 const filteredProducts = computed(() => {
   return products.value.filter(
-    (product) => product.category.name.toLowerCase() === "drink"
+    (product) => product.category.name.toLowerCase() === "fruit"
   );
 });
 

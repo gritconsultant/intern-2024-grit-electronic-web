@@ -66,7 +66,9 @@
               <div class="flex justify-between">
                 <div>
                   <h2 class="font-bold text-xl">โดย: {{ review.username }}</h2>
-                  <p class="text-sm text-gray-500">คะแนน: {{ review.rating }}</p>
+                  <p class="text-sm text-gray-500">
+                    คะแนน: {{ review.rating }}
+                  </p>
                 </div>
               </div>
               <p class="mt-2">{{ review.description }}</p>
@@ -93,14 +95,13 @@
       <div>
         <h1 class="text-2xl flex justify-center font-bold">สินค้าใกล้เคียง</h1>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-10 mt-10">
-          <NuxtLink
-                  v-for="product in filteredProducts"
-                  :key="product.id"
-                  :to="`/product/${product.category}`"
-                  class="block"
-                >
-                  <CardProduct :product="product" />
-                </NuxtLink>
+          <NuxtLink>
+            <CardProduct
+              v-for="product in products"
+              :key="product.id"
+              :product="product"
+            />
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -109,6 +110,7 @@
     <p>Loading...</p>
   </div>
 </template>
+
 <script lang="ts" setup>
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
@@ -117,7 +119,9 @@ import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const products = ref<Product[]>([]);
+const route = useRoute();
 
+// Fetch Product by ID
 const getProductById = async () => {
   const resp = await service.product.getProductById(route.params.id);
   const data = resp.data.data;
@@ -156,12 +160,14 @@ onMounted(() => {
   getProductById();
 });
 
-const route = useRoute();
+// Selected Product
 const product = computed(() =>
   products.value.find((item) => item.id === Number(route.params.id))
 );
 
+// Related Products
 
+// Quantity Control
 const selectedAmount = ref(1);
 
 const increaseQuantity = () => {
@@ -183,6 +189,7 @@ const addToCart = () => {
   alert("เพิ่มสินค้าในตะกร้าสำเร็จ!");
 };
 
+// Pagination for Reviews
 const reviewsPerPage = 3;
 const currentPage = ref(1);
 
@@ -202,8 +209,4 @@ const changePage = (page: number) => {
     currentPage.value = page;
   }
 };
-const filteredProducts = computed(() => {
-  return products.value.filter((product) => product.is_active);
-});
 </script>
-
