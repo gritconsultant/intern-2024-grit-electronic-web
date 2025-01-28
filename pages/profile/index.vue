@@ -126,7 +126,6 @@ definePageMeta({
 });
 
 
-
 const register = ref<Register>({
   firstname: "",
   lastname: "",

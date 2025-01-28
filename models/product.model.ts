@@ -4,7 +4,7 @@
     price: number;
     stock: number;
     description: string;
-    Image: ProductImage;
+    image: ProductImage;
     category: ProductCategory;
     Review: ProductReview[];
     is_active: boolean;
@@ -15,6 +15,8 @@
 export interface ProductReview {
     id: number;
     rating: number;
+    username: string;
+    description: string;
 }
 
 export interface ProductCategory {

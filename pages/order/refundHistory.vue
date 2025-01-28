@@ -51,9 +51,6 @@
                 <strong>ธนาคาร:</strong> {{ refund.bankName }}<br />
                 <strong>เลขบัญชี:</strong> {{ refund.accountNumber }}
               </p>
-              <p v-if="refund.paymentMethod === 'พร้อมเพย์'">
-                <strong>หมายเลขพร้อมเพย์:</strong> {{ refund.promptPayNumber }}
-              </p>
             </div>
           </div>
     <!-- No Refunds -->
@@ -88,8 +85,9 @@ const refundHistory = ref([
     productName: "เลมอนอบแห้ง",
     returnDate: "2025-01-12",
     reason: "สินค้าเสียหาย",
-    paymentMethod: "พร้อมเพย์",
-    promptPayNumber: "0987654321",
+    paymentMethod: "บัญชีธนาคาร",
+    bankName: "ธนาคารกรุงไทย",
+    accountNumber: "1234567890",
     status: "ไม่สำเร็จ",
   },
 ]);

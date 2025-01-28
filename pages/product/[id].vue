@@ -5,16 +5,14 @@
         <!-- Product Details -->
         <div class="flex flex-col lg:flex-row justify-between gap-4">
           <div class="w-full p-2 flex justify-center">
-            <!-- <img
-              class="object-cover max-w-full w-[650px] h-[650px]"
-              :src="product.img"
-              :alt="product.name"
-            /> -->
+            <div class="object-cover max-w-full w-[650px] h-[650px]">
+              {{ product.image.id }}
+            </div>
           </div>
           <div class="w-full lg:w-3/6 p-5">
             <h1 class="font-bold text-2xl">{{ product.name }}</h1>
             <div class="mt-2 flex gap-5">
-              <div>จำนวนดาว</div>
+              <div>จำนวนรีวิว: {{ product.Review.length }}</div>
               <div>ถูกใจ</div>
             </div>
             <div class="text-[#FF0808] font-semibold text-4xl mt-10">
@@ -29,16 +27,21 @@
               </div>
             </div>
             <!-- Quantity Control -->
-            <div class="flex items-center gap-4 mt-4 ">
-              <button class="px-4 py-2 rounded border" @click="decreaseQuantity">
+            <div class="flex items-center gap-4 mt-4">
+              <button
+                class="px-4 py-2 rounded border"
+                @click="decreaseQuantity"
+              >
                 -
               </button>
               <span class="text-lg font-semibold">{{ selectedAmount }}</span>
-              <button class="px-4 py-2 rounded border" @click="increaseQuantity">
+              <button
+                class="px-4 py-2 rounded border"
+                @click="increaseQuantity"
+              >
                 +
               </button>
             </div>
-
             <button
               class="bg-[#EE973C] text-white p-4 rounded-lg w-full lg:w-[350px] mt-10 hover:bg-[#FD8C35]/70 transition"
               @click="addToCart"
@@ -47,57 +50,29 @@
             </button>
           </div>
         </div>
-
         <hr class="my-10" />
-
-        <!-- Review -->
+        <!-- Reviews -->
         <div>
           <h1 class="text-2xl font-bold">รีวิวสินค้า</h1>
           <div class="flex gap-5 mt-4">
             <p>จำนวนรีวิวทั้งหมด: {{ product.Review.length }}</p>
           </div>
-
           <div class="flex justify-center gap-20 mt-10">
-            <!-- Reviews -->
-            <!-- <div
+            <div
               v-for="review in paginatedReviews"
               :key="review.id"
               class="border rounded-lg p-4 w-[480px]"
             >
               <div class="flex justify-between">
                 <div>
-                  <h2 class="font-bold text-xl">{{ review.name }}</h2>
-                  <p class="text-sm text-gray-500">{{ review.date }}</p>
-                </div>
-                <div class="flex flex-col items-center gap-2 w-1/4">
-                  <div class="subheader">{{ review.rating }}</div>
-                  <div class="icons flex justify-center">
-                    <img
-                      v-for="star in review.rating"
-                      :key="star"
-                      src="https://cdn-icons-png.flaticon.com/256/15853/15853959.png"
-                      alt="star"
-                    />
-                  </div>
+                  <h2 class="font-bold text-xl">โดย: {{ review.username }}</h2>
+                  <p class="text-sm text-gray-500">คะแนน: {{ review.rating }}</p>
                 </div>
               </div>
-              <p class="mt-4 h-[100px] p-2 overflow-y-auto">
-                {{ review.detail }}
-              </p>
-              <div class="mt-4 flex flex-wrap gap-2">
-                <img
-                  v-for="(image, index) in product.Review.image.slice(0, 4)"
-                  :key="index"
-                  :src="image"
-                  class="w-[80px] h-[80px] object-cover rounded-md"
-                  alt="Review Image"
-                />
-              </div>
-            </div> -->
+              <p class="mt-2">{{ review.description }}</p>
+            </div>
           </div>
-
-          <!-- Pagination -->
-          <!-- <div class="flex justify-center mt-6">
+          <div class="flex justify-center mt-6">
             <button
               v-for="page in totalPages"
               :key="page"
@@ -110,17 +85,22 @@
             >
               {{ page }}
             </button>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
     <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30">
       <div>
         <h1 class="text-2xl flex justify-center font-bold">สินค้าใกล้เคียง</h1>
-        <div class="flex justify-center gap-20 mt-10">
-          <div v-for="(item, index) in products.slice(0, 4)" :key="index">
-            <CardProduct :product="item" />
-          </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-10 mt-10">
+          <NuxtLink
+                  v-for="product in filteredProducts"
+                  :key="product.id"
+                  :to="`/product/${product.category}`"
+                  class="block"
+                >
+                  <CardProduct :product="product" />
+                </NuxtLink>
         </div>
       </div>
     </div>
@@ -129,125 +109,101 @@
     <p>Loading...</p>
   </div>
 </template>
-
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { errorMessages } from "vue/compiler-sfc";
 import type { Product } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
-const products = ref<Product[]>([
-  {
-    id: 0,
-    name: "",
-    price: 0,
-    stock: 0,
-    description: "",
-    Image: {
-      id: 0,
-      ref_id: 0,
-      type: "",
-      description: "",
-    }, // ถูกต้อง
-    category: { id: 0, name: "" },
-    Review: [{ id: 0, rating: 0 }, { id: 0, rating: 0 }],
-    is_active: true,
-    created_at: 0,
-    updated_at: 0,
-  },
-]);
+const products = ref<Product[]>([]);
 
-const getProductList = async () => {
-  await service.product.getProductList()
-    .then((resp: any) => {
-      const data = resp.data;
-      console.log(resp.data);
+const getProductById = async () => {
+  const resp = await service.product.getProductById(route.params.id);
+  const data = resp.data.data;
 
-      
-      const productList: Product[] = [];
-
-      console.log(data);
-
-      for (let i = 0; i < data.length; i++) {
-        const product = data[i];
-        productList.push({
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          stock: product.stock,
-          description: product.description,
-          Image: {
-            id: product.image.id,
-            ref_id: product.image.ref_id,
-            type: product.image.type,
-            description: product.image.description,
-          },
-          category: { id: product.category.id, name: product.category.name },
-          Review: product.review,
-          is_active: product.is_active,
-          created_at: product.created_at,
-          updated_at: product.updated_at,
-        });
-        products.value = productList;
-      }
-    })
-    .catch((error: any) => {
-      console.log(errorMessages);
-    })
-    .finally(() => {});
+  const product: Product = {
+    id: data.id,
+    name: data.name,
+    price: data.price,
+    stock: data.stock,
+    description: data.description ?? null,
+    image: {
+      id: data.image?.id,
+      ref_id: data.image?.ref_id,
+      type: data.image?.type,
+      description: data.image?.description,
+    },
+    category: {
+      id: data.category?.id,
+      name: data.category?.name,
+    },
+    Review:
+      data.review?.map((r: any) => ({
+        id: r.id,
+        rating: r.rating,
+        username: r.username,
+        description: r.description,
+      })) ?? [],
+    is_active: data.is_active,
+    created_at: data.created_at,
+    updated_at: data.updated_at,
+  };
+  products.value.push(product);
 };
 
-onMounted(async () => {
-  await getProductList();
+onMounted(() => {
+  getProductById();
 });
 
+const route = useRoute();
+const product = computed(() =>
+  products.value.find((item) => item.id === Number(route.params.id))
+);
 
-// Selected amount for the product
+
 const selectedAmount = ref(1);
 
-// Increase quantity
 const increaseQuantity = () => {
-  if (product && selectedAmount.value < product.stock) {
+  if (product.value && selectedAmount.value < product.value.stock) {
     selectedAmount.value++;
-  } else {
-    alert("ไม่สามารถเพิ่มจำนวนได้");
   }
 };
 
-// Decrease quantity
 const decreaseQuantity = () => {
   if (selectedAmount.value > 1) {
     selectedAmount.value--;
   }
 };
 
-// Paginate
-// const reviewsPerPage = 3;
-// const currentPage = ref(1);
-// const paginatedReviews = computed(() => {
-//   const start = (currentPage.value - 1) * reviewsPerPage;
-//   return products.Review.value.slice(start, start + reviewsPerPage);
-// });
-// const totalPages = computed(() =>
-//   Math.ceil(products.Review.value.length / reviewsPerPage)
-// );
-// const changePage = (page: number) => {
-//   if (page >= 1 && page <= totalPages.value) {
-//     currentPage.value = page;
-//   }
-// };
-
-// Product
-const route = useRoute();
-const store = useIndexStore();
-const product = products.value.find((item) => item.id === Number(route.params.id));
 const addToCart = () => {
-  if (!product) return;
-  store.addToCart({ ...product, selectedAmount: 1 });
+  if (!product.value) return;
+  const store = useIndexStore();
+  store.addToCart({ ...product.value, selectedAmount: selectedAmount.value });
   alert("เพิ่มสินค้าในตะกร้าสำเร็จ!");
 };
+
+const reviewsPerPage = 3;
+const currentPage = ref(1);
+
+const paginatedReviews = computed(() => {
+  if (!product.value) return [];
+  const start = (currentPage.value - 1) * reviewsPerPage;
+  return product.value.Review.slice(start, start + reviewsPerPage);
+});
+
+const totalPages = computed(() => {
+  if (!product.value) return 0;
+  return Math.ceil(product.value.Review.length / reviewsPerPage);
+});
+
+const changePage = (page: number) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page;
+  }
+};
+const filteredProducts = computed(() => {
+  return products.value.filter((product) => product.is_active);
+});
 </script>
 
-<style scoped></style>

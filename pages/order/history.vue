@@ -9,23 +9,23 @@
         <h1 class="text-xl font-bold mb-6">ประวัติการซื้อ</h1>
       </div>
 
-      <!-- Filter Dropdown -->
-      <div class="my-4">
+      <!-- Tabs -->
+      <div class="mt-5">
+        <Tab />
+      </div>
+
+            <!-- Filter Dropdown -->
+            <div class="my-4">
         <label for="filter" class="block text-sm font-medium text-gray-700">กรองคำสั่งซื้อ</label>
         <select
           id="filter"
           v-model="filterStatus"
-          class="w-full lg:w-1/3 border p-2 rounded"
+          class="w-full lg:w-1/3 border p-2 rounded-lg mt-1"
         >
           <option value="">ทั้งหมด</option>
           <option value="completed">สำเร็จ</option>
           <option value="cancelled">ยกเลิก</option>
         </select>
-      </div>
-
-      <!-- Tabs -->
-      <div class="mt-5">
-        <Tab />
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -65,7 +65,7 @@
               @click="toggleProductSelection(product)"
             >
               <div class="w-24 h-24">
-                <img :src="product.Image.description" alt="product" class="w-full h-full object-cover" />
+                <img :src="product.image.description" alt="product" class="w-full h-full object-cover" />
               </div>
               <div class="flex-grow">
                   <div class="flex justify-between">

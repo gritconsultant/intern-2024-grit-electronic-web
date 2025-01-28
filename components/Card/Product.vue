@@ -10,7 +10,7 @@
           <div>
             <i class="fa-solid fa-star"></i>
           </div>
-          <p>4</p>
+          <p> {{ averageRating }}</p>
         </div>
         <div class="text-[#878787]">
           <i class="fa-regular fa-heart"></i>
@@ -18,7 +18,10 @@
       </div>
 
       <div class="flex justify-center items-center h-[300px] w-full overflow-hidden rounded-md">
-        <img :src="product.Image.description" alt="product" class="w-full h-full object-cover rounded-md "/>
+        <div class="w-full h-full object-cover rounded-md">
+          {{ product.image.id }}
+        </div>
+
       </div>
       <div class="flex justify-between mt-1">
         <div>
@@ -42,12 +45,21 @@
 <script setup lang="ts">
 import type { Product } from "~/models/product.model";
 
+
 const props = defineProps({
   product: {
     type: Object as PropType<Product>,
     required: true,
   },
 });
+
+const averageRating = computed(() => {
+  if (!props.product.Review || props.product.Review.length === 0) return "0";
+  const total = props.product.Review.reduce((sum, review) => sum + review.rating, 0);
+  return (total / props.product.Review.length).toFixed(1); // ค่าเฉลี่ยทศนิยม 1 ตำแหน่ง
+});
+
+
 </script>
 
 <style scoped>

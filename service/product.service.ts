@@ -6,3 +6,17 @@ export const getProductList = () => {
         method: "get",
     })
 }
+
+export const getProductById = (id: any) => {
+    return client({
+        url: `/product/${id}`,
+        method: "get",
+    })
+}
+
+export const getCategoryList = () => {
+    return client({
+        url: "/category",
+        method: "get",
+    })
+} 

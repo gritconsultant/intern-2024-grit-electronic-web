@@ -9,24 +9,6 @@
         <h1 class="text-xl font-bold mb-6">คืนสินค้า</h1>
       </div>
 
-      <div class="my-4">
-            <label
-              for="filterRefund"
-              class="block text-sm font-medium text-gray-700"
-              >กรองการคืนสินค้า</label
-            >
-            <select
-              id="filterRefund"
-              v-model="refundFilter"
-              class="w-full lg:w-1/3 border p-2 rounded"
-            >
-              <option value="">ทั้งหมด</option>
-              <option value="สำเร็จ">สำเร็จ</option>
-              <option value="ยกเลิก">ไม่สำเร็จ</option>
-              <option value="รอดำเนินการ">รอดำเนินการ</option>
-            </select>
-          </div>
-
           <div v-if="filteredRefundProducts.length">
             <div
               v-for="product in filteredRefundProducts"
@@ -64,6 +46,24 @@
       <div class="mt-5">
         <Tab />
       </div>
+
+      <div class="my-4">
+            <label
+              for="filterRefund"
+              class="block text-sm font-medium text-gray-700"
+              >กรองการคืนสินค้า</label
+            >
+            <select
+              id="filterRefund"
+              v-model="refundFilter"
+              class="w-full lg:w-1/3 border p-2 rounded"
+            >
+              <option value="">ทั้งหมด</option>
+              <option value="รอดำเนินการ">รอดำเนินการ</option>
+              <option value="สำเร็จ">สำเร็จ</option>
+              <option value="ยกเลิก">ไม่สำเร็จ</option>
+            </select>
+          </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- รายการคืนสินค้า -->

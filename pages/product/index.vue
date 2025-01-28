@@ -4,7 +4,9 @@
       <div>tack pages</div>
       <div class="flex flex-col lg:flex-row gap-2 my-6">
         <h1 class="font-bold text-2xl lg:text-3xl">สินค้าทั้งหมด</h1>
-        <p class="mt-2 lg:mt-[10px] text-black/40">(สินค้าทั้งหมด รายการ)</p>
+        <p class="mt-2 lg:mt-[10px] text-black/40">
+          (สินค้าทั้งหมด {{ products.length }} รายการ)
+        </p>
       </div>
       <!-- Filter -->
       <div
@@ -17,9 +19,9 @@
           </select>
         </div>
       </div>
-      <hr class="mt-[10px] mb-[50px] lg:mb-[100px]" />
+      <hr class="mt-[10px] mb-[50px]" />
       <!-- Category Display -->
-      <div class="grid gap-10 lg:gap-20">
+      <div>
         <div>
           <div class="grid justify-center">
             <div class="flex justify-between">
@@ -28,16 +30,20 @@
                 ทั้งหมด ->
               </div>
             </div>
-            <div>
+            <div class="mt-8">
+              <!-- Product Grid -->
               <div
-                class="mt-[10px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-32"
+                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20"
               >
-                <div
-                  v-for="(item, index) in products" :key="index"
-                  class="flex justify-center"
+                <!-- Product Card -->
+                <NuxtLink
+                  v-for="product in filteredProducts"
+                  :key="product.id"
+                  :to="`/product/${product.id}`"
+                  class="block"
                 >
-                  <CardProduct :product="item" />
-                </div>
+                  <CardProduct :product="product" />
+                </NuxtLink>
               </div>
             </div>
           </div>
@@ -48,73 +54,61 @@
 </template>
 
 <script setup lang="ts">
-import { errorMessages } from "vue/compiler-sfc";
+import { ref, computed, onMounted } from "vue";
 import type { Product } from "~/models/product.model";
 import service from "~/service";
 
-const products = ref<Product[]>([
-  {
-    id: 0,
-    name: "",
-    price: 0,
-    stock: 0,
-    description: "",
-    Image: {
-      id: 0,
-      ref_id: 0,
-      type: "",
-      description: "",
-    }, // ถูกต้อง
-    category: { id: 0, name: "" },
-    Review: [],
-    is_active: true,
-    created_at: 0,
-    updated_at: 0,
-  },
-]);
+const products = ref<Product[]>([]);
 
 const getProductList = async () => {
-  await service.product.getProductList()
+  await service.product
+    .getProductList()
     .then((resp: any) => {
-      const data = resp.data;
-      console.log(resp.data);
-
-      
-      const productList: Product[] = [];
-
-      console.log(data);
+      const data = resp.data.data;
+      const productlist: Product[] = [];
 
       for (let i = 0; i < data.length; i++) {
-        const product = data[i];
-        productList.push({
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          stock: product.stock,
-          description: product.description,
-          Image: {
-            id: product.image.id,
-            ref_id: product.image.ref_id,
-            type: product.image.type,
-            description: product.image.description,
+        const e = data[i];
+        const product: Product = {
+          id: e.id,
+          name: e.name,
+          price: e.price,
+          stock: e.stock,
+          description: e.description ?? null,
+          image: {
+            id: e.image?.id,
+            ref_id: e.image?.ref_id,
+            type: e.image?.type,
+            description: e.image?.description,
           },
-          category: { id: product.category.id, name: product.category.name },
-          Review: product.review,
-          is_active: product.is_active,
-          created_at: product.created_at,
-          updated_at: product.updated_at,
-        });
-        products.value = productList;
+          category: {
+            id: e.category?.id,
+            name: e.category?.name,
+          },
+          Review:
+            e.review?.map((r: any) => ({
+              id: r.id,
+              rating: r.rating,
+            })) ?? [],
+          is_active: e.is_active,
+          created_at: e.created_at,
+          updated_at: e.updated_at,
+        };
+        productlist.push(product);
       }
+      products.value = productlist;
     })
     .catch((error: any) => {
-      console.log(errorMessages);
-    })
-    .finally(() => {});
+      console.error("Error loading product list:", error.response || error);
+    });
 };
 
 onMounted(async () => {
   await getProductList();
+});
+
+const filteredProducts = computed(() => {
+  return products.value.filter((product) => product.is_active);
 });
 </script>
 
