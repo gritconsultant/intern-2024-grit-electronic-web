@@ -46,7 +46,7 @@
             </li>
             <li>
               <NuxtLink
-                to="/category/fruit"
+                to="/category/herbs"
                 class="block px-4 py-2 hover:bg-gray-100"
               >
                 ผลไม้

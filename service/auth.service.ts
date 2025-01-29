@@ -1,6 +1,7 @@
 
 import type { Login, Register } from "~/models/page.model"
 import { client } from "./httpClient"
+import type { UserInfo } from "~/models/product.model"
 
 export const login = (payload: Login) => {
     return client({
@@ -17,3 +18,5 @@ export const register = (payload: Register) => {
         data: payload,
     })
 }
+
+

@@ -1,3 +1,4 @@
+import type { PasswordUpdate } from "~/models/product.model"
 import { client } from "./httpClient"
 
 export const getProductList = () => {
@@ -20,3 +21,18 @@ export const getCategoryList = () => {
         method: "get",
     })
 } 
+
+export const getUserInfo = () => {
+    return client({
+        url: "/user/info",
+        method: "get",
+    })
+} 
+
+export const updatePassword = (id: any, payload: PasswordUpdate) => {
+    return client({
+        url: `/user/${id}`,
+        method: "patch",
+        data: payload,
+    })
+}

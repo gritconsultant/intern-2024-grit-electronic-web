@@ -16,6 +16,11 @@
           หมวดหมู่
           <select class="border p-1 rounded">
             <option value="">ทั้งหมด</option>
+            <option value="food">อาหาร</option>
+            <option value="drink">เครื่องดื่ม</option>
+            <option value="fruit">สมุนไพร</option>
+            <option value="">ผ้าและเครื่องแต่งกาย</option>
+            <option value="">ของใช้ ของตกแต่ง</option>
           </select>
         </div>
       </div>
@@ -26,9 +31,6 @@
           <div class="grid justify-center">
             <div class="flex justify-between">
               <h1 class="headercategory"></h1>
-              <div class="mt-[10px] text-black/40 cursor-pointer">
-                ทั้งหมด ->
-              </div>
             </div>
             <div class="mt-8">
               <!-- Product Grid -->
@@ -100,11 +102,12 @@ const getProductList = async () => {
     })
     .catch((error: any) => {
       console.error("Error loading product list:", error.response || error);
-    });
+    })
+    .finally(() => {});
 };
 
 onMounted(async () => {
-  await getProductList();
+  getProductList();
 });
 
 const filteredProducts = computed(() => {

@@ -11,7 +11,9 @@
       <div>
         <div class="flex justify-center mt-5">
           <div class="w-[500px]">
-            <div
+
+            <div> {{ getinfo.Username }}</div>
+            <!-- <div
               v-for="(address, index) in addresses"
               :key="index"
               class="mb-4 p-4 border rounded-lg transition-colors"
@@ -19,8 +21,8 @@
                 'bg-gray-100': address.isDefault,
                 'bg-white': !address.isDefault,
               }"
-            >
-              <!-- ที่อยู่ -->
+            > -->
+<!-- 
               <h2 class="font-bold text-lg">{{ address.title }}</h2>
               <p>ชื่อ: {{ address.name }}</p>
               <p>บ้านเลขที่: {{ address.houseNo }}</p>
@@ -28,10 +30,10 @@
               <p>ตำบล: {{ address.subDistrict }}</p>
               <p>อำเภอ: {{ address.district }}</p>
               <p>จังหวัด: {{ address.province }} <span>รหัสไปรษณีย์: {{ address.postalCode }}</span></p>
-              <p>โทรศัพท์: {{ address.phone }}</p>
+              <p>โทรศัพท์: {{ address.phone }}</p> -->
 
               <!-- ปุ่มตั้งค่าเริ่มต้น -->
-              <div class="mt-4 flex items-center justify-between">
+              <!-- <div class="mt-4 flex items-center justify-between">
                 <button
                   class="text-blue-500 hover:underline"
                   @click="handleEdit(address)"
@@ -49,7 +51,7 @@
                   ค่าเริ่มต้น
                 </span>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -74,46 +76,89 @@ definePageMeta({
 });
 
 import { reactive } from "vue";
+import type { UserInfo } from "~/models/product.model";
+import service from "~/service";
 import { useIndexStore } from "~/store/main";
 const store = useIndexStore();
 
-const addresses = reactive([
-  {
-    title: "หอพัก",
-    name: "kk kub",
-    houseNo: "12/34",
-    village: "หมู่บ้าน kk condo",
-    subDistrict: "ตำบลศิลา",
-    district: "อำเภอเมือง",
-    province: "จังหวัดขอนแก่น",
-    postalCode: "40000",
-    phone: "065-094-5399",
-    isDefault: true,
-  },
-  {
-    title: "บ้าน",
-    name: "สวัสดี ครับ",
-    houseNo: "123",
-    village: "หมู่บ้าน ABC",
-    subDistrict: "ตำบลในเมือง",
-    district: "อำเภอเมือง",
-    province: "จังหวัดขอนแก่น",
-    postalCode: "40000",
-    phone: "065-094-5399",
-    isDefault: false,
-  },
-]);
+// const addresses = reactive([
+//   {
+//     title: "หอพัก",
+//     name: "kk kub",
+//     houseNo: "12/34",
+//     village: "หมู่บ้าน kk condo",
+//     subDistrict: "ตำบลศิลา",
+//     district: "อำเภอเมือง",
+//     province: "จังหวัดขอนแก่น",
+//     postalCode: "40000",
+//     phone: "065-094-5399",
+//     isDefault: true,
+//   },
+//   {
+//     title: "บ้าน",
+//     name: "สวัสดี ครับ",
+//     houseNo: "123",
+//     village: "หมู่บ้าน ABC",
+//     subDistrict: "ตำบลในเมือง",
+//     district: "อำเภอเมือง",
+//     province: "จังหวัดขอนแก่น",
+//     postalCode: "40000",
+//     phone: "065-094-5399",
+//     isDefault: false,
+//   },
+// ]);
 
-function handleEdit(address: typeof addresses[number]) {
-  console.log("กำลังแก้ไข:", address);
-}
+const getinfo = ref<UserInfo>({
+  ID: 0,
+  FirstName: "",
+  LastName: "",
+  Username: "",
+  Password: "",
+  Email: "",
+  Phone: 0,
+  created_at: 0,
+  updated_at: 0,
+});
 
-function setDefaultAddress(index: number) {
-  addresses.forEach((address, i) => {
-    address.isDefault = i === index;
-  });
-  alert(`ตั้งที่อยู่ "${addresses[index].title}" เป็นค่าเริ่มต้นเรียบร้อยแล้ว`);
-}
+const getuserinfo = async () => {
+  await service.product
+    .getUserInfo()
+    .then((resp: any) => {
+      console.log(resp);
+      const data = resp.data.data;
+      const user: UserInfo = {
+        ID: data.ID,
+        FirstName: data.FirstName,
+        LastName: data.LastName,
+        Username: data.Username,
+        Password: data.Password,
+        Email: data.Email,
+        Phone: data.Phone,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      };
+      getinfo.value = user;
+    })
+    .catch((error: any) => {
+      console.log(error);
+    })
+    .finally(() => {});
+};
+
+// function handleEdit(address: typeof addresses[number]) {
+//   console.log("กำลังแก้ไข:", address);
+// }
+
+// function setDefaultAddress(index: number) {
+//   addresses.forEach((address, i) => {
+//     address.isDefault = i === index;
+//   });
+//   alert(`ตั้งที่อยู่ "${addresses[index].title}" เป็นค่าเริ่มต้นเรียบร้อยแล้ว`);
+// }
+
+onMounted(() => {
+  getuserinfo();
+});
 </script>
 
 <style scoped>

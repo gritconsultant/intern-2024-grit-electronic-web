@@ -1,5 +1,5 @@
 <template>
-  <div class=" p-4">
+  <div class="p-4">
     <div class="flex">
       <!-- Sidebar -->
       <Sidebar />
@@ -14,23 +14,23 @@
             <div class="grid grid-cols-2">
               <div class="mt-10 ml-10">
                 <div>
-                  <label for="username"> ชื่อ - นามสกุล </label> <br />
-                  <h1 class="font-bold text-lg">hello world</h1>
+                  <p> ชื่อ - นามสกุล </p>
+                  <h1 class="font-bold text-lg">{{ getinfo.FirstName }} <span> {{ getinfo.LastName }}</span></h1>
                 </div>
 
                 <!-- change password -->
                 <div>
                   <div class="mt-5 relative">
-                    <label for="changepassword"> เปลี่ยนรหัสผ่าน </label> <br />
+                    <p> เปลี่ยนรหัสผ่าน </p>
                     <div class="relative">
                       <input
                         :type="
                           passwordVisible.changePassword ? 'text' : 'password'
                         "
+                        
                         id="changepassword"
                         class="w-full max-w-[400px] h-[45px] mt-2 inputbox pr-10"
                         :class="{ 'border-red-500': passwordError }"
-                        @input="validatePassword"
                       />
                       <span
                         class="-m-8 cursor-pointer text-black"
@@ -45,15 +45,10 @@
                         ></i>
                       </span>
                     </div>
-
-                    <p v-if="passwordError" class="text-red-500 text-xs mt-1">
-                      Password must be at least 8 characters, include an
-                      uppercase letter, a lowercase letter, and a number.
-                    </p>
                   </div>
 
                   <div class="mt-5 relative">
-                    <label for="conpassword"> ยืนยันรหัสผ่านใหม่ </label> <br />
+                    <p> ยืนยันรหัสผ่านใหม่ </p>
                     <div class="relative">
                       <input
                         :type="
@@ -61,7 +56,6 @@
                         "
                         id="conpassword"
                         class="w-[400px] h-[45px] mt-2 inputbox"
-                        @input="validatePasswordMatch"
                       />
                       <span
                         class="-m-8 cursor-pointer text-black"
@@ -90,7 +84,7 @@
                     <button
                       type="submit"
                       class="text-white w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 hover:text:black rounded-xl"
-                      @click="confirmChange"
+                      @click="updatePassword"
                     >
                       ยืนยันการเปลี่ยนรหัสผ่าน
                     </button>
@@ -100,14 +94,13 @@
 
               <div>
                 <div class="mt-10">
-                  <label for="email"> Email </label>
-                  <br />
-                  <h1 class="font-bold text-lg">helloworld@gmail.com</h1>
+                  <p> Email </p>
+                  <h1 class="font-bold text-lg"> {{ getinfo.Email }}</h1>
                 </div>
 
                 <div class="mt-5">
-                  <label for="phone">เบอร์โทรศัพท์</label> <br />
-                  <h1 class="font-bold text-lg">0987654567</h1>
+                  <p>เบอร์โทรศัพท์</p>
+                  <h1 class="font-bold text-lg">{{ getinfo.Phone }}</h1>
                 </div>
               </div>
             </div>
@@ -119,22 +112,91 @@
 </template>
 
 <script setup lang="ts">
-import type { Register } from "~/models/page.model";
+import type { PasswordRes, PasswordUpdate, UserInfo } from "~/models/product.model";
+import service from "~/service";
 
 definePageMeta({
   layout: "user",
 });
 
+const route = useRoute();
 
-const register = ref<Register>({
-  firstname: "",
-  lastname: "",
-  username: "",
-  phone: 0,
-  email: "",
-  password: "",
-  confirmPassword: "",
+const getinfo = ref<UserInfo>({
+  ID: 0,
+  FirstName: "",
+  LastName: "",
+  Username: "",
+  Password: "",
+  Email: "",
+  Phone: 0,
+  created_at: 0,
+  updated_at: 0,
 });
+
+const password = ref<PasswordUpdate>({
+  // username: "",
+    password:  "",
+    // email:  "",
+    // phone: 0,
+    // firstname:  "",
+    // lastname:  "",
+
+})
+
+const passwordres = ref<PasswordRes>({
+  // username: "",
+    password:  "",
+    // email:  "",
+    // phone: 0,
+    // firstname:  "",
+    // lastname:  "",
+})
+
+const getuserinfo = async () => {
+  await service.product
+    .getUserInfo()
+    .then((resp: any) => {
+      console.log(resp);
+      const data = resp.data.data;
+      const user: UserInfo = {
+        ID: data.id,
+        FirstName: data.FirstName,
+        LastName: data.LastName,
+        Username: data.Username,
+        Password: data.Password,
+        Email: data.Email,
+        Phone: data.Phone,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      };
+      getinfo.value = user;
+    })
+    .catch((error: any) => {
+      console.log(error);
+    })
+    .finally(() => {});
+};
+
+const updatePassword = async () => {
+  await service.product.updatePassword(route.params.id, password.value)
+   .then((resp: any) => {
+      console.log(resp);
+      const data = resp.data;
+      const newPassword : PasswordUpdate = {
+        // username: data.username,
+        password: data.password,
+        // email: data.email,
+        // phone: data.phone,
+        // firstname: data.firstname,
+        // lastname: data.lastname,
+      };
+      passwordres.value = newPassword;
+    })
+    .catch((error: any) => {
+      console.log(error);
+    })
+    .finally(() => {});
+}
 
 const passwordVisible = ref({
   changePassword: false,
@@ -143,26 +205,16 @@ const passwordVisible = ref({
 const passwordError = ref(false); // แสดงข้อผิดพลาดของรหัสผ่าน
 const passwordMismatch = ref(false);
 
-const validatePassword = () => {
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  passwordError.value = !passwordPattern.test(register.value.password);
-};
-
-const validatePasswordMatch = () => {
-  passwordMismatch.value =
-    register.value.password !== register.value.confirmPassword;
-};
-
 const togglePasswordVisibility = (
   field: keyof typeof passwordVisible.value
 ) => {
   passwordVisible.value[field] = !passwordVisible.value[field];
 };
 
-const confirmChange = () => {
-  alert("เปลี่ยนรหัสผ่านแล้ว");
-};
+
+onMounted(() => {
+  getuserinfo();
+});
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

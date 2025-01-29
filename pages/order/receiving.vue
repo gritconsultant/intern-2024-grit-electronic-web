@@ -58,7 +58,7 @@
             >
               <div class="w-24 h-24">
                 <img
-                  :src="product.img"
+                  src=""
                   alt="product"
                   class="w-full h-full object-cover"
                 />
@@ -68,8 +68,8 @@
                   <h2 class="font-bold">{{ product.name }}</h2>
                   <p class="text-lg font-bold">฿{{ product.price }}</p>
                 </div>
-                <p class="text-gray-500 text-sm">{{ product.detail }}</p>
-                <p class="text-gray-500 text-sm">จำนวน: {{ product.amount }}</p>
+                <p class="text-gray-500 text-sm">{{ product.description }}</p>
+                <p class="text-gray-500 text-sm">จำนวน: {{ product.stock }}</p>
               </div>
             </div>
 
@@ -169,26 +169,28 @@ const orders = ref<Order[]>([
     id: "778231342",
     date: "26 ตุลาคม 2566",
     total: 124,
-    deliveryDate: "26 ตุลาคม 2566",
+    deliveryDate: "",
     products: [
       {
-        id: 1,
-        name: "มะขาม 4 รส",
-        detail: "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด",
-        price: 62,
-        amount: 1,
-        img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
-        categoryId: 1,
-      },
-      {
-        id: 2,
-        name: "มะขามคลุกบ๊วย 4 รส",
-        detail:
-          "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย",
-        price: 62,
-        amount: 1,
-        img: "https://halal.co.th/storages/products/343928.png",
-        categoryId: 1,
+        id: 0,
+        name: "",
+        price: 0,
+        stock: 0,
+        description: "",
+        image: {
+          id: 0,
+          ref_id: 0,
+          type: "",
+          description: "",
+        }, // ถูกต้อง
+        category: { id: 0, name: "" },
+        Review: [
+          { id: 0, rating: 0, username: "", description: "" },
+          { id: 0, rating: 0, username: "", description: "" },
+        ],
+        is_active: true,
+        created_at: 0,
+        updated_at: 0,
       },
     ],
     shippingStatus: [

@@ -43,7 +43,8 @@
           <div v-if="selectedCategoryId === cate.id || selectedCategoryId === 0">
             <div class="flex justify-between px-10">
               <h1 class="fontsubheader mt-[3px]">{{ cate.name }}</h1>
-              <div class="text-black/40 cursor-pointer">ทั้งหมด -></div>
+              <div class="text-black/40 cursor-pointer">
+                ทั้งหมด -></div>
             </div>
             <div class="grid grid-cols-4 my-5">
               <div

@@ -55,7 +55,7 @@
             >
               <div class="w-24 h-24">
                 <img
-                  :src="product.img"
+                  src=""
                   alt="product"
                   class="w-full h-full object-cover"
                 />
@@ -68,10 +68,10 @@
                 <div class="flex justify-between mt-2">
                   <div>
                     <p class="text-gray-500 text-sm texthide">
-                      {{ product.detail }}
+                      {{ product.description }}
                     </p>
                     <p class="text-gray-500 text-sm">
-                      จำนวน: {{ product.amount }}
+                      จำนวน: {{ product.stock }}
                     </p>
                   </div>
                   <div>
@@ -135,221 +135,24 @@ const orders = ref<Order[]>([
     total: 124,
     deliveryDate: "",
     products: [
-      {
-        id: 1,
-        name: "มะขาม 4 รส",
-        detail: "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด",
-        price: 62,
-        amount: 1,
-        img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
-        categoryId: 1,
-      },
-      {
-        id: 2,
-        name: "มะขามคลุกบ๊วย 4 รส",
-        detail:
-          "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย",
-        price: 62,
-        amount: 1,
-        img: "https://halal.co.th/storages/products/343928.png",
-        categoryId: 1,
-      },
-    ],
-    shippingStatus: [],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
+    {
+    id: 0,
+    name: "",
+    price: 0,
+    stock: 0,
+    description: "",
+    image: {
+      id: 0,
+      ref_id: 0,
+      type: "",
+      description: "",
+    }, // ถูกต้อง
+    category: { id: 0, name: "" },
+    Review: [{ id: 0, rating: 0,username: "", description: "" }, { id: 0, rating: 0,username: "", description: "" }],
+    is_active: true,
+    created_at: 0,
+    updated_at: 0,
   },
-  {
-    id: "10292348935",
-    date: "29 ตุลาคม 2566",
-    total: 390,
-    deliveryDate: "",
-    products: [
-      {
-        id: 1,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 2,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 3,
-        name: "เครื่องดื่มน้ำองุ่นขาว",
-        detail: "กลูต้า เคอร์คิวมา มินต์ ซี เครื่องดื่มน้ำองุ่นขาว ผสมกลูต้าไธโอนและขมิ้น",
-        price: 40,
-        amount: 1,
-        img: "https://farmfoodsmart.com/upload/products/1634/637982414838759739.png",
-        categoryId: 2,
-      },
-      {
-        id: 4,
-        name: "เครื่องดื่มสมุนไพรตรีผลา",
-        detail:
-          "ชีววิถี เครื่องดื่มสมุนไพรตรีผลา สูตรเข้มข้น รสธรรมชาติ",
-        price: 150,
-        amount: 1,
-        img: "https://apimain.pordee.com/images/1650958142.jpg",
-        categoryId: 2,
-      },
-    ],
-    shippingStatus: [],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-  {
-    id: "29498364883",
-    date: "26 ตุลาคม 2566",
-    total: 164,
-    deliveryDate: "19-26 พฤศจิกายน 2566",
-    products: [
-      {
-        id: 1,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 2,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 3,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 4,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-    ],
-    shippingStatus: [],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-  {
-    id: "948847419745",
-    date: "29 ตุลาคม 2566",
-    total: 117,
-    deliveryDate: "12-19 ธันวาคม 2566",
-    products: [
-      {
-        id: 1,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 2,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 3,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 4,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-    ],
-    shippingStatus: [],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-  {
-    id: "84847366635",
-    date: "26 ตุลาคม 2566",
-    total: 164,
-    deliveryDate: "19-26 พฤศจิกายน 2566",
-    products: [
-      {
-        id: 1,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 2,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 3,
-        name: "เครื่องดื่มรังนกสำเร็จรูป",
-        detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-        price: 150,
-        amount: 5,
-        img: "https://halal.co.th/storages/products/679578.jpg",
-        categoryId: 2,
-      },
-      {
-        id: 4,
-        name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-        detail:
-          "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-        price: 150,
-        amount: 3,
-        img: "https://halal.co.th/storages/products/p135225.jpg",
-        categoryId: 2,
-      },
     ],
     shippingStatus: [],
     namerecipe: "คมเข้ม คำเกษ 098 765 4321",

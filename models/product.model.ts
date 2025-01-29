@@ -74,3 +74,47 @@ export interface ShippingStatus {
     date: string;
     isCurrent: boolean;
   }
+
+  export interface User {
+    ID: number;
+    FirstName: string;
+    LastName: string;
+    Username: string;
+    Password: string;
+    Email: string;
+    Phone: number;
+    created_at: number;
+    updated_at: number;
+}
+
+export interface UserInfo {
+    ID: number;
+    FirstName: string;
+    LastName: string;
+    Username: string;
+    Password: string;
+    Email: string;
+    Phone: number;
+    created_at: number;
+    updated_at: number;
+}
+
+export interface PasswordUpdate {
+    // username: string;
+    password: string;
+    // email: string;
+    // phone: number;
+    // firstname: string;
+    // lastname: string;
+
+}
+
+export interface PasswordRes {
+    // username: string;
+    password: string;
+    // email: string;
+    // phone: number;
+    // firstname: string;
+    // lastname: string;
+
+}

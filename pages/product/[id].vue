@@ -65,7 +65,7 @@
             >
               <div class="flex justify-between">
                 <div>
-                  <h2 class="font-bold text-xl">โดย: {{ review.username }}</h2>
+                  <h2 class="font-bold text-xl">โดย: {{ product.Review }}</h2>
                   <p class="text-sm text-gray-500">
                     คะแนน: {{ review.rating }}
                   </p>

@@ -162,36 +162,7 @@ const orders = ref<Order[]>([
       description: "",
     }, // ถูกต้อง
     category: { id: 0, name: "" },
-    Review: [{ id: 0, rating: 0 }, { id: 0, rating: 0 }],
-    is_active: true,
-    created_at: 0,
-    updated_at: 0,
-  },
-    ],
-    shippingStatus: [],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-  {
-    id: "10292348935",
-    date: "29 ตุลาคม 2566",
-    total: 390,
-    deliveryDate: "",
-    products: [
-    {
-    id: 0,
-    name: "",
-    price: 0,
-    stock: 0,
-    description: "",
-    image: {
-      id: 0,
-      ref_id: 0,
-      type: "",
-      description: "",
-    }, // ถูกต้อง
-    category: { id: 0, name: "" },
-    Review: [{ id: 0, rating: 0 }, { id: 0, rating: 0 }],
+    Review: [{ id: 0, rating: 0,username: "", description: "" }, { id: 0, rating: 0,username: "", description: "" }],
     is_active: true,
     created_at: 0,
     updated_at: 0,

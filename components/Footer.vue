@@ -136,7 +136,7 @@ const page = ref<Page[]>([
     active: false,
   },
   {
-    name: "สมุนไพร",
+    name: "ผลไม้",
     path: "/category/herbs",
     active: false,
   },

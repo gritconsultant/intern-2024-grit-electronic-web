@@ -112,13 +112,13 @@ const login = async () => {
       console.log(resp.data);
       store.$state.token = resp.data.token;
 
-
       if (store.$state.token != null) {
         router.push("/");
       }
     })
     .catch((error: any) => {
-      console.log(error.data);
+      console.error(error);
+      alert("เข้าสู่ระบบผิดพลาด! อีเมล หรือ รหัสผ่านผิด");
     })
     .finally(() => {});
 };

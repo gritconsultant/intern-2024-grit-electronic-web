@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full md:w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden "
+    class="w-full md:w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
   >
     <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
       <h1 class="text-sm md:text-base font-bold">
@@ -37,11 +37,7 @@
         :key="item.id"
         class="flex justify-between items-center border-b py-2"
       >
-        <input
-          type="checkbox"
-          class="mr-2"
-          v-model="item.selected"
-        />
+        <input type="checkbox" class="mr-2" v-model="item.selected" />
 
         <img
           :src="item.img"
@@ -51,7 +47,6 @@
         <div class="flex-1 ml-2 md:ml-4">
           <div class="flex justify-between">
             <div>
-              <!-- link ไปหน้า product -->
               <router-link
                 :to="`/product/${item.id}`"
                 class="text-sm md:text-md font-normal text-blue-500 hover:underline"
@@ -83,24 +78,76 @@
           </div>
 
           <div class="flex justify-between items-center">
-            <!-- ปุ่ม ลบ เพิ่ม -->
-            <div v-if="isEditing" class="flex items-center gap-2 mt-2 md:mt-3">
+            <div class="flex items-center gap-2 mt-2 md:mt-3">
+              <span class="text-sm md:text-base"
+                >จำนวน: {{ item.selectedAmount }}</span
+              >
+              <!-- ไอคอนแก้ไข -->
+              <button
+                @click="toggleEditItem(index)"
+                class="ml-2 text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  class="w-[22px] h-[22px] text-gray-400 hover:text-gray-700 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div
+              v-if="editIndex === index"
+              class="flex items-center gap-2 mt-2 md:mt-3"
+            >
               <button
                 @click="decreaseSelectedAmount(index)"
                 class="px-2 text-xs md:text-sm border rounded"
               >
                 -
               </button>
-              <span class="text-sm md:text-base">{{ item.selectedAmount }}</span>
+              <span class="text-sm md:text-base">{{
+                item.selectedAmount
+              }}</span>
               <button
                 @click="increaseSelectedAmount(index)"
                 class="px-2 text-xs md:text-sm border rounded"
               >
                 +
               </button>
-            </div>
-            <div v-else class="mt-2 md:mt-3">
-              <span class="text-sm md:text-base">จำนวน: {{ item.selectedAmount }}</span>
+              <button
+                @click="saveEdit"
+                class="px-2 text-xs md:text-sm bg-green-500 text-white rounded"
+              >
+                <svg
+                  class="w-[22px] h-[22px] dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 11.917 9.724 16.5 19 7.5"
+                  />
+                </svg>
+              </button>
             </div>
 
             <div class="mt-2 md:mt-3">
@@ -118,15 +165,9 @@
       </div>
       <div class="flex flex-col items-center mt-5 md:mt-10">
         <button
-          @click="toggleEditMode"
-          class="popupbtn w-full mb-2 text-sm md:text-base py-2"
-        >
-          {{ isEditing ? "บันทึกการเปลี่ยนแปลง" : "แก้ไขสินค้า" }}
-        </button>
-        <button
           @click="checkout"
           class="popupbtn w-full mb-2 text-sm md:text-base py-2"
-          :disabled="isEditing"
+          :disabled="editIndex !== null"
         >
           ชำระเงิน ({{ selectedCount }} รายการ)
         </button>
@@ -195,7 +236,6 @@ const cartItems = ref([
     selectedAmount: 1,
   },
 
-
   {
     id: 5,
     name: "เครื่องดื่มรังนกสำเร็จรูป",
@@ -221,7 +261,8 @@ const cartItems = ref([
   {
     id: 7,
     name: "เครื่องดื่มน้ำองุ่นขาว",
-    detail: "กลูต้า เคอร์คิวมา มินต์ ซี เครื่องดื่มน้ำองุ่นขาว ผสมกลูต้าไธโอนและขมิ้น",
+    detail:
+      "กลูต้า เคอร์คิวมา มินต์ ซี เครื่องดื่มน้ำองุ่นขาว ผสมกลูต้าไธโอนและขมิ้น",
     price: 40,
     amount: 3,
     img: "https://farmfoodsmart.com/upload/products/1634/637982414838759739.png",
@@ -242,6 +283,16 @@ const cartItems = ref([
   },
 ]);
 
+const editIndex = ref<number | null>(null);
+
+const toggleEditItem = (index: number) => {
+  editIndex.value = editIndex.value === index ? null : index;
+};
+
+const saveEdit = () => {
+  editIndex.value = null;
+};
+
 const isEditing = ref(false);
 
 const selectedTotalPrice = computed(() =>
@@ -252,13 +303,9 @@ const selectedTotalPrice = computed(() =>
   )
 );
 
-const selectedCount = computed(() =>
-  cartItems.value.filter((item) => item.selected).length
+const selectedCount = computed(
+  () => cartItems.value.filter((item) => item.selected).length
 );
-
-const toggleEditMode = () => {
-  isEditing.value = !isEditing.value;
-};
 
 // เพิ่มจำนวนสินค้าที่เลือก
 const increaseSelectedAmount = (index: number) => {
@@ -291,12 +338,9 @@ const checkout = () => {
   if (isEditing.value) return alert("กรุณาบันทึกก่อนชำระเงิน");
   const selectedItems = cartItems.value.filter((item) => item.selected);
   console.log("ชำระเงินสำหรับสินค้า:", selectedItems);
+  store.cartAction = false;
+  router.push("/order/checkout");
 };
-//   console.log("ชำระเงินสำหรับสินค้า:", selectedItems);
-//   store.cartAction = false;
-//   router.push("/order/checkout");
-// };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
