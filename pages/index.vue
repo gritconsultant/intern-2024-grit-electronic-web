@@ -97,9 +97,11 @@ const getProductList = async () => {
             id: e.category?.id,
             name: e.category?.name,
           },
-          reviews: e.review?.map((r: any) => ({
+          Review: e.Review?.map((r: any) => ({
             id: r.id,
             rating: r.rating,
+            username: r.username,
+            description: r.description,
           })) || [],
           is_active: e.is_active,
           created_at: e.created_at,

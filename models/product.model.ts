@@ -118,3 +118,17 @@ export interface PasswordRes {
     // lastname: string;
 
 }
+
+export interface Shipment {
+    id: number;
+    firstname: string;
+    lastname: string;
+    address: string;
+    zip_code: number;
+    sub_district: string;
+    district: string;
+    province: string;
+    status: string;
+    created_at: number;
+    updated_at: number;
+}

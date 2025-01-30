@@ -94,11 +94,11 @@
     <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30">
       <div>
         <h1 class="text-2xl flex justify-center font-bold">สินค้าใกล้เคียง</h1>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-10 mt-10">
+        <div class="grid grid-cols-4 gap-10 mt-10">
           <NuxtLink>
             <CardProduct
               v-for="product in products"
-              :key="product.id"
+              :key="product.category.id"
               :product="product"
             />
           </NuxtLink>
@@ -114,6 +114,7 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import Category from "~/components/Dropdown/Category.vue";
 import type { Product } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
@@ -155,9 +156,7 @@ const getProductById = async () => {
   products.value.push(product);
 };
 
-onMounted(() => {
-  getProductById();
-});
+
 
 // Selected Product
 const product = computed(() =>
@@ -207,4 +206,9 @@ const changePage = (page: number) => {
     currentPage.value = page;
   }
 };
+onMounted(() => {
+  getProductById();
+});
 </script>
+<style scoped>
+</style>

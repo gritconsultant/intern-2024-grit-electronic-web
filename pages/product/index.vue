@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="p-[20px] lg:p-[50px]">
-      <div>tack pages</div>
+      <div class="text-black/40">
+        <NuxtLink to="/">หน้าหลัก</NuxtLink>
+         > 
+         <span class="text-black">สินค้าทั้งหมด</span></div>
       <div class="flex flex-col lg:flex-row gap-2 my-6">
         <h1 class="font-bold text-2xl lg:text-3xl">สินค้าทั้งหมด</h1>
         <p class="mt-2 lg:mt-[10px] text-black/40">
@@ -9,18 +12,14 @@
         </p>
       </div>
       <!-- Filter -->
-      <div
-        class="flex flex-wrap gap-5 mt-[30px] lg:mt-[50px] pl-3 text-black/40"
-      >
+      <div class="flex flex-wrap gap-5 mt-[30px] lg:mt-[50px] pl-3 text-black/40">
         <div>
           หมวดหมู่
-          <select class="border p-1 rounded">
-            <option value="">ทั้งหมด</option>
-            <option value="food">อาหาร</option>
-            <option value="drink">เครื่องดื่ม</option>
-            <option value="fruit">สมุนไพร</option>
-            <option value="">ผ้าและเครื่องแต่งกาย</option>
-            <option value="">ของใช้ ของตกแต่ง</option>
+          <select v-model="selectedCategoryId" class="border p-1 rounded">
+            <option :value="null">ทั้งหมด</option>
+            <option v-for="cate in categories" :key="cate.id" :value="cate.id">
+              {{ cate.name }}
+            </option>
           </select>
         </div>
       </div>
@@ -57,10 +56,12 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import type { Product } from "~/models/product.model";
+import type { Category, Product } from "~/models/product.model";
 import service from "~/service";
 
 const products = ref<Product[]>([]);
+  const categories = ref<Category[]>([]);
+    const selectedCategoryId = ref<number | null>(null); // ใช้ `null` เพื่อแสดงทั้งหมด
 
 const getProductList = async () => {
   await service.product
@@ -88,9 +89,11 @@ const getProductList = async () => {
             name: e.category?.name,
           },
           Review:
-            e.review?.map((r: any) => ({
+            e.Review?.map((r: any) => ({
               id: r.id,
               rating: r.rating,
+              username: r.username,
+              description: r.description,
             })) ?? [],
           is_active: e.is_active,
           created_at: e.created_at,
@@ -106,12 +109,32 @@ const getProductList = async () => {
     .finally(() => {});
 };
 
-onMounted(async () => {
-  getProductList();
+// ดึงข้อมูลหมวดหมู่ทั้งหมด
+const getCategoryList = async () => {
+  await service.product
+    .getCategoryList()
+    .then((resp: any) => {
+      const data = resp.data.data;
+      categories.value = data.map((e: any) => ({
+        id: e.id,
+        name: e.name,
+      }));
+    })
+    .catch((error: any) => {
+      console.error("Error loading category list:", error);
+    });
+};
+
+// ฟิลเตอร์สินค้าตามหมวดหมู่ที่เลือก
+const filteredProducts = computed(() => {
+  return selectedCategoryId.value
+    ? products.value.filter((product) => product.category.id === selectedCategoryId.value)
+    : products.value;
 });
 
-const filteredProducts = computed(() => {
-  return products.value.filter((product) => product.is_active);
+onMounted(async () => {
+  getProductList();
+  getCategoryList();
 });
 </script>
 

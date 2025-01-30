@@ -1,9 +1,12 @@
 <template>
   <div>
     <div class="p-[20px] lg:p-[50px]">
-      <div>tack pages</div>
+      <div class="text-black/40">
+        <NuxtLink to="/">หน้าหลัก</NuxtLink>
+         > 
+        <span class="text-black">ผ้าและเครื่องแต่งกาย</span></div>
       <div class="flex flex-col lg:flex-row gap-2 my-6">
-        <h1 class="font-bold text-2xl lg:text-3xl">Dress</h1>
+        <h1 class="font-bold text-2xl lg:text-3xl">ผ้าและเครื่องแต่งกาย</h1>
         <p class="mt-2 lg:mt-[10px] text-black/40">
           (สินค้าทั้งหมด {{ filteredProducts.length }} รายการ)
         </p>
@@ -63,9 +66,11 @@ const getProductList = async () => {
             id: e.category?.id,
             name: e.category?.name,
           },
-          reviews: e.review?.map((r: any) => ({
+          Review: e.Review?.map((r: any) => ({
             id: r.id,
             rating: r.rating,
+            username: r.username,
+            description: r.description,
           })) || [],
           is_active: e.is_active,
           created_at: e.created_at,
@@ -74,13 +79,15 @@ const getProductList = async () => {
     })
     .catch((error: any) => {
       console.error("Error loading product list:", error);
+    })
+    .finally(() => {
     });
 };
 
-// กรองสินค้าที่อยู่ในหมวดหมู่ `dress`
+
 const filteredProducts = computed(() => {
   return products.value.filter(
-    (product) => product.category.name.toLowerCase() === "dress"
+    (product) => product.category.id === 6
   );
 });
 
