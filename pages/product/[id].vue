@@ -21,7 +21,7 @@
             <div class="mt-10">
               <h1 class="font-medium text-base">รายละเอียด</h1>
               <div
-                class="h-[350px] w-full p-4 overflow-y-auto border rounded-md mt-4"
+                class="h-[350px] w-full p-4 overflow-y-auto  rounded-md mt-4"
               >
                 <p>{{ product.description }}</p>
               </div>
@@ -59,19 +59,19 @@
           </div>
           <div class="flex justify-center gap-20 mt-10">
             <div
-              v-for="review in paginatedReviews"
-              :key="review.id"
+              v-for="Review in paginatedReviews"
+              :key="Review.id"
               class="border rounded-lg p-4 w-[480px]"
             >
               <div class="flex justify-between">
                 <div>
-                  <h2 class="font-bold text-xl">โดย: {{ product.Review }}</h2>
+                  <h2 class="font-bold text-xl">โดย: {{ Review.username }}</h2>
                   <p class="text-sm text-gray-500">
-                    คะแนน: {{ review.rating }}
+                    คะแนน: {{ Review.rating }}
                   </p>
                 </div>
               </div>
-              <p class="mt-2">{{ review.description }}</p>
+              <p class="mt-2">{{ Review.description }}</p>
             </div>
           </div>
           <div class="flex justify-center mt-6">
@@ -121,7 +121,6 @@ import { useIndexStore } from "~/store/main";
 const products = ref<Product[]>([]);
 const route = useRoute();
 
-// Fetch Product by ID
 const getProductById = async () => {
   const resp = await service.product.getProductById(route.params.id);
   const data = resp.data.data;
@@ -143,9 +142,9 @@ const getProductById = async () => {
       name: data.category?.name,
     },
     Review:
-      data.review?.map((r: any) => ({
+      data.Review?.map((r: any) => ({
         id: r.id,
-        rating: r.rating,
+        rating: Math.max(1, Math.min(5, r.rating)),
         username: r.username,
         description: r.description,
       })) ?? [],
@@ -165,7 +164,6 @@ const product = computed(() =>
   products.value.find((item) => item.id === Number(route.params.id))
 );
 
-// Related Products
 
 // Quantity Control
 const selectedAmount = ref(1);

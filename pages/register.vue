@@ -108,7 +108,7 @@
             required
             placeholder="กรุณายืนยันรหัสผ่าน"
           />
-          <p v-if="passwordMismatch" class="text-[#FD8C35] text-sm mt-2">
+          <p class="text-[#FD8C35] text-sm mt-2">
             รหัสผ่านไม่ตรงกัน
           </p>
         </div>
@@ -186,7 +186,6 @@ const register = async () => {
 
 const passwordVisible = ref(false);
 const passwordError = ref(false);
-const passwordMismatch = ref(false);
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;

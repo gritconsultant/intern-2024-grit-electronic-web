@@ -36,3 +36,10 @@ export const updatePassword = (id: any, payload: PasswordUpdate) => {
         data: payload,
     })
 }
+
+export const getPaymentList = () => {
+    return client({
+        url: "/payment",
+        method: "get",
+    })
+} 

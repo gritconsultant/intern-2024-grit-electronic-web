@@ -12,8 +12,8 @@
         <div class="flex justify-center mt-5">
           <div class="w-[500px]">
 
-            <div> {{ getinfo.Username }}</div>
-            <!-- <div
+
+            <div
               v-for="(address, index) in addresses"
               :key="index"
               class="mb-4 p-4 border rounded-lg transition-colors"
@@ -21,8 +21,8 @@
                 'bg-gray-100': address.isDefault,
                 'bg-white': !address.isDefault,
               }"
-            > -->
-<!-- 
+            >
+
               <h2 class="font-bold text-lg">{{ address.title }}</h2>
               <p>ชื่อ: {{ address.name }}</p>
               <p>บ้านเลขที่: {{ address.houseNo }}</p>
@@ -30,10 +30,10 @@
               <p>ตำบล: {{ address.subDistrict }}</p>
               <p>อำเภอ: {{ address.district }}</p>
               <p>จังหวัด: {{ address.province }} <span>รหัสไปรษณีย์: {{ address.postalCode }}</span></p>
-              <p>โทรศัพท์: {{ address.phone }}</p> -->
+              <p>โทรศัพท์: {{ address.phone }}</p>
 
               <!-- ปุ่มตั้งค่าเริ่มต้น -->
-              <!-- <div class="mt-4 flex items-center justify-between">
+              <div class="mt-4 flex items-center justify-between">
                 <button
                   class="text-blue-500 hover:underline"
                   @click="handleEdit(address)"
@@ -51,7 +51,7 @@
                   ค่าเริ่มต้น
                 </span>
               </div>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
@@ -81,32 +81,32 @@ import service from "~/service";
 import { useIndexStore } from "~/store/main";
 const store = useIndexStore();
 
-// const addresses = reactive([
-//   {
-//     title: "หอพัก",
-//     name: "kk kub",
-//     houseNo: "12/34",
-//     village: "หมู่บ้าน kk condo",
-//     subDistrict: "ตำบลศิลา",
-//     district: "อำเภอเมือง",
-//     province: "จังหวัดขอนแก่น",
-//     postalCode: "40000",
-//     phone: "065-094-5399",
-//     isDefault: true,
-//   },
-//   {
-//     title: "บ้าน",
-//     name: "สวัสดี ครับ",
-//     houseNo: "123",
-//     village: "หมู่บ้าน ABC",
-//     subDistrict: "ตำบลในเมือง",
-//     district: "อำเภอเมือง",
-//     province: "จังหวัดขอนแก่น",
-//     postalCode: "40000",
-//     phone: "065-094-5399",
-//     isDefault: false,
-//   },
-// ]);
+const addresses = reactive([
+  {
+    title: "หอพัก",
+    name: "kk kub",
+    houseNo: "12/34",
+    village: "หมู่บ้าน kk condo",
+    subDistrict: "ตำบลศิลา",
+    district: "อำเภอเมือง",
+    province: "จังหวัดขอนแก่น",
+    postalCode: "40000",
+    phone: "065-094-5399",
+    isDefault: true,
+  },
+  {
+    title: "บ้าน",
+    name: "สวัสดี ครับ",
+    houseNo: "123",
+    village: "หมู่บ้าน ABC",
+    subDistrict: "ตำบลในเมือง",
+    district: "อำเภอเมือง",
+    province: "จังหวัดขอนแก่น",
+    postalCode: "40000",
+    phone: "065-094-5399",
+    isDefault: false,
+  },
+]);
 
 const getinfo = ref<UserInfo>({
   ID: 0,
@@ -145,16 +145,16 @@ const getuserinfo = async () => {
     .finally(() => {});
 };
 
-// function handleEdit(address: typeof addresses[number]) {
-//   console.log("กำลังแก้ไข:", address);
-// }
+function handleEdit(address: typeof addresses[number]) {
+  console.log("กำลังแก้ไข:", address);
+}
 
-// function setDefaultAddress(index: number) {
-//   addresses.forEach((address, i) => {
-//     address.isDefault = i === index;
-//   });
-//   alert(`ตั้งที่อยู่ "${addresses[index].title}" เป็นค่าเริ่มต้นเรียบร้อยแล้ว`);
-// }
+function setDefaultAddress(index: number) {
+  addresses.forEach((address, i) => {
+    address.isDefault = i === index;
+  });
+  alert(`ตั้งที่อยู่ "${addresses[index].title}" เป็นค่าเริ่มต้นเรียบร้อยแล้ว`);
+}
 
 onMounted(() => {
   getuserinfo();

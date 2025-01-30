@@ -27,8 +27,7 @@
                         :type="
                           passwordVisible.changePassword ? 'text' : 'password'
                         "
-                        
-                        id="changepassword"
+                        v-model="changePassword.password"
                         class="w-full max-w-[400px] h-[45px] mt-2 inputbox pr-10"
                         :class="{ 'border-red-500': passwordError }"
                       />
@@ -47,14 +46,14 @@
                     </div>
                   </div>
 
-                  <div class="mt-5 relative">
+                  <div  class="mt-5 relative">
                     <p> ยืนยันรหัสผ่านใหม่ </p>
                     <div class="relative">
                       <input
                         :type="
-                          passwordVisible.confirmPassword ? 'text' : 'password'
+                          passwordVisible.confirmPassword? 'text' : 'password'
                         "
-                        id="conpassword"
+                        v-model="confirmPassword.password"
                         class="w-[400px] h-[45px] mt-2 inputbox"
                       />
                       <span
@@ -71,12 +70,12 @@
                       </span>
                     </div>
 
-                    <p
+                    <!-- <p
                       v-if="passwordMismatch"
                       class="text-red-500 text-xs mt-1"
                     >
                       Passwords do not match.
-                    </p>
+                    </p> -->
                   </div>
 
                   <!-- Login Button -->
@@ -114,12 +113,14 @@
 <script setup lang="ts">
 import type { PasswordRes, PasswordUpdate, UserInfo } from "~/models/product.model";
 import service from "~/service";
+import { useIndexStore } from "~/store/main";
 
 definePageMeta({
   layout: "user",
 });
 
 const route = useRoute();
+const store = useIndexStore();
 
 const getinfo = ref<UserInfo>({
   ID: 0,
@@ -133,7 +134,7 @@ const getinfo = ref<UserInfo>({
   updated_at: 0,
 });
 
-const password = ref<PasswordUpdate>({
+const changePassword = ref<PasswordUpdate>({
   // username: "",
     password:  "",
     // email:  "",
@@ -143,7 +144,7 @@ const password = ref<PasswordUpdate>({
 
 })
 
-const passwordres = ref<PasswordRes>({
+const confirmPassword = ref<PasswordRes>({
   // username: "",
     password:  "",
     // email:  "",
@@ -159,7 +160,7 @@ const getuserinfo = async () => {
       console.log(resp);
       const data = resp.data.data;
       const user: UserInfo = {
-        ID: data.id,
+        ID: data.ID,
         FirstName: data.FirstName,
         LastName: data.LastName,
         Username: data.Username,
@@ -178,11 +179,11 @@ const getuserinfo = async () => {
 };
 
 const updatePassword = async () => {
-  await service.product.updatePassword(route.params.id, password.value)
+  await service.product.updatePassword(store.$state.userId, changePassword.value)
    .then((resp: any) => {
       console.log(resp);
       const data = resp.data;
-      const newPassword : PasswordUpdate = {
+      const changePassword : PasswordRes = {
         // username: data.username,
         password: data.password,
         // email: data.email,
@@ -190,7 +191,11 @@ const updatePassword = async () => {
         // firstname: data.firstname,
         // lastname: data.lastname,
       };
-      passwordres.value = newPassword;
+      confirmPassword.value = changePassword;
+
+      if (resp.status == 200) {
+    alert("เปลี่ยนรหัสผ่านสำเร็จ!");
+  }
     })
     .catch((error: any) => {
       console.log(error);
@@ -198,12 +203,13 @@ const updatePassword = async () => {
     .finally(() => {});
 }
 
+
+// สถานะสำหรับแสดงซ่อนรหัส
 const passwordVisible = ref({
   changePassword: false,
   confirmPassword: false,
-}); // สถานะสำหรับแสดง/ซ่อนรหัสผ่าน
+});
 const passwordError = ref(false); // แสดงข้อผิดพลาดของรหัสผ่าน
-const passwordMismatch = ref(false);
 
 const togglePasswordVisibility = (
   field: keyof typeof passwordVisible.value

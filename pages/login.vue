@@ -86,6 +86,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { Login } from "~/models/page.model";
+import type { UserInfo } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
@@ -104,13 +105,16 @@ const logins = ref<Login>({
 
 const login = async () => {
   await service.auth.login(logins.value)
-    .then((resp: any) => {
+    .then(async(resp: any) => {
 
       
       const refToken = useStatefulCookie("token");
       refToken.value = resp.data.token;
       console.log(resp.data);
       store.$state.token = resp.data.token;
+      await getuserinfo()
+
+
 
       if (store.$state.token != null) {
         router.push("/");
@@ -122,6 +126,19 @@ const login = async () => {
     })
     .finally(() => {});
 };
+
+const getuserinfo = async () => {
+  await service.product.getUserInfo()
+  .then((resp: any) => {
+    const data = resp.data.data;
+    console.log(data.ID);
+    store.$state.userId = data.ID;
+  })
+  .catch((error: any) => {
+     console.error(error);
+   })
+   .finally(() => {});
+}
 
 
 const togglePasswordVisibility = () => {

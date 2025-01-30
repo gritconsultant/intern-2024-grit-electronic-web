@@ -46,6 +46,7 @@
 import type { Product } from "~/models/product.model";
 
 
+
 const props = defineProps({
   product: {
     type: Object as PropType<Product>,

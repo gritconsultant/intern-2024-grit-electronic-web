@@ -1,43 +1,76 @@
 <template>
-  <div>
-    <div class="p-[20px] lg:p-[50px]">
-      <div>tack pages</div>
-      <div class="flex flex-col lg:flex-row gap-2 my-6">
-        <h1 class="font-bold text-2xl lg:text-3xl">สินค้าทั้งหมด</h1>
-        <p class="mt-2 lg:mt-[10px] text-black/40">(สินค้าทั้งหมด รายการ)</p>
-      </div>
-      <!-- Filter -->
-      <div
-        class="flex flex-wrap gap-5 mt-[30px] lg:mt-[50px] pl-3 text-black/40"
-      >
-        <div>
-          หมวดหมู่
-          <select class="border p-1 rounded">
-            <option value="">ทั้งหมด</option>
-          </select>
+  <div class="p-4">
+    <div class="flex">
+      <!-- Sidebar -->
+      <Sidebar />
+      <!-- Main Content -->
+      <div class="w-full lg:w-3/4 p-6 h-[100%]">
+        <div class="border-b">
+          <h1 class="text-xl font-bold mb-6">ข้อมูลบัญชีผู้ใช้</h1>
         </div>
-      </div>
-      <hr class="mt-[10px] mb-[50px] lg:mb-[100px]" />
-      <!-- Category Display -->
-      <div class="grid gap-10 lg:gap-20">
+
         <div>
-          <div class="grid justify-center">
-            <div class="flex justify-between">
-              <h1 class="headercategory"></h1>
-              <div class="mt-[10px] text-black/40 cursor-pointer">
-                ทั้งหมด ->
+          <div class="grid grid-cols-2">
+            <div class="mt-10 ml-10">
+              <div>
+                <p> ชื่อ - นามสกุล </p>
+                <h1 class="font-bold text-lg">
+                  {{ getinfo.FirstName }} <span> {{ getinfo.LastName }}</span>
+                </h1>
+              </div>
+
+              <!-- เปลี่ยนรหัสผ่าน -->
+              <div class="mt-5 relative">
+                <p>รหัสผ่านใหม่</p>
+                <input
+                  :type="passwordVisible.newPassword ? 'text' : 'password'"
+                  v-model="password.newPassword"
+                  class="w-full max-w-[400px] h-[45px] mt-2 inputbox pr-10"
+                  required
+                  @input="checkPasswords"
+                />
+                <span class="-m-8 cursor-pointer text-black" @click="togglePasswordVisibility('newPassword')">
+                  <i :class="passwordVisible.newPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                </span>
+              </div>
+
+              <div v-if="password.newPassword" class="mt-5 relative">
+                <p>ยืนยันรหัสผ่านใหม่</p>
+                <input
+                  :type="passwordVisible.confirmPassword ? 'text' : 'password'"
+                  v-model="password.confirmPassword"
+                  class="w-[400px] h-[45px] mt-2 inputbox"
+                  required
+                  @input="checkPasswords"
+                />
+                <span class="-m-8 cursor-pointer text-black" @click="togglePasswordVisibility('confirmPassword')">
+                  <i :class="passwordVisible.confirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                </span>
+                <p v-if="passwordMismatch" class="text-red-500 text-xs mt-1">
+                  รหัสผ่านไม่ตรงกัน
+                </p>
+              </div>
+
+              <div class="mt-10">
+                <button
+                  type="submit"
+                  class="text-white w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl"
+                  @click="updatePassword"
+                  :disabled="passwordMismatch || !password.newPassword || !password.confirmPassword"
+                >
+                  ยืนยันการเปลี่ยนรหัสผ่าน
+                </button>
               </div>
             </div>
+
             <div>
-              <div
-                class="mt-[10px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-32"
-              >
-                <div
-                  v-for="(item, index) in products" :key="index"
-                  class="flex justify-center"
-                >
-                  <CardProduct :product="item" />
-                </div>
+              <div class="mt-10">
+                <p>Email</p>
+                <h1 class="font-bold text-lg"> {{ getinfo.Email }}</h1>
+              </div>
+              <div class="mt-5">
+                <p>เบอร์โทรศัพท์</p>
+                <h1 class="font-bold text-lg">{{ getinfo.Phone }}</h1>
               </div>
             </div>
           </div>
@@ -48,73 +81,82 @@
 </template>
 
 <script setup lang="ts">
-import { errorMessages } from "vue/compiler-sfc";
-import type { Product } from "~/models/product.model";
+import Swal from "sweetalert2";
+import type { PasswordUpdate, UserInfo } from "~/models/product.model";
 import service from "~/service";
 
-const products = ref<Product[]>([
-  {
-    id: 0,
-    name: "",
-    price: 0,
-    stock: 0,
-    description: "",
-    Image: {
-      id: 0,
-      ref_id: 0,
-      type: "",
-      description: "",
-    }, // ถูกต้อง
-    category: { id: 0, name: "" },
-    Review: [],
-    is_active: true,
-    created_at: 0,
-    updated_at: 0,
-  },
-]);
+definePageMeta({ layout: "user" });
 
-const getProductList = async () => {
-  await service.product.getProductList()
-    .then((resp: any) => {
-      const data = resp.data;
-      console.log(resp.data);
+const getinfo = ref<UserInfo>({
+  ID: 0,
+  FirstName: "",
+  LastName: "",
+  Username: "",
+  Email: "",
+  Phone: 0,
+  created_at: 0,
+  updated_at: 0,
+});
 
-      
-      const productList: Product[] = [];
+const password = ref<PasswordUpdate>({
+  newPassword: "",
+  confirmPassword: "",
+});
 
-      console.log(data);
+const passwordMismatch = computed(() => password.value.newPassword !== password.value.confirmPassword);
 
-      for (let i = 0; i < data.length; i++) {
-        const product = data[i];
-        productList.push({
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          stock: product.stock,
-          description: product.description,
-          Image: {
-            id: product.image.id,
-            ref_id: product.image.ref_id,
-            type: product.image.type,
-            description: product.image.description,
-          },
-          category: { id: product.category.id, name: product.category.name },
-          Review: product.review,
-          is_active: product.is_active,
-          created_at: product.created_at,
-          updated_at: product.updated_at,
-        });
-        products.value = productList;
-      }
-    })
-    .catch((error: any) => {
-      console.log(errorMessages);
-    })
-    .finally(() => {});
+const passwordVisible = ref({
+  newPassword: false,
+  confirmPassword: false,
+});
+
+// ดึงข้อมูลผู้ใช้
+const getuserinfo = async () => {
+  try {
+    const resp = await service.product.getUserInfo();
+    getinfo.value = resp.data.data;
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้", error);
+  }
 };
 
-onMounted(async () => {
-  await getProductList();
+// อัปเดตรหัสผ่าน
+const updatePassword = async () => {
+  if (passwordMismatch.value) {
+    Swal.fire("รหัสผ่านไม่ตรงกัน", "กรุณากรอกให้ถูกต้อง", "error");
+    return;
+  }
+
+  try {
+    if (!getinfo.value.ID) throw new Error("ไม่พบข้อมูลผู้ใช้");
+
+    const payload = {
+      newPassword: password.value.newPassword,
+    };
+
+    const response = await service.product.updatePassword(getinfo.value.ID, payload);
+    if (response.status === 200) {
+      Swal.fire("สำเร็จ", "รหัสผ่านถูกเปลี่ยนเรียบร้อย", "success");
+      password.value = { newPassword: "", confirmPassword: "" };
+    } else {
+      throw new Error("เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน");
+    }
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาด", error);
+    Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถเปลี่ยนรหัสผ่านได้", "error");
+  }
+};
+
+const checkPasswords = () => {
+  passwordMismatch.value = password.value.newPassword !== password.value.confirmPassword;
+};
+
+const togglePasswordVisibility = (field: keyof typeof passwordVisible.value) => {
+  passwordVisible.value[field] = !passwordVisible.value[field];
+};
+
+onMounted(() => {
+  getuserinfo();
 });
 </script>
 
