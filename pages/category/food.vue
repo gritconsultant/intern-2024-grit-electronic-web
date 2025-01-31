@@ -86,7 +86,7 @@ const getProductList = async () => {
 
 const filteredProducts = computed(() => {
   return products.value.filter(
-    (product) => product.category.id === 3
+    (product) => product.category.name === "อาหาร"
   );
 });
 

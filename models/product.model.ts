@@ -132,3 +132,33 @@ export interface Shipment {
     created_at: number;
     updated_at: number;
 }
+
+export interface ShipmentCreate {
+    firstname: string;
+    lastname: string;
+    address: string;
+    zip_code: number;
+    sub_district: string;
+    district: string;
+    province: string;
+    status: string;
+}
+export interface ShipmentRes {
+    firstname: string;
+    lastname: string;
+    address: string;
+    zip_code: number;
+    sub_district: string;
+    district: string;
+    province: string;
+    status: string;
+}
+
+export interface ShipmentUpdate {
+    address: string;
+    zip_code: number;
+    sub_district: string;
+    district: string;
+    province: string;
+    status: string;
+}

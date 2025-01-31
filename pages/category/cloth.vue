@@ -87,7 +87,7 @@ const getProductList = async () => {
 
 const filteredProducts = computed(() => {
   return products.value.filter(
-    (product) => product.category.id === 6
+    (product) => product.category.name === "ผ้าและเครื่องแต่งกาย"
   );
 });
 

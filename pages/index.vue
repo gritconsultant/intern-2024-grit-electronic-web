@@ -70,6 +70,11 @@ import { ref, onMounted } from "vue";
 import type { Category, Product } from "~/models/product.model";
 import service from "~/service";
 
+// ตอนรีเฟรช token หายแต่ userid ไม่หาย
+definePageMeta({
+  middleware: 'auth'
+})
+
 const products = ref<Product[]>([]);
 const category = ref<Category[]>([]);
 const selectedCategoryId = ref(0); // 0 = All categories
