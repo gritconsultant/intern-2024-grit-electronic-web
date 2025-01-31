@@ -107,7 +107,7 @@ const addShipment = async () => {
 const saveAddress = () => {
   if (!shipmentRes.value.firstname || !shipmentRes.value.lastname || !shipmentRes.value.address || !shipmentRes.value.zip_code ||
       !shipmentRes.value.sub_district || !shipmentRes.value.district || !shipmentRes.value.province || !shipmentRes.value.status) {
-    alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+    alert("เพิ่มที่อยู่ใหม่!");
     return;
   }
 

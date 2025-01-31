@@ -3,7 +3,7 @@
     <!-- Sidebar -->
     <Sidebar />
     <div class="w-full lg:w-3/4 p-6">
-      <div class="flex justify-between border-b">
+      <!-- <div class="flex justify-between border-b">
         <h1 class="text-xl font-bold mb-6">ที่อยู่</h1>
         <button
           class="text-black/50 hover:underline"
@@ -11,7 +11,7 @@
         >
           เพิ่มที่อยู่ใหม่
         </button>
-      </div>
+      </div> -->
 
       <div>
         <div class="flex justify-center mt-5">
@@ -29,8 +29,9 @@
               <p>อำเภอ: {{ shipment.district }}</p>
               <p>
                 จังหวัด: {{ shipment.province }}
+                <span>รหัสไปรษณีย์: {{ shipment.zip_code }}</span>
               </p>
-              <p>รหัสไปรษณีย์:  {{ shipment.zip_code }}</p>
+              <p>โทรศัพท์: {{ getinfo.Phone }}</p>
 
               <!-- ปุ่มตั้งค่าเริ่มต้น -->
               <div class="mt-4 flex items-center justify-between">
@@ -51,15 +52,15 @@
     </div>
 
     <!-- Payment Popup -->
-    <div
+    <!-- <div
       v-if="store.addressAction"
       @click="store.addressAction = !store.addressAction"
       class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
     >
       <div @click.stop>
-        <PopupAddress @click="handleAddressAdded" />
+        <PopupAddress  />
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -155,10 +156,10 @@ const getShipmentId = async () => {
    .finally(() => {});
 }
 
-const handleAddressAdded = (newAddress: Shipment) => {
-  console.log("ได้รับที่อยู่ใหม่:", newAddress); // ✅ ตรวจสอบค่าที่ได้รับ
-  shipment.value = newAddress;
-};
+// const handleAddressAdded = (newAddress: Shipment) => {
+//   console.log("ได้รับที่อยู่ใหม่:", newAddress); // ✅ ตรวจสอบค่าที่ได้รับ
+//   shipment.value = newAddress;
+// };
 // const getshipmentlist =async () => {
 //   await service.product.getShipmentList()
 //   .then((resp: any) => {

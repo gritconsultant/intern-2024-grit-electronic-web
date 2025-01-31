@@ -1,163 +1,162 @@
 <template>
-  <div class="p-4">
-    <div class="flex">
-      <!-- Sidebar -->
-      <Sidebar />
-      <!-- Main Content -->
-      <div class="w-full lg:w-3/4 p-6 h-[100%]">
-        <div class="border-b">
-          <h1 class="text-xl font-bold mb-6">ข้อมูลบัญชีผู้ใช้</h1>
-        </div>
+  <div class="flex p-4 h-full overflow-y-auto">
+    <Sidebar />
+    <div class="w-full lg:w-3/4 p-6">
+      <div class="flex justify-between border-b">
+        <h1 class="text-xl font-bold mb-6">ที่อยู่</h1>
+        <!-- ✅ ปุ่มเพิ่มที่อยู่ใหม่ -->
+        <button class="text-black/50 hover:underline" @click="store.addressAction = true">
+          เพิ่มที่อยู่ใหม่
+        </button>
+      </div>
 
-        <div>
-          <div class="grid grid-cols-2">
-            <div class="mt-10 ml-10">
-              <div>
-                <p> ชื่อ - นามสกุล </p>
-                <h1 class="font-bold text-lg">
-                  {{ getinfo.FirstName }} <span> {{ getinfo.LastName }}</span>
-                </h1>
-              </div>
-
-              <!-- เปลี่ยนรหัสผ่าน -->
-              <div class="mt-5 relative">
-                <p>รหัสผ่านใหม่</p>
-                <input
-                  :type="passwordVisible.newPassword ? 'text' : 'password'"
-                  v-model="password.newPassword"
-                  class="w-full max-w-[400px] h-[45px] mt-2 inputbox pr-10"
-                  required
-                  @input="checkPasswords"
-                />
-                <span class="-m-8 cursor-pointer text-black" @click="togglePasswordVisibility('newPassword')">
-                  <i :class="passwordVisible.newPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-                </span>
-              </div>
-
-              <div v-if="password.newPassword" class="mt-5 relative">
-                <p>ยืนยันรหัสผ่านใหม่</p>
-                <input
-                  :type="passwordVisible.confirmPassword ? 'text' : 'password'"
-                  v-model="password.confirmPassword"
-                  class="w-[400px] h-[45px] mt-2 inputbox"
-                  required
-                  @input="checkPasswords"
-                />
-                <span class="-m-8 cursor-pointer text-black" @click="togglePasswordVisibility('confirmPassword')">
-                  <i :class="passwordVisible.confirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-                </span>
-                <p v-if="passwordMismatch" class="text-red-500 text-xs mt-1">
-                  รหัสผ่านไม่ตรงกัน
+      <div>
+        <div class="flex justify-center mt-5">
+          <div class="w-[500px]">
+            <!-- ✅ วนลูปแสดงที่อยู่ทั้งหมด -->
+            <div v-if="shipments.length > 0">
+              <div
+                v-for="(shipment, index) in shipments"
+                :key="shipment.id"
+                class="mb-4 p-4 border rounded-lg transition-colors"
+              >
+                <h2 class="font-bold text-lg">ที่อยู่ {{ index + 1 }}</h2>
+                <p>ชื่อ: {{ shipment.firstname }} {{ shipment.lastname }}</p>
+                <p>บ้านเลขที่: {{ shipment.address }}</p>
+                <p>ตำบล: {{ shipment.sub_district }}</p>
+                <p>อำเภอ: {{ shipment.district }}</p>
+                <p>
+                  จังหวัด: {{ shipment.province }}
+                  <span>รหัสไปรษณีย์: {{ shipment.zip_code }}</span>
                 </p>
-              </div>
+                <p>โทรศัพท์: {{ getinfo.Phone }}</p>
 
-              <div class="mt-10">
-                <button
-                  type="submit"
-                  class="text-white w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl"
-                  @click="updatePassword"
-                  :disabled="passwordMismatch || !password.newPassword || !password.confirmPassword"
-                >
-                  ยืนยันการเปลี่ยนรหัสผ่าน
-                </button>
+                <!-- ปุ่มแก้ไข -->
+                <div class="mt-4 flex items-center justify-between">
+                  <button class="text-blue-500 hover:underline">แก้ไข</button>
+                </div>
               </div>
             </div>
 
-            <div>
-              <div class="mt-10">
-                <p>Email</p>
-                <h1 class="font-bold text-lg"> {{ getinfo.Email }}</h1>
-              </div>
-              <div class="mt-5">
-                <p>เบอร์โทรศัพท์</p>
-                <h1 class="font-bold text-lg">{{ getinfo.Phone }}</h1>
-              </div>
+            <!-- ถ้าไม่มีที่อยู่ให้ขึ้นข้อความแจ้งเตือน -->
+            <div v-else class="text-center text-gray-500 mt-6">
+              ไม่พบข้อมูลที่อยู่
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ✅ Popup เพิ่มที่อยู่ -->
+    <div v-if="store.addressAction" @click="store.addressAction = false" class="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+      <div @click.stop>
+        <PopupAddress @addressAdded="handleAddressAdded" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Swal from "sweetalert2";
-import type { PasswordUpdate, UserInfo } from "~/models/product.model";
+definePageMeta({
+  layout: "user",
+});
+
+import { ref, onMounted } from "vue";
+import type { Shipment, UserInfo } from "~/models/product.model";
 import service from "~/service";
+import { useIndexStore } from "~/store/main";
 
-definePageMeta({ layout: "user" });
+const store = useIndexStore();
 
+// ✅ เก็บข้อมูลผู้ใช้
 const getinfo = ref<UserInfo>({
   ID: 0,
   FirstName: "",
   LastName: "",
   Username: "",
+  Password: "",
   Email: "",
   Phone: 0,
   created_at: 0,
   updated_at: 0,
 });
 
-const password = ref<PasswordUpdate>({
-  newPassword: "",
-  confirmPassword: "",
-});
+// ✅ เก็บที่อยู่ของ userId
+const shipments = ref<Shipment[]>([]);
 
-const passwordMismatch = computed(() => password.value.newPassword !== password.value.confirmPassword);
-
-const passwordVisible = ref({
-  newPassword: false,
-  confirmPassword: false,
-});
-
-// ดึงข้อมูลผู้ใช้
+// ✅ ดึงข้อมูลผู้ใช้
 const getuserinfo = async () => {
-  try {
-    const resp = await service.product.getUserInfo();
-    getinfo.value = resp.data.data;
-  } catch (error) {
-    console.error("เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้", error);
-  }
+  await service.product
+    .getUserInfo()
+    .then((resp: any) => {
+      const data = resp.data.data;
+      getinfo.value = {
+        ID: data.ID,
+        FirstName: data.FirstName,
+        LastName: data.LastName,
+        Username: data.Username,
+        Password: data.Password,
+        Email: data.Email,
+        Phone: data.Phone,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      };
+
+      // ✅ ดึงที่อยู่ของ userId
+      getShipmentList(data.ID);
+    })
+    .catch((error: any) => {
+      console.log("Error fetching user info:", error);
+    });
 };
 
-// อัปเดตรหัสผ่าน
-const updatePassword = async () => {
-  if (passwordMismatch.value) {
-    Swal.fire("รหัสผ่านไม่ตรงกัน", "กรุณากรอกให้ถูกต้อง", "error");
+// ✅ ดึงรายการที่อยู่ทั้งหมดของ userId
+const getShipmentList = async (userId?: number) => {
+  const id = userId || store.$state.userId;
+  if (!id) {
+    console.error("ไม่มี userId สำหรับดึงข้อมูลที่อยู่");
     return;
   }
 
-  try {
-    if (!getinfo.value.ID) throw new Error("ไม่พบข้อมูลผู้ใช้");
-
-    const payload = {
-      newPassword: password.value.newPassword,
-    };
-
-    const response = await service.product.updatePassword(getinfo.value.ID, payload);
-    if (response.status === 200) {
-      Swal.fire("สำเร็จ", "รหัสผ่านถูกเปลี่ยนเรียบร้อย", "success");
-      password.value = { newPassword: "", confirmPassword: "" };
-    } else {
-      throw new Error("เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน");
-    }
-  } catch (error) {
-    console.error("เกิดข้อผิดพลาด", error);
-    Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถเปลี่ยนรหัสผ่านได้", "error");
-  }
+  await service.product
+    .getShipmentList()
+    .then((resp: any) => {
+      console.log("ที่อยู่ทั้งหมดที่ได้จาก API:", resp);
+      const data = resp.data.data;
+      shipments.value = data.filter((item: any) => item.userId === id) // ✅ กรองเฉพาะของ userId
+        .map((item: any) => ({
+          id: item.id,
+          firstname: item.firstname,
+          lastname: item.lastname,
+          address: item.address,
+          zip_code: item.zip_code,
+          sub_district: item.sub_district,
+          district: item.district,
+          province: item.province,
+          status: item.status,
+          created_at: item.created_at,
+          updated_at: item.updated_at,
+        }));
+    })
+    .catch((error: any) => {
+      console.error("เกิดข้อผิดพลาดในการดึงที่อยู่:", error);
+    });
 };
 
-const checkPasswords = () => {
-  passwordMismatch.value = password.value.newPassword !== password.value.confirmPassword;
+// ✅ อัปเดตที่อยู่ใหม่เมื่อเพิ่มจาก Popup
+const handleAddressAdded = (newAddress: Shipment) => {
+  console.log("ที่อยู่ใหม่ที่เพิ่ม:", newAddress);
+  shipments.value.push(newAddress);
+  store.addressAction = false; // ปิด Popup
 };
 
-const togglePasswordVisibility = (field: keyof typeof passwordVisible.value) => {
-  passwordVisible.value[field] = !passwordVisible.value[field];
-};
-
+// ✅ ดึงข้อมูลเมื่อหน้าโหลด
 onMounted(() => {
   getuserinfo();
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.overflow-hidden { overflow: hidden; }
+.overflow-y-auto { overflow-y: auto; }
+</style>
