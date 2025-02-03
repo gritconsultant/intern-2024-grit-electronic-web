@@ -28,44 +28,12 @@
           class="absolute bg-white rounded-lg border shadow w-44 hidden group-hover:block"
         >
           <ul class="py-2 text-sm text-gray-700">
-            <li>
+            <li v-for="cate in categories" :key="cate.id">
               <NuxtLink
-                to="/category/food"
+                :to="`/category/${cate.id}`"
                 class="block px-4 py-2 hover:bg-gray-100"
               >
-                อาหาร
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink
-                to="/category/drink"
-                class="block px-4 py-2 hover:bg-gray-100"
-              >
-                เครื่องดื่ม
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink
-                to="/category/herbs"
-                class="block px-4 py-2 hover:bg-gray-100"
-              >
-                สมุนไพร
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink
-                to="/category/cloth"
-                class="block px-4 py-2 hover:bg-gray-100"
-              >
-                ผ้าและเครื่องแต่งกาย
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink
-                to="/category/items"
-                class="block px-4 py-2 hover:bg-gray-100"
-              >
-                ของใช้ ของตกแต่ง
+                {{ cate.name }}
               </NuxtLink>
             </li>
           </ul>
@@ -75,6 +43,32 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import type { Category } from "~/models/product.model";
+import service from "~/service";
+
+const categories = ref<Category[]>([]);
+
+const getCategoryList = async () => {
+  await service.product
+    .getCategoryList()
+    .then((resp: any) => {
+      const data = resp.data.data;
+      categories.value = data.map((e: any) => ({
+        id: e.id,    
+        name: e.name, 
+        img: e.img,   
+      }));
+    })
+    .catch((error: any) => {
+      console.error("เกิดข้อผิดพลาดในการดึงหมวดหมู่สินค้า:", error);
+    });
+};
+
+onMounted(() => {
+  getCategoryList();
+});
+</script>
 
 <style scoped></style>

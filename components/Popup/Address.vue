@@ -15,11 +15,11 @@
           <input v-model="shipment.address" class="w-full p-2 border rounded" required />
         </div>
         <div class="mb-4">
-          <label class="block text-sm font-medium">ตำบล</label>
+          <label class="block text-sm font-medium">ตำบล/แขวง</label>
           <input v-model="shipment.sub_district" class="w-full p-2 border rounded" required />
         </div>
         <div class="mb-4">
-          <label class="block text-sm font-medium">อำเภอ</label>
+          <label class="block text-sm font-medium">อำเภอ/เขต</label>
           <input v-model="shipment.district" class="w-full p-2 border rounded" required />
         </div>
         <div class="mb-4">
@@ -29,10 +29,6 @@
         <div class="mb-4">
           <label class="block text-sm font-medium">รหัสไปรษณีย์</label>
           <input v-model="shipment.zip_code" class="w-full p-2 border rounded" required />
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium">สถานะ</label>
-          <input v-model="shipment.status" class="w-full p-2 border rounded" required />
         </div>
 
         <div class="flex justify-between mt-6">
@@ -65,7 +61,7 @@ const shipment = ref<ShipmentCreate>({
   sub_district: "",
   district: "",
   province: "",
-  status: "",
+  // status: "",
 })
 
 const shipmentRes = ref<ShipmentRes>({
@@ -76,7 +72,7 @@ const shipmentRes = ref<ShipmentRes>({
   sub_district: "",
   district: "",
   province: "",
-  status: "",
+  // status: "",
 })
 
 const addShipment = async () => {
@@ -93,7 +89,7 @@ const addShipment = async () => {
       sub_district: data.sub_district,
       district: data.district,
       province: data.province,
-      status: data.status,
+      // status: data.status,
     }
     shipmentRes.value = shipment;
   })
@@ -106,7 +102,7 @@ const addShipment = async () => {
 // บันทึกที่อยู่ใหม่
 const saveAddress = () => {
   if (!shipmentRes.value.firstname || !shipmentRes.value.lastname || !shipmentRes.value.address || !shipmentRes.value.zip_code ||
-      !shipmentRes.value.sub_district || !shipmentRes.value.district || !shipmentRes.value.province || !shipmentRes.value.status) {
+      !shipmentRes.value.sub_district || !shipmentRes.value.district || !shipmentRes.value.province) {
     alert("เพิ่มที่อยู่ใหม่!");
     return;
   }

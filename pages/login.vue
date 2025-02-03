@@ -112,6 +112,7 @@ const login = async () => {
       refToken.value = resp.data.token;
       console.log(resp.data);
       store.$state.token = resp.data.token;
+      // เรียกใช้ getinfo เพื่อดึงข้อมูลผู้ใช้หลังได้ token
       await getuserinfo()
 
 

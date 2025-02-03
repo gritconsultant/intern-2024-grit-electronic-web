@@ -1,124 +1,97 @@
 <template>
-  <div v-if="product">
-    <div class="p-10">
-      <div class="mx-[20px] lg:mx-[50px]">
-        <!-- Product Details -->
-        <div class="flex flex-col lg:flex-row justify-between gap-4">
-          <div class="w-full p-2 flex justify-center">
-            <div class="object-cover max-w-full w-[650px] h-[650px]">
-              {{ product.image.id }}
-            </div>
-          </div>
-          <div class="w-full lg:w-3/6 p-5">
-            <h1 class="font-bold text-2xl">{{ product.name }}</h1>
-            <div class="mt-2 flex gap-5">
-              <div>จำนวนรีวิว: {{ product.Review.length }}</div>
-              <div>ถูกใจ</div>
-            </div>
-            <div class="text-[#FF0808] font-semibold text-4xl mt-10">
-              ฿{{ product.price }}
-            </div>
-            <div class="mt-10">
-              <h1 class="font-medium text-base">รายละเอียด</h1>
-              <div
-                class="h-[350px] w-full p-4 overflow-y-auto  rounded-md mt-4"
-              >
-                <p>{{ product.description }}</p>
+  <div>
+    <div v-if="product">
+      <div class="p-10">
+        <div class="mx-[20px] lg:mx-[50px]">
+          <!-- Product Details -->
+          <div class="flex flex-col lg:flex-row justify-between gap-4">
+            <div class="w-full p-2 flex justify-center">
+              <div class="object-cover max-w-full w-[650px] h-[650px]">
+                {{ product.image.id }}
               </div>
             </div>
-            <!-- Quantity Control -->
-            <div class="flex items-center gap-4 mt-4">
-              <button
-                class="px-4 py-2 rounded border"
-                @click="decreaseQuantity"
-              >
-                -
-              </button>
-              <span class="text-lg font-semibold">{{ selectedAmount }}</span>
-              <button
-                class="px-4 py-2 rounded border"
-                @click="increaseQuantity"
-              >
-                +
-              </button>
-            </div>
-            <button
-              class="bg-[#EE973C] text-white p-4 rounded-lg w-full lg:w-[350px] mt-10 hover:bg-[#FD8C35]/70 transition"
-              @click="addToCart"
-            >
-              เพิ่มใส่ตะกร้า
-            </button>
-          </div>
-        </div>
-        <hr class="my-10" />
-        <!-- Reviews -->
-        <div>
-          <h1 class="text-2xl font-bold">รีวิวสินค้า</h1>
-          <div class="flex gap-5 mt-4">
-            <p>จำนวนรีวิวทั้งหมด: {{ product.Review.length }}</p>
-          </div>
-          <div class="flex justify-center gap-20 mt-10">
-            <div
-              v-for="Review in paginatedReviews"
-              :key="Review.id"
-              class="border rounded-lg p-4 w-[480px]"
-            >
-              <div class="flex justify-between">
-                <div>
-                  <h2 class="font-bold text-xl">โดย: {{ Review.username }}</h2>
-                  <p class="text-sm text-gray-500">
-                    คะแนน: {{ Review.rating }}
-                  </p>
+            <div class="w-full lg:w-3/6 p-5">
+              <h1 class="font-bold text-2xl">{{ product.name }}</h1>
+              <div class="mt-2 flex gap-5">
+                <div>จำนวนรีวิว: {{ product.Review.length }}</div>
+                <div>ถูกใจ</div>
+              </div>
+              <div class="text-[#FF0808] font-semibold text-4xl mt-10">
+                ฿{{ product.price }}
+              </div>
+              <div class="mt-10">
+                <h1 class="font-medium text-base">รายละเอียด</h1>
+                <div class="h-[350px] w-full p-4 overflow-y-auto rounded-md mt-4">
+                  <p>{{ product.description }}</p>
                 </div>
               </div>
-              <p class="mt-2">{{ Review.description }}</p>
+              <!-- Quantity Control -->
+              <div class="flex items-center gap-4 mt-4">
+                <button class="px-4 py-2 rounded border" @click="decreaseQuantity">-</button>
+                <span class="text-lg font-semibold">{{ selectedAmount }}</span>
+                <button class="px-4 py-2 rounded border" @click="increaseQuantity">+</button>
+              </div>
+              <button class="bg-[#EE973C] text-white p-4 rounded-lg w-full lg:w-[350px] mt-10 hover:bg-[#FD8C35]/70 transition"
+                @click="addToCart">
+                เพิ่มใส่ตะกร้า
+              </button>
             </div>
           </div>
-          <div class="flex justify-center mt-6">
-            <button
-              v-for="page in totalPages"
-              :key="page"
-              @click="changePage(page)"
-              :class="{
-                'bg-[#EE973C] text-white': page === currentPage,
-                'bg-gray-200': page !== currentPage,
-              }"
-              class="px-4 py-2 mx-1 rounded"
-            >
-              {{ page }}
-            </button>
+          <hr class="my-10" />
+          <!-- Reviews -->
+          <div>
+            <h1 class="text-2xl font-bold">รีวิวสินค้า</h1>
+            <div class="flex gap-5 mt-4">
+              <p>จำนวนรีวิวทั้งหมด: {{ product.Review.length }}</p>
+            </div>
+            <div class="flex justify-center gap-20 mt-10">
+              <div v-for="Review in paginatedReviews" :key="Review.id" class="border rounded-lg p-4 w-[480px]">
+                <div class="flex justify-between">
+                  <div>
+                    <h2 class="font-bold text-xl">โดย: {{ Review.username }}</h2>
+                    <p class="text-sm text-gray-500">คะแนน: {{ Review.rating }}</p>
+                  </div>
+                </div>
+                <p class="mt-2">{{ Review.description }}</p>
+              </div>
+            </div>
+            <div class="flex justify-center mt-6">
+              <button v-for="page in totalPages" :key="page" @click="changePage(page)"
+                :class="{ 'bg-[#EE973C] text-white': page === currentPage, 'bg-gray-200': page !== currentPage }"
+                class="px-4 py-2 mx-1 rounded">
+                {{ page }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30">
+        <div>
+          <h1 class="text-2xl flex justify-center font-bold">สินค้าใกล้เคียง</h1>
+          <div class="grid grid-cols-4 gap-10 mt-10">
+            <NuxtLink>
+              <CardProduct v-for="product in products" :key="product.category.id" :product="product" />
+            </NuxtLink>
           </div>
         </div>
       </div>
     </div>
-    <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30">
-      <div>
-        <h1 class="text-2xl flex justify-center font-bold">สินค้าใกล้เคียง</h1>
-        <div class="grid grid-cols-4 gap-10 mt-10">
-          <NuxtLink>
-            <CardProduct
-              v-for="product in products"
-              :key="product.category.id"
-              :product="product"
-            />
-          </NuxtLink>
-        </div>
-      </div>
+    <div v-else>
+      <p>Loading...</p>
     </div>
   </div>
-  <div v-else>
-    <p>Loading...</p>
-  </div>
 </template>
+
 
 <script lang="ts" setup>
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import Category from "~/components/Dropdown/Category.vue";
 import type { Product } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
+
+const store = useIndexStore();
 const products = ref<Product[]>([]);
 const route = useRoute();
 
@@ -156,13 +129,8 @@ const getProductById = async () => {
   products.value.push(product);
 };
 
-
-
 // Selected Product
-const product = computed(() =>
-  products.value.find((item) => item.id === Number(route.params.id))
-);
-
+const product = computed(() => products.value.find((item) => item.id === Number(route.params.id)));
 
 // Quantity Control
 const selectedAmount = ref(1);
@@ -181,9 +149,10 @@ const decreaseQuantity = () => {
 
 const addToCart = () => {
   if (!product.value) return;
-  const store = useIndexStore();
   store.addToCart({ ...product.value, selectedAmount: selectedAmount.value });
-  alert("เพิ่มสินค้าในตะกร้าสำเร็จ!");
+
+  // เปิด popup/cart
+  store.cartAction = true;
 };
 
 // Pagination for Reviews
@@ -206,9 +175,8 @@ const changePage = (page: number) => {
     currentPage.value = page;
   }
 };
+
 onMounted(() => {
   getProductById();
 });
 </script>
-<style scoped>
-</style>

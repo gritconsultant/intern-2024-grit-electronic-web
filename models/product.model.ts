@@ -99,6 +99,8 @@ export interface UserInfo {
     updated_at: number;
 }
 
+// password
+
 export interface PasswordUpdate {
     // username: string;
     password: string;
@@ -116,6 +118,9 @@ export interface PasswordRes {
     // phone: number;
     // firstname: string;
     // lastname: string;
+
+
+// Shipment
 
 }
 
@@ -141,7 +146,7 @@ export interface ShipmentCreate {
     sub_district: string;
     district: string;
     province: string;
-    status: string;
+    // status: string;
 }
 export interface ShipmentRes {
     firstname: string;
@@ -151,7 +156,7 @@ export interface ShipmentRes {
     sub_district: string;
     district: string;
     province: string;
-    status: string;
+    // status: string;
 }
 
 export interface ShipmentUpdate {
@@ -160,5 +165,26 @@ export interface ShipmentUpdate {
     sub_district: string;
     district: string;
     province: string;
-    status: string;
+    // status: string;
+}
+
+// Cart
+
+export interface Cart {
+    id: number;
+    UserID: UserID[];
+    CartItems: CartItem[];
+    created_at: number;
+    updated_at: number;
+}
+
+export interface UserID {
+    id: number;
+    username: string;
+}
+
+export interface CartItem {
+    id: number;
+    Product: Product[];
+    total_product_amount: number;
 }

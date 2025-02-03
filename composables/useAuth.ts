@@ -1,4 +1,3 @@
-import type { UserInfo } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 

@@ -1,4 +1,4 @@
-import type { PasswordUpdate, Shipment, ShipmentCreate } from "~/models/product.model"
+import type { PasswordUpdate, Shipment, ShipmentCreate, ShipmentUpdate } from "~/models/product.model"
 import { client } from "./httpClient"
 
 export const getProductList = () => {
@@ -59,10 +59,17 @@ export const addShipment = (payload: ShipmentCreate) => {
     })
 }
 
-export const updateShipment = (id: any, payload: PasswordUpdate) => {
+export const updateShipment = (id: any, payload: ShipmentUpdate) => {
     return client({
-        url: `/user/${id}`,
+        url: `/shipment/${id}`,
         method: "patch",
         data: payload,
+    })
+}
+
+export const getCartByID = (id: any) => {
+    return client({
+        url: `/cart/${id}`,
+        method: "get",
     })
 }

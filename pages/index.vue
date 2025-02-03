@@ -115,6 +115,8 @@ const getProductList = async () => {
     })
     .catch((error: any) => {
       console.error("Error loading product list:", error);
+    })
+    .finally(() => {
     });
 };
 
@@ -131,6 +133,8 @@ const getCategoryList = async () => {
     })
     .catch((error: any) => {
       console.error("Error loading category list:", error);
+    })
+    .finally(() => {
     });
 };
 
