@@ -118,13 +118,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { errorMessages } from "vue/compiler-sfc";
-import type { CartItems, UserInfo } from "~/models/product.model";
+import type { CartItems, ProductCartRes, ProductCartUpdate, UserInfo } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 const cartlist = ref<CartItems[]>([]);
-
 const getinfo = ref<UserInfo>({
   ID: 0,
   FirstName: "",
@@ -136,6 +135,12 @@ const getinfo = ref<UserInfo>({
   created_at: 0,
   updated_at: 0,
 });
+const updateCart = ref<ProductCartUpdate>({
+  TotalProductAmount: 0,
+});
+const updateCartRes = ref<ProductCartRes>({
+  TotalProductAmount: 0,
+})
 
 const getuserinfo = async () => {
   await service.product
@@ -149,33 +154,6 @@ const getuserinfo = async () => {
     });
 };
 
-// const getCartByID = async () => {
-//   await service.product
-//     .getCartByID()
-//     .then((resp: any) => {
-//       const data = resp.data.data;
-//       const cartitems: CartItems[] = [];
-
-//       for (let i = 0; i < data.length; i++) {
-//         const e = data[i];
-//         const cartitem: CartItems = {
-//           id: e.id,
-//           cart_id: e.cart_id,
-//           Product: e.Product,
-//           total_product_amount: e.total_product_amount,
-//           status: e.status,
-//           updated_at: e.updated_at,
-//           created_at: e.created_at,
-//           selected: false,
-//         };
-//         cartitems.push(cartitem);
-//       }
-//       cartlist.value = cartitems;
-//     })
-//     .catch((error: any) => {
-//       console.error(error);
-//     });
-// };
 
 const getCartItem = async () => {
   await service.product
@@ -195,6 +173,7 @@ const getCartItem = async () => {
           updated_at: e.updated_at,
           created_at: e.created_at,
           selected: false,
+          stock: e.stock,
         };
         cartitems.push(cartitem);
       }
@@ -206,16 +185,29 @@ const getCartItem = async () => {
 };
 
 const deleteCartItem = async (cartItemId: number) => {
-  await service.product.deleteCartItem(cartItemId) // ✅ ส่งค่า cart_item_id ใน body
+  await service.product.deleteCartItem(cartItemId) //  ส่งค่า cart_item_id ใน body
     .then(() => {
-      cartlist.value = cartlist.value.filter(item => item.id !== cartItemId); // ✅ ลบสินค้าออกจาก UI
-      console.log(`✅ ลบสินค้าสำเร็จ: ID ${cartItemId}`);
+      cartlist.value = cartlist.value.filter(item => item.id !== cartItemId); //ลบสินค้าออก
+      console.log(`ลบสินค้าสำเร็จ: ID ${cartItemId}`);
     })
     .catch((error: any) => {
-      console.error("❌ ลบสินค้าไม่สำเร็จ:", error);
+      console.error("ลบสินค้าไม่สำเร็จ:", error);
     });
 };
 
+const updateCartItem = async (cartItemId: number) => {
+  await service.product.updateCartItem(cartItemId, updateCart.value)
+    .then((resp: any) => {
+      console.log(resp);
+      updateCartRes.value = resp.data.data;
+      cartlist.value = cartlist.value.map((item: any) =>
+        item.id === cartItemId? {...item, total_product_amount: updateCartRes.value.TotalProductAmount } : item
+      );
+    })
+    .catch((error: any) => {
+      console.error(error);
+    });
+}
 
 
 

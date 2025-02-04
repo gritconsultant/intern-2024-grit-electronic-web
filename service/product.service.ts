@@ -1,4 +1,4 @@
-import type { PasswordUpdate, Shipment, ShipmentCreate, ShipmentUpdate } from "~/models/product.model"
+import type { PasswordUpdate, ProductCartUpdate, Shipment, ShipmentCreate, ShipmentUpdate } from "~/models/product.model"
 import { client } from "./httpClient"
 
 export const getProductList = () => {
@@ -67,11 +67,11 @@ export const updateShipment = (id: any, payload: ShipmentUpdate) => {
     })
 }
 
-export const getCartByID = () => {
+export const getCartByID = (UserId: any) => {
     return client({
-        url: "/cart",
+        url: "/cart", 
         method: "get",
-        data: {}
+        params: { UserId } 
     })
 }
 
@@ -87,5 +87,13 @@ export const deleteCartItem = (cartItemId: number) => {
         url: "/cartitem",
         method: "delete",
         data: { cart_item_id: cartItemId },
+    })
+}
+
+export const updateCartItem = (id: any , payload: ProductCartUpdate) => {
+    return client({
+        url: `/cartitem/${id}`,
+        method: "patch",
+        data: payload,
     })
 }

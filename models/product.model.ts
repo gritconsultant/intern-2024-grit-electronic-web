@@ -198,10 +198,31 @@ export interface CartItems {
     updated_at: number;
     created_at: number;
     selected: boolean;
+    stock: number;
 }
 
 export interface ProductCart {
     id: number;
     name: string;
     price: number;
+}
+
+export interface ProductCartUpdate {
+    // ID: number;
+    // CartID: number;
+    // ProductID: number;
+    TotalProductAmount: number;
+    // Status: string;
+    // created_at: number;
+    // updated_at: number;
+}
+
+export interface ProductCartRes {
+    // ID: number;
+    // CartID: number;
+    // ProductID: number;
+    TotalProductAmount: number;
+    // Status: string;
+    // created_at: number;
+    // updated_at: number;
 }
