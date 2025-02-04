@@ -32,7 +32,7 @@
                 <button class="px-4 py-2 rounded border" @click="increaseQuantity">+</button>
               </div>
               <button class="bg-[#EE973C] text-white p-4 rounded-lg w-full lg:w-[350px] mt-10 hover:bg-[#FD8C35]/70 transition"
-                @click="addToCart">
+                >
                 เพิ่มใส่ตะกร้า
               </button>
             </div>
@@ -147,13 +147,13 @@ const decreaseQuantity = () => {
   }
 };
 
-const addToCart = () => {
-  if (!product.value) return;
-  store.addToCart({ ...product.value, selectedAmount: selectedAmount.value });
+// const addToCart = () => {
+//   if (!product.value) return;
+//   store.addToCart({ ...product.value, selectedAmount: selectedAmount.value });
 
-  // เปิด popup/cart
-  store.cartAction = true;
-};
+//   // เปิด popup/cart
+//   store.cartAction = true;
+// };
 
 // Pagination for Reviews
 const reviewsPerPage = 3;

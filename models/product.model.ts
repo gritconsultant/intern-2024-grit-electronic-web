@@ -188,3 +188,20 @@ export interface CartItem {
     Product: Product[];
     total_product_amount: number;
 }
+
+export interface CartItems {
+    id: number;
+    cart_id: number;
+    Product: ProductCart;
+    total_product_amount: number;
+    status: string;
+    updated_at: number;
+    created_at: number;
+    selected: boolean;
+}
+
+export interface ProductCart {
+    id: number;
+    name: string;
+    price: number;
+}

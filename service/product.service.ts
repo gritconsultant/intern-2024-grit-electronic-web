@@ -67,9 +67,25 @@ export const updateShipment = (id: any, payload: ShipmentUpdate) => {
     })
 }
 
-export const getCartByID = (id: any) => {
+export const getCartByID = () => {
     return client({
-        url: `/cart/${id}`,
+        url: "/cart",
         method: "get",
+        data: {}
+    })
+}
+
+export const getCartItem = () => {
+    return client({
+        url: "/cartitem",
+        method: "get",
+    })
+}
+
+export const deleteCartItem = (cartItemId: number) => {
+    return client({
+        url: "/cartitem",
+        method: "delete",
+        data: { cart_item_id: cartItemId },
     })
 }
