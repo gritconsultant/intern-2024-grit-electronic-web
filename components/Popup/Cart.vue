@@ -4,7 +4,7 @@
   >
     <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
       <h1 class="text-sm md:text-base font-bold">
-        ตะกร้าสินค้า ({{ cartlist.length }})
+        ตะกร้าสินค้า ({{ carts.length }})
       </h1>
       <h2 class="text-red-500 cursor-pointer text-xs md:text-sm ml-56">
         ลบทั้งหมด
@@ -30,7 +30,7 @@
     <!-- Cart Items -->
     <div class="px-4 md:px-5 flex-grow overflow-y-auto">
       <div
-        v-for="item in cartlist"
+        v-for="item in carts"
         :key="item.id"
         class="flex justify-between items-center border-b py-2"
       >
@@ -51,7 +51,6 @@
                 {{ item.Product.name }}
               </router-link>
             </div>
-
           <div>
             <button @click="deleteCartItem(item.id)" class="text-red-500">
               <svg
@@ -74,13 +73,7 @@
 
           <div class="flex justify-between items-center">
             <div class="flex items-center gap-2 mt-2 md:mt-3">
-              <span class="text-sm md:text-base">จำนวน: </span>
-              <input
-                v-model.number="item.total_product_amount"
-                type="number"
-                min="1"
-                class="w-12 text-center border rounded-md"
-              />
+              <span class="text-sm md:text-base">จำนวน: {{ item.total_product_amount }} </span>
             </div>
             <div class="mt-2 md:mt-3">
               <p class="font-semibold text-sm md:text-lg">
@@ -116,68 +109,37 @@
 </template>
 
 <script setup lang="ts">
+import Swal from "sweetalert2";
 import { ref, computed, onMounted } from "vue";
-import { errorMessages } from "vue/compiler-sfc";
-import type { CartItems, ProductCartRes, ProductCartUpdate, UserInfo } from "~/models/product.model";
+import type { CartItem, CartItems, ProductCartRes, ProductCartUpdate, UserInfo } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 const cartlist = ref<CartItems[]>([]);
-const getinfo = ref<UserInfo>({
-  ID: 0,
-  FirstName: "",
-  LastName: "",
-  Username: "",
-  Password: "",
-  Email: "",
-  Phone: 0,
-  created_at: 0,
-  updated_at: 0,
-});
-const updateCart = ref<ProductCartUpdate>({
-  TotalProductAmount: 0,
-});
-const updateCartRes = ref<ProductCartRes>({
-  TotalProductAmount: 0,
-})
+const carts = ref<CartItem[]>([]);
 
-const getuserinfo = async () => {
-  await service.product
-    .getUserInfo()
-    .then((resp: any) => {
-      console.log(resp);
-      getinfo.value = resp.data.data;
-    })
-    .catch((error: any) => {
-      console.log(error);
-    });
-};
 
 
 const getCartItem = async () => {
   await service.product
-    .getCartItem()
+    .getCart()
     .then((resp: any) => {
-      const data = resp.data.data;
-      const cartitems: CartItems[] = [];
+      const data = resp.data.data.CartItems;
+      const cartitems: CartItem[] = [];
+      console.log(data);
 
       for (let i = 0; i < data.length; i++) {
         const e = data[i];
-        const cartitem: CartItems = {
+        const cartitem: CartItem = {
           id: e.id,
-          cart_id: e.cart_id,
-          Product: e.Product,
+          Product: e.product,
           total_product_amount: e.total_product_amount,
-          status: e.status,
-          updated_at: e.updated_at,
-          created_at: e.created_at,
           selected: false,
-          stock: e.stock,
         };
         cartitems.push(cartitem);
       }
-      cartlist.value = cartitems;
+      carts.value = cartitems;
     })
     .catch((error: any) => {
       console.error(error);
@@ -185,36 +147,46 @@ const getCartItem = async () => {
 };
 
 const deleteCartItem = async (cartItemId: number) => {
-  await service.product.deleteCartItem(cartItemId) //  ส่งค่า cart_item_id ใน body
-    .then(() => {
-      cartlist.value = cartlist.value.filter(item => item.id !== cartItemId); //ลบสินค้าออก
-      console.log(`ลบสินค้าสำเร็จ: ID ${cartItemId}`);
-    })
-    .catch((error: any) => {
-      console.error("ลบสินค้าไม่สำเร็จ:", error);
-    });
+  const result = await Swal.fire({
+    title: "คุณแน่ใจหรือไม่?",
+    text: "คุณต้องการลบสินค้านี้ออกจากตะกร้า!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#EE973C",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "ยืนยัน",
+    cancelButtonText: "ยกเลิก"
+  });
+
+  if (result.isConfirmed) {
+    await service.product.deleteCartItem(cartItemId) // ส่งค่า cart_item_id ใน body
+      .then(() => {
+        // กรองและลบสินค้าออกจาก cartlist และ carts
+        cartlist.value = cartlist.value.filter(item => item.id !== cartItemId);
+        carts.value = carts.value.filter(item => item.id !== cartItemId); // ทำการอัพเดต `carts`
+        Swal.fire(
+          "ลบสินค้าสำเร็จ!",
+          "สินค้าถูกลบออกจากตะกร้าแล้ว.",
+          "success"
+        );
+      })
+      .catch((error: any) => {
+        console.error("ลบสินค้าไม่สำเร็จ:", error);
+        Swal.fire(
+          "เกิดข้อผิดพลาด!",
+          "ไม่สามารถลบสินค้าจากตะกร้าได้.",
+          "error"
+        );
+      });
+  }
 };
 
-const updateCartItem = async (cartItemId: number) => {
-  await service.product.updateCartItem(cartItemId, updateCart.value)
-    .then((resp: any) => {
-      console.log(resp);
-      updateCartRes.value = resp.data.data;
-      cartlist.value = cartlist.value.map((item: any) =>
-        item.id === cartItemId? {...item, total_product_amount: updateCartRes.value.TotalProductAmount } : item
-      );
-    })
-    .catch((error: any) => {
-      console.error(error);
-    });
-}
+// กรองสินค้าที่เลือกไว้
+const selectedItems = computed(() => {
+  return carts.value.filter((item: any) => item.selected);
+});
 
-
-
-const selectedItems = computed(() =>
-  cartlist.value.filter((item: any) => item.selected)
-);
-
+// คำนวณราคารวมของสินค้าที่เลือก
 const totalSelectedPrice = computed(() => {
   return selectedItems.value.reduce(
     (sum, item) => sum + (item.Product?.price || 0) * item.total_product_amount,
@@ -223,7 +195,6 @@ const totalSelectedPrice = computed(() => {
 });
 
 onMounted(() => {
-  getuserinfo();
   getCartItem();
 });
 </script>

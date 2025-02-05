@@ -28,9 +28,10 @@
             <div class="flex justify-between items-center">
               <div>
                 <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
-                <p class="text-gray-500 text-sm">{{ order.date }}</p>
+                <p class="text-gray-500 text-sm">{{ formatDate(order.created_at) }}</p>
               </div>
-              <p class="text-lg font-bold">฿{{ order.total }}</p>
+              <p class="text-lg font-bold">฿{{ order.payment_price
+               }}</p>
             </div>
           </div>
         </div>
@@ -40,7 +41,7 @@
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
           <div v-if="selectedOrder">
             <!-- Products -->
-            <div
+            <!-- <div
               v-for="product in selectedOrder.products"
               :key="product.id"
               class="flex items-center space-x-4 border-b pb-4 cursor-pointer"
@@ -60,13 +61,13 @@
                 <p class="text-gray-500 text-sm">{{ product.description }}</p>
                 <p class="text-gray-500 text-sm">จำนวน: {{ product.stock }}</p>
               </div>
-            </div>
+            </div> -->
 
             <!-- Address -->
             <div class="mt-4 border-b pb-4">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <p class="text-gray-500 text-sm mt-4">ชื่อผู้รับ : {{ selectedOrder.namerecipe }}</p>
-              <p class="text-gray-500 text-sm">ที่อยู่ : {{ selectedOrder.address }}</p>
+              <p class="text-gray-500 text-sm mt-4">ชื่อผู้รับ : {{ getinfo.FirstName }} <span> {{  getinfo.LastName }}</span></p>
+              <p class="text-gray-500 text-sm">ที่อยู่ : {{  }}</p>
             </div>
 
             <!-- Delivery Method -->
@@ -82,7 +83,7 @@
                 <p class="text-md font-medium">
                   ไปรษณีย์ไทย <br />
                   <span class="text-sm font-normal text-gray-500">
-                    จัดส่งภายในวันที่ {{ selectedOrder.date }}
+                    จัดส่งภายในวันที่ {{  }}
                   </span>
                 </p>
               </div>
@@ -121,47 +122,109 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Order } from "~/models/product.model";
+import type { Order, UserInfo } from "~/models/product.model";
+import service from "~/service";
 definePageMeta({
   layout: "user",
 });
 
-const orders = ref<Order[]>([
-  {
-    id: "778231342",
-    date: "26 ตุลาคม 2566",
-    total: 124,
-    deliveryDate: "",
-    products: [
-    {
-    id: 0,
-    name: "",
-    price: 0,
-    stock: 0,
-    description: "",
-    image: {
-      id: 0,
-      ref_id: 0,
-      type: "",
-      description: "",
-    }, // ถูกต้อง
-    category: { id: 0, name: "" },
-    Review: [{ id: 0, rating: 0,username: "", description: "" }, { id: 0, rating: 0,username: "", description: "" }],
-    is_active: true,
-    created_at: 0,
-    updated_at: 0,
-  },
-    ],
-    shippingStatus: [],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-]);
+const orders = ref<Order[]>([]);
+  const getinfo = ref<UserInfo>({
+  ID: 0,
+  FirstName: "",
+  LastName: "",
+  Username: "",
+  Password: "",
+  Email: "",
+  Phone: 0,
+  created_at: 0,
+  updated_at: 0,
+});
+
+const getuserinfo = async () => {
+  await service.product
+    .getUserInfo()
+    .then((resp: any) => {
+      console.log(resp);
+      const data = resp.data.data;
+      const user: UserInfo = {
+        ID: data.ID,
+        FirstName: data.FirstName,
+        LastName: data.LastName,
+        Username: data.Username,
+        Password: data.Password,
+        Email: data.Email,
+        Phone: data.Phone,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      };
+      getinfo.value = user;
+    })
+    .catch((error: any) => {
+      console.log(error);
+    })
+    .finally(() => {});
+};
+
+const getOrderList = async () => {
+  await service.product
+    .getOrderList()
+    .then((resp: any) => {
+      const data = resp.data.data;
+      const orderList: Order[] = [];
+      console.log(data);
+
+      for (let i = 0; i < data.length; i++) {
+        const e = data[i];
+        const order: Order = {
+          id: e.id,
+          user_id: e.user_id,
+          username: e.username,
+          status: e.status,
+          total_amount: e.total_amount,
+          total_price: e.total_price,
+          system_bank_id: e.system_bank_id,
+          payment_price: e.payment_price,
+          bank_name: e.bank_name,
+          account_name: e.account_name,
+          account_number: e.account_number,
+          payment_status: e.payment_status,
+          firstname: e.firstname,
+          lastname: e.lastname,
+          address: e.address,
+          zip_code: e.zip_code,
+          sub_district: e.sub_district,
+          district: e.district,
+          province: e.province,
+          shipment_status: e.shipment_status,
+          created_at: e.created_at,
+          updated_at: e.updated_at,
+          selectedOrder: e.selectedOrder,
+        };
+        orderList.push(order);
+      }
+      orders.value = orderList;
+    })
+    .catch((error: any) => {
+      console.error(error);
+    })
+    .finally(() => {});
+};
 
 const selectedOrder = ref<Order | null>(null);
 
 const selectOrder = (order: Order): void => {
   selectedOrder.value = order;
+};
+
+const formatDate = (timestamp: number): string => {
+  const date = new Date(timestamp * 1000); // คูณด้วย 1000 เพื่อแปลงจาก Unix timestamp เป็น milliseconds
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+  return date.toLocaleDateString('th-TH', options); // ใช้ locale "th-TH" สำหรับวันที่ในภาษาไทย
 };
 
 const cancelOrder = (): void => {
@@ -176,6 +239,11 @@ const cancelOrder = (): void => {
     }
   }
 };
+
+onMounted(async () => {
+  await getOrderList();
+  await getuserinfo();
+});
 </script>
 
 <style scoped>

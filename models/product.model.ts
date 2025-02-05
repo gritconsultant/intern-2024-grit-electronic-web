@@ -56,18 +56,6 @@ export interface Address {
     postalCode: string;   // รหัสไปรษณีย์
     phone: string;        
   }
-  
-
-export interface Order {
-    id: string;
-    date: string;
-    total: number;
-    deliveryDate: string;
-    products: Product[];
-    shippingStatus: ShippingStatus[];
-    namerecipe: string;
-    address: string;
-  }
 
 export interface ShippingStatus {
     text: string;
@@ -185,8 +173,9 @@ export interface UserID {
 
 export interface CartItem {
     id: number;
-    Product: Product[];
+    Product: ProductCart;
     total_product_amount: number;
+    selected: boolean;
 }
 
 export interface CartItems {
@@ -199,6 +188,19 @@ export interface CartItems {
     created_at: number;
     selected: boolean;
     stock: number;
+}
+
+export interface CartItemCreate {
+    product_id: number;
+    total_product_amount: number;
+}
+export interface CartItemAdd {
+    product_id: any;
+    total_product_amount: number;
+}
+export interface CartItemRes {
+    product_id: number;
+    total_product_amount: number;
 }
 
 export interface ProductCart {
@@ -226,3 +228,57 @@ export interface ProductCartRes {
     // created_at: number;
     // updated_at: number;
 }
+
+
+// order
+export interface Order {
+    id: number;
+    user_id: number;
+    username: string;
+    status: string;
+    total_amount: number;
+    total_price: number;
+    system_bank_id: number;
+    payment_price: number;
+    bank_name: string;
+    account_name: string;
+    account_number: number;
+    payment_status: string;
+    firstname: string;
+    lastname: string;
+    address: string;
+    zip_code: number;
+    sub_district: string;
+    district: string;
+    province: string;
+    shipment_status: string;
+    created_at: number;
+    updated_at: number;
+    selectedOrder: boolean;
+}
+
+// export interface getOrderById {
+//     id: number;
+//     user_id: number;
+//     username: string;
+//     status: string;
+//     total_amount: number;
+//     total_price: number;
+//     system_bank_id: number;
+//     payment_price: number;
+//     bank_name: string;
+//     account_name: string;
+//     account_number: number;
+//     payment_status: string;
+//     firstname: string;
+//     lastname: string;
+//     address: string;
+//     zip_code: number;
+//     sub_district: string;
+//     district: string;
+//     province: string;
+//     shipment_status: string;
+//     created_at: number;
+//     updated_at: number;
+//     selectedOrder: boolean;
+// }

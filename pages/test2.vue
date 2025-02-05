@@ -90,12 +90,12 @@
               </div>
             </div>
             <!-- Edit Button -->
-            <button
+            <!-- <button
               @click="updateCartItem(item)"
               class="text-green-500 text-xs md:text-sm mt-2"
             >
               ยืนยันการแก้ไข
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -202,24 +202,24 @@
       });
   };
   
-  const updateCartItem = async (item: CartItems) => {
-    // ใช้ updateCart เพื่อส่งข้อมูลการอัปเดต
-    const updatedData = {
-      cartItemId: item.id,
-      total_product_amount: item.total_product_amount,
-    };
-    await service.product.updateCartItem(updatedData.cartItemId, updatedData)
-      .then((resp: any) => {
-        console.log(resp);
-        // อัปเดต cartlist หลังจากการแก้ไข
-        cartlist.value = cartlist.value.map((cartItem: any) =>
-          cartItem.id === item.id ? { ...cartItem, total_product_amount: item.total_product_amount } : cartItem
-        );
-      })
-      .catch((error: any) => {
-        console.error(error);
-      });
-  };
+  // const updateCartItem = async (item: CartItems) => {
+  //   // ใช้ updateCart เพื่อส่งข้อมูลการอัปเดต
+  //   const updatedData = {
+  //     cartItemId: item.id,
+  //     total_product_amount: item.total_product_amount,
+  //   };
+  //   await service.product.updateCartItem(updatedData.cartItemId, updatedData)
+  //     .then((resp: any) => {
+  //       console.log(resp);
+  //       // อัปเดต cartlist หลังจากการแก้ไข
+  //       cartlist.value = cartlist.value.map((cartItem: any) =>
+  //         cartItem.id === item.id ? { ...cartItem, total_product_amount: item.total_product_amount } : cartItem
+  //       );
+  //     })
+  //     .catch((error: any) => {
+  //       console.error(error);
+  //     });
+  // };
   
   const selectedItems = computed(() =>
     cartlist.value.filter((item: any) => item.selected)

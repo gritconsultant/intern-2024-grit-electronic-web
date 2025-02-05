@@ -60,48 +60,52 @@ import type { Category, Product } from "~/models/product.model";
 import service from "~/service";
 
 const products = ref<Product[]>([]);
-  const categories = ref<Category[]>([]);
-    const selectedCategoryId = ref<number | null>(null); // ใช้ `null` เพื่อแสดงทั้งหมด
+const categories = ref<Category[]>([]);
+const selectedCategoryId = ref<number | null>(null); // ใช้ `null` เพื่อแสดงทั้งหมด
 
+// ดึงข้อมูลสินค้าทั้งหมด
 const getProductList = async () => {
   await service.product
     .getProductList()
     .then((resp: any) => {
       const data = resp.data.data;
+
       const productlist: Product[] = [];
 
       for (let i = 0; i < data.length; i++) {
         const e = data[i];
-        const product: Product = {
-          id: e.id,
-          name: e.name,
-          price: e.price,
-          stock: e.stock,
-          description: e.description ?? null,
-          image: {
-            id: e.image?.id,
-            ref_id: e.image?.ref_id,
-            type: e.image?.type,
-            description: e.image?.description,
-          },
-          category: {
-            id: e.category?.id,
-            name: e.category?.name,
-          },
-          Review:
-            e.Review?.map((r: any) => ({
-              id: r.id,
-              rating: r.rating,
-              username: r.username,
-              description: r.description,
-            })) ?? [],
-          is_active: e.is_active,
-          created_at: e.created_at,
-          updated_at: e.updated_at,
-        };
-        productlist.push(product);
+        if (e.is_active) {  // กรองเฉพาะสินค้าที่ is_active เป็น true
+          const product: Product = {
+            id: e.id,
+            name: e.name,
+            price: e.price,
+            stock: e.stock,
+            description: e.description ?? null,
+            image: {
+              id: e.image?.id,
+              ref_id: e.image?.ref_id,
+              type: e.image?.type,
+              description: e.image?.description,
+            },
+            category: {
+              id: e.category?.id,
+              name: e.category?.name,
+            },
+            Review:
+              e.Review?.map((r: any) => ({
+                id: r.id,
+                rating: r.rating,
+                username: r.username,
+                description: r.description,
+              })) ?? [],
+            is_active: e.is_active,
+            created_at: e.created_at,
+            updated_at: e.updated_at,
+          };
+          productlist.push(product);
+        }
       }
-      products.value = productlist;
+      products.value = productlist; // กำหนดให้ products มีสินค้าที่ is_active เท่านั้น
     })
     .catch((error: any) => {
       console.error("Error loading product list:", error.response || error);
