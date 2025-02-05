@@ -126,21 +126,37 @@ export interface Shipment {
     updated_at: number;
 }
 
-export interface ShipmentCreate {
+export interface ShipmentId {
+    id: number;
     firstname: string;
     lastname: string;
     address: string;
-    zip_code: number;
+    zip_code: any;
+    sub_district: string;
+    district: string;
+    province: string;
+    status: string;
+    created_at: number;
+    updated_at: number;
+}
+
+export interface ShipmentCreate {
+    id: number;
+    firstname: string;
+    lastname: string;
+    address: string;
+    zip_code: any;
     sub_district: string;
     district: string;
     province: string;
     // status: string;
 }
 export interface ShipmentRes {
+    id: number;
     firstname: string;
     lastname: string;
     address: string;
-    zip_code: number;
+    zip_code: any;
     sub_district: string;
     district: string;
     province: string;
@@ -148,6 +164,9 @@ export interface ShipmentRes {
 }
 
 export interface ShipmentUpdate {
+    id: number;
+    firstname: string;
+    lastname: string;
     address: string;
     zip_code: number;
     sub_district: string;

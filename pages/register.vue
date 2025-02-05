@@ -7,7 +7,10 @@
     >
       <!-- Logo -->
       <div class="flex justify-center">
-        <img src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" class="w-[150px] sm:w-[200px] md:w-[230px]" />
+        <img
+          src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png"
+          class="w-[150px] sm:w-[200px] md:w-[230px]"
+        />
       </div>
       <div class="flex justify-center font-normal text-xl mt-6">
         <h1>ลงทะเบียน</h1>
@@ -98,17 +101,23 @@
             <i :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
         </div>
-        <div>
+        <div class="relative">
           <label for="confirmPassword"> ยืนยันรหัสผ่าน </label>
           <input
             v-model="registers.confirmPassword"
-            type="password"
+            :type="confirmPasswordVisible ? 'text' : 'password'"
             id="confirmPassword"
             class="inputbox inputboxform"
             required
             placeholder="กรุณายืนยันรหัสผ่าน"
           />
-          <p class="text-[#FD8C35] text-sm mt-2">
+          <span
+            class="absolute right-3 top-[42px] cursor-pointer text-black"
+            @click="toggleConfirmPasswordVisibility"
+          >
+            <i :class="confirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </span>
+          <p v-if="passwordMismatch" class="text-[#FD8C35] text-sm mt-2">
             รหัสผ่านไม่ตรงกัน
           </p>
         </div>
@@ -119,8 +128,8 @@
         <button
           type="button"
           class="w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl text-white text-lg"
-        @click="register"
-          >
+          @click="register"
+        >
           ลงทะเบียน
         </button>
       </div>
@@ -143,6 +152,7 @@
 </template>
 
 <script setup lang="ts">
+import Swal from "sweetalert2";
 import { ref } from "vue";
 import type { Register } from "~/models/page.model";
 import service from "~/service";
@@ -162,51 +172,56 @@ const registers = ref<Register>({
   confirmPassword: "",
 });
 
-const register = async () => {
-  console.log(registers.value)
-  await service.auth.register(registers.value)
-  .then((resp: any) => {
-    console.log(resp)
-
-  if (resp.status == 200) {
-    alert("Registration successful!");
-    router.push("/login");
-  }
-
-
-  })
-  .catch((error: any) => {
-    console.error(error);
-    alert("Registration failed. Please try again later.");
-    return;
-  })
-  .finally(() => {})
-}
-
-
 const passwordVisible = ref(false);
+const confirmPasswordVisible = ref(false);
 const passwordError = ref(false);
+const passwordMismatch = ref(false);
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
 
-// const handleRegister = () => {
-//   if (!register.value.firstname || !register.value.lastname) {
-//     alert("Please fill in all fields");
-//     return;
-//   }
-//   if (register.value.password !== register.value.confirmPassword) {
-//     passwordMismatch.value = true;
-//     alert("Passwords do not match.");
-//     return;
-//   }
-//   passwordMismatch.value = false;
+const toggleConfirmPasswordVisibility = () => {
+  confirmPasswordVisible.value = !confirmPasswordVisible.value;
+};
 
-//   console.log("Registration successful", register.value);
-//   alert("Registration successful!");
-// };
+const register = async () => {
+  if (registers.value.password !== registers.value.confirmPassword) {
+    passwordMismatch.value = true;
+    return;
+  } else {
+    passwordMismatch.value = false;
+  }
+
+  console.log(registers.value);
+  await service.auth
+    .register(registers.value)
+    .then((resp: any) => {
+      console.log(resp);
+
+      if (resp.status == 200) {
+        Swal.fire({
+          title: "ลงทะเบียนสำเร็จ!",
+          text: "คุณสามารถเข้าสู่ระบบได้แล้ว.",
+          icon: "success",
+          confirmButtonText: "ตกลง",
+        });
+        router.push("/login");
+      }
+    })
+    .catch((error: any) => {
+      console.error(error);
+      Swal.fire({
+        title: "เกิดข้อผิดพลาด!",
+        text: "ไม่สามารถลงทะเบียนได้ กรุณาลองใหม่อีกครั้ง.",
+        icon: "error",
+        confirmButtonText: "ตกลง",
+      });
+      return;
+    })
+    .finally(() => {});
+};
+
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

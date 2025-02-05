@@ -111,7 +111,7 @@
 <script setup lang="ts">
 import Swal from "sweetalert2";
 import { ref, computed, onMounted } from "vue";
-import type { CartItem, CartItems, ProductCartRes, ProductCartUpdate, UserInfo } from "~/models/product.model";
+import type { CartItem, CartItems } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
@@ -143,6 +143,8 @@ const getCartItem = async () => {
     })
     .catch((error: any) => {
       console.error(error);
+    })
+    .finally(() => {
     });
 };
 

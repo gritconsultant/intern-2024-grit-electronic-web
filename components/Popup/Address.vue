@@ -2,7 +2,7 @@
   <div class="w-full md:w-[500px] border-2 flex flex-col justify-center bg-white drop-shadow-lg rounded-lg">
     <div class="p-4 border-b">
       <h1 class="text-xl font-bold mb-4">เพิ่มที่อยู่ใหม่</h1>
-      <form @submit.prevent="saveAddress">
+      <form @submit.prevent="addShipment">
 
         <div class="mb-4">
           <label class="block text-sm font-medium">ชื่อผู้รับ</label>
@@ -35,7 +35,7 @@
           <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" @click="cancel">
             ยกเลิก
           </button>
-          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" @click="addShipment">
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
             บันทึก
           </button>
         </div>
@@ -45,15 +45,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits } from "vue";
+import Swal from "sweetalert2";
+import { ref, defineEmits, onMounted } from "vue";
 import type { ShipmentCreate, ShipmentRes } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
-const emit = defineEmits(["addressAdded"]);
 
+// กำหนดค่า shipment ให้เป็นค่าเริ่มต้น
 const shipment = ref<ShipmentCreate>({
+  id: 0,
   firstname: "",
   lastname: "",
   address: "",
@@ -61,10 +63,10 @@ const shipment = ref<ShipmentCreate>({
   sub_district: "",
   district: "",
   province: "",
-  // status: "",
-})
+});
 
 const shipmentRes = ref<ShipmentRes>({
+  id: 0,
   firstname: "",
   lastname: "",
   address: "",
@@ -72,48 +74,80 @@ const shipmentRes = ref<ShipmentRes>({
   sub_district: "",
   district: "",
   province: "",
-  // status: "",
-})
-
+});
+// เมื่อแอดที่อยู่ใหม่ให้เรียกฟังก์ชันนี้
 const addShipment = async () => {
-  await service.product.addShipment(shipment.value)
-  .then((resp: any) => {
-    console.log(resp.data);
-
-    const data = resp.data.data;
-    const shipment: ShipmentRes = {
-      firstname: data.firstname,
-      lastname: data.lastname,
-      address: data.address,
-      zip_code: data.zip_code,
-      sub_district: data.sub_district,
-      district: data.district,
-      province: data.province,
-      // status: data.status,
-    }
-    shipmentRes.value = shipment;
-  })
-  .catch((error: any) => {
-     console.error(error);
-   });
-   store.addressAction = false;
-}
-
-// บันทึกที่อยู่ใหม่
-const saveAddress = () => {
-  if (!shipmentRes.value.firstname || !shipmentRes.value.lastname || !shipmentRes.value.address || !shipmentRes.value.zip_code ||
-      !shipmentRes.value.sub_district || !shipmentRes.value.district || !shipmentRes.value.province) {
-    alert("เพิ่มที่อยู่ใหม่!");
+  // ตรวจสอบข้อมูล
+  if (!shipment.value.firstname || !shipment.value.lastname || !shipment.value.address || !shipment.value.zip_code ||
+      !shipment.value.sub_district || !shipment.value.district || !shipment.value.province) {
+    Swal.fire({
+      title: "กรุณากรอกข้อมูลให้ครบถ้วน",
+      text: "กรุณากรอกข้อมูลทั้งหมดก่อนบันทึก",
+      icon: "error",
+      confirmButtonText: "ตกลง",
+    });
     return;
   }
 
-  console.log("ส่งข้อมูลไปที่ profile/address.vue:", shipmentRes.value);
-  emit("addressAdded", shipmentRes.value);
+  // ตรวจสอบรหัสไปรษณีย์
+  if (isNaN(shipment.value.zip_code) || shipment.value.zip_code <= 0) {
+    Swal.fire({
+      title: "รหัสไปรษณีย์ไม่ถูกต้อง",
+      text: "กรุณากรอกรหัสไปรษณีย์ที่ถูกต้อง",
+      icon: "error",
+      confirmButtonText: "ตกลง",
+    });
+    return;
+  }
+
+  // ส่งข้อมูลที่อยู่ใหม่ไปยัง API
+  await service.product.addShipment(shipment.value)
+    .then((resp: any) => {
+      const data = resp.data.data;
+      if (data) {
+        Swal.fire({
+          title: "เพิ่มที่อยู่สำเร็จ!",
+          text: "ที่อยู่ของคุณได้ถูกเพิ่มแล้ว!",
+          icon: "success",
+          confirmButtonText: "ตกลง",
+        });
+        // ปิด Popup และรีเซ็ตค่าที่อยู่
+        store.addressAction = false;
+      }
+      // อัพเดทข้อมูล shipmentRes
+      shipmentRes.value = {
+        id: data.id,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        address: data.address,
+        zip_code: data.zip_code,
+        sub_district: data.sub_district,
+        district: data.district,
+        province: data.province,
+      };
+    })
+    .catch((error: any) => {
+      console.error(error);
+      Swal.fire({
+        title: "เกิดข้อผิดพลาด!",
+        text: "ไม่สามารถเพิ่มที่อยู่ได้ กรุณาลองใหม่",
+        icon: "error",
+        confirmButtonText: "ตกลง",
+      });
+    });
+};
+
+// ฟังก์ชันยกเลิก
+const cancel = () => {
   store.addressAction = false; // ปิด Popup
 };
 
-// ยกเลิกการเพิ่มที่อยู่
-const cancel = () => {
-  store.addressAction = false;
-};
+onMounted(() => {
+  // กรณีที่มีการโหลดข้อมูลที่อยู่ (ถ้าจำเป็น)
+  console.log("Component loaded");
+});
 </script>
+
+<style scoped>
+/* คุณสามารถเพิ่มสไตล์เพิ่มเติมที่นี่ */
+</style>

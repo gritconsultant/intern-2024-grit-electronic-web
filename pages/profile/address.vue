@@ -1,36 +1,57 @@
 <template>
-  <div class="flex p-4 h-full overflow-y-auto">
+  <div class="flex p-4 h-full">
+    <!-- Sidebar -->
     <Sidebar />
     <div class="w-full lg:w-3/4 p-6">
       <div class="flex justify-between border-b">
         <h1 class="text-xl font-bold mb-6">ที่อยู่</h1>
-        <button class="text-black/50 hover:underline" @click="store.addressAction = true">
+        <button
+          class="text-black/50 hover:underline"
+          @click="store.addressAction = !store.addressAction"
+        >
           เพิ่มที่อยู่ใหม่
         </button>
       </div>
 
-      <div class="overflow-y-auto sticky" style="max-height: 60vh">
-        <div class="flex justify-center mt-5">
+      <div>
+        <div
+          class="flex justify-center mt-5 overflow-y-auto sticky top-0"
+          style="max-height: 53vh"
+        >
           <div class="w-[500px]">
-            <!-- เช็คว่ามีที่อยู่หรือไม่ -->
-            <div v-if="shipments.length > 0">
-              <div v-for="(shipment, index) in shipments" :key="shipment.id" class="mb-4 p-4 border rounded-lg transition-colors">
-                <h2 class="font-bold text-lg">ที่อยู่ {{ index + 1 }}</h2>
-                <p>ชื่อ: {{ shipment.firstname }} {{ shipment.lastname }}</p>
-                <p>บ้านเลขที่: {{ shipment.address }}</p>
-                <p>ตำบล/แขวง: {{ shipment.sub_district }}</p>
-                <p>อำเภอ/เขต: {{ shipment.district }}</p>
-                <p>จังหวัด: {{ shipment.province }}</p>
-                <p>รหัสไปรษณีย์: {{ shipment.zip_code }}</p>
+            <div
+              v-for="(i, index) in shipment"
+              :key="i.id"
+              class="mb-4 p-4 border rounded-lg transition-colors"
+            >
+              <h2 class="font-bold text-lg">ที่อยู่ {{ index + 1 }}</h2>
+              <p>ชื่อ: {{ i.firstname }} {{ i.lastname }}</p>
+              <p>บ้านเลขที่: {{ i.address }}</p>
+              <p>หมู่: {{ i.address }}</p>
+              <p>ตำบล: {{ i.sub_district }}</p>
+              <p>อำเภอ: {{ i.district }}</p>
+              <p>
+                จังหวัด: {{ i.province }}
+                <span>รหัสไปรษณีย์: {{ i.zip_code }}</span>
+              </p>
+              <p>โทรศัพท์: {{ }}</p>
 
-                <!-- ปุ่มแก้ไข -->
-                <div class="mt-4 flex items-center justify-between">
-                  <button class="text-blue-500 hover:underline" @click="editShipment(shipment)">แก้ไข</button>
-                </div>
+              <!-- ปุ่มตั้งค่าเริ่มต้น -->
+              <div class="mt-4 flex items-center justify-between">
+                <button
+                  class="text-blue-500 hover:underline"
+                  @click="store.editaddressAction = !store.editaddressAction"
+                >
+                  แก้ไข
+                </button>
               </div>
             </div>
 
-            <div v-else class="text-center text-gray-500 mt-6">
+            <!-- ถ้าไม่มีข้อมูลที่อยู่ -->
+            <div
+              v-if="shipment.length === 0"
+              class="text-center text-gray-500 mt-6"
+            >
               ไม่พบข้อมูลที่อยู่
             </div>
           </div>
@@ -38,93 +59,135 @@
       </div>
     </div>
 
-    <!-- Popup เพิ่มที่อยู่ -->
-    <div v-if="store.addressAction" @click="store.addressAction = false" class="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+    <!-- Popup -->
+    <div
+      v-if="store.addressAction"
+      @click="store.addressAction = !store.addressAction"
+      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+    >
       <div @click.stop>
-        <PopupAddress @addressAdded="handleAddressAdded" />
+        <PopupAddress />
       </div>
     </div>
 
-    <!-- Popup แก้ไขที่อยู่ -->
-    <div v-if="store.editaddressAction && selectedShipment" @click="store.editaddressAction = false" class="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+    <div
+      v-if="store.editaddressAction"
+      @click="store.editaddressAction = !store.editaddressAction"
+      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+    >
       <div @click.stop>
-        <PopupEditAddress :shipment="selectedShipment ?? defaultShipment" @addressUpdated="handleAddressUpdated" />
+        <PopupEditAddress />
       </div>
     </div>
+
+    <Loading :loading="loading" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import type { Shipment } from "~/models/product.model";
+definePageMeta({
+  layout: "user",
+});
+
+import type { Shipment, ShipmentId, UserInfo } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
-
 const store = useIndexStore();
-const shipments = ref<Shipment[]>([]);
+const loading = ref(false);
 
-// ค่าเริ่มต้นของ selectedShipment
-const defaultShipment: Shipment = {
-  id: 0,
-  firstname: "",
-  lastname: "",
-  address: "",
-  zip_code: 0,
-  sub_district: "",
-  district: "",
-  province: "",
-  status: "",
+const getinfo = ref<UserInfo>({
+  ID: 0,
+  FirstName: "",
+  LastName: "",
+  Username: "",
+  Password: "",
+  Email: "",
+  Phone: 0,
   created_at: 0,
   updated_at: 0,
-};
+});
 
-// ใช้ ref และกำหนดค่าเริ่มต้นให้ไม่เป็น null
-const selectedShipment = ref<Shipment>(defaultShipment);
+const shipment = ref<ShipmentId[]>([]);
 
-// ดึงข้อมูลที่อยู่ทั้งหมดของผู้ใช้
-const getShipmentList = async () => {
+const getuserinfo = async () => {
+  loading.value = true;
   await service.product
-    .getShipmentList()
+    .getUserInfo()
     .then((resp: any) => {
-      shipments.value = resp.data.data;
+      console.log(resp);
+      const data = resp.data.data;
+      const user: UserInfo = {
+        ID: data.ID,
+        FirstName: data.FirstName,
+        LastName: data.LastName,
+        Username: data.Username,
+        Password: data.Password,
+        Email: data.Email,
+        Phone: data.Phone,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      };
+      getinfo.value = user;
     })
-    .catch(() => console.error("เกิดข้อผิดพลาดในการดึงที่อยู่"));
+    .catch((error: any) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
-// กด "แก้ไข" แล้วเปิด Popup
-const editShipment = (shipment: Shipment) => {
-  selectedShipment.value = { ...shipment };
-  store.editaddressAction = true;
-};
+const getShipment = async () => {
+  loading.value = true;
+  await service.product
+    .getShipmentId()
+    .then((resp: any) => {
+      const data = resp.data.data;
+      const shipmentlist: Shipment[] = [];
+      console.log(data);
 
-// เพิ่มที่อยู่ใหม่
-const handleAddressAdded = (newAddress: Shipment) => {
-  shipments.value.push(newAddress);
-  store.addressAction = false;
-};
-
-// อัปเดตข้อมูลที่อยู่ใหม่
-const handleAddressUpdated = (updatedShipment: Shipment) => {
-  const index = shipments.value.findIndex((s) => s.id === updatedShipment.id);
-  if (index !== -1) {
-    shipments.value[index] = { ...updatedShipment };
-  }
-  store.editaddressAction = false;
+      for (let i = 0; i < data.length; i++) {
+        const e = data[i];
+        const shipments: Shipment = {
+          id: e.id,
+          firstname: e.firstname,
+          lastname: e.lastname,
+          address: e.address,
+          zip_code: e.zip_code,
+          sub_district: e.sub_district,
+          district: e.district,
+          province: e.province,
+          status: e.status,
+          created_at: e.created_at,
+          updated_at: e.updated_at,
+        };
+        shipmentlist.push(shipments);
+      }
+      shipment.value = shipmentlist;
+    })
+    .catch((error: any) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 onMounted(() => {
-  getShipmentList();
+  getuserinfo();
+  getShipment();
 });
 </script>
 
 <style scoped>
+.sticky {
+  position: sticky;
+}
 .overflow-hidden {
   overflow: hidden;
 }
+
 .overflow-y-auto {
   overflow-y: auto;
-}
-.sticky {
-  position: sticky;
 }
 </style>

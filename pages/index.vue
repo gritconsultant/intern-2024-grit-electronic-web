@@ -61,6 +61,7 @@
         </div>
       </div>
     </div>
+    <Loading :loading="loading" />
   </div>
 </template>
 
@@ -78,9 +79,11 @@ definePageMeta({
 const products = ref<Product[]>([]);
 const category = ref<Category[]>([]);
 const selectedCategoryId = ref(0); // 0 = All categories
+const loading = ref(true); 
 
 // ดึงข้อมูลสินค้าทั้งหมด
 const getProductList = async () => {
+  loading.value = true;
   await service.product.getProductList()
     .then((resp: any) => {
       const data = resp.data.data || [];
@@ -117,11 +120,13 @@ const getProductList = async () => {
       console.error("Error loading product list:", error);
     })
     .finally(() => {
+      loading.value = false;
     });
 };
 
 // ดึงข้อมูลหมวดหมู่สินค้า
 const getCategoryList = async () => {
+  loading.value = true;
   await service.product.getCategoryList()
     .then((resp: any) => {
       const data = resp.data.data;

@@ -37,9 +37,9 @@ export const updatePassword = (id: any, payload: PasswordUpdate) => {
     })
 }
 
-export const getShipmentId = (id: any) => {
+export const getShipmentId = () => {
     return client({
-        url: `/shipment/${id}`,
+        url: "/shipment",
         method: "get",
     })
 } 

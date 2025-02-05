@@ -135,6 +135,7 @@
     </div>
 
     </div>
+    <Loading :loading="loading" />
   </div>
 </template>
 
@@ -149,7 +150,7 @@ import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
-
+const loading = ref(true); 
 const orders = ref<Order[]>([]);
 const getinfo = ref<UserInfo>({
   ID: 0,
@@ -164,6 +165,7 @@ const getinfo = ref<UserInfo>({
 });
 
 const getuserinfo = async () => {
+  loading.value = true;
   await service.product
     .getUserInfo()
     .then((resp: any) => {
@@ -185,10 +187,11 @@ const getuserinfo = async () => {
     .catch((error: any) => {
       console.log(error);
     })
-    .finally(() => {});
+    .finally(() => {loading.value = false;});
 };
 
 const getOrderList = async () => {
+  loading.value = true;
   await service.product
     .getOrderList()
     .then((resp: any) => {
@@ -230,7 +233,7 @@ const getOrderList = async () => {
     .catch((error: any) => {
       console.error(error);
     })
-    .finally(() => {});
+    .finally(() => {loading.value = false;});
 };
 
 const selectedOrder = ref<Order | null>(null);

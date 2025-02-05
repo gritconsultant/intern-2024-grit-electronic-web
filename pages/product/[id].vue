@@ -75,9 +75,7 @@
         </div> -->
       </div>
     </div>
-    <div v-else>
-      <p>Loading...</p>
-    </div>
+    <Loading :loading="loading" />
   </div>
 </template>
 
@@ -87,10 +85,9 @@ import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import type { CartItemAdd, CartItemRes, Product } from "~/models/product.model";
 import service from "~/service";
-import { useIndexStore } from "~/store/main";
 
 const route = useRoute();
-const store = useIndexStore();
+const loading = ref(false); 
 const products = ref<Product[]>([]);
 const cartitem = ref<CartItemAdd>({
   product_id: 0,
@@ -104,6 +101,7 @@ const cartitemRes = ref<CartItemRes>({
 
 // Get Product By ID
 const getProductById = async () => {
+  loading.value = true;
   const resp = await service.product.getProductById(route.params.id);
   const data = resp.data.data;
 
@@ -136,10 +134,12 @@ const getProductById = async () => {
   };
 
   products.value.push(product);
+  loading.value = false;
 };
 
 // Add Product to Cart
 const addCartItem = async () => {
+  loading.value = true;
   cartitem.value.product_id = Number(route.params.id);
   cartitem.value.total_product_amount = selectedAmount.value;
   await service.product.addCartItem(cartitem.value).then((resp: any) => {
@@ -159,7 +159,9 @@ const addCartItem = async () => {
     cartitemRes.value = cartitem;
   }).catch((error: any) => {
     console.error(error);
-  }).finally(() => {});
+  }).finally(() => {
+    loading.value = false;
+  });
 };
 
 // Selected Product

@@ -80,13 +80,14 @@
         </NuxtLink>
       </div>
     </form>
+    <Loading :loading="loading" />
   </div>
 </template>
 
 <script setup lang="ts">
+import Swal from "sweetalert2";
 import { ref } from "vue";
 import type { Login } from "~/models/page.model";
-import type { UserInfo } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
@@ -97,6 +98,7 @@ definePageMeta({
 const passwordVisible = ref(false);
 const router = useRouter();
 const store = useIndexStore();
+const loading = ref(false); 
 
 const logins = ref<Login>({
   email: "",
@@ -104,6 +106,7 @@ const logins = ref<Login>({
 });
 
 const login = async () => {
+  loading.value = true;
   await service.auth.login(logins.value)
     .then(async(resp: any) => {
 
@@ -123,9 +126,16 @@ const login = async () => {
     })
     .catch((error: any) => {
       console.error(error);
-      alert("เข้าสู่ระบบผิดพลาด! อีเมล หรือ รหัสผ่านผิด");
+      Swal.fire({
+        title: "เกิดข้อผิดพลาด!",
+        text: "ไม่สามารถเข้าสู่ระบบได้ กรุณาลองใหม่อีกครั้ง.",
+        icon: "error",
+        confirmButtonText: "ตกลง",
+      });
     })
-    .finally(() => {});
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 const getuserinfo = async () => {

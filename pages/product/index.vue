@@ -51,6 +51,7 @@
         </div>
       </div>
     </div>
+    <Loading :loading="loading" />
   </div>
 </template>
 
@@ -62,9 +63,11 @@ import service from "~/service";
 const products = ref<Product[]>([]);
 const categories = ref<Category[]>([]);
 const selectedCategoryId = ref<number | null>(null); // ใช้ `null` เพื่อแสดงทั้งหมด
+  const loading = ref(false); 
 
 // ดึงข้อมูลสินค้าทั้งหมด
 const getProductList = async () => {
+  loading.value = true;
   await service.product
     .getProductList()
     .then((resp: any) => {
@@ -110,11 +113,14 @@ const getProductList = async () => {
     .catch((error: any) => {
       console.error("Error loading product list:", error.response || error);
     })
-    .finally(() => {});
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 // ดึงข้อมูลหมวดหมู่ทั้งหมด
 const getCategoryList = async () => {
+  loading.value = true;
   await service.product
     .getCategoryList()
     .then((resp: any) => {
@@ -126,6 +132,9 @@ const getCategoryList = async () => {
     })
     .catch((error: any) => {
       console.error("Error loading category list:", error);
+    })
+    .finally(() => {
+      loading.value = false;
     });
 };
 

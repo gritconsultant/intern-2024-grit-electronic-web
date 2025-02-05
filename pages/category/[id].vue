@@ -33,6 +33,7 @@
           </div>
         </div>
       </div>
+      <Loading :loading="loading" />
     </div>
   </template>
   
@@ -42,12 +43,13 @@
   import service from "~/service";
 
   const route = useRoute(); 
-  
+  const loading = ref(true); 
   const products = ref<Product[]>([]);
     const categoryId = computed(() => route.params.id);
     const categories = ref<Category[]>([]);
 
 const getCategoryList = async () => {
+  loading.value = true;
   await service.product
     .getCategoryList()
     .then((resp: any) => {
@@ -62,11 +64,13 @@ const getCategoryList = async () => {
       console.error("เกิดข้อผิดพลาดในการดึงหมวดหมู่สินค้า:", error);
     })
     .finally(() => {
+      loading.value = false;
     });
 };
   
   // ดึงข้อมูลสินค้าทั้งหมด
   const getProductList = async () => {
+    loading.value = true;
     await service.product.getProductList()
       .then((resp: any) => {
         const data = resp.data.data || [];
@@ -103,6 +107,7 @@ const getCategoryList = async () => {
         console.error("Error loading product list:", error);
       })
       .finally(() => {
+        loading.value = false;
       });
   };
   // ฟังก์ชันดึงชื่อหมวดหมู่จาก categories

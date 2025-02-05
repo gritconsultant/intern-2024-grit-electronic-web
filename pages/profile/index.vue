@@ -107,6 +107,7 @@
         </div>
       </div>
     </div>
+    <Loading :loading="loading" />
   </div>
 </template>
 
@@ -121,6 +122,7 @@ definePageMeta({
 
 const route = useRoute();
 const store = useIndexStore();
+const loading = ref(false); 
 
 const getinfo = ref<UserInfo>({
   ID: 0,
@@ -154,6 +156,7 @@ const confirmPassword = ref<PasswordRes>({
 })
 
 const getuserinfo = async () => {
+  loading.value = true;
   await service.product
     .getUserInfo()
     .then((resp: any) => {
@@ -175,10 +178,13 @@ const getuserinfo = async () => {
     .catch((error: any) => {
       console.log(error);
     })
-    .finally(() => {});
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 const updatePassword = async () => {
+  loading.value = true;
   await service.product.updatePassword(store.$state.userId, changePassword.value)
    .then((resp: any) => {
       console.log(resp);
@@ -200,7 +206,9 @@ const updatePassword = async () => {
     .catch((error: any) => {
       console.log(error);
     })
-    .finally(() => {});
+    .finally(() => {
+      loading.value = false;
+    });
 }
 
 
