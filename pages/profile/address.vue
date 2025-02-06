@@ -16,7 +16,7 @@
       <div>
         <div
           class="flex justify-center mt-5 overflow-y-auto sticky top-0"
-          style="max-height: 53vh"
+          style="max-height: 56vh"
         >
           <div class="w-[500px]">
             <div

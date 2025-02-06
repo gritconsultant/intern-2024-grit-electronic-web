@@ -1,10 +1,10 @@
 <template>
-  <div class="flex p-4">
+  <div class="flex p-4" >
     <!-- Sidebar -->
     <Sidebar />
 
     <!-- Content -->
-    <div class="w-full lg:w-3/4 p-6 ">
+    <div class="w-full lg:w-3/4 p-6">
       <div class="border-b">
         <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
       </div>
@@ -16,28 +16,37 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Order List -->
-        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
+        <div
+          class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+          style="max-height: 48vh"
+        >
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
-            v-for="order in orders"
+            v-for="order in orderById"
             :key="order.id"
             @click="selectOrder(order)"
             class="cursor-pointer border-b p-4"
-            :class="{ 'bg-gray-100': selectedOrder && selectedOrder.id === order.id }"
+            :class="{
+              'bg-gray-100': selectedOrder && selectedOrder.id === order.id,
+            }"
           >
             <div class="flex justify-between items-center">
               <div>
                 <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
-                <p class="text-gray-500 text-sm">{{ formatDate(order.created_at) }}</p>
+                <p class="text-gray-500 text-sm">
+                  {{ formatDate(order.created_at) }}
+                </p>
               </div>
-              <p class="text-lg font-bold">฿{{ order.payment_price
-               }}</p>
+              <p class="text-lg font-bold">฿{{ order.total_price }}</p>
             </div>
           </div>
         </div>
 
         <!-- Selected Order Details -->
-        <div class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0" style="max-height: 48vh">
+        <div
+          class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+          style="max-height: 48vh"
+        >
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
           <div v-if="selectedOrder">
             <!-- Products -->
@@ -66,8 +75,11 @@
             <!-- Address -->
             <div class="mt-4 border-b pb-4">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <p class="text-gray-500 text-sm mt-4">ชื่อผู้รับ : {{ getinfo.FirstName }} <span> {{  getinfo.LastName }}</span></p>
-              <p class="text-gray-500 text-sm">ที่อยู่ : {{  }}</p>
+              <p class="text-gray-500 text-sm mt-4">
+                ชื่อผู้รับ : {{ getinfo.FirstName }}
+                <span> {{ getinfo.LastName }}</span>
+              </p>
+              <p class="text-gray-500 text-sm">ที่อยู่ : {{}}</p>
             </div>
 
             <!-- Delivery Method -->
@@ -83,7 +95,7 @@
                 <p class="text-md font-medium">
                   ไปรษณีย์ไทย <br />
                   <span class="text-sm font-normal text-gray-500">
-                    จัดส่งภายในวันที่ {{  }}
+                    จัดส่งภายในวันที่ {{}}
                   </span>
                 </p>
               </div>
@@ -111,25 +123,27 @@
             </div>
           </div>
 
-          <div v-else class="text-center text-gray-500">
-            เลือกคำสั่งซื้อ
-          </div>
+          <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div>
         </div>
       </div>
     </div>
+    <Loading :loading="loading" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { Order, UserInfo } from "~/models/product.model";
-import service from "~/service";
 definePageMeta({
   layout: "user",
 });
 
-const orders = ref<Order[]>([]);
-  const getinfo = ref<UserInfo>({
+import Swal from "sweetalert2";
+import { ref } from "vue";
+import type { OrderById, UserInfo } from "~/models/product.model";
+import service from "~/service";
+
+const loading = ref(true);
+const orderById = ref<OrderById[]>([]);
+const getinfo = ref<UserInfo>({
   ID: 0,
   FirstName: "",
   LastName: "",
@@ -142,6 +156,7 @@ const orders = ref<Order[]>([]);
 });
 
 const getuserinfo = async () => {
+  loading.value = true;
   await service.product
     .getUserInfo()
     .then((resp: any) => {
@@ -163,86 +178,85 @@ const getuserinfo = async () => {
     .catch((error: any) => {
       console.log(error);
     })
-    .finally(() => {});
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
-const getOrderList = async () => {
+const getOrder = async () => {
+  loading.value = true;
   await service.product
-    .getOrderList()
+    .getOrderById()
     .then((resp: any) => {
       const data = resp.data.data;
-      const orderList: Order[] = [];
+      const orderId: OrderById[] = [];
       console.log(data);
-
       for (let i = 0; i < data.length; i++) {
         const e = data[i];
-        const order: Order = {
+        const order: OrderById = {
           id: e.id,
           user_id: e.user_id,
-          username: e.username,
-          status: e.status,
+          payment_id: e.payment_id,
+          shipment_id: e.shipment_id,
           total_amount: e.total_amount,
           total_price: e.total_price,
-          system_bank_id: e.system_bank_id,
-          payment_price: e.payment_price,
-          bank_name: e.bank_name,
-          account_name: e.account_name,
-          account_number: e.account_number,
-          payment_status: e.payment_status,
-          firstname: e.firstname,
-          lastname: e.lastname,
-          address: e.address,
-          zip_code: e.zip_code,
-          sub_district: e.sub_district,
-          district: e.district,
-          province: e.province,
-          shipment_status: e.shipment_status,
+          status: e.status,
           created_at: e.created_at,
           updated_at: e.updated_at,
-          selectedOrder: e.selectedOrder,
         };
-        orderList.push(order);
+        orderId.push(order);
       }
-      orders.value = orderList;
+      orderById.value = orderId;
     })
     .catch((error: any) => {
       console.error(error);
     })
-    .finally(() => {});
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
-const selectedOrder = ref<Order | null>(null);
+const selectedOrder = ref<OrderById | null>(null);
 
-const selectOrder = (order: Order): void => {
+const selectOrder = (order: OrderById) => {
   selectedOrder.value = order;
 };
 
 const formatDate = (timestamp: number): string => {
   const date = new Date(timestamp * 1000); // คูณด้วย 1000 เพื่อแปลงจาก Unix timestamp เป็น milliseconds
   const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   };
-  return date.toLocaleDateString('th-TH', options); // ใช้ locale "th-TH" สำหรับวันที่ในภาษาไทย
+  return date.toLocaleDateString("th-TH", options); // ใช้ locale "th-TH" สำหรับวันที่ในภาษาไทย
 };
+
 
 const cancelOrder = (): void => {
   if (selectedOrder.value) {
-    // Confirm cancellation
-    const confirmCancel = confirm(`คุณต้องการยกเลิกคำสั่งซื้อ #${selectedOrder.value.id} หรือไม่?`);
-    if (confirmCancel) {
-      // Remove the order from the list
-      orders.value = orders.value.filter(order => order.id !== selectedOrder.value!.id);
-      alert("คำสั่งซื้อถูกยกเลิกเรียบร้อยแล้ว");
-      selectedOrder.value = null; // Clear the selected order
-    }
+    Swal.fire({
+      title: "ยืนยันการยกเลิก",
+      text: `คุณต้องการยกเลิกคำสั่งซื้อ #${selectedOrder.value.id} หรือไม่?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "ใช่, ยกเลิกเลย",
+      cancelButtonText: "ไม่, กลับไป",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // ลบ order ออกจากรายการ
+        orderById.value = orderById.value.filter(order => order.id !== selectedOrder.value!.id);
+        
+        Swal.fire("ลบสำเร็จ!", "คำสั่งซื้อถูกยกเลิกและลบออกเรียบร้อยแล้ว", "success");
+        selectedOrder.value = null; // เคลียร์คำสั่งซื้อที่เลือก
+      }
+    });
   }
 };
 
 onMounted(async () => {
-  await getOrderList();
   await getuserinfo();
+  await getOrder();
 });
 </script>
 

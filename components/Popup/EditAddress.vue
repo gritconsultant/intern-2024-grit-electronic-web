@@ -46,7 +46,6 @@
         </form>
       </div>
     </div>
-    <Loading :loading="loading" />
   </div>
 </template>
 
@@ -58,7 +57,6 @@ import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 const route = useRoute();
-const loading = ref(false);
 const shipment = ref<ShipmentId[]>([]);
 const shipmentUpdate = ref<ShipmentUpdate>({
   id: 0,
@@ -83,7 +81,6 @@ const shipmentRes = ref<ShipmentRes>({
 });
 
 const getShipment = async () => {
-  loading.value = true;
   await service.product
     .getShipmentId()
     .then((resp: any) => {
@@ -114,7 +111,6 @@ const getShipment = async () => {
       console.log(error);
     })
     .finally(() => {
-      loading.value = false;
     });
 };
 

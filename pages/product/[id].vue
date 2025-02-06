@@ -28,7 +28,7 @@
               <!-- Quantity Control -->
               <div class="flex items-center gap-4 mt-4">
                 <button class="px-4 py-2 rounded border" @click="decreaseQuantity">-</button>
-                <span class="text-lg font-semibold">{{ selectedAmount }}</span>
+                <span class="text-lg font-semibold">{{ selectedAmount  }}</span>
                 <button class="px-4 py-2 rounded border" @click="increaseQuantity">+</button>
               </div>
               <button type="submit" @click="addCartItem" class="bg-[#EE973C] text-white p-4 rounded-lg w-full lg:w-[350px] mt-10 hover:bg-[#FD8C35]/70 transition">
@@ -163,6 +163,8 @@ const addCartItem = async () => {
     loading.value = false;
   });
 };
+
+
 
 // Selected Product
 const product = computed(() => products.value.find((item) => item.id === Number(route.params.id)));

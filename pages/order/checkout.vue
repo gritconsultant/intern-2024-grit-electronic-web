@@ -1,5 +1,5 @@
 <template>
-  <div class="flex p-4">
+  <div class="flex p-4 "  v-if="orderById.some(order => order.status === 'pending')">
     <!-- Sidebar -->
     <Sidebar />
 
@@ -22,7 +22,7 @@
         >
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
-            v-for="order in orders"
+            v-for="order in orderById.filter(order => order.status === 'pending')"
             :key="order.id"
             @click="selectOrder(order)"
             class="cursor-pointer border-b p-4"
@@ -33,12 +33,13 @@
             <div class="flex justify-between items-center">
               <div>
                 <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
-                <p class="text-gray-500 text-sm">{{ formatDate(order.created_at) }}</p>
+                <p class="text-gray-500 text-sm">
+                  {{ formatDate(order.created_at) }}
+                </p>
               </div>
-              <p class="text-lg font-bold">฿{{ order.payment_price }}</p>
+              <p class="text-lg font-bold">฿{{ order.total_price }}</p>
             </div>
           </div>
-  
         </div>
 
         <!-- Selected Order Details -->
@@ -74,10 +75,11 @@
             <!-- Address -->
             <div class="mt-4 border-b pb-4">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <p class="text-gray-500 text-sm mt-4">ชื่อผู้รับ : {{ getinfo.FirstName }} <span> {{  getinfo.LastName }}</span></p>
-              <p class="text-gray-500 text-sm">
-                ที่อยู่ : {{  }}
+              <p class="text-gray-500 text-sm mt-4">
+                ชื่อผู้รับ : {{ getinfo.FirstName }}
+                <span> {{ getinfo.LastName }}</span>
               </p>
+              <p class="text-gray-500 text-sm">ที่อยู่ : {{ }}</p>
             </div>
 
             <!-- Delivery Method -->
@@ -130,10 +132,9 @@
       class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
       @click="store.paymentAction = !store.paymentAction"
     >
-    <div @click.stop>
-      <PopupPayment />
-    </div>
-
+      <div @click.stop>
+        <PopupPayment />
+      </div>
     </div>
     <Loading :loading="loading" />
   </div>
@@ -145,13 +146,13 @@ definePageMeta({
 });
 
 import { ref } from "vue";
-import type { Order, UserInfo } from "~/models/product.model";
+import type { OrderById, UserInfo } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
-const loading = ref(true); 
-const orders = ref<Order[]>([]);
+const loading = ref(true);
+const orderById = ref<OrderById[]>([]);
 const getinfo = ref<UserInfo>({
   ID: 0,
   FirstName: "",
@@ -187,75 +188,62 @@ const getuserinfo = async () => {
     .catch((error: any) => {
       console.log(error);
     })
-    .finally(() => {loading.value = false;});
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
-const getOrderList = async () => {
-  loading.value = true;
-  await service.product
-    .getOrderList()
-    .then((resp: any) => {
-      const data = resp.data.data;
-      const orderList: Order[] = [];
-      console.log(data);
 
-      for (let i = 0; i < data.length; i++) {
-        const e = data[i];
-        const order: Order = {
-          id: e.id,
-          user_id: e.user_id,
-          username: e.username,
-          status: e.status,
-          total_amount: e.total_amount,
-          total_price: e.total_price,
-          system_bank_id: e.system_bank_id,
-          payment_price: e.payment_price,
-          bank_name: e.bank_name,
-          account_name: e.account_name,
-          account_number: e.account_number,
-          payment_status: e.payment_status,
-          firstname: e.firstname,
-          lastname: e.lastname,
-          address: e.address,
-          zip_code: e.zip_code,
-          sub_district: e.sub_district,
-          district: e.district,
-          province: e.province,
-          shipment_status: e.shipment_status,
-          created_at: e.created_at,
-          updated_at: e.updated_at,
-          selectedOrder: e.selectedOrder,
-        };
-        orderList.push(order);
+const getOrder = async() => {
+  loading.value = true;
+  await service.product.getOrderById().then((resp: any) => {
+    const data = resp.data.data;
+    const orderId: OrderById[] = [];
+    console.log(data);
+    for (let i =0; i < data.length; i++){
+      const e = data[i];
+      const order: OrderById = {
+        id: e.id,
+        user_id: e.user_id,
+        payment_id: e.payment_id,
+        shipment_id: e.shipment_id,
+        total_amount: e.total_amount,
+        total_price: e.total_price,
+        status: e.status,
+        created_at: e.created_at,
+        updated_at: e.updated_at,
       }
-      orders.value = orderList;
-    })
-    .catch((error: any) => {
+      orderId.push(order);
+    }
+    orderById.value = orderId;
+  })
+   .catch((error: any) => {
       console.error(error);
     })
-    .finally(() => {loading.value = false;});
-};
+   .finally(() => {
+      loading.value = false;
+    });
+}
 
-const selectedOrder = ref<Order | null>(null);
+const selectedOrder = ref<OrderById | null>(null);
 
-const selectOrder = (order: Order) => {
+const selectOrder = (order: OrderById) => {
   selectedOrder.value = order;
 };
 
 const formatDate = (timestamp: number): string => {
   const date = new Date(timestamp * 1000); // คูณด้วย 1000 เพื่อแปลงจาก Unix timestamp เป็น milliseconds
   const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   };
-  return date.toLocaleDateString('th-TH', options); // ใช้ locale "th-TH" สำหรับวันที่ในภาษาไทย
+  return date.toLocaleDateString("th-TH", options); // ใช้ locale "th-TH" สำหรับวันที่ในภาษาไทย
 };
 
-
 onMounted(async () => {
-  await getOrderList();
   await getuserinfo();
+  await getOrder();
 });
 </script>
 

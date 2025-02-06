@@ -26,9 +26,9 @@
         </svg>
       </button>
     </div>
-
+    
     <!-- Cart Items -->
-    <div class="px-4 md:px-5 flex-grow overflow-y-auto">
+    <div class="px-4 md:px-5 flex-grow overflow-y-auto" v-if="loading">
       <div
         v-for="item in carts"
         :key="item.id"
@@ -51,29 +51,31 @@
                 {{ item.Product.name }}
               </router-link>
             </div>
-          <div>
-            <button @click="deleteCartItem(item.id)" class="text-red-500">
-              <svg
-                class="w-[15px] h-[15px] md:w-[17px] md:h-[17px] hover:text-red-500"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-                />
-              </svg>
-            </button>
-          </div>
+            <div>
+              <button @click="deleteCartItem(item.id)" class="text-red-500">
+                <svg
+                  class="w-[15px] h-[15px] md:w-[17px] md:h-[17px] hover:text-red-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
 
           <div class="flex justify-between items-center">
             <div class="flex items-center gap-2 mt-2 md:mt-3">
-              <span class="text-sm md:text-base">จำนวน: {{ item.total_product_amount }} </span>
+              <span class="text-sm md:text-base"
+                >จำนวน: {{ item.total_product_amount }}
+              </span>
             </div>
             <div class="mt-2 md:mt-3">
               <p class="font-semibold text-sm md:text-lg">
@@ -83,15 +85,17 @@
           </div>
         </div>
       </div>
+
     </div>
 
-    <div class="p-4 border-t mt-4 bg-gray-100">
+    <div class="p-4 border-t mt-4 bg-gray-100" v-if="loading">
       <div class="flex justify-between font-medium">
         <span class="text-sm md:text-base">ราคารวม:</span>
         <span class="text-sm md:text-base">฿{{ totalSelectedPrice }}</span>
       </div>
       <div class="flex flex-col items-center mt-5 md:mt-10">
         <button
+          @click="addOrder"
           class="popupbtn w-full mb-2 text-sm md:text-base py-2"
           :disabled="selectedItems.length === 0"
         >
@@ -111,15 +115,31 @@
 <script setup lang="ts">
 import Swal from "sweetalert2";
 import { ref, computed, onMounted } from "vue";
-import type { CartItem, CartItems } from "~/models/product.model";
+import type {
+  OrderAdd,
+  CartItem,
+  CartItems,
+  OrderRes,
+} from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
+const route = useRoute();
+const loading = ref(true);
 const cartlist = ref<CartItems[]>([]);
 const carts = ref<CartItem[]>([]);
+const orders = ref<OrderAdd>({
+  shipment_id: 0,
+  payment_id: 0,
+  status: "pending",
+});
 
-
+const orderRes = ref<OrderRes>({
+  shipment_id: 0,
+  payment_id: 0,
+  status: "pending",
+});
 
 const getCartItem = async () => {
   await service.product
@@ -144,11 +164,11 @@ const getCartItem = async () => {
     .catch((error: any) => {
       console.error(error);
     })
-    .finally(() => {
-    });
+    .finally(() => {});
 };
 
 const deleteCartItem = async (cartItemId: number) => {
+  loading.value = true;
   const result = await Swal.fire({
     title: "คุณแน่ใจหรือไม่?",
     text: "คุณต้องการลบสินค้านี้ออกจากตะกร้า!",
@@ -157,36 +177,66 @@ const deleteCartItem = async (cartItemId: number) => {
     confirmButtonColor: "#EE973C",
     cancelButtonColor: "#d33",
     confirmButtonText: "ยืนยัน",
-    cancelButtonText: "ยกเลิก"
+    cancelButtonText: "ยกเลิก",
   });
 
   if (result.isConfirmed) {
-    await service.product.deleteCartItem(cartItemId) // ส่งค่า cart_item_id ใน body
+    await service.product
+      .deleteCartItem(cartItemId) // ส่งค่า cart_item_id ใน body
       .then(() => {
         // กรองและลบสินค้าออกจาก cartlist และ carts
-        cartlist.value = cartlist.value.filter(item => item.id !== cartItemId);
-        carts.value = carts.value.filter(item => item.id !== cartItemId); // ทำการอัพเดต `carts`
-        Swal.fire(
-          "ลบสินค้าสำเร็จ!",
-          "สินค้าถูกลบออกจากตะกร้าแล้ว.",
-          "success"
+        cartlist.value = cartlist.value.filter(
+          (item) => item.id !== cartItemId
         );
+        carts.value = carts.value.filter((item) => item.id !== cartItemId); // ทำการอัพเดต `carts`
+        Swal.fire("ลบสินค้าสำเร็จ!", "สินค้าถูกลบออกจากตะกร้าแล้ว.", "success");
       })
       .catch((error: any) => {
         console.error("ลบสินค้าไม่สำเร็จ:", error);
-        Swal.fire(
-          "เกิดข้อผิดพลาด!",
-          "ไม่สามารถลบสินค้าจากตะกร้าได้.",
-          "error"
-        );
+        Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถลบสินค้าจากตะกร้าได้.", "error");
+      })
+      .finally(() => {
+        loading.value = false;
       });
   }
 };
-
 // กรองสินค้าที่เลือกไว้
 const selectedItems = computed(() => {
   return carts.value.filter((item: any) => item.selected);
 });
+
+const addOrder = async () => {
+  loading.value = true;
+  orders.value.shipment_id = Number(route.params.id);
+  orders.value.payment_id = totalSelectedPrice.value;
+  await service.product
+    .addOrder(orders.value)
+    .then((resp: any) => {
+      const data = resp.data.data;
+      if (data) {
+        Swal.fire({
+        title: "การสั่งซื้อสำเร็จ!",
+        text: "คำสั่งซื้อของคุณถูกเพิ่มเรียบร้อย!",
+        icon: "success",
+        
+      });
+      }
+      const orders: OrderRes = {
+        shipment_id: data.id,
+        payment_id: data.payment_id,
+        status: data.status,
+      };
+      orderRes.value = orders;
+    })
+    .catch((error: any) => {
+      console.error(error);
+    })
+    .finally(() => {
+      loading.value = false;
+
+    });
+
+};
 
 // คำนวณราคารวมของสินค้าที่เลือก
 const totalSelectedPrice = computed(() => {

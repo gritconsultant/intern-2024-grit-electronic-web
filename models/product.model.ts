@@ -196,6 +196,9 @@ export interface CartItem {
     total_product_amount: number;
     selected: boolean;
 }
+export interface CartResponse {
+    data: CartItem[];
+  }
 
 export interface CartItems {
     id: number;
@@ -276,28 +279,33 @@ export interface Order {
     selectedOrder: boolean;
 }
 
-// export interface getOrderById {
-//     id: number;
-//     user_id: number;
-//     username: string;
-//     status: string;
-//     total_amount: number;
-//     total_price: number;
-//     system_bank_id: number;
-//     payment_price: number;
-//     bank_name: string;
-//     account_name: string;
-//     account_number: number;
-//     payment_status: string;
-//     firstname: string;
-//     lastname: string;
-//     address: string;
-//     zip_code: number;
-//     sub_district: string;
-//     district: string;
-//     province: string;
-//     shipment_status: string;
-//     created_at: number;
-//     updated_at: number;
-//     selectedOrder: boolean;
-// }
+
+export interface OrderCreate {
+    shipment_id: number;
+    payment_id: number;
+    status: string;
+}
+
+export interface OrderAdd {
+    shipment_id: any;
+    payment_id: number;
+    status: string;
+}
+
+export interface OrderRes {
+    shipment_id: number;
+    payment_id: number;
+    status: string;
+}
+
+export interface OrderById {
+    id: number;
+    user_id: number;
+    payment_id: number;
+    shipment_id: number;
+    total_amount: number;
+    total_price: number;
+    status: string;
+    created_at: number;
+    updated_at: number;
+}

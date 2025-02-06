@@ -1,4 +1,4 @@
-import type { CartItemCreate, PasswordUpdate, ProductCartUpdate, Shipment, ShipmentCreate, ShipmentUpdate } from "~/models/product.model"
+import type { CartItemCreate, OrderAdd, OrderCreate, PasswordUpdate, ProductCartUpdate, Shipment, ShipmentCreate, ShipmentUpdate } from "~/models/product.model"
 import { client } from "./httpClient"
 
 export const getProductList = () => {
@@ -81,6 +81,17 @@ export const getCartItem = () => {
     })
 }
 
+export const getCartItemByProductId = (productId: any) => {
+    return client({
+        url: "/cartitem",
+        method: "get",
+        params: { product_id: productId },
+    })
+}
+
+
+
+
 export const addCartItem = (payload: CartItemCreate) => {
     return client({
         url: `/cartitem/create`,
@@ -112,3 +123,22 @@ export const getOrderList = () => {
     })
 }
 
+export const getOrderById = () => {
+    return client({
+        url: "/order",
+        method: "get",
+    })
+}
+
+export const addOrder = (payload: OrderCreate) => {
+    return client({
+        url: `/order/create`,
+        method: "post",
+        data: payload,
+    })
+}
+
+
+export function setDefaultShipment(id: number) {
+  throw new Error("Function not implemented.")
+}

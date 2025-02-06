@@ -143,11 +143,9 @@ const cancel = () => {
 };
 
 onMounted(() => {
-  // กรณีที่มีการโหลดข้อมูลที่อยู่ (ถ้าจำเป็น)
   console.log("Component loaded");
 });
 </script>
 
 <style scoped>
-/* คุณสามารถเพิ่มสไตล์เพิ่มเติมที่นี่ */
 </style>
