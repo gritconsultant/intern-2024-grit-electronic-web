@@ -22,7 +22,7 @@
         >
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
-            v-for="order in orders"
+            v-for="order in orderById"
             :key="order.id"
             @click="selectOrder(order)"
             class="cursor-pointer border-b p-4"
@@ -33,9 +33,11 @@
             <div class="flex justify-between items-center">
               <div>
                 <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
-                <p class="text-gray-500 text-sm">{{ order.date }}</p>
+                <p class="text-gray-500 text-sm">
+                  {{ formatDate(order.created_at) }}
+                </p>
               </div>
-              <p class="text-lg font-bold">฿{{ order.total }}</p>
+              <p class="text-lg font-bold">฿{{ order.total_price }}</p>
             </div>
           </div>
         </div>
@@ -48,7 +50,7 @@
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
           <div v-if="selectedOrder">
             <!-- Products -->
-            <div
+            <!-- <div
               v-for="product in selectedOrder.products"
               :key="product.id"
               class="flex items-center space-x-4 border-b pb-4 cursor-pointer"
@@ -82,35 +84,46 @@
                       รีวิวสินค้า
                     </button>
                   </div>
+
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <!-- Address -->
             <div class="mt-4 border-b pb-4">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
               <p class="text-gray-500 text-sm mt-4">
-                ชื่อผู้รับ : {{ selectedOrder.namerecipe }}
+                ชื่อผู้รับ : {{ getinfo.FirstName }}
+                <span> {{ getinfo.LastName }}</span>
               </p>
-              <p class="text-gray-500 text-sm">
-                ที่อยู่ : {{ selectedOrder.address }}
-              </p>
+              <p class="text-gray-500 text-sm">ที่อยู่ : {{}}</p>
             </div>
           </div>
 
           <!-- No Order Selected -->
           <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div>
+          <div>
+            <button
+              class="bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white p-2 rounded-lg mt-5"
+              @click="store.reviewAction = true"
+            >
+              รีวิวสินค้า
+            </button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Review Popup -->
-    <div
-      v-if="store.reviewAction"
-      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-
-    >
-      <PopupReview :product="selectedProduct" />
+      <!-- Review Popup -->
+      <div
+        v-if="store.reviewAction"
+        class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+        @click="store.reviewAction = !store.reviewAction"
+      >
+        <div @click.stop>
+          <!-- <PopupReview :product="selectedProduct" /> -->
+          <PopupReview />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -121,59 +134,111 @@ definePageMeta({
 });
 
 import { ref } from "vue";
-import type { Order, Product } from "~/models/product.model";
+import type {
+  Order,
+  OrderById,
+  Product,
+  UserInfo,
+} from "~/models/product.model";
+import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
-
-
 const store = useIndexStore();
+const loading = ref(true);
+const orderById = ref<OrderById[]>([]);
+const getinfo = ref<UserInfo>({
+  ID: 0,
+  FirstName: "",
+  LastName: "",
+  Username: "",
+  Password: "",
+  Email: "",
+  Phone: 0,
+  created_at: 0,
+  updated_at: 0,
+});
 
-const orders = ref<Order[]>([
-  {
-    id: "778231342",
-    date: "26 ตุลาคม 2566",
-    total: 124,
-    deliveryDate: "",
-    products: [
-    {
-    id: 0,
-    name: "",
-    price: 0,
-    stock: 0,
-    description: "",
-    image: {
-      id: 0,
-      ref_id: 0,
-      type: "",
-      description: "",
-    }, // ถูกต้อง
-    category: { id: 0, name: "" },
-    Review: [{ id: 0, rating: 0,username: "", description: "" }, { id: 0, rating: 0,username: "", description: "" }],
-    is_active: true,
-    created_at: 0,
-    updated_at: 0,
-  },
-    ],
-    shippingStatus: [],
-    namerecipe: "คมเข้ม คำเกษ 098 765 4321",
-    address: "kku เพลส อำเภอเมือง ตำบลในเมือง จังหวัดขอนแก่น 40000",
-  },
-]);
+const getuserinfo = async () => {
+  loading.value = true;
+  await service.product
+    .getUserInfo()
+    .then((resp: any) => {
+      console.log(resp);
+      const data = resp.data.data;
+      const user: UserInfo = {
+        ID: data.ID,
+        FirstName: data.FirstName,
+        LastName: data.LastName,
+        Username: data.Username,
+        Password: data.Password,
+        Email: data.Email,
+        Phone: data.Phone,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      };
+      getinfo.value = user;
+    })
+    .catch((error: any) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
 
-const selectedOrder = ref<Order | null>(null);
-const selectedProduct = ref<Product | null>(null);
+const getOrder = async () => {
+  loading.value = true;
+  await service.product
+    .getOrderById()
+    .then((resp: any) => {
+      const data = resp.data.data;
+      const orderId: OrderById[] = [];
+      console.log(data);
+      for (let i = 0; i < data.length; i++) {
+        const e = data[i];
+        const order: OrderById = {
+          id: e.id,
+          user_id: e.user_id,
+          payment_id: e.payment_id,
+          shipment_id: e.shipment_id,
+          total_amount: e.total_amount,
+          total_price: e.total_price,
+          status: e.status,
+          created_at: e.created_at,
+          updated_at: e.updated_at,
+        };
+        orderId.push(order);
+      }
+      orderById.value = orderId;
+    })
+    .catch((error: any) => {
+      console.error(error);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
 
-// เลือกคำสั่งซื้อ
-const selectOrder = (order: Order): void => {
+const selectedOrder = ref<OrderById | null>(null);
+
+const selectOrder = (order: OrderById) => {
   selectedOrder.value = order;
 };
 
-// เปิด Popup รีวิวสินค้า
-const openReviewPopup = (product: Product): void => {
-  selectedProduct.value = product;
-  store.reviewAction = true;
+const formatDate = (timestamp: number): string => {
+  const date = new Date(timestamp * 1000); // คูณด้วย 1000 เพื่อแปลงจาก Unix timestamp เป็น milliseconds
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return date.toLocaleDateString("th-TH", options); // ใช้ locale "th-TH" สำหรับวันที่ในภาษาไทย
 };
 
+onMounted(async () => {
+  await getuserinfo();
+  await getOrder();
+});
 </script>
 
 <style scoped>
@@ -181,4 +246,3 @@ const openReviewPopup = (product: Product): void => {
   position: sticky;
 }
 </style>
-

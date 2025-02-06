@@ -1,6 +1,8 @@
 import type { CartItemCreate, OrderAdd, OrderCreate, PasswordUpdate, ProductCartUpdate, Shipment, ShipmentCreate, ShipmentUpdate } from "~/models/product.model"
 import { client } from "./httpClient"
 
+
+// product
 export const getProductList = () => {
     return client({
         url: "/product",
@@ -15,6 +17,8 @@ export const getProductById = (id: any) => {
     })
 }
 
+
+// category
 export const getCategoryList = () => {
     return client({
         url: "/category",
@@ -22,6 +26,9 @@ export const getCategoryList = () => {
     })
 } 
 
+
+
+// user
 export const getUserInfo = () => {
     return client({
         url: "/user/info",
@@ -37,6 +44,8 @@ export const updatePassword = (id: any, payload: PasswordUpdate) => {
     })
 }
 
+
+// shipment
 export const getShipmentId = () => {
     return client({
         url: "/shipment",
@@ -67,6 +76,8 @@ export const updateShipment = (id: any, payload: ShipmentUpdate) => {
     })
 }
 
+
+// cart
 export const getCart = () => {
     return client({
         url: "/cart", 
@@ -88,8 +99,6 @@ export const getCartItemByProductId = (productId: any) => {
         params: { product_id: productId },
     })
 }
-
-
 
 
 export const addCartItem = (payload: CartItemCreate) => {
@@ -116,6 +125,8 @@ export const updateCartItem = (id: any , payload: ProductCartUpdate) => {
     })
 }
 
+
+// order
 export const getOrderList = () => {
     return client({
         url: "/order",
@@ -139,6 +150,10 @@ export const addOrder = (payload: OrderCreate) => {
 }
 
 
-export function setDefaultShipment(id: number) {
-  throw new Error("Function not implemented.")
+// payment
+export const getSystemBank = () => {
+    return client({
+        url: "/system",
+        method: "get",
+    })
 }

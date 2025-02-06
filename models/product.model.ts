@@ -309,3 +309,25 @@ export interface OrderById {
     created_at: number;
     updated_at: number;
 }
+
+
+// payment
+
+export interface SystemBank {
+    id: number;
+    bank_name: string;
+    account_name: string;
+    account_number: number;
+    description: string;
+    ImageSystemBank: ImageSystemBank[];
+    is_active: boolean;
+    created_at: number;
+    updated_at: number;
+}
+
+export interface ImageSystemBank {
+    id: number;
+    ref_id: string;
+    type: any;
+    description: string;
+}

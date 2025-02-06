@@ -1,5 +1,5 @@
 <template>
-  <div class="flex p-4" >
+  <div class="flex p-4"  v-if="orderById.some(order => order.status === 'pending')">
     <!-- Sidebar -->
     <Sidebar />
 
@@ -22,7 +22,7 @@
         >
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div
-            v-for="order in orderById"
+            v-for="order in orderById.filter(order => order.status === 'pending')"
             :key="order.id"
             @click="selectOrder(order)"
             class="cursor-pointer border-b p-4"
