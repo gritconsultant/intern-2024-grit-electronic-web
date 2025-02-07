@@ -141,6 +141,13 @@ export const getOrderById = () => {
     })
 }
 
+// export const getOrderById = () => {
+//     return client({
+//         url: `/order`,
+//         method: "get",
+//     })
+// }
+
 export const addOrder = (payload: OrderCreate) => {
     return client({
         url: `/order/create`,

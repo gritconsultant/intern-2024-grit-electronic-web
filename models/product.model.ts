@@ -235,7 +235,7 @@ export interface ProductCartUpdate {
     // ID: number;
     // CartID: number;
     // ProductID: number;
-    TotalProductAmount: number;
+    total_product_amount: number;
     // Status: string;
     // created_at: number;
     // updated_at: number;
@@ -245,7 +245,7 @@ export interface ProductCartRes {
     // ID: number;
     // CartID: number;
     // ProductID: number;
-    TotalProductAmount: number;
+    total_product_amount: number;
     // Status: string;
     // created_at: number;
     // updated_at: number;
@@ -310,6 +310,49 @@ export interface OrderById {
     updated_at: number;
 }
 
+// export interface OrderById {
+//     id: number;
+//     User: OrderUser;
+//     Payment: PaymentOrder;
+//     SystemBank: SystemBankOrder;
+//     ImageSystemBank: ImageSystemBank;
+//     Shipment: ShipmentOrder;
+//     total_amount: string;
+//     total_price: number;
+//     status: string;
+//     created_at: number;
+//     updated_at: number;
+// }
+
+export interface OrderUser {
+    id: number;
+    firstname: string;
+    lastname: string;
+}
+
+export interface PaymentOrder {
+    id: number;
+    price: number;
+}
+
+export interface SystemBankOrder {
+    id: number;
+    bank_name: string;
+    account_name: string;
+    account_number: number;
+    description: string;
+}
+
+export interface ShipmentOrder {
+    id: number;
+    firstname: string;
+    lastname: string;
+    address: string;
+    zip_code: number;
+    sub_district: string;
+    district: string;
+    province: string;
+}
 
 // payment
 

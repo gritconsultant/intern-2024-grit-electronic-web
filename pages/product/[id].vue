@@ -137,32 +137,44 @@ const getProductById = async () => {
   loading.value = false;
 };
 
-// Add Product to Cart
 const addCartItem = async () => {
-  loading.value = true;
   cartitem.value.product_id = Number(route.params.id);
   cartitem.value.total_product_amount = selectedAmount.value;
-  await service.product.addCartItem(cartitem.value).then((resp: any) => {
-    const data = resp.data.data;
-    if (data) {
+
+  await service.product.addCartItem(cartitem.value)
+    .then((resp: any) => {
+      const data = resp.data.data;
+
+      // ถ้าการเพิ่มสินค้าสำเร็จ
       Swal.fire({
         title: "เพิ่มสินค้าสำเร็จ!",
         text: "ได้เพิ่มสินค้าแล้ว!",
         icon: "success",
       });
-    }
 
-    const cartitem: CartItemRes = {
-      product_id: data.id,
-      total_product_amount: data.total_product_amount,
-    };
-    cartitemRes.value = cartitem;
-  }).catch((error: any) => {
-    console.error(error);
-  }).finally(() => {
-    loading.value = false;
-  });
+      const cartitem: CartItemRes = {
+        product_id: data.id,
+        total_product_amount: data.total_product_amount,
+      };
+      cartitemRes.value = cartitem;
+    })
+    .catch((error: any) => {
+      // ตรวจสอบว่า API ส่ง message ว่า stock ไม่พอ
+      if (error.response && error.response.data.message === "not enough stock") {
+        Swal.fire({
+          title: "ไม่สามารถซื้อได้!",
+          text: "ขออภัย, สินค้าชิ้นนี้หมดสต็อกแล้ว!",
+          icon: "error",
+        });
+        return; // หยุดการดำเนินการ
+      }
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
+
+
 
 
 

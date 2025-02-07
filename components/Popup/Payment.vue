@@ -61,7 +61,7 @@ import { useIndexStore } from "~/store/main";
 const router = useRouter();
 const store = useIndexStore();
 const system = ref<SystemBank[]>([]);
-const order = ref<OrderById | null>(null); // ✅ เปลี่ยนเป็นเก็บแค่ออเดอร์เดียว
+const order = ref<OrderById | null>(null); // เปลี่ยนเป็นเก็บแค่ออเดอร์เดียว
 
 const getSystemBank = async () => {
   await service.product.getSystemBank()
@@ -93,7 +93,7 @@ const getOrder = async () => {
     const data = resp.data.data;
     if (data.length > 0) {
       order.value = {
-        id: data[0].id, // ✅ เอาออเดอร์ตัวแรกมาใช้
+        id: data[0].id, // เอาออเดอร์ตัวแรกมาใช้
         user_id: data[0].user_id,
         payment_id: data[0].payment_id,
         shipment_id: data[0].shipment_id,
