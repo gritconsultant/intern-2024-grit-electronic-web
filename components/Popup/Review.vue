@@ -41,50 +41,12 @@
           </div>
 
           <textarea
-            v-model="reviewText"
+            v-model="description"
             class="w-full border rounded-md p-2 mt-4"
             rows="3"
             placeholder="แสดงความคิดเห็น"
           ></textarea>
 
-          <!-- Image Upload Section -->
-          <div class="mt-4">
-            <h3 class="text-sm font-medium mb-2">เพิ่มรูปภาพ (สูงสุด 4 รูป)</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <div
-                v-for="(image, index) in uploadedImages"
-                :key="index"
-                class="relative w-24 h-24 border rounded-md overflow-hidden"
-              >
-                <img
-                  :src="image"
-                  alt="Uploaded"
-                  class="w-full h-full object-cover"
-                />
-                <button
-                  class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                  @click="removeImage(index)"
-                >
-                  ×
-                </button>
-              </div>
-              <div
-                v-if="uploadedImages.length < 4"
-                class="w-24 h-24 border rounded-md flex items-center justify-center cursor-pointer bg-gray-100"
-              >
-                <label for="image-upload" class="cursor-pointer">
-                  <i class="fas fa-plus text-gray-400"></i>
-                </label>
-                <input
-                  id="image-upload"
-                  type="file"
-                  accept="image/*"
-                  class="hidden"
-                  @change="handleImageUpload"
-                />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div class="flex justify-center mt-4 px-4 pb-6">
@@ -105,24 +67,78 @@ definePageMeta({
   layout: "auth",
 });
 
+import Swal from "sweetalert2";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import type { ReviewCreate, ReviewRes } from "~/models/product.model";
+import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 const router = useRouter();
+const review = ref<ReviewCreate>({
+  description: "",
+  rating: 0,
+  product_id: 0,
+})
+
+const reviewRes = ref<ReviewRes>({
+  description: "",
+  rating: 0,
+  product_id: 0,
+})
 
 // Rating and Review
 const rating = ref(5);
-const reviewText = ref("");
+const description = ref("");
 
-// Image Upload
-const uploadedImages = ref<string[]>([]);
+const addReview = async() => {
+  review.value.description = description.value;
+  review.value.rating = rating.value;
+  // review.value.product_id = store.product?.id;
+
+  await service.product.addReview(review.value)
+  .then((resp: any) => {
+    const data = resp.data.data;
+
+          // ถ้าการเพิ่มรีวิวสำเร็จ
+          Swal.fire({
+        title: "เพิ่มรีวิวสำเร็จ!",
+        text: "ได้เพิ่มรีวิวแล้ว!",
+        icon: "success",
+      });
+
+      const review: ReviewRes = {
+        description: data.description,
+        rating: data.rating,
+        product_id: data.product_id,
+      }
+
+      reviewRes.value = review;
+
+
+  })
+  .catch((error: any) => {
+      // ตรวจสอบว่า API ส่ง message ว่า stock ไม่พอ
+      if (error.response && error.response.data.message === "not enough stock") {
+        Swal.fire({
+          title: "ไม่สามารถซื้อได้!",
+          text: "ขออภัย, สินค้าชิ้นนี้หมดสต็อกแล้ว!",
+          icon: "error",
+        });
+        return; // หยุดการดำเนินการ
+      }
+    })
+    .finally(() => {
+    });
+}
+
+
 
 
 const confirmReview = () => {
   alert(
-    `รีวิวของคุณ: ${reviewText.value}\nคะแนน: ${rating.value}\nรูปภาพ: ${uploadedImages.value.length}`
+    `รีวิวของคุณ: ${description.value}\nคะแนน: ${rating.value}`
   );
   store.reviewAction = false;
   router.push("/order/review");
@@ -133,30 +149,10 @@ const setRating = (value: number) => {
   rating.value = value;
 };
 
+onMounted(() => {
+  addReview();
+})
 
-// Image Upload
-const handleImageUpload = (event: Event) => {
-  const input = event.target as HTMLInputElement;
-  const files = input.files;
-
-  if (files && uploadedImages.value.length < 4) {
-    const file = files[0];
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      if (reader.result) {
-        uploadedImages.value.push(reader.result as string);
-      }
-    };
-
-    reader.readAsDataURL(file);
-  }
-};
-
-// ลบ Uploaded Image
-const removeImage = (index: number) => {
-  uploadedImages.value.splice(index, 1);
-};
 </script>
 
 <style scoped>

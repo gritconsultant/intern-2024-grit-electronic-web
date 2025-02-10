@@ -28,9 +28,9 @@
     </div>
 
     <!-- Cart Items -->
-    <div class="px-4 md:px-5 flex-grow overflow-y-auto" v-if="loading">
+    <div class="px-4 md:px-5 flex-grow overflow-y-auto">
       <div
-        v-for="item in carts"
+        v-for="(item, index) in carts"
         :key="item.id"
         class="flex justify-between items-center border-b py-2"
       >
@@ -51,6 +51,7 @@
                 {{ item.Product.name }}
               </router-link>
             </div>
+
             <div>
               <button @click="deleteCartItem(item.id)" class="text-red-500">
                 <svg
@@ -77,10 +78,10 @@
                 >จำนวน: {{ item.total_product_amount }}
               </span>
 
-              <!-- icon แก้ไขจำนวน -->
-              <div>
+              <!-- icon แก้ไข -->
+              <button @click="toggleEditItem(index)" class="ml-2 text-gray-500 hover:text-gray-700">
                 <svg
-                  class="w-[22px] h-[22px] text-gray-800 dark:text-white"
+                  class="w-[22px] h-[22px] text-gray-400 hover:text-gray-700 dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -96,8 +97,37 @@
                     d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
                   />
                 </svg>
-              </div>
+              </button>
             </div>
+
+            <div v-if="editIndex === index" class="flex items-center gap-2 mt-2 md:mt-3">
+              <button @click="decreaseSelectedAmount(index)" class="px-2 text-xs md:text-sm border rounded">-</button>
+              <span> {{ item.total_product_amount }}</span>
+              <button @click="increaseSelectedAmount(index)" class="px-2 text-xs md:text-sm border rounded">+</button>
+
+              <button @click="saveEdit"
+                class="px-2 text-xs md:text-sm bg-green-500 text-white rounded"
+              >
+                <svg
+                  class="w-[22px] h-[22px] text-gray-800 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 11.917 9.724 16.5 19 7.5"
+                  />
+                </svg>
+              </button>
+            </div>
+
             <div class="mt-2 md:mt-3">
               <p class="font-semibold text-sm md:text-lg">
                 ฿{{ item.Product?.price || 0 }}
@@ -108,14 +138,14 @@
       </div>
     </div>
 
-    <div class="p-4 border-t mt-4 bg-gray-100" v-if="loading">
+    <div class="p-4 border-t mt-4 bg-gray-100">
       <div class="flex justify-between font-medium">
         <span class="text-sm md:text-base">ราคารวม:</span>
         <span class="text-sm md:text-base">฿{{ totalSelectedPrice }}</span>
       </div>
       <div class="flex flex-col items-center mt-5 md:mt-10">
         <button
-          @click="addOrder"
+        @click="addOrder"
           class="popupbtn w-full mb-2 text-sm md:text-base py-2"
           :disabled="selectedItems.length === 0"
         >
@@ -140,6 +170,8 @@ import type {
   CartItem,
   CartItems,
   OrderRes,
+  ProductCartUpdate,
+  ProductCartRes,
 } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
@@ -149,6 +181,8 @@ const route = useRoute();
 const loading = ref(true);
 const cartlist = ref<CartItems[]>([]);
 const carts = ref<CartItem[]>([]);
+const editIndex = ref<number | null>(null);
+const isEditing = ref(false);
 const orders = ref<OrderAdd>({
   shipment_id: 0,
   payment_id: 0,
@@ -160,6 +194,14 @@ const orderRes = ref<OrderRes>({
   payment_id: 0,
   status: "pending",
 });
+
+const productCartUpdate = ref<ProductCartUpdate>({
+  total_product_amount: 0,
+})
+
+const productCartRes = ref<ProductCartRes>({
+  total_product_amount: 0,
+})
 
 const getCartItem = async () => {
   await service.product
@@ -253,6 +295,51 @@ const addOrder = async () => {
     .finally(() => {
       loading.value = false;
     });
+};
+
+const toggleEditItem = (index: number) => {
+    editIndex.value = isEditing.value? null : index;
+//   isEditing.value =!isEditing.value;
+}
+
+const saveEdit = async () => {
+  await service.product.updateCartItem(store.$state.userId, productCartUpdate.value)
+  .then((resp: any) => {
+    console.log(resp);
+    const data = resp.data.data;
+    const productCartUpdate: ProductCartRes = {
+      total_product_amount: data.total_product_amount,
+    };
+    productCartRes.value = productCartUpdate;
+  })
+  .catch((error: any) => {
+     console.error(error);
+   })
+   .finally(() => {
+     isEditing.value = false;
+   });
+}
+
+
+
+
+// const saveEdit = () => {
+//     editIndex.value = null;
+// }
+
+const selectedCount = computed(() => cartlist.value.filter((item) => item.selected).length);
+
+
+// เพิ่มจำนวน
+const increaseSelectedAmount = (index: number) => {
+  carts.value[index].total_product_amount++;
+};
+
+// ลดจำนวน
+const decreaseSelectedAmount = (index: number) => {
+  if (carts.value[index].total_product_amount > 1) {
+    carts.value[index].total_product_amount--;
+  }
 };
 
 // คำนวณราคารวมของสินค้าที่เลือก

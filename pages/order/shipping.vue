@@ -203,6 +203,7 @@ const getOrder = async () => {
           status: e.status,
           created_at: e.created_at,
           updated_at: e.updated_at,
+          products: e.products,
         };
         orderId.push(order);
       }

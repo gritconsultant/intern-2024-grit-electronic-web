@@ -12,9 +12,6 @@
           </div>
           <p> {{ averageRating }}</p>
         </div>
-        <div class="text-[#878787]">
-          <i class="fa-regular fa-heart"></i>
-        </div>
       </div>
 
       <div class="flex justify-center items-center h-[300px] w-full overflow-hidden rounded-md">
@@ -59,6 +56,7 @@ const averageRating = computed(() => {
   const total = props.product.Review.reduce((sum, review) => sum + review.rating, 0);
   return (total / props.product.Review.length).toFixed(1); // ค่าเฉลี่ยทศนิยม 1 ตำแหน่ง
 });
+
 
 
 </script>

@@ -4,14 +4,14 @@
   >
     <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
       <h1 class="text-sm md:text-base font-bold">
-        รายการโปรด ({{ favoriteItems.length }})
+        รายการโปรด ({{ wish.length }})
       </h1>
-      <h2
+      <!-- <h2
         @click="clearFavorites"
         class="text-red-500 cursor-pointer text-xs md:text-sm ml-56"
       >
         ลบทั้งหมด
-      </h2>
+      </h2> -->
       <button @click="store.favouriteAction = !store.favouriteAction">
         <svg
           class="w-5 h-5 md:w-6 md:h-6 hover:text-red-500"
@@ -34,34 +34,32 @@
     <!-- Favorite Items -->
     <div class="px-4 md:px-5 overflow-y-auto flex-1">
       <div
-        v-for="(item, index) in favoriteItems"
+        v-for="(item, index) in wish"
         :key="item.id"
         class="flex justify-between items-center border-b py-2"
       >
-
         <img
-          :src="item.img"
+          src=""
           alt="product"
           class="w-[50px] h-[50px] md:w-[75px] md:h-[75px] object-cover rounded-md"
         />
         <div class="flex-1 ml-2">
           <div class="flex justify-between">
             <div>
-                            <!-- link ไปหน้า product -->
-                            <router-link
-                :to="`/product/${item.id}`"
-                class="text-sm md:text-md font-normal text-blue-500 hover:underline"
+              <!-- link ไปหน้า product -->
+              <div
+                class="text-md md:text-md font-bold"
               >
-                {{ item.name }}
-              </router-link>
+                {{ item.product.name }}
+              </div>
             </div>
           </div>
 
           <div class="flex justify-between">
             <!-- detail -->
             <div class="font-normal text-xs text-black/50">
-                <p class="texthide">{{ item.detail }}</p>
-              </div>
+              <p class="texthide">{{ item.product.description }}</p>
+            </div>
 
             <!-- fav -->
             <div>
@@ -98,14 +96,13 @@
           <div>
             <div class="flex justify-between items-center gap-2 mt-1">
               <div>
-                <p class="fontsubheader">฿{{ item.price }}</p>
+                <p class="fontsubheader">฿{{ item.product.price }}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
 
     <div class="p-3 md:p-4 border-t bg-gray-100">
       <button
@@ -119,115 +116,78 @@
 </template>
 
 <script setup lang="ts">
-
-definePageMeta({
-  layout: "auth",
-});
-
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import type { wishlistById } from "~/models/product.model";
+import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
-const favoriteItems = ref([
-{
-    id: 1,
-    name: "มะขาม 4 รส",
-    detail:
-      "มะขาม 4 รส มะขามคลุก (บ้านมะขาม) โดยบริษัทสวนผึ้ง จำกัด ",
-    price: 62,
-    amount: 1,
-    img: "https://th-test-11.slatic.net/p/2b0d5f80a00b77d2c6490b09a053a1c0.png",
-    isFavorite: true,
-  },
-  {
-    id: 2,
-    name: "มะขามคลุกบ๊วย 4 รส",
-    detail: "มะขามแกะเปลือก ปรุงรสด้วย นำ้ตาล พริก เกลือ และผงบ๊วย ",
-    price: 62,
-    amount: 1,
-    img: "https://halal.co.th/storages/products/343928.png",
-    isFavorite: true,
-  },
-  {
-    id: 3,
-    name: "เลมอนอบแห้ง รสน้ำผึ้ง",
-    detail: "เลมอนอบแห้ง ผสมด้วย ผงน้ำผึ้ง",
-    price: 59,
-    amount: 10,
-    img: "https://halal.co.th/storages/products/390694.jpg",
-    categoryId: 1,
-    isFavorite: true,
-  },
-  {
-    id: 4,
-    name: "เผือกกรอบไส้เสาวรส",
-    detail: "บริษัท สวนผึ้งหวาน จำกัด เผือกกรอบไส้เสาวรส",
-    price: 58,
-    amount: 20,
-    img: "https://halal.co.th/storages/products/680694.jpg",
-    categoryId: 1,
-    isFavorite: true,
-  },
+const wish = ref<wishlistById[]>([]);
 
+const getWishlist = async () => {
+  await service.product
+    .getFavorite()
+    .then((resp: any) => {
+      const data = resp.data.data;
+      const wishlist: wishlistById[] = [];
+      console.log(data);
 
-  {
-    id: 5,
-    name: "เครื่องดื่มรังนกสำเร็จรูป",
-    detail: "ดอกบัวคู่ เครื่องดื่มรังนกสำเร็จรูป สูตรดั้งเดิม",
-    price: 150,
-    amount: 5,
-    img: "https://halal.co.th/storages/products/679578.jpg",
-    categoryId: 2,
-    isFavorite: true,
-  },
-  {
-    id: 6,
-    name: "เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง",
-    detail: "กิฟฟารีน วีทกราส (เครื่องดื่มใบอ่อนข้าวสาลีชนิดผง) (ตรากิฟฟารีน)",
-    price: 150,
-    amount: 3,
-    img: "https://halal.co.th/storages/products/p135225.jpg",
-    categoryId: 2,
-    isFavorite: true,
-  },
-  {
-    id: 7,
-    name: "เครื่องดื่มน้ำองุ่นขาว",
-    detail: "กลูต้า เคอร์คิวมา มินต์ ซี เครื่องดื่มน้ำองุ่นขาว ผสมกลูต้าไธโอนและขมิ้น",
-    price: 40,
-    amount: 3,
-    img: "https://farmfoodsmart.com/upload/products/1634/637982414838759739.png",
-    categoryId: 2,
-    isFavorite: true,
-  },
-  {
-    id: 8,
-    name: "เครื่องดื่มสมุนไพรตรีผลา",
-    detail: "ชีววิถี เครื่องดื่มสมุนไพรตรีผลา สูตรเข้มข้น รสธรรมชาติ",
-    price: 155,
-    amount: 3,
-    img: "https://obs-ect.line-scdn.net/r/ect/ect/image_1695790690327236876b5788947t124fdd52",
-    categoryId: 2,
-    isFavorite: true,
-  },
-]);
+      for (let i = 0; i < data.length; i++) {
+        const e = data[i];
+        const wishlists: wishlistById = {
+          id: e.id,
+          user: e.user,
+          product: e.product,
+          price_per_product: e.price_per_product,
+          amount_per_product: e.amount_per_product,
+          created_at: e.created_at,
+          updated_at: e.updated_at,
+          isFavorite: true,
+        };
+        wishlist.push(wishlists);
+      }
+      wish.value = wishlist;
+    })
+    .catch((erro: any) => {
+      console.error(Error);
+    })
+    .finally(() => {});
+};
+
+const deleteWishlist = async (id: String) => {
+  await service.product
+    .deleteFavorite(id)
+    .then((resp: any) => {
+      const data = resp.data.data;
+      console.log(data);
+    })
+    .catch((error: any) => {
+      console.error(error);
+    })
+    .finally(() => {});
+};
 
 // Toggle Favorite - ถ้ากดไอคอนหัวใจซ้ำจะเปลี่ยน isFavorite
-const toggleFavorite = (index: number) => {
-  favoriteItems.value[index].isFavorite =
-    !favoriteItems.value[index].isFavorite;
-  if (!favoriteItems.value[index].isFavorite) {
-    // ถ้า isFavorite เป็น false ให้ลบออกจากรายการ
-    favoriteItems.value.splice(index, 1);
+const toggleFavorite = async (index: number) => {
+  const item = wish.value[index];
+
+  if (item.isFavorite) {
+    // ถ้ากดปิด ให้ลบจากรายการโปรด
+    try {
+      await deleteWishlist(String(item.id));
+      wish.value.splice(index, 1); // ลบออกจาก UI
+    } catch (error) {
+      console.error("Failed to remove from wishlist:", error);
+    }
+  } else {
+    // ถ้ากดเปิด ต้องเพิ่มเข้าไปในรายการโปรด (ถ้ามี API รองรับ)
+    console.log("เพิ่มเข้ารายการโปรด", item.product.name);
   }
 };
 
-// ล้างรายการโปรด
-const clearFavorites = () => {
-  favoriteItems.value = [];
-};
-
+onMounted(() => {
+  getWishlist();
+});
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

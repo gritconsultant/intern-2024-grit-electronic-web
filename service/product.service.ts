@@ -1,4 +1,4 @@
-import type { CartItemCreate, OrderAdd, OrderCreate, PasswordUpdate, ProductCartUpdate, Shipment, ShipmentCreate, ShipmentUpdate } from "~/models/product.model"
+import type { CartItemCreate,OrderCreate, Params, PasswordUpdate, ProductCartUpdate, ReviewCreate, ShipmentCreate, ShipmentUpdate, WishlistCreate } from "~/models/product.model"
 import { client } from "./httpClient"
 
 
@@ -25,6 +25,14 @@ export const getCategoryList = () => {
         method: "get",
     })
 } 
+
+export const getOrderlist = (params: Params) => {
+    return client({
+      url: "/order",
+      method: "GET",
+      params,
+    });
+  };
 
 
 
@@ -117,7 +125,7 @@ export const deleteCartItem = (cartItemId: number) => {
     })
 }
 
-export const updateCartItem = (id: any , payload: ProductCartUpdate) => {
+export const updateCartItem = (id: any, payload: ProductCartUpdate) => {
     return client({
         url: `/cartitem/${id}`,
         method: "patch",
@@ -162,5 +170,37 @@ export const getSystemBank = () => {
     return client({
         url: "/system",
         method: "get",
+    })
+}
+
+export const addReview = (payload: ReviewCreate) => {
+    return client({
+        url: "/review/create",
+        method: "post",
+        data: payload,
+    })
+}
+
+
+// fav
+export const getFavorite = () => {
+    return client({
+        url: "/wish",
+        method: "get",
+    })
+}
+
+export const deleteFavorite = (id: any) => {
+    return client({
+        url:`/wish/${id}`,
+        method: "delete",
+    })
+}
+
+export const addFavorite = (payload: WishlistCreate) => {
+    return client({
+        url: "/wish/create",
+        method: "post",
+        data: payload,
     })
 }

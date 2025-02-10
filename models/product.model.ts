@@ -141,7 +141,7 @@ export interface ShipmentId {
 }
 
 export interface ShipmentCreate {
-    id: number;
+    ID: number;
     firstname: string;
     lastname: string;
     address: string;
@@ -308,6 +308,7 @@ export interface OrderById {
     status: string;
     created_at: number;
     updated_at: number;
+    products: []; // ✅ เพิ่ม products เข้าไป
 }
 
 // export interface OrderById {
@@ -374,3 +375,59 @@ export interface ImageSystemBank {
     type: any;
     description: string;
 }
+
+export interface Params {
+    page: number;
+    size: number;
+    search: string;
+  }
+
+
+  export interface ReviewCreate {
+    description: string;
+    rating: number;
+    product_id: number;
+  }
+
+  export interface ReviewRes {
+    description: string;
+    rating: number;
+    product_id: number;
+  }
+
+  export interface wishlistById {
+    id: number;
+    user: Userwish;
+    product: Productwish;
+    price_per_product: number;
+    amount_per_product: number;
+    created_at: number;  
+    updated_at: number;
+    isFavorite: boolean;
+
+  }
+
+  export interface Userwish {
+    id: number;
+    username: string;
+  }
+
+  export interface Productwish {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+  }
+
+
+  export interface WishlistCreate {
+    user_id: number;
+    product_id: number;
+    isFavorite: boolean;
+  }
+
+  export interface WishlistRes {
+    user_id: number;
+    product_id: number;
+    isFavorite: boolean;
+  }

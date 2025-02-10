@@ -145,13 +145,14 @@ definePageMeta({
 });
 
 import { ref } from "vue";
-import type { Order, UserInfo } from "~/models/product.model";
+import type { Order, OrderById, UserInfo } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 const loading = ref(true); 
 const orders = ref<Order[]>([]);
+  const orderById = ref<OrderById[]>([]);
 const getinfo = ref<UserInfo>({
   ID: 0,
   FirstName: "",
@@ -166,28 +167,16 @@ const getinfo = ref<UserInfo>({
 
 const getuserinfo = async () => {
   loading.value = true;
-  await service.product
-    .getUserInfo()
-    .then((resp: any) => {
-      console.log(resp);
-      const data = resp.data.data;
-      const user: UserInfo = {
-        ID: data.ID,
-        FirstName: data.FirstName,
-        LastName: data.LastName,
-        Username: data.Username,
-        Password: data.Password,
-        Email: data.Email,
-        Phone: data.Phone,
-        created_at: data.created_at,
-        updated_at: data.updated_at,
-      };
-      getinfo.value = user;
-    })
-    .catch((error: any) => {
-      console.log(error);
-    })
-    .finally(() => {loading.value = false;});
+  try {
+    const resp = await service.product.getUserInfo();
+    console.log("User Info:", resp);
+    getinfo.value = resp.data.data;
+    store.$state.userId = resp.data.data.ID; // เก็บ userId ใน store
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loading.value = false;
+  }
 };
 
 const getOrderList = async () => {
@@ -236,9 +225,44 @@ const getOrderList = async () => {
     .finally(() => {loading.value = false;});
 };
 
-const selectedOrder = ref<Order | null>(null);
 
-const selectOrder = (order: Order) => {
+const getOrder = async () => {
+  loading.value = true;
+  await service.product
+    .getOrderById()
+    .then((resp: any) => {
+      const data = resp.data.data;
+      const orderId: OrderById[] = [];
+      console.log(data);
+      for (let i = 0; i < data.length; i++) {
+        const e = data[i];
+        const order: OrderById = {
+          id: e.id,
+          user_id: e.user_id,
+          payment_id: e.payment_id,
+          shipment_id: e.shipment_id,
+          total_amount: e.total_amount,
+          total_price: e.total_price,
+          status: e.status,
+          created_at: e.created_at,
+          updated_at: e.updated_at,
+          products: e.products,
+        };
+        orderId.push(order);
+      }
+      orderById.value = orderId;
+    })
+    .catch((error: any) => {
+      console.error(error);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+};
+
+const selectedOrder = ref<OrderById | null>(null);
+
+const selectOrder = (order: OrderById) => {
   selectedOrder.value = order;
 };
 
@@ -256,6 +280,7 @@ const formatDate = (timestamp: number): string => {
 onMounted(async () => {
   await getOrderList();
   await getuserinfo();
+  await getOrder();
 });
 </script>
 

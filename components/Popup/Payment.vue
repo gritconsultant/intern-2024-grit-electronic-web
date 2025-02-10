@@ -77,6 +77,7 @@ const getSystemBank = async () => {
       is_active: e.is_active,
       created_at: e.created_at,
       updated_at: e.updated_at,
+      
     }));
   })
   .catch((error: any) => {
@@ -102,6 +103,7 @@ const getOrder = async () => {
         status: data[0].status,
         created_at: data[0].created_at,
         updated_at: data[0].updated_at,
+        products: data[0].products,
       };
     }
   })

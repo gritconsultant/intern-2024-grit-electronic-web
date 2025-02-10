@@ -135,9 +135,7 @@ definePageMeta({
 
 import { ref } from "vue";
 import type {
-  Order,
   OrderById,
-  Product,
   UserInfo,
 } from "~/models/product.model";
 import service from "~/service";
@@ -206,6 +204,7 @@ const getOrder = async () => {
           status: e.status,
           created_at: e.created_at,
           updated_at: e.updated_at,
+          products: [],
         };
         orderId.push(order);
       }
