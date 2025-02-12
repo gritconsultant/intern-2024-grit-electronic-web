@@ -41,7 +41,7 @@
 
           <div class="flex justify-between mt-6">
             <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded" @click="cancel">ยกเลิก</button>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">บันทึก </button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">บันทึก</button>
           </div>
         </form>
       </div>
@@ -50,14 +50,18 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch, defineProps } from "vue";
 import Swal from "sweetalert2";
-import type { Shipment, ShipmentId, ShipmentRes, ShipmentUpdate } from "~/models/product.model";
 import service from "~/service";
+import type { ShipmentUpdate } from "~/models/product.model";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
-const route = useRoute();
-const shipment = ref<ShipmentId[]>([]);
+
+const props = defineProps({
+  addressData: Object as () => ShipmentUpdate | null, // รับค่า addressData จาก props
+});
+
 const shipmentUpdate = ref<ShipmentUpdate>({
   id: 0,
   firstname: "",
@@ -67,93 +71,43 @@ const shipmentUpdate = ref<ShipmentUpdate>({
   district: "",
   province: "",
   zip_code: 0,
-})
-
-const shipmentRes = ref<ShipmentRes>({
-  id: 0,
-  firstname: "",
-  lastname: "",
-  address: "",
-  zip_code: 0,
-  sub_district: "",
-  district: "",
-  province: "",
 });
 
-const getShipment = async () => {
-  await service.product
-    .getShipmentId()
-    .then((resp: any) => {
-      const data = resp.data.data;
-      const shipmentlist: Shipment[] = [];
-      console.log(data);
+// อัปเดตข้อมูลเมื่อ props เปลี่ยนแปลง
+watch(
+  () => props.addressData,
+  (newVal) => {
+    if (newVal) {
+      shipmentUpdate.value = { ...newVal };
+    }
+  },
+  { immediate: true }
+);
 
-      for (let i = 0; i < data.length; i++) {
-        const e = data[i];
-        const shipments: Shipment = {
-          id: e.id,
-          firstname: e.firstname,
-          lastname: e.lastname,
-          address: e.address,
-          zip_code: e.zip_code,
-          sub_district: e.sub_district,
-          district: e.district,
-          province: e.province,
-          status: e.status,
-          created_at: e.created_at,
-          updated_at: e.updated_at,
-        };
-        shipmentlist.push(shipments);
-      }
-      shipment.value = shipmentlist;
-    })
-    .catch((error: any) => {
-      console.log(error);
-    })
-    .finally(() => {
-    });
-};
-
-const updateShipments = async() => {
-  await service.product.updateShipment(route.params.id, shipmentUpdate.value)
-  .then((resp: any) => {
+const updateShipments = async () => {
+  try {
+    const resp = await service.product.updateShipment(
+      shipmentUpdate.value.id.toString(), // 🔹 แปลง id เป็น string ก่อนส่ง
+      shipmentUpdate.value
+    );
     const data = resp.data.data;
 
     if (data) {
-        Swal.fire({
-          title: "แก้ไขที่อยู่สำเร็จ!",
-          text: "ที่อยู่ของคุณได้แก้ไขแล้ว!",
-          icon: "success",
-          confirmButtonText: "Okay",
-        });
-      }
-
-      const shipment: ShipmentRes = {
-        id: data.id,
-        firstname: data.firstname,
-        lastname: data.lastname,
-        address: data.address,
-        zip_code: data.zip_code,
-        sub_district: data.sub_district,
-        district: data.district,
-        province: data.province,
-      };
-      shipmentRes.value = shipment;
-  })
-  .catch((error: any) => {
-    console.error(error.response);
-  })
-  .finally(() => {
-  });
-}
+      Swal.fire({
+        title: "แก้ไขที่อยู่สำเร็จ!",
+        text: "ที่อยู่ของคุณได้แก้ไขแล้ว!",
+        icon: "success",
+        confirmButtonText: "Okay",
+      });
+    }
+  } catch (error) {
+    console.error("Update Error:", error);
+  }
+};
 
 
 // ยกเลิกการแก้ไข
 const cancel = () => {
   store.editaddressAction = false;
 };
-
-onMounted(() => {
-  getShipment();
-});
 </script>

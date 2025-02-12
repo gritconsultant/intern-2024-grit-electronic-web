@@ -58,7 +58,7 @@ const getCategoryList = async () => {
       categories.value = data.map((e: any) => ({
         id: e.id,    
         name: e.name, 
-        img: e.img,   
+        image: e.image,   
       }));
     })
     .catch((error: any) => {

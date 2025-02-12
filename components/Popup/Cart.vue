@@ -36,7 +36,7 @@
       >
         <input type="checkbox" v-model="item.selected" class="mr-2" />
         <img
-          src=""
+          :src="item.Product.image"
           alt=""
           class="w-[50px] h-[50px] md:w-[75px] md:h-[75px] object-cover rounded-md"
         />
@@ -218,6 +218,7 @@ const getCartItem = async () => {
           Product: e.product,
           total_product_amount: e.total_product_amount,
           selected: false,
+          image: e.image,
         };
         cartitems.push(cartitem);
       }
@@ -316,7 +317,6 @@ const saveEdit = async () => {
      console.error(error);
    })
    .finally(() => {
-     isEditing.value = false;
    });
 }
 

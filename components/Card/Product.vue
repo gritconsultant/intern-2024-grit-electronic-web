@@ -16,7 +16,11 @@
 
       <div class="flex justify-center items-center h-[300px] w-full overflow-hidden rounded-md">
         <div class="w-full h-full object-cover rounded-md">
-          {{ product.image.id }}
+          <img
+                  :src="product.image"
+                  alt=""
+                  class="w-full h-full object-cover"
+                />
         </div>
 
       </div>

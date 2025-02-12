@@ -58,6 +58,7 @@ export const getShipmentId = () => {
     return client({
         url: "/shipment",
         method: "get",
+
     })
 } 
 
@@ -142,12 +143,54 @@ export const getOrderList = () => {
     })
 }
 
-export const getOrderById = () => {
+export const getOrderById = (id: any) => {
     return client({
-        url: "/order",
+        url: `/order/${id}`,
         method: "get",
     })
 }
+
+export const getOrderPending = () => {
+    return client({
+        url: "/order/pending",
+        method: "get",
+    })
+}
+export const getOrderShip = () => {
+    return client({
+        url: "/order/ship",
+        method: "get",
+    })
+}
+
+export const getOrderPrepare = () => {
+    return client({
+        url: "/order/prepare",
+        method: "get",
+    })
+}
+
+export const getOrderSuccess = () => {
+    return client({
+        url: "/order/success",
+        method: "get",
+    })
+}
+
+export const getOrderHistory = () => {
+    return client({
+        url: "/order/history",
+        method: "get",
+    })
+}
+
+
+// export const getOrderById = (orderId: number) => {
+//     return client({
+//         url: `/order/${orderId}`, // เพิ่ม orderId ไปใน URL
+//         method: "get",
+//     });
+// };
 
 // export const getOrderById = () => {
 //     return client({
@@ -204,3 +247,4 @@ export const addFavorite = (payload: WishlistCreate) => {
         data: payload,
     })
 }
+

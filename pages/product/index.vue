@@ -84,12 +84,7 @@ const getProductList = async () => {
             price: e.price,
             stock: e.stock,
             description: e.description ?? null,
-            image: {
-              id: e.image?.id,
-              ref_id: e.image?.ref_id,
-              type: e.image?.type,
-              description: e.image?.description,
-            },
+            image: e.image,
             category: {
               id: e.category?.id,
               name: e.category?.name,

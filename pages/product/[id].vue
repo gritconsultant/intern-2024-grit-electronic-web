@@ -9,7 +9,7 @@
             <div class="w-full p-2 flex justify-center">
               <div class="object-cover max-w-full w-[650px] h-[650px]">
                 <img
-                  :src="product.image.description"
+                  :src="product.image"
                   alt=""
                   class="w-full h-full object-cover"
                 />
@@ -121,11 +121,24 @@
           </div>
         </div>
       </div>
-      <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30"></div>
+      <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30">
+        <div class="flex flex-col gap-4">
+          <p>สินค้าอื่นๆ</p>
+          <div class="flex flex-wrap gap-4">
+            <!-- Product Card -->
+              <div
+                v-for="product in products"
+                :key="product.id"
+                class="w-[250px] h-[300px] border-2 border-gray-200 p-4 rounded-lg transition hover:border-[#EE973C]"
+                :class="{
+                  'hover:border-[#EE973C]': product.category.name == 'Product',
+                }"
+              ></div>
+          </div>
+        </div>
+      </div>
     </div>
     <Loading :loading="loading" />
-
-    <pre>{{ wishlistCreate }}</pre>
   </div>
 </template>
 
@@ -182,12 +195,7 @@ const getProductById = async () => {
     price: data.price,
     stock: data.stock,
     description: data.description ?? null,
-    image: {
-      id: data.image?.id,
-      ref_id: data.image?.ref_id,
-      type: data.image?.type,
-      description: data.image?.description,
-    },
+    image: data.image,
     category: {
       id: data.category?.id,
       name: data.category?.name,

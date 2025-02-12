@@ -21,25 +21,26 @@
           style="max-height: 48vh"
         >
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
-          <div
-            v-for="order in orderById"
-            :key="order.id"
-            @click="selectOrder(order)"
-            class="cursor-pointer border-b p-4"
-            :class="{
-              'bg-gray-100': selectedOrder && selectedOrder.id === order.id,
-            }"
-          >
-            <div class="flex justify-between items-center">
-              <div>
-                <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
-                <p class="text-gray-500 text-sm">
-                  {{ formatDate(order.created_at) }}
-                </p>
+          <div v-if="orders.length">
+            <div
+              v-for="order in orders"
+              :key="order.id"
+              @click="checkOrder(order)"
+              class="cursor-pointer border-b p-4"
+              :class="{ 'bg-gray-400': selectedOrder?.id === order.id }"
+            >
+              <div class="flex justify-between items-center">
+                <div>
+                  <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
+                  <p class="text-gray-500 text-sm">
+                    {{ formatDate(order.created_at) }}
+                  </p>
+                </div>
+                <p class="text-lg font-bold">฿{{ order.total_price }}</p>
               </div>
-              <p class="text-lg font-bold">฿{{ order.total_price }}</p>
             </div>
           </div>
+          <div v-else class="text-center text-gray-500">ไม่มีคำสั่งซื้อ</div>
         </div>
 
         <!-- Selected Order Details -->
@@ -49,37 +50,29 @@
         >
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
           <div v-if="selectedOrder">
-            <!-- Products -->
-            <!-- <div
-              v-for="product in selectedOrder.products"
-              :key="product.id"
-              class="flex items-center space-x-4 border-b pb-4"
-            >
-              <div class="w-24 h-24">
-                <img
-                  src=""
-                  alt="product"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <div class="flex-grow">
-                <div class="flex justify-between">
-                  <h2 class="font-bold">{{ product.name }}</h2>
-                  <p class="text-lg font-bold">฿{{ product.price }}</p>
-                </div>
-                <p class="text-gray-500 text-sm">{{ product.description }}</p>
-                <p class="text-gray-500 text-sm">จำนวน: {{ product.stock }}</p>
-              </div>
-            </div> -->
+            <h3 class="font-bold">สินค้า</h3>
+            <ul>
+              <li
+                v-for="(product, index) in selectedOrder.product"
+                :key="index"
+                class="text-gray-700"
+              >
+                - {{ product }}
+              </li>
+            </ul>
 
-            <!-- Address -->
-            <div class="mt-4 border-b pb-4">
+            <div class="mt-4 pb-4 border-b">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <p class="text-gray-500 text-sm mt-4">
-                ชื่อผู้รับ : {{ getinfo.FirstName }}
-                <span> {{ getinfo.LastName }}</span>
+              <p class="text-gray-700">
+                {{ selectedOrder?.Shipment.firstname }}
+                {{ selectedOrder?.Shipment.lastname }}
+                <br />
+                {{ selectedOrder?.Shipment.address }},
+                {{ selectedOrder?.Shipment.sub_district }},
+                {{ selectedOrder?.Shipment.district }},
+                {{ selectedOrder?.Shipment.province }}
+                {{ selectedOrder?.Shipment.zip_code }}
               </p>
-              <p class="text-gray-500 text-sm">ที่อยู่ : {{}}</p>
             </div>
 
             <!-- Delivery Method -->
@@ -101,196 +94,122 @@
               </div>
             </div>
 
-            <!-- shipping -->
-
+            <!-- Tracking Number -->
             <div class="mt-4 space-x-4">
-              <label for="trackingNumber" class="block font-medium">
-                    เลขแทร็ก
-                  </label>
-                  <div class="flex items-center mt-2">
-                    <input
-                      id="trackingNumber"
-                      type="text"
-                      class="border p-2 rounded-lg w-full mr-2"
-                      :value="trackingNumber"
-                      readonly
-                    />
-                    <button
-                      @click="copyToClipboard(trackingNumber)"
-                      class="text-blue-500 text-xl"
-                      title="คัดลอกเลขแทร็ก"
-                    >
-                      <svg
-                        class="w-[22px] h-[22px] text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 8v3a1 1 0 0 1-1 1H5m11 4h2a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-7a1 1 0 0 0-1 1v1m4 3v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7.13a1 1 0 0 1 .24-.65L7.7 8.35A1 1 0 0 1 8.46 8H13a1 1 0 0 1 1 1Z"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <a
-                    :href="`https://track.thailandpost.co.th/?trackNumber=${trackingNumber}`"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-blue-500 underline flex items-center mt-2"
-                  >
-                    <span class="ml-2">ตรวจสอบสถานะ</span>
-                  </a>
-            </div>
-            <!-- Shipping Status -->
-            <!-- <div class="mt-4 border-b pb-4">
-              <h3 class="font-bold">สถานะการจัดส่ง</h3>
-              <div
-                v-for="status in selectedOrder.shippingStatus"
-                :key="status.text"
-                class="flex items-center justify-between"
+              <label for="trackingNumber" class="block font-medium"
+                >เลขแทร็ก</label
               >
-                <div>
-                  <p>{{ status.text }}</p>
-                  <p class="text-gray-500 text-sm">{{ status.date }}</p>
-                </div> -->
-
-            <!-- Show Tracking Number -->
-            <!-- <div
-                  v-if="status.isCurrent && status.text === 'การจัดส่งสำเร็จ'"
-                  class="mt-4"
+              <div class="flex items-center mt-2">
+                <input
+                  id="trackingNumber"
+                  type="text"
+                  class="border p-2 rounded-lg w-full mr-2"
+                  :value="trackingNumber"
+                  readonly
+                />
+                <button
+                  @click="copyToClipboard(trackingNumber)"
+                  class="text-blue-500 text-xl"
+                  title="คัดลอกเลขแทร็ก"
                 >
-                  <label for="trackingNumber" class="block font-medium">
-                    เลขแทร็ก
-                  </label>
-                  <div class="flex items-center mt-2">
-                    <input
-                      id="trackingNumber"
-                      type="text"
-                      class="border p-2 rounded-lg w-full mr-2"
-                      :value="trackingNumber"
-                      readonly
-                    />
-                    <button
-                      @click="copyToClipboard(trackingNumber)"
-                      class="text-blue-500 text-xl"
-                      title="คัดลอกเลขแทร็ก"
-                    >
-                      <svg
-                        class="w-[22px] h-[22px] text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 8v3a1 1 0 0 1-1 1H5m11 4h2a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-7a1 1 0 0 0-1 1v1m4 3v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7.13a1 1 0 0 1 .24-.65L7.7 8.35A1 1 0 0 1 8.46 8H13a1 1 0 0 1 1 1Z"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <a
-                    :href="`https://track.thailandpost.co.th/?trackNumber=${trackingNumber}`"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-blue-500 underline flex items-center mt-2"
+                  <svg
+                    class="w-[22px] h-[22px] text-gray-800"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
                   >
-                    <span class="ml-2">ตรวจสอบสถานะ</span>
-                  </a>
-                </div> -->
+                    <path
+                      stroke="currentColor"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 8v3a1 1 0 0 1-1 1H5m11 4h2a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-7a1 1 0 0 0-1 1v1m4 3v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7.13a1 1 0 0 1 .24-.65L7.7 8.35A1 1 0 0 1 8.46 8H13a1 1 0 0 1 1 1Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <a
+                :href="`https://track.thailandpost.co.th/?trackNumber=${trackingNumber}`"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-blue-500 underline flex items-center mt-2"
+              >
+                <span class="ml-2">ตรวจสอบสถานะ</span>
+              </a>
+            </div>
+
+            <!-- Confirm Received Button -->
+            <div
+              v-if="selectedOrder && selectedOrder.status !== 'success'"
+              class="mt-4"
+            >
+              <button
+                class="bg-green-500 text-white px-4 py-2 rounded-lg w-full hover:bg-green-600 transition"
+              >
+                ยืนยันได้รับสินค้าแล้ว
+              </button>
+            </div>
           </div>
           <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div>
         </div>
       </div>
-
-      <!-- <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div> -->
     </div>
+    <Loading :loading="loading" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Order, OrderById, UserInfo } from "~/models/product.model";
+import type { Order, OrderById, Shipment } from "~/models/product.model";
 import service from "~/service";
-import { useIndexStore } from "~/store/main";
 
-const store = useIndexStore();
 const loading = ref(true);
-const orderById = ref<OrderById[]>([]);
-const getinfo = ref<UserInfo>({
-  ID: 0,
-  FirstName: "",
-  LastName: "",
-  Username: "",
-  Password: "",
-  Email: "",
-  Phone: 0,
-  created_at: 0,
-  updated_at: 0,
-});
+const orders = ref<Order[]>([]);
+const selectedOrder = ref<OrderById | null>(null);
+const shipment = ref<Shipment[]>([]);
+const selectedAddressMap = ref<{ [key: number]: number }>({});
 
-const getuserinfo = async () => {
+const getOrderprepare = async () => {
   loading.value = true;
   await service.product
-    .getUserInfo()
-    .then((resp: any) => {
-      console.log(resp);
-      const data = resp.data.data;
-      const user: UserInfo = {
-        ID: data.ID,
-        FirstName: data.FirstName,
-        LastName: data.LastName,
-        Username: data.Username,
-        Password: data.Password,
-        Email: data.Email,
-        Phone: data.Phone,
-        created_at: data.created_at,
-        updated_at: data.updated_at,
-      };
-      getinfo.value = user;
-    })
-    .catch((error: any) => {
-      console.log(error);
-    })
-    .finally(() => {
-      loading.value = false;
-    });
-};
-
-const getOrder = async () => {
-  loading.value = true;
-  await service.product
-    .getOrderById()
+    .getOrderPrepare()
     .then((resp: any) => {
       const data = resp.data.data;
-      const orderId: OrderById[] = [];
+      const orderList: Order[] = [];
       console.log(data);
+
       for (let i = 0; i < data.length; i++) {
         const e = data[i];
-        const order: OrderById = {
+        const order: Order = {
           id: e.id,
           user_id: e.user_id,
-          payment_id: e.payment_id,
-          shipment_id: e.shipment_id,
+          username: e.username,
+          status: e.status,
           total_amount: e.total_amount,
           total_price: e.total_price,
-          status: e.status,
+          system_bank_id: e.system_bank_id,
+          payment_price: e.payment_price,
+          bank_name: e.bank_name,
+          account_name: e.account_name,
+          account_number: e.account_number,
+          payment_status: e.payment_status,
+          firstname: e.firstname,
+          lastname: e.lastname,
+          address: e.address,
+          zip_code: e.zip_code,
+          sub_district: e.sub_district,
+          district: e.district,
+          province: e.province,
+          shipment_status: e.shipment_status,
           created_at: e.created_at,
           updated_at: e.updated_at,
+          selectedOrder: e.selectedOrder,
         };
-        orderId.push(order);
+        orderList.push(order);
       }
-      orderById.value = orderId;
+      orders.value = orderList;
     })
     .catch((error: any) => {
       console.error(error);
@@ -300,24 +219,45 @@ const getOrder = async () => {
     });
 };
 
-const selectedOrder = ref<OrderById | null>(null);
+const getOrderById = async (orderId: number) => {
+  try {
+    selectedOrder.value = null;
+    const resp = await service.product.getOrderById(orderId);
+    const data = resp.data.data;
+    if (data) {
+      selectedOrder.value = {
+        ...data,
+        product: Array.isArray(data.product) ? data.product : [],
+      };
 
-const selectOrder = (order: OrderById) => {
-  selectedOrder.value = order;
+      if (!selectedAddressMap.value[orderId]) {
+        selectedAddressMap.value[orderId] =
+          shipment.value.length > 0 ? shipment.value[0].id : 0;
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching order:", error);
+  }
+};
+const checkOrder = (order: Order) => {
+  getOrderById(Number(order.id));
 };
 
-const formatDate = (timestamp: number): string => {
-  const date = new Date(timestamp * 1000); // คูณด้วย 1000 เพื่อแปลงจาก Unix timestamp เป็น milliseconds
-  const options: Intl.DateTimeFormatOptions = {
+const formatDate = (timestamp: number | string): string => {
+  const date = new Date(
+    typeof timestamp === "string" ? timestamp : timestamp * 1000
+  );
+  return date.toLocaleDateString("th-TH", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  };
-  return date.toLocaleDateString("th-TH", options); // ใช้ locale "th-TH" สำหรับวันที่ในภาษาไทย
+  });
 };
 
 // เลขแทร็ก
-const trackingNumber = "1234567890123";
+const trackingNumber = computed(
+  () => selectedOrder.value?.tracking_number || "ไม่มีเลขแทร็ก"
+);
 
 // คัดลอกเลขแทร็ก
 const copyToClipboard = (text: string) => {
@@ -326,9 +266,20 @@ const copyToClipboard = (text: string) => {
   });
 };
 
+// const confirmReceived = async () => {
+//   if (!selectedOrder.value) return;
+//   try {
+//     await service.product.updateOrderStatus(selectedOrder.value.id, "delivered");
+//     alert("ยืนยันได้รับสินค้าแล้ว!");
+//     selectedOrder.value.status = "delivered";
+//   } catch (error) {
+//     console.error("Error updating order status:", error);
+//     alert("เกิดข้อผิดพลาด กรุณาลองใหม่!");
+//   }
+// };
+
 onMounted(async () => {
-  await getuserinfo();
-  await getOrder();
+  await getOrderprepare();
 });
 </script>
 

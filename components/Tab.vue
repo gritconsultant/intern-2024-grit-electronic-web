@@ -41,13 +41,13 @@
           ประวัติการซื้อ
         </NuxtLink>
 
-        <NuxtLink
+        <!-- <NuxtLink
           to="/order/refundOrder"
           class="py-2 px-4 text-gray-600 hover:text-[#EE973C]"
           :class="isActive('/order/refundOrder') ? 'border-b-2 border-[#EE973C] text-[#EE973C]' : ''"
         >
           คืนสินค้า
-        </NuxtLink>
+        </NuxtLink> -->
 
       </div>
     </div>

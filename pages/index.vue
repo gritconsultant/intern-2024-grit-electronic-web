@@ -5,6 +5,16 @@
       <img src="/images/banner.jpg" class="rounded-b-2xl" />
     </div>
 
+        <!-- Search Bar -->
+        <div class="mt-6 flex justify-end">
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="ค้นหาสินค้า..."
+        class="border p-2 rounded-lg w-full max-w-[300px]"
+      />
+    </div>
+
     <!-- Categories -->
     <div class="grid grid-cols-1 text-center mt-12">
       <h1 class="my-[50px] lg:my-[70px] fontheader">หมวดหมู่สินค้า</h1>
@@ -21,10 +31,14 @@
                 'border-2 border-[#EE973C]': selectedCategoryId === cate.id,
                 'border-2': selectedCategoryId !== cate.id,
               }"
-              class="rounded-full p-1 w-[60px] h-[60px] lg:w-[80px] lg:h-[80px]"
+              class="rounded-full p-1 w-[90px] h-[90px] lg:w-[100px] lg:h-[100px]"
             >
-              <div class="w-full h-full object-cover rounded-full">
-                {{ cate.img }}
+              <div class="w-full h-full object-cover rounded-full overflow-hidden">
+                <img
+                  :src="cate.image"
+                  alt=""
+                  class="w-full h-full object-cover "
+                />
               </div>
             </div>
           </div>
@@ -78,6 +92,7 @@ definePageMeta({
 
 const products = ref<Product[]>([]);
 const category = ref<Category[]>([]);
+  const searchQuery = ref("");
 const selectedCategoryId = ref(0); // 0 = All categories
 const loading = ref(true); 
 
@@ -95,12 +110,7 @@ const getProductList = async () => {
           price: e.price,
           stock: e.stock,
           description: e.description || "",
-          image: {
-            id: e.image?.id,
-            ref_id: e.image?.ref_id,
-            type: e.image?.type,
-            description: e.image?.description,
-          },
+          image: e.image || "",
           category: {
             id: e.category?.id,
             name: e.category?.name,
@@ -133,7 +143,7 @@ const getCategoryList = async () => {
       category.value = data.map((e: any) => ({
         id: e.id,
         name: e.name,
-        img: e.img,
+        image: e.image,
       }));
     })
     .catch((error: any) => {
@@ -151,6 +161,15 @@ const getProductsByCategory = (categoryId: number): Product[] => {
       (product.category.id === categoryId || categoryId === 0) // กรองตาม category
   );
 };
+
+const filteredProducts = computed(() => {
+  return products.value.filter(
+    (product) =>
+      (selectedCategoryId.value === 0 ||
+        product.category.id === selectedCategoryId.value) &&
+      product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
 
 onMounted(async () => {
   await getCategoryList();

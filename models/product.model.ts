@@ -4,7 +4,7 @@
     price: number;
     stock: number;
     description: string;
-    image: ProductImage;
+    image: string;
     category: ProductCategory;
     Review: ProductReview[];
     is_active: boolean;
@@ -34,7 +34,7 @@ export interface ProductImage {
 export interface Category {
     id: number;
     name: string;
-    img: string;
+    image: string;
 }
 
 export interface Payment {
@@ -183,6 +183,7 @@ export interface Cart {
     CartItems: CartItem[];
     created_at: number;
     updated_at: number;
+    image: string;
 }
 
 export interface UserID {
@@ -195,6 +196,7 @@ export interface CartItem {
     Product: ProductCart;
     total_product_amount: number;
     selected: boolean;
+    image: string;
 }
 export interface CartResponse {
     data: CartItem[];
@@ -210,6 +212,7 @@ export interface CartItems {
     created_at: number;
     selected: boolean;
     stock: number;
+    image: string;
 }
 
 export interface CartItemCreate {
@@ -229,6 +232,7 @@ export interface ProductCart {
     id: number;
     name: string;
     price: number;
+    image: string;
 }
 
 export interface ProductCartUpdate {
@@ -298,42 +302,74 @@ export interface OrderRes {
     status: string;
 }
 
-export interface OrderById {
-    id: number;
-    user_id: number;
-    payment_id: number;
-    shipment_id: number;
-    total_amount: number;
-    total_price: number;
-    status: string;
-    created_at: number;
-    updated_at: number;
-    products: []; // ✅ เพิ่ม products เข้าไป
-}
-
 // export interface OrderById {
 //     id: number;
-//     User: OrderUser;
-//     Payment: PaymentOrder;
-//     SystemBank: SystemBankOrder;
-//     ImageSystemBank: ImageSystemBank;
-//     Shipment: ShipmentOrder;
-//     total_amount: string;
+//     User: number;
+//     payment_id: number;
+//     shipment_id: number;
+//     total_amount: number;
 //     total_price: number;
 //     status: string;
 //     created_at: number;
 //     updated_at: number;
+//     product_name: string; 
 // }
+
+// export interface Order {
+//     id: number;
+//     user_id: number;
+//     username: string;
+//     status: string;
+//     total_amount: number;
+//     total_price: number;
+//     system_bank_id: number;
+//     payment_price: number;
+//     bank_name: string;
+//     account_name: string;
+//     account_number: number;
+//     payment_status: string;
+//     firstname: string;
+//     lastname: string;
+//     address: string;
+//     zip_code: number;
+//     sub_district: string;
+//     district: string;
+//     province: string;
+//     shipment_status: string;
+//     created_at: number;
+//     updated_at: number;
+//     selectedOrder: boolean;
+// }
+
+export interface OrderById {
+    id: number;
+    User: OrderUser;
+    Payment: PaymentOrder;
+    SystemBank: SystemBankOrder;
+    Shipment: ShipmentOrder;
+    total_amount: string;
+    total_price: number;
+    tracking_number: string;
+    status: string;
+    created_at: number;
+    updated_at: number;
+    product: string;
+}
 
 export interface OrderUser {
     id: number;
     firstname: string;
     lastname: string;
+    phone: number;
 }
 
 export interface PaymentOrder {
     id: number;
     price: number;
+    bank_name: string;
+    account_name: string;
+    account_number: number;
+    status: string;
 }
 
 export interface SystemBankOrder {
@@ -342,6 +378,7 @@ export interface SystemBankOrder {
     account_name: string;
     account_number: number;
     description: string;
+    image: string;
 }
 
 export interface ShipmentOrder {
@@ -363,7 +400,7 @@ export interface SystemBank {
     account_name: string;
     account_number: number;
     description: string;
-    ImageSystemBank: ImageSystemBank[];
+    image: string;
     is_active: boolean;
     created_at: number;
     updated_at: number;
