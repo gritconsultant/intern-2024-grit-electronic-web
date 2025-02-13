@@ -53,17 +53,18 @@
             <h3 class="font-bold">สินค้า</h3>
             <ul>
               <li
-                v-for="(product, index) in selectedOrder.product"
+                v-for="(product, index) in selectedOrder.products"
                 :key="index"
-                class="text-gray-700"
               >
-                - {{ product }}
+                - {{ product.product_name }}
                 <button
-                    class="bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white px-3 py-1 rounded-lg text-sm"
-                    @click="openReviewPopup(product)"
-                  >
-                    รีวิว
-                  </button>
+                  v-if="product.product_name"
+                  class="bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white px-3 py-1 rounded-lg text-sm"
+                  @click="openReviewPopup(product)"
+
+                >
+                  รีวิว
+                </button>
               </li>
             </ul>
 
@@ -121,7 +122,8 @@
     >
       <div @click.stop>
         <!-- <PopupReview :product="selectedProduct" /> -->
-        <PopupReview :product="selectedProduct"/>
+        <PopupReview :productId="selectedProduct?.id ?? 0" />
+
       </div>
     </div>
   </div>
@@ -132,88 +134,69 @@ definePageMeta({
   layout: "user",
 });
 
-import { ref } from "vue";
-import type { Order, OrderById, Shipment } from "~/models/product.model";
+import { ref, onMounted } from "vue";
+import type { Order, OrderById } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
-const loading = ref(true);
 const store = useIndexStore();
 const orders = ref<Order[]>([]);
 const selectedOrder = ref<OrderById | null>(null);
-const selectedProduct = ref<string | null>(null);
+  const selectedProduct = ref<{ id: number; product_name: string } | null>(null);
+
+
+const props = defineProps({
+  productId: {
+    type: Number,
+  },
+});
 
 const getOrdersuccess = async () => {
-  loading.value = true;
-  await service.product
-    .getOrderSuccess()
-    .then((resp: any) => {
-      const data = resp.data.data;
-      const orderList: Order[] = [];
-      console.log(data);
-
-      for (let i = 0; i < data.length; i++) {
-        const e = data[i];
-        const order: Order = {
-          id: e.id,
-          user_id: e.user_id,
-          username: e.username,
-          status: e.status,
-          total_amount: e.total_amount,
-          total_price: e.total_price,
-          system_bank_id: e.system_bank_id,
-          payment_price: e.payment_price,
-          bank_name: e.bank_name,
-          account_name: e.account_name,
-          account_number: e.account_number,
-          payment_status: e.payment_status,
-          firstname: e.firstname,
-          lastname: e.lastname,
-          address: e.address,
-          zip_code: e.zip_code,
-          sub_district: e.sub_district,
-          district: e.district,
-          province: e.province,
-          shipment_status: e.shipment_status,
-          created_at: e.created_at,
-          updated_at: e.updated_at,
-          selectedOrder: e.selectedOrder,
-        };
-        orderList.push(order);
-      }
-      orders.value = orderList;
-    })
-    .catch((error: any) => {
-      console.error(error);
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  try {
+    const resp = await service.product.getOrderSuccess();
+    orders.value = resp.data.data.map((e: any) => ({
+      id: e.id,
+      user_id: e.user_id,
+      username: e.username,
+      status: e.status,
+      total_amount: e.total_amount,
+      total_price: e.total_price,
+      shipment_status: e.shipment_status,
+      created_at: e.created_at,
+      products: e.products || [],
+    }));
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+  }
 };
 
 const getOrderById = async (orderId: number) => {
   try {
-    selectedOrder.value = null;
     const resp = await service.product.getOrderById(orderId);
-    const data = resp.data.data;
-    if (data) {
-      selectedOrder.value = {
-        ...data,
-        product: Array.isArray(data.product) ? data.product : [],
-      };
-    }
+    selectedOrder.value = resp.data.data || null;
   } catch (error) {
     console.error("Error fetching order:", error);
   }
 };
+
 const checkOrder = (order: Order) => {
-  getOrderById(Number(order.id));
+  getOrderById(order.id);
 };
 
-const openReviewPopup = (product: string) => {
-  selectedProduct.value = product || "";  // ให้ค่าเป็นสตริงว่างหาก null หรือ undefined
+const openReviewPopup = (product: { product_id: number; product_name: string }) => {
+  if (!product.product_id) {
+    console.error("ไม่มี productId");
+    return;
+  }
+  // Rename product_id to id
+  selectedProduct.value = {
+    id: product.product_id, // Rename here
+    product_name: product.product_name
+  };
   store.reviewAction = true;
 };
+
+
 
 
 const formatDate = (timestamp: number | string): string => {
@@ -227,10 +210,9 @@ const formatDate = (timestamp: number | string): string => {
   });
 };
 
-onMounted(async () => {
-  await getOrdersuccess();
-});
+onMounted(getOrdersuccess);
 </script>
+
 
 <style scoped>
 .sticky {

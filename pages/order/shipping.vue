@@ -53,7 +53,7 @@
             <h3 class="font-bold">สินค้า</h3>
             <ul>
               <li
-                v-for="(product, index) in selectedOrder.product"
+                v-for="(product, index) in selectedOrder.products"
                 :key="index"
                 class="text-gray-700"
               >
@@ -129,10 +129,10 @@ const selectedOrder = ref<OrderById | null>(null);
 const shipment = ref<Shipment[]>([]);
 const selectedAddressMap = ref<{ [key: number]: number }>({});
 
-const getOrdership = async () => {
+const getOrderprepare = async () => {
   loading.value = true;
   await service.product
-    .getOrderShip()
+    .getOrderPrepare()
     .then((resp: any) => {
       const data = resp.data.data;
       const orderList: Order[] = [];
@@ -175,7 +175,7 @@ const getOrdership = async () => {
     .finally(() => {
       loading.value = false;
     });
-};
+}
 
 const getOrderById = async (orderId: number) => {
   try {
@@ -215,7 +215,7 @@ const formatDate = (timestamp: number | string): string => {
 };
 
 onMounted(async () => {
-  await getOrdership();
+  await getOrderprepare();
 });
 </script>
 

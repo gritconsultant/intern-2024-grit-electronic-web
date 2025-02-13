@@ -46,14 +46,14 @@
       </div>
 
       <!-- Forget Password -->
-      <div class="flex justify-end mt-5 text-base">
+      <!-- <div class="flex justify-end mt-5 text-base">
         <NuxtLink
           to="/forgetpassword"
           class="hover:text-[#FD8C35] font-normal hover:underline"
         >
           ลืมรหัสผ่าน?
         </NuxtLink>
-      </div>
+      </div> -->
 
       <!-- Login Button -->
       <div class="mt-12 flex justify-center">
@@ -150,6 +150,8 @@ const getuserinfo = async () => {
    })
    .finally(() => {});
 }
+
+
 
 
 const togglePasswordVisibility = () => {

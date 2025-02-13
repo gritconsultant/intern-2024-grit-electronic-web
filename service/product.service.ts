@@ -1,4 +1,4 @@
-import type { CartItemCreate,OrderCreate, Params, PasswordUpdate, ProductCartUpdate, ReviewCreate, ShipmentCreate, ShipmentUpdate, WishlistCreate } from "~/models/product.model"
+import type { CartItemCreate,OrderCreate, OrderUpdate, Params, PasswordUpdate, PaymentCreate, ProductCartUpdate, ReviewCreate, ShipmentCreate, ShipmentUpdate, WishlistCreate } from "~/models/product.model"
 import { client } from "./httpClient"
 
 
@@ -85,6 +85,22 @@ export const updateShipment = (id: any, payload: ShipmentUpdate) => {
     })
 }
 
+
+// payment
+
+export const getPaymentList = () => {
+    return client({
+        url: "/payment",
+        method: "get",
+    })
+} 
+export const getPaymentId = () => {
+    return client({
+        url: "/payment",
+        method: "get",
+
+    })
+} 
 
 // cart
 export const getCart = () => {
@@ -183,6 +199,34 @@ export const getOrderHistory = () => {
         method: "get",
     })
 }
+
+export const updateOrder = (id: any, payload: OrderUpdate) => {
+    console.log(payload)
+    return client({
+        url: `/order/${id}`,
+        method: "patch",
+        data: payload,
+    })
+}
+
+export const addPayment = (payload: PaymentCreate) => {
+    return client({
+        url: "/payment/create",
+        method: "post",
+        data: payload,
+    })
+}
+
+export const updatePayment = (id: any, payload: PaymentCreate) => {
+    console.log(payload)
+    return client({
+        url: `/payment/${id}`,
+        method: "patch",
+        data: payload,
+    })
+}
+
+
 
 
 // export const getOrderById = (orderId: number) => {

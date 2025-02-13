@@ -48,38 +48,41 @@
           <div v-if="selectedOrder">
             <h3 class="font-bold">สินค้า</h3>
             <ul>
-              <li
-                v-for="(product, index) in selectedOrder.product"
-                :key="index"
-                class="text-gray-700"
-              >
-                - {{ product }}
-              </li>
-            </ul>
+  <li
+    v-for="(product, index) in selectedOrder.products"
+    :key="index"
+    class="flex items-center space-x-4 p-4 border-b "
+  >
+    <!-- Product Image -->
+    <div class="w-24 h-24">
+      <img
+        :src="product.image"
+        alt="product"
+        class="w-full h-full object-cover rounded-lg"
+      />
+    </div>
+
+    <!-- Product Info -->
+    <div class="flex-grow">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="font-bold text-lg">{{ product.product_name }}</h2>
+        <p class="text-lg font-bold text-gray-800">฿{{ product.price }}</p>
+      </div>
+      <p class="text-sm text-gray-500">จำนวน: {{ product.total_product_amount }}</p>
+    </div>
+  </li>
+</ul>
+
 
             <div class="mt-4 pb-4 border-b">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <select
-                v-model="selectedAddressMap[selectedOrder.id]"
-                @change="updateSelectedAddress(selectedOrder.id)"
-              >
-                <option
-                  v-for="addr in shipment"
-                  :key="addr.id"
-                  :value="addr.id"
-                >
-                  {{ addr.firstname }} {{ addr.lastname }} - {{ addr.address }}
-                  {{ addr.sub_district }} {{ addr.district }}
-                  {{ addr.province }} {{ addr.zip_code }}
-                </option>
-              </select>
               <p class="text-gray-500 text-sm mt-2">
-                ที่อยู่ปัจจุบัน:
-                {{
-                  getSelectedShipment(selectedOrder.id)?.address ||
-                  "ไม่มีข้อมูล"
-                }}
-                {{ getSelectedShipment(selectedOrder.id)?.district }}
+                ขื่อผู้รับ: {{ selectedOrder.Shipment.firstname }} {{ selectedOrder.Shipment.lastname }} <br>
+                <span>{{ selectedOrder.Shipment?.address || "ไม่มีข้อมูล" }}</span>
+                {{ selectedOrder.Shipment?.district }}
+                {{ selectedOrder.Shipment?.sub_district }}
+                {{ selectedOrder.Shipment?.province }}
+                {{ selectedOrder.Shipment?.zip_code }}
               </p>
             </div>
 
@@ -134,14 +137,14 @@
       </div>
     </div>
 
-        <!-- Noti Popup -->
+        <!--  Popup -->
         <div
       v-if="store.paymentAction"
-      @click="store.paymentAction = !store.paymentAction"
       class="fixed inset-0 bg-black/50 flex justify-end z-50"
+            @click="store.paymentAction = !store.paymentAction"
     >
       <div @click.stop>
-        <PopupPayment />
+        <PopupPayment  :orderId="selectedOrder?.id" :paymentId="selectedOrder?.Payment.id" />
       </div>
     </div>
   </div>
@@ -150,7 +153,7 @@
 <script setup lang="ts">
 import Swal from "sweetalert2";
 import { ref, onMounted } from "vue";
-import type { Order, OrderById, Shipment } from "~/models/product.model";
+import type { Order, OrderById, OrderCreate, OrderRes, Shipment } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 definePageMeta({
@@ -163,10 +166,16 @@ const selectedOrder = ref<OrderById | null>(null);
 const shipment = ref<Shipment[]>([]);
 const selectedAddressMap = ref<{ [key: number]: number }>({});
 
-const getSelectedShipment = (orderId: number) => {
-  const addressId = selectedAddressMap.value[orderId];
-  return shipment.value.find((addr) => addr.id === addressId) || null;
-};
+
+const props = defineProps({
+  orderId: {
+    type: Number,
+  },
+  paymentId: {
+    type: Number,
+  }
+})
+
 
 const getOrderpending = async () => {
   try {
@@ -198,7 +207,7 @@ const getOrderById = async (orderId: number) => {
     if (data) {
       selectedOrder.value = {
         ...data,
-        product: Array.isArray(data.product) ? data.product : [],
+        products: Array.isArray(data.products) ? data.products : [],
       };
 
       if (!selectedAddressMap.value[orderId]) {
@@ -216,22 +225,21 @@ const checkOrder = (order: Order) => {
 };
 
 const cancelOrder = (orderId: number): void => {
-  const order = selectedOrder.value; // เก็บค่าก่อน
-  if (order && order.id === orderId) {
+  if (selectedOrder.value) {
     Swal.fire({
       title: "ยืนยันการยกเลิก",
-      text: `คุณต้องการยกเลิกคำสั่งซื้อ #${order.id} หรือไม่?`,
+      text: `คุณต้องการยกเลิกคำสั่งซื้อ #${selectedOrder.value.id} หรือไม่?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "ใช่, ยกเลิกเลย",
       cancelButtonText: "ไม่, กลับไป",
     }).then((result) => {
       if (result.isConfirmed) {
-        order.status = "cancelled"; // ใช้ค่าที่เก็บไว้ ไม่ใช่ selectedOrder.value โดยตรง
-        orders.value = orders.value.filter(o => o.id !== orderId);
-
+        // ลบ order ออกจากรายการ
+        orders.value = orders.value.filter(order => order.id !== selectedOrder.value!.id);
+        
         Swal.fire("ลบสำเร็จ!", "คำสั่งซื้อถูกยกเลิกและลบออกเรียบร้อยแล้ว", "success");
-        selectedOrder.value = null;
+        selectedOrder.value = null; // เคลียร์คำสั่งซื้อที่เลือก
       }
     });
   }
@@ -249,13 +257,6 @@ const formatDate = (timestamp: number | string): string => {
     month: "long",
     day: "numeric",
   });
-};
-
-const updateSelectedAddress = (orderId: number) => {
-  if (selectedOrder.value && selectedOrder.value.id === orderId) {
-    selectedOrder.value.Shipment =
-      getSelectedShipment(orderId) ?? ({} as Shipment);
-  }
 };
 
 onMounted(() => {

@@ -55,7 +55,7 @@ const store = useIndexStore();
 
 // กำหนดค่า shipment ให้เป็นค่าเริ่มต้น
 const shipment = ref<ShipmentCreate>({
-  id: 0,
+  ID: 0,
   firstname: "",
   lastname: "",
   address: "",

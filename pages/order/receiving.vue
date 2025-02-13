@@ -53,11 +53,11 @@
             <h3 class="font-bold">สินค้า</h3>
             <ul>
               <li
-                v-for="(product, index) in selectedOrder.product"
+                v-for="(product, index) in selectedOrder.products"
                 :key="index"
                 class="text-gray-700"
               >
-                - {{ product }}
+                - {{ product.product_name }}
               </li>
             </ul>
 
@@ -146,6 +146,7 @@
               class="mt-4"
             >
               <button
+              @click="updateStatus"
                 class="bg-green-500 text-white px-4 py-2 rounded-lg w-full hover:bg-green-600 transition"
               >
                 ยืนยันได้รับสินค้าแล้ว
@@ -156,25 +157,37 @@
         </div>
       </div>
     </div>
+
+    
     <Loading :loading="loading" />
   </div>
 </template>
 
 <script setup lang="ts">
+import Swal from "sweetalert2";
 import { ref } from "vue";
-import type { Order, OrderById, Shipment } from "~/models/product.model";
+import type { Order, OrderById, OrderUpdate, OrderUpdateRes } from "~/models/product.model";
 import service from "~/service";
 
 const loading = ref(true);
+const route = useRoute();
 const orders = ref<Order[]>([]);
 const selectedOrder = ref<OrderById | null>(null);
-const shipment = ref<Shipment[]>([]);
-const selectedAddressMap = ref<{ [key: number]: number }>({});
 
-const getOrderprepare = async () => {
+const orderUpdate = ref<OrderUpdate>({
+  id: 0,
+  status: "success",
+})
+
+const orderUpdateRes = ref<OrderUpdateRes>({
+  id: 0,
+  status: "success",
+})
+
+const getOrdership = async () => {
   loading.value = true;
   await service.product
-    .getOrderPrepare()
+    .getOrderShip()
     .then((resp: any) => {
       const data = resp.data.data;
       const orderList: Order[] = [];
@@ -227,18 +240,45 @@ const getOrderById = async (orderId: number) => {
     if (data) {
       selectedOrder.value = {
         ...data,
-        product: Array.isArray(data.product) ? data.product : [],
+        products: Array.isArray(data.products) ? data.products : [],
       };
-
-      if (!selectedAddressMap.value[orderId]) {
-        selectedAddressMap.value[orderId] =
-          shipment.value.length > 0 ? shipment.value[0].id : 0;
-      }
     }
   } catch (error) {
     console.error("Error fetching order:", error);
   }
 };
+
+const updateStatus = async () => {
+  await service.product.updateOrder(selectedOrder.value?.id , orderUpdate.value)
+  .then((resp: any) => {
+    console.log(resp);
+    const data = resp.data;
+    const orderUpdate: OrderUpdateRes = {
+      id: data.id,
+      status: data.status,
+    };
+    orderUpdateRes.value = orderUpdate;
+
+    if (resp.status == 200) {
+      Swal.fire({
+        title: "รับสินค้าสำเร็จ?",
+        text: "การยืนยันสได้รับสินค้าสำเร็จ",
+        icon: "success",
+        confirmButtonText: "ตกลง",
+      })
+    }
+  })
+  .catch((error: any) => {
+    console.error("Error updating order status:", error);
+  })
+  .finally(() => {
+    orderUpdate.value = {
+      id: orderUpdate.value.id,
+      status: "success",
+    };
+  });
+}
+
 const checkOrder = (order: Order) => {
   getOrderById(Number(order.id));
 };
@@ -279,7 +319,8 @@ const copyToClipboard = (text: string) => {
 // };
 
 onMounted(async () => {
-  await getOrderprepare();
+  await getOrdership();
+
 });
 </script>
 

@@ -236,7 +236,7 @@ export interface ProductCart {
 }
 
 export interface ProductCartUpdate {
-    // ID: number;
+    id: number;
     // CartID: number;
     // ProductID: number;
     total_product_amount: number;
@@ -246,7 +246,7 @@ export interface ProductCartUpdate {
 }
 
 export interface ProductCartRes {
-    // ID: number;
+    id: number;
     // CartID: number;
     // ProductID: number;
     total_product_amount: number;
@@ -292,15 +292,26 @@ export interface OrderCreate {
 
 export interface OrderAdd {
     shipment_id: any;
-    payment_id: number;
+    payment_id: any;
     status: string;
 }
 
 export interface OrderRes {
-    shipment_id: number;
-    payment_id: number;
+    shipment_id: any;
+    payment_id: any;
     status: string;
 }
+
+export interface OrderUpdate {
+    id: number;
+    status: string;
+}
+
+export interface OrderUpdateRes {
+    id: number;
+    status: string;
+}
+
 
 // export interface OrderById {
 //     id: number;
@@ -353,7 +364,15 @@ export interface OrderById {
     status: string;
     created_at: number;
     updated_at: number;
-    product: string;
+    products: OrderProducts[];
+}
+
+export interface OrderProducts {
+    product_id: number;
+    product_name: string;
+    price: number;
+    total_product_amount: number;
+    image: string;
 }
 
 export interface OrderUser {
@@ -413,6 +432,67 @@ export interface ImageSystemBank {
     description: string;
 }
 
+// export interface Paymentlist {
+//     system_bank_id: number;
+//     updated_by: number;
+//     price: number;
+//     payment_slip: number;
+//     bank_name: number;
+//     account_name: string;
+//     account_number: number;
+//     status: number;
+// }
+
+export interface PaymentCreate {
+    system_bank_id: number;
+    date: string;
+    order_id: number;
+}
+
+export interface PaymentRes {
+    system_bank_id: number;
+    date: string;
+    order_id: number;
+}
+
+export interface PaymentById {
+    id: number;
+    updated_by: number;
+    SystemBank: PaymentSystemBank;
+    ImageSystemBank: PaymentImageSystemBank;
+    price: number;
+    status: string;
+    Image: PaymentImage;
+    bank_name: string;
+    account_name: string;
+    account_number: number;
+    created_at: number;
+    updated_at: number;
+}
+
+export interface PaymentSystemBank {
+    id: number;
+    bank_name: string;
+    account_name: string;
+    account_number: number;
+    description: string;
+    image: string;
+}
+
+export interface PaymentImageSystemBank {
+    id: number;
+    ref_id: number;
+    type: any;
+    description: string;
+    url: string;
+}
+
+export interface PaymentImage {
+    id: number;
+    ref_id: number;
+    description: string;
+}
+
 export interface Params {
     page: number;
     size: number;
@@ -454,6 +534,7 @@ export interface Params {
     name: string;
     description: string;
     price: number;
+    image: string;
   }
 
 

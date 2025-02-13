@@ -23,7 +23,7 @@
           v-for="cate in category"
           :key="cate.id"
           class="text-center w-[90px] lg:w-[200px] cursor-pointer"
-          @click="selectedCategoryId = cate.id"
+          @click="toggleCategory(cate.id)"
         >
           <div class="flex justify-center">
             <div
@@ -73,8 +73,12 @@
             </div>
           </div>
         </div>
+        
       </div>
+
+      
     </div>
+    
     <Loading :loading="loading" />
   </div>
 </template>
@@ -85,7 +89,7 @@ import { ref, onMounted } from "vue";
 import type { Category, Product } from "~/models/product.model";
 import service from "~/service";
 
-// ตอนรีเฟรช token หายแต่ userid ไม่หาย
+
 definePageMeta({
   middleware: 'auth'
 })
@@ -162,6 +166,7 @@ const getProductsByCategory = (categoryId: number): Product[] => {
   );
 };
 
+
 const filteredProducts = computed(() => {
   return products.value.filter(
     (product) =>
@@ -171,6 +176,13 @@ const filteredProducts = computed(() => {
   );
 });
 
+const toggleCategory = (categoryId: number) => {
+  if (selectedCategoryId.value === categoryId) {
+    selectedCategoryId.value = 0; // รีเซ็ตการเลือกหมวดหมู่เมื่อกดหมวดหมู่เดิม
+  } else {
+    selectedCategoryId.value = categoryId;
+  }
+};
 onMounted(async () => {
   await getCategoryList();
   await getProductList();

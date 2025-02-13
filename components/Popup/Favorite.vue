@@ -39,19 +39,23 @@
         class="flex justify-between items-center border-b py-2"
       >
         <img
-          src=""
+          :src="item.product.image"
           alt="product"
           class="w-[50px] h-[50px] md:w-[75px] md:h-[75px] object-cover rounded-md"
         />
-        <div class="flex-1 ml-2">
-          <div class="flex justify-between">
+        <div class="flex-1 ml-2 ">
+          <div class="flex justify-between ">
             <div>
               <!-- link ไปหน้า product -->
-              <div
-                class="text-md md:text-md font-bold"
+              <div>
+              <router-link
+                v-if="item.product.id"
+                :to="`/product/${item.product.id}`"
+                class="text-md font-bold text-black cursor-pointer hover:text-[#FD8C35]/70"
               >
                 {{ item.product.name }}
-              </div>
+              </router-link>
+            </div>
             </div>
           </div>
 
@@ -94,9 +98,9 @@
             </div>
           </div>
           <div>
-            <div class="flex justify-between items-center gap-2 mt-1">
+            <div class="flex justify-between items-center gap-2">
               <div>
-                <p class="fontsubheader">฿{{ item.product.price }}</p>
+                <p class="font-bold">฿{{ item.product.price }}</p>
               </div>
             </div>
           </div>
@@ -123,8 +127,10 @@ import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 const wish = ref<wishlistById[]>([]);
+  const loading = ref(true);
 
 const getWishlist = async () => {
+  loading.value = true;
   await service.product
     .getFavorite()
     .then((resp: any) => {
@@ -151,10 +157,13 @@ const getWishlist = async () => {
     .catch((erro: any) => {
       console.error(Error);
     })
-    .finally(() => {});
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 const deleteWishlist = async (id: String) => {
+  loading.value = true;
   await service.product
     .deleteFavorite(id)
     .then((resp: any) => {
@@ -164,11 +173,14 @@ const deleteWishlist = async (id: String) => {
     .catch((error: any) => {
       console.error(error);
     })
-    .finally(() => {});
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
 // Toggle Favorite - ถ้ากดไอคอนหัวใจซ้ำจะเปลี่ยน isFavorite
 const toggleFavorite = async (index: number) => {
+  loading.value = true;
   const item = wish.value[index];
 
   if (item.isFavorite) {
@@ -180,6 +192,7 @@ const toggleFavorite = async (index: number) => {
       console.error("Failed to remove from wishlist:", error);
     }
   } else {
+    loading.value = false;
     // ถ้ากดเปิด ต้องเพิ่มเข้าไปในรายการโปรด (ถ้ามี API รองรับ)
     console.log("เพิ่มเข้ารายการโปรด", item.product.name);
   }

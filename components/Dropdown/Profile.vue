@@ -43,12 +43,13 @@
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink
+                <div
+                @click="logout"
                   to="/login"
                   class="block px-4 py-2 hover:bg-gray-100"
                 >
                   ออกจากระบบ
-                </NuxtLink>
+                </div>
               </li>
             </ul>
           </div>
@@ -57,7 +58,34 @@
     </div>
   </template>
   
-  <script setup lang="ts"></script>
+  <script setup lang="ts">
+
+  // ใช้ Pinia store
+  import { useIndexStore } from "~/store/main";
+import { useRouter } from "vue-router";
+
+// ใช้ Pinia store
+const store = useIndexStore();
+const router = useRouter();
+
+// ฟังก์ชัน logout
+const logout = () => {
+  // ลบข้อมูลใน store
+  store.$state.token = "";
+  store.$state.userId = "";
+
+  // ลบคุกกี้จาก sessionStorage หรือ localStorage
+  sessionStorage.removeItem("token");
+  localStorage.removeItem("token");
+
+  // ลบคุกกี้ที่ชื่อว่า 'token'
+  document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+
+  // เปลี่ยนเส้นทางไปหน้าล็อกอิน
+  router.push("/login");
+};
+
+</script>
   
   <style scoped>
   </style>

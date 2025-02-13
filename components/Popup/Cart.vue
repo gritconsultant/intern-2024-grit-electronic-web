@@ -2,8 +2,8 @@
   <div
     class="w-full md:w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
   >
-    <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
-      <h1 class="text-sm md:text-base font-bold">
+    <div  class="flex justify-between items-center p-4 md:p-5 border-b-2" >
+      <h1 class="text-sm md:text-base font-bold" >
         ตะกร้าสินค้า ({{ carts.length }})
       </h1>
       <h2 class="text-red-500 cursor-pointer text-xs md:text-sm ml-56">
@@ -28,7 +28,7 @@
     </div>
 
     <!-- Cart Items -->
-    <div class="px-4 md:px-5 flex-grow overflow-y-auto">
+    <div class="px-4 md:px-5 flex-grow overflow-y-auto" >
       <div
         v-for="(item, index) in carts"
         :key="item.id"
@@ -46,7 +46,7 @@
               <router-link
                 v-if="item.Product.id"
                 :to="`/product/${item.Product.id}`"
-                class="text-sm md:text-md font-normal text-blue-500 hover:underline"
+                class="text-lg font-bold text-black cursor-pointer hover:text-[#FD8C35]/70"
               >
                 {{ item.Product.name }}
               </router-link>
@@ -55,7 +55,7 @@
             <div>
               <button @click="deleteCartItem(item.id)" class="text-red-500">
                 <svg
-                  class="w-[15px] h-[15px] md:w-[17px] md:h-[17px] hover:text-red-500"
+                  class="w-[20px] h-[20px] md:w-[22px] md:h-[22px] hover:text-red-500"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -178,13 +178,20 @@ import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 const route = useRoute();
+const router = useRouter();
 const loading = ref(true);
 const cartlist = ref<CartItems[]>([]);
 const carts = ref<CartItem[]>([]);
 const editIndex = ref<number | null>(null);
 const isEditing = ref(false);
+
+const props = defineProps({
+  cartitemId: {
+    type: Number,
+  }
+})
 const orders = ref<OrderAdd>({
-  shipment_id: 0,
+  shipment_id: 1,
   payment_id: 0,
   status: "pending",
 });
@@ -196,14 +203,17 @@ const orderRes = ref<OrderRes>({
 });
 
 const productCartUpdate = ref<ProductCartUpdate>({
+  id: 0,
   total_product_amount: 0,
 })
 
 const productCartRes = ref<ProductCartRes>({
+  id: 0,
   total_product_amount: 0,
 })
 
 const getCartItem = async () => {
+  loading.value = true;
   await service.product
     .getCart()
     .then((resp: any) => {
@@ -227,8 +237,11 @@ const getCartItem = async () => {
     .catch((error: any) => {
       console.error(error);
     })
-    .finally(() => {});
+    .finally(() => {
+      loading.value = false;
+    });
 };
+
 
 const deleteCartItem = async (cartItemId: number) => {
   loading.value = true;
@@ -270,8 +283,8 @@ const selectedItems = computed(() => {
 
 const addOrder = async () => {
   loading.value = true;
-  orders.value.shipment_id = Number(route.params.id);
-  orders.value.payment_id = totalSelectedPrice.value;
+  orders.value.shipment_id = orders.value.shipment_id;
+  orders.value.payment_id = orders.value.payment_id;
   await service.product
     .addOrder(orders.value)
     .then((resp: any) => {
@@ -281,6 +294,10 @@ const addOrder = async () => {
           title: "การสั่งซื้อสำเร็จ!",
           text: "คำสั่งซื้อของคุณถูกเพิ่มเรียบร้อย!",
           icon: "success",
+        })
+        .then(() => {
+          // รีโหลดหน้าใหม่
+          router.push({ path: '/order/checkout' }).then(() => window.location.reload());
         });
       }
       const orders: OrderRes = {
@@ -304,19 +321,32 @@ const toggleEditItem = (index: number) => {
 }
 
 const saveEdit = async () => {
-  await service.product.updateCartItem(store.$state.userId, productCartUpdate.value)
+  loading.value = true;
+  await service.product.updateCartItem(props.cartitemId, productCartUpdate.value)
   .then((resp: any) => {
     console.log(resp);
     const data = resp.data.data;
     const productCartUpdate: ProductCartRes = {
+      id: data.id,
       total_product_amount: data.total_product_amount,
     };
     productCartRes.value = productCartUpdate;
+
+    if (resp.status == 200) {
+
+Swal.fire({
+  title: "เปลี่ยนแปลงจำนวนสินค้า!",
+  text: "เปลี่ยแปลงจำนวนสินค้าสำเร็จ",
+  icon: "success",
+  confirmButtonText: "ตกลง",
+})
+}
   })
   .catch((error: any) => {
      console.error(error);
    })
    .finally(() => {
+    loading.value = false;
    });
 }
 

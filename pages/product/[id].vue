@@ -21,7 +21,11 @@
                 <div>จำนวนรีวิว: {{ product.Review?.length }}</div>
                 <div>
                   <!-- ไอคอนหัวใจ -->
-                  <button type="submit" @click="addFavorite" class="focus:outline-none">
+                  <button
+                    type="submit"
+                    @click="addFavorite"
+                    class="focus:outline-none"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="currentColor"
@@ -121,19 +125,24 @@
           </div>
         </div>
       </div>
+      <!-- สินค้าใกล้เคียง -->
       <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30">
         <div class="flex flex-col gap-4">
-          <p>สินค้าอื่นๆ</p>
+          <p class="text-xl font-semibold">สินค้าใกล้เคียง</p>
           <div class="flex flex-wrap gap-4">
-            <!-- Product Card -->
-              <div
-                v-for="product in products"
-                :key="product.id"
-                class="w-[250px] h-[300px] border-2 border-gray-200 p-4 rounded-lg transition hover:border-[#EE973C]"
-                :class="{
-                  'hover:border-[#EE973C]': product.category.name == 'Product',
-                }"
-              ></div>
+            <div
+              v-for="product in relatedProducts"
+              :key="product.id"
+              class="w-[250px] h-[300px] border-2 border-gray-200 p-4 rounded-lg transition hover:border-[#EE973C]"
+            >
+              <img
+                :src="product.image"
+                alt=""
+                class="w-full h-[180px] object-cover rounded"
+              />
+              <h2 class="text-lg font-semibold mt-2">{{ product.name }}</h2>
+              <p class="text-[#FF0808] font-semibold">฿{{ product.price }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -146,7 +155,6 @@
 import Swal from "sweetalert2";
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import User from "~/layouts/user.vue";
 import type {
   CartItemAdd,
   CartItemRes,
@@ -260,56 +268,36 @@ const addCartItem = async () => {
 const addFavorite = async () => {
   wishlistCreate.value.product_id = Number(route.params.id);
   wishlistCreate.value.user_id = Number(store.$state.userId);
-  wishlistCreate.value.isFavorite = true;
+  
+  // สลับค่าการกดถูกใจ (toggle)
+  wishlistCreate.value.isFavorite = !wishlistRes.value.isFavorite;
+  
+  await service.product.addFavorite(wishlistCreate.value)
+    .then((resp: any) => {
+      const data = resp.data;
 
-  if (!store.$state.userId) {
-    Swal.fire({
-      title: "กรุณาเข้าสู่ระบบ",
-      text: "คุณต้องเข้าสู่ระบบก่อนกดถูกใจสินค้า!",
-      icon: "warning",
-    });
-    return;
-  }
-    // กำหนด isFavorite เป็น true ทันทีเมื่อกดหัวใจ
-  wishlistRes.value.isFavorite = true;
+      // อัปเดตค่า isFavorite ตามที่ API ส่งกลับมา
+      wishlistRes.value.isFavorite = data.isFavorite;
 
-  await service.product.addFavorite(wishlistCreate.value).then((resp: any) => {
-    const data = resp.data;
-    console.log(data);
-
-
-    // ถ้าการเพิ่มสินค้าสำเร็จ
-    Swal.fire({
-      title: "กดถูกใจ!",
-      text: "ได้กดถูกใจสินค้าแล้ว!",
-      icon: "success",
-    });
-
-    const wishlistCreate: WishlistRes = {
-      user_id: data.user_id,
-      product_id: data.product_id,
-      isFavorite: data.isFavorite,
-    };
-    wishlistRes.value = wishlistCreate;
-  })
-  .catch((error: any) => {
-      // ตรวจสอบว่า API ส่ง message ว่า stock ไม่พอ
+      Swal.fire({
+        title: data.isFavorite ? "กดถูกใจ!" : "เลิกถูกใจ!",
+        text: data.isFavorite ? "ได้กดถูกใจสินค้าแล้ว!" : "ได้เลิกถูกใจสินค้าแล้ว!",
+        icon: "success",
+      });
+    })
+    .catch((error: any) => {
       if (
         error.response &&
         error.response.data.message === "this product is already in the wishlist"
       ) {
-        Swal.fire({
-          title: "ไม่สามารถกดถูกใจได้!",
-          text: "ขออภัย, สินค้าชิ้นนี้ได้กดถูกใจแล้ว!",
-          icon: "error",
-        });
-        return; // หยุดการดำเนินการ
+        // ถ้าสินค้ามีอยู่แล้วใน Wishlist ให้กำหนดให้หัวใจเป็นสีแดง
+        wishlistRes.value.isFavorite = true;
+      } else {
+        console.error("เกิดข้อผิดพลาด:", error);
       }
-    })
-    .finally(() => {
-      loading.value = false;
     });
 };
+
 
 
 // Selected Product
@@ -353,11 +341,16 @@ const changePage = (page: number) => {
   }
 };
 
-// Get Related Products (filter by category)
-// const relatedProducts = computed(() => {
-//   if (!product.value) return [];
-//   return products.value.filter(p => p.category.id === product.value.category.id && p.id !== product.value.id);
-// });
+const relatedProducts = computed(() => {
+  if (!product.value) return [];
+  return products.value
+    .filter(
+      (p) =>
+        p.category.id === product.value?.category.id &&
+        p.id !== product.value?.id
+    )
+    .slice(0, 4);
+});
 
 onMounted(() => {
   getProductById();

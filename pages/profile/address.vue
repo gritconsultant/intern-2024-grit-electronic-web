@@ -109,9 +109,31 @@ const getShipment = async () => {
   await service.product
     .getShipmentId()
     .then((resp: any) => {
-      shipment.value = resp.data.data;
+      const data = resp.data.data;
+      const shipmentlist: Shipment[] = [];
+      console.log(data);
+
+      for (let i = 0; i < data.length; i++) {
+        const e = data[i];
+        const shipments: Shipment = {
+          id: e.id,
+          firstname: e.firstname,
+          lastname: e.lastname,
+          address: e.address,
+          zip_code: e.zip_code,
+          sub_district: e.sub_district,
+          district: e.district,
+          province: e.province,
+          status: e.status,
+          created_at: e.created_at,
+          updated_at: e.updated_at,
+        };
+        shipmentlist.push(shipments);
+      }
+      shipment.value = shipmentlist;
     })
     .catch((error: any) => {
+      console.log(shipment.value)
       console.log(error);
     })
     .finally(() => {

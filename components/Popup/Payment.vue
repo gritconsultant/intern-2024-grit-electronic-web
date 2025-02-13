@@ -25,8 +25,12 @@
         </button>
       </div>
 
-      <div v-for="i in system" :key="i.id" class="flex flex-col items-center justify-center py-6 px-4 md:px-8">
-        <!-- QR Code -->
+      <!-- เลือกบัญชีธนาคาร -->
+      <div
+        v-for="i in system"
+        :key="i.id"
+        class="flex flex-col items-center justify-center py-6 px-4 md:px-8"
+      >
         <div class="w-[80%] max-w-[300px] mb-6">
           <img
             :src="i.image"
@@ -35,7 +39,6 @@
           />
         </div>
 
-        <!-- Bank Info -->
         <div class="text-center mb-6">
           <h2 class="text-lg font-semibold">{{ i.bank_name }}</h2>
           <p class="text-sm mt-3">
@@ -47,31 +50,34 @@
         </div>
       </div>
 
-      <div class="border-t p-4 px-5 bg-gray-100 flex justify-between items-center">
-        <span class="text-sm font-semibold">รวมทั้งสิ้น</span>
-        <span class="text-sm font-semibold">฿{{ order?.total_price }}</span>
-      </div>
-
-      <!-- Date and Time -->
+      <!-- วันที่และเวลาที่โอน -->
       <div class="px-4 mt-5">
-        <label for="date-time" class="block text-sm font-medium text-gray-700">วันที่และเวลาที่โอน</label>
+        <label
+          for="transfer-datetime"
+          class="block text-sm font-medium text-gray-700"
+          >วันที่และเวลาที่โอน</label
+        >
         <input
           id="transfer-datetime"
           type="datetime-local"
+          v-model="paymentCreate.date"
           class="w-full border rounded-md p-2 text-sm"
           required
         />
       </div>
 
-      <!-- Actions -->
       <div class="flex justify-center mt-4 px-4 pb-6">
         <button
+        type="button"
           class="popupbtn w-full md:w-auto py-2 px-4 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-md"
-          @click="confirmOrder"
+          @click="updatePayment"
+      
         >
           ยืนยันคำสั่งซื้อ
         </button>
       </div>
+
+      <pre> {{ props.paymentId }}</pre> order id:<pre>{{ props.orderId }}</pre>
     </div>
   </div>
 </template>
@@ -80,8 +86,13 @@
 definePageMeta({ layout: "auth" });
 
 import Swal from "sweetalert2";
-import { useRouter } from "vue-router";
-import type { OrderById, SystemBank } from "~/models/product.model";
+import { useRouter, useRoute } from "vue-router";
+import type {
+  OrderById,
+  PaymentCreate,
+  PaymentRes,
+  SystemBank,
+} from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
@@ -89,79 +100,114 @@ const router = useRouter();
 const route = useRoute();
 const store = useIndexStore();
 const system = ref<SystemBank[]>([]);
-const order = ref<OrderById | null>(null); // เปลี่ยนเป็นเก็บแค่ออเดอร์เดียว
+const order = ref<OrderById | null>(null);
 
+const props = defineProps({
+  orderId: {
+    type: Number,
+  },
+  paymentId: {
+    type: Number,
+  }
+})
+
+
+
+// เก็บค่าการชำระเงิน
+const paymentCreate = ref<PaymentCreate>({
+  system_bank_id: 0,
+  date: "",
+  order_id: 0,
+});
+
+const paymentRes = ref<PaymentRes>({
+  system_bank_id: 0,
+  date: "",
+  order_id: 0,
+});
+
+
+// ดึงบัญชีธนาคาร
 const getSystemBank = async () => {
-  await service.product
-    .getSystemBank()
-    .then((resp: any) => {
-      const data = resp.data.data;
-      system.value = data.map((e: any) => ({
-        id: e.id,
-        bank_name: e.bank_name,
-        account_name: e.account_name,
-        account_number: e.account_number,
-        description: e.description,
-        image: e.image,
-        is_active: e.is_active,
-        created_at: e.created_at,
-        updated_at: e.updated_at,
-      }));
-    })
-    .catch((error: any) => {
-      console.error(error);
-    })
-    .finally(() => {
-      console.log("getSystemBank completed");
-    });
-};
-
-const getOrder = async (orderId: number) => {
-  await service.product
-    .getOrderById(orderId)
-    .then((resp: any) => {
-      const data = resp.data.data;
-      if (data) {
-        order.value = {
-          id: data.id,
-          User: data.User,
-          Payment: data.Payment,
-          SystemBank: data.SystemBank,
-          Shipment: data.Shipment,
-          total_amount: data.total_amount,
-          total_price: data.total_price,
-          status: data.status,
-          created_at: data.created_at,
-          updated_at: data.updated_at,
-          tracking_number: data.tracking_number,
-          product: Array.isArray(data.product) ? data.product : [],
-        };
-      }
-    })
-    .catch((error: any) => {
-      console.error(error);
-    })
-    .finally(() => {
-      console.log("getOrder completed");
-    });
-};
-
-const confirmOrder = () => {
-  if (order.value) {
-    Swal.fire({
-      title: "ยืนยันการชำระเงิน",
-      text: "หากยืนยันการชำระเงินแล้วจะไม่สามารถยกเลิกสินค้าได้!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "ใช่, ชำระเลย",
-      cancelButtonText: "ไม่, กลับไป",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        router.push("/order/shipping");
-      }
-    });
+  try {
+    const resp = await service.product.getSystemBank();
+    system.value = resp.data.data.map((e: any) => ({
+      id: e.id,
+      bank_name: e.bank_name,
+      account_name: e.account_name,
+      account_number: e.account_number,
+      image: e.image,
+      is_active: e.is_active,
+    }));
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการดึงข้อมูลธนาคาร", error);
   }
 };
+
+// ดึงข้อมูลคำสั่งซื้อ
+const getOrder = async (orderId: number) => {
+  try {
+    const resp = await service.product.getOrderById(orderId);
+    const data = resp.data.data;
+    if (data) {
+      order.value = {
+        id: data.id,
+        User: data.User || { id: 0, firstname: "", lastname: "", phone: 0 },
+        Payment: data.Payment || {
+          id: 0,
+          price: 0,
+          bank_name: "",
+          account_name: "",
+          account_number: 0,
+          status: "",
+        },
+        SystemBank: data.SystemBank || null,
+        Shipment: data.Shipment || null,
+        total_amount: data.total_amount || 0,
+        total_price: data.total_price || 0,
+        status: data.status || "",
+        created_at: data.created_at || "",
+        updated_at: data.updated_at || "",
+        tracking_number: data.tracking_number || "",
+        products: Array.isArray(data.products) ? data.products : [],
+      } as OrderById;
+    }
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการดึงข้อมูลคำสั่งซื้อ", error);
+  }
+};
+
+
+const updatePayment = async () => {
+  await service.product.updatePayment(props.paymentId, paymentCreate.value)
+   .then((resp: any) => {
+      console.log(resp);
+      const data = resp.data;
+      const paymentCreate : PaymentRes = {
+        system_bank_id: data.system_bank_id,
+  date: data.data,
+  order_id: data.order_id,
+      };
+      paymentRes.value = paymentCreate;
+
+      if (resp.status == 200) {
+
+        Swal.fire({
+          title: "ยืนยันการชำระเงินสำเร็จ",
+          text: "การชำระเงินสำเร็จแล้ว",
+          icon: "success",
+          confirmButtonText: "ตกลง",
+        })
+  }
+    })
+    .catch((error: any) => {
+      console.log(error);
+    })
+    .finally(() => {
+    });
+}
+
+
 
 onMounted(async () => {
   await getSystemBank();
@@ -169,8 +215,8 @@ onMounted(async () => {
   if (orderId) {
     await getOrder(orderId);
   } else {
-    console.error("❌ ไม่พบ orderId ใน route params");
+    console.error("ไม่พบ orderId ใน route params");
   }
+  paymentCreate.value.order_id = props.orderId?? 0;
 });
-
 </script>
