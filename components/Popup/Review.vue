@@ -28,8 +28,6 @@
         </button>
       </div>
     </div>
-
-    <pre>{{ props.productId }}</pre>
   </div>
 </template>
 
@@ -41,7 +39,7 @@ definePageMeta({
 import Swal from "sweetalert2";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import type { ReviewCreate, ReviewRes } from "~/models/product.model";
+import type { OrderUpdate, OrderUpdateRes, ReviewCreate, ReviewRes } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
@@ -55,17 +53,48 @@ const props = defineProps({
   },
 });
 
+const orderUpdate = ref<OrderUpdate>({
+  id: 0,
+  status: "success",
+})
+
+const orderUpdateRes = ref<OrderUpdateRes>({
+  id: 0,
+  status: "success",
+})
+
 // ข้อมูลรีวิว
 const rating = ref(5);
 const description = ref("");
 
 // เพิ่มรีวิว
+const reviewedProducts = ref<number[]>([]); // เก็บ ID สินค้าที่ถูกรีวิวแล้ว
+
+const confirmReview = () => {
+  Swal.fire({
+    title: "ยืนยันการรีวิว?",
+    text: `รีวิวของคุณ: ${description.value}\nคะแนน: ${rating.value}`,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "ตกลง",
+    cancelButtonText: "ยกเลิก",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      addReview();
+    } else if (result.isDismissed) {
+      store.reviewAction = false;
+      router.push("/order/review");
+    }
+  });
+};
+
+// เพิ่มรีวิวและซ่อนปุ่มรีวิวของสินค้าที่ถูกรีวิวแล้ว
 const addReview = async () => {
   try {
     const review: ReviewCreate = {
       description: description.value,
       rating: rating.value,
-      product_id: props.productId, // ใช้ค่าจาก props
+      product_id: props.productId,
     };
 
     const resp = await service.product.addReview(review);
@@ -77,6 +106,7 @@ const addReview = async () => {
       icon: "success",
     });
 
+    reviewedProducts.value.push(props.productId); // เพิ่มสินค้าในรายการที่ถูกรีวิวแล้ว
     store.reviewAction = false;
     router.push("/order/review");
   } catch (error: any) {
@@ -89,21 +119,6 @@ const addReview = async () => {
   }
 };
 
-// ยืนยันรีวิว
-const confirmReview = () => {
-  Swal.fire({
-    title: "ยืนยันการรีวิว?",
-    text: `รีวิวของคุณ: ${description.value}\nคะแนน: ${rating.value}`,
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "ตกลง",
-    cancelButtonText: "ยกเลิก",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      addReview();
-    }
-  });
-};
 
 // ตั้งค่าคะแนน
 const setRating = (value: number) => {

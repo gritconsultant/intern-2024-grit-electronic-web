@@ -55,23 +55,46 @@
               <li
                 v-for="(product, index) in selectedOrder.products"
                 :key="index"
-                class="text-gray-700"
+                class="flex items-center space-x-4 p-4 border-b"
               >
-                - {{ product.product_name }}
+                <!-- Product Image -->
+                <div class="w-24 h-24">
+                  <img
+                    :src="product.image"
+                    alt="product"
+                    class="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
+                                                                <!-- Product Info -->
+                                                                <div class="flex-grow">
+                  <div class="flex justify-between items-center mb-2">
+                    <h2 class="font-bold text-lg">
+                      {{ product.product_name }}
+                    </h2>
+                    <p class="text-lg font-bold text-gray-800">
+                      ฿{{ product.price }}
+                    </p>
+                  </div>
+                  <p class="text-sm text-gray-500">
+                    จำนวน: {{ product.total_product_amount }}
+                  </p>
+                </div>
               </li>
             </ul>
 
             <div class="mt-4 pb-4 border-b">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <p class="text-gray-700">
-                {{ selectedOrder?.Shipment.firstname }}
-                {{ selectedOrder?.Shipment.lastname }}
-                <br />
-                {{ selectedOrder?.Shipment.address }},
-                {{ selectedOrder?.Shipment.sub_district }},
-                {{ selectedOrder?.Shipment.district }},
-                {{ selectedOrder?.Shipment.province }}
-                {{ selectedOrder?.Shipment.zip_code }}
+              <p class="text-gray-500 text-sm mt-2">
+                ขื่อผู้รับ: {{ selectedOrder.Shipment.firstname }}
+                {{ selectedOrder.Shipment.lastname }} <br />
+                <span>
+                  ที่อยู่:
+                  {{ selectedOrder.Shipment?.address || "ไม่มีข้อมูล" }}</span
+                >
+                ตำบล/แขวง: {{ selectedOrder.Shipment?.sub_district }} อำเภอ/เขต:
+                {{ selectedOrder.Shipment?.district }} จังหวัด:
+                {{ selectedOrder.Shipment?.province }} รหัสไปรษณีย์:
+                {{ selectedOrder.Shipment?.zip_code }}
               </p>
             </div>
 
@@ -164,6 +187,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: "user",
+});
+
 import Swal from "sweetalert2";
 import { ref } from "vue";
 import type { Order, OrderById, OrderUpdate, OrderUpdateRes } from "~/models/product.model";
@@ -249,6 +276,7 @@ const getOrderById = async (orderId: number) => {
 };
 
 const updateStatus = async () => {
+  loading.value = true;
   await service.product.updateOrder(selectedOrder.value?.id , orderUpdate.value)
   .then((resp: any) => {
     console.log(resp);
@@ -260,9 +288,10 @@ const updateStatus = async () => {
     orderUpdateRes.value = orderUpdate;
 
     if (resp.status == 200) {
+      
       Swal.fire({
-        title: "รับสินค้าสำเร็จ?",
-        text: "การยืนยันสได้รับสินค้าสำเร็จ",
+        title: "รับสินค้าสำเร็จ",
+        text: "การยืนยันได้รับสินค้าสำเร็จ",
         icon: "success",
         confirmButtonText: "ตกลง",
       })
@@ -275,7 +304,9 @@ const updateStatus = async () => {
     orderUpdate.value = {
       id: orderUpdate.value.id,
       status: "success",
+      
     };
+    loading.value = false;
   });
 }
 

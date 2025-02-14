@@ -8,6 +8,14 @@
         >
           ที่ต้องชำระ
         </NuxtLink>
+
+        <NuxtLink
+          to="/order/paid"
+          class="py-2 px-4 text-gray-600 hover:text-[#EE973C]"
+          :class="isActive('/order/paid') ? 'border-b-2 border-[#EE973C] text-[#EE973C]' : ''"
+        >
+          ชำระแล้ว
+        </NuxtLink>
   
         <NuxtLink
           to="/order/shipping"

@@ -67,7 +67,7 @@
       </div>
 
       <div class="flex justify-center mt-4 px-4 pb-6">
-        <button
+        <button 
         type="button"
           class="popupbtn w-full md:w-auto py-2 px-4 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-md"
           @click="updatePayment"
@@ -76,8 +76,6 @@
           ยืนยันคำสั่งซื้อ
         </button>
       </div>
-
-      <pre> {{ props.paymentId }}</pre> order id:<pre>{{ props.orderId }}</pre>
     </div>
   </div>
 </template>
@@ -89,6 +87,8 @@ import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
 import type {
   OrderById,
+  OrderUpdate,
+  OrderUpdateRes,
   PaymentCreate,
   PaymentRes,
   SystemBank,
@@ -96,11 +96,14 @@ import type {
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
+
 const router = useRouter();
 const route = useRoute();
 const store = useIndexStore();
 const system = ref<SystemBank[]>([]);
 const order = ref<OrderById | null>(null);
+  const loading = ref(true);
+
 
 const props = defineProps({
   orderId: {
@@ -126,6 +129,17 @@ const paymentRes = ref<PaymentRes>({
   order_id: 0,
 });
 
+const orderUpdate = ref<OrderUpdate>({
+  id: 0,
+  status: "prepare",
+})
+
+const orderUpdateRes = ref<OrderUpdateRes>({
+  id: 0,
+  status: "prepare",
+})
+
+
 
 // ดึงบัญชีธนาคาร
 const getSystemBank = async () => {
@@ -146,6 +160,7 @@ const getSystemBank = async () => {
 
 // ดึงข้อมูลคำสั่งซื้อ
 const getOrder = async (orderId: number) => {
+  loading.value = true;
   try {
     const resp = await service.product.getOrderById(orderId);
     const data = resp.data.data;
@@ -175,10 +190,12 @@ const getOrder = async (orderId: number) => {
   } catch (error) {
     console.error("เกิดข้อผิดพลาดในการดึงข้อมูลคำสั่งซื้อ", error);
   }
+  loading.value = false;
 };
 
 
 const updatePayment = async () => {
+  loading.value = true;
   await service.product.updatePayment(props.paymentId, paymentCreate.value)
    .then((resp: any) => {
       console.log(resp);
@@ -198,12 +215,20 @@ const updatePayment = async () => {
           icon: "success",
           confirmButtonText: "ตกลง",
         })
+        .then(() => {
+        
+          store.paymentAction = false;
+          router.push({ path: '/order/checkout' }).then(() => window.location.reload());
+
+        });
   }
     })
     .catch((error: any) => {
       console.log(error);
     })
     .finally(() => {
+
+      loading.value = false;
     });
 }
 

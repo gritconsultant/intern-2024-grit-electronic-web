@@ -172,6 +172,13 @@ export const getOrderPending = () => {
         method: "get",
     })
 }
+
+export const getOrderPaid = () => {
+    return client({
+        url: "/order/paid",
+        method: "get",
+    })
+}
 export const getOrderShip = () => {
     return client({
         url: "/order/ship",

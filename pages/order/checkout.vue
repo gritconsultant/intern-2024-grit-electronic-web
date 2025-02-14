@@ -48,40 +48,49 @@
           <div v-if="selectedOrder">
             <h3 class="font-bold">สินค้า</h3>
             <ul>
-  <li
-    v-for="(product, index) in selectedOrder.products"
-    :key="index"
-    class="flex items-center space-x-4 p-4 border-b "
-  >
-    <!-- Product Image -->
-    <div class="w-24 h-24">
-      <img
-        :src="product.image"
-        alt="product"
-        class="w-full h-full object-cover rounded-lg"
-      />
-    </div>
+              <li
+                v-for="(product, index) in selectedOrder.products"
+                :key="index"
+                class="flex items-center space-x-4 p-4 border-b"
+              >
+                <!-- Product Image -->
+                <div class="w-24 h-24">
+                  <img
+                    :src="product.image"
+                    alt="product"
+                    class="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
 
-    <!-- Product Info -->
-    <div class="flex-grow">
-      <div class="flex justify-between items-center mb-2">
-        <h2 class="font-bold text-lg">{{ product.product_name }}</h2>
-        <p class="text-lg font-bold text-gray-800">฿{{ product.price }}</p>
-      </div>
-      <p class="text-sm text-gray-500">จำนวน: {{ product.total_product_amount }}</p>
-    </div>
-  </li>
-</ul>
-
+                <!-- Product Info -->
+                <div class="flex-grow">
+                  <div class="flex justify-between items-center mb-2">
+                    <h2 class="font-bold text-lg">
+                      {{ product.product_name }}
+                    </h2>
+                    <p class="text-lg font-bold text-gray-800">
+                      ฿{{ product.price }}
+                    </p>
+                  </div>
+                  <p class="text-sm text-gray-500">
+                    จำนวน: {{ product.total_product_amount }}
+                  </p>
+                </div>
+              </li>
+            </ul>
 
             <div class="mt-4 pb-4 border-b">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
               <p class="text-gray-500 text-sm mt-2">
-                ขื่อผู้รับ: {{ selectedOrder.Shipment.firstname }} {{ selectedOrder.Shipment.lastname }} <br>
-                <span>{{ selectedOrder.Shipment?.address || "ไม่มีข้อมูล" }}</span>
-                {{ selectedOrder.Shipment?.district }}
-                {{ selectedOrder.Shipment?.sub_district }}
-                {{ selectedOrder.Shipment?.province }}
+                ขื่อผู้รับ: {{ selectedOrder.Shipment.firstname }}
+                {{ selectedOrder.Shipment.lastname }} <br />
+                <span>
+                  ที่อยู่:
+                  {{ selectedOrder.Shipment?.address || "ไม่มีข้อมูล" }}</span
+                >
+                ตำบล/แขวง: {{ selectedOrder.Shipment?.sub_district }} อำเภอ/เขต:
+                {{ selectedOrder.Shipment?.district }} จังหวัด:
+                {{ selectedOrder.Shipment?.province }} รหัสไปรษณีย์:
                 {{ selectedOrder.Shipment?.zip_code }}
               </p>
             </div>
@@ -119,16 +128,16 @@
             <!-- Payment Button -->
             <div class="flex space-x-4 mt-4">
               <button
-                class="flex-1 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg"
-                @click="cancelOrder(selectedOrder.id)"
-              >
-                ยกเลิกสินค้า
-              </button>
-              <button
                 class="flex-1 py-2 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-lg"
                 @click="store.paymentAction = true"
               >
                 ชำระเงิน
+              </button>
+              <button
+                class="flex-1 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg"
+                @click="updateStatus"
+              >
+                ยกเลิกสินค้า
               </button>
             </div>
           </div>
@@ -137,23 +146,29 @@
       </div>
     </div>
 
-        <!--  Popup -->
-        <div
+    <!--  Popup -->
+    <div
       v-if="store.paymentAction"
       class="fixed inset-0 bg-black/50 flex justify-end z-50"
-            @click="store.paymentAction = !store.paymentAction"
+      @click="store.paymentAction = !store.paymentAction"
     >
       <div @click.stop>
-        <PopupPayment  :orderId="selectedOrder?.id" :paymentId="selectedOrder?.Payment.id" />
+        <PopupPayment
+          :orderId="selectedOrder?.id"
+          :paymentId="selectedOrder?.Payment.id"
+        />
       </div>
     </div>
+    <Loading :loading="loading" />
+    
   </div>
+  
 </template>
 
 <script setup lang="ts">
 import Swal from "sweetalert2";
 import { ref, onMounted } from "vue";
-import type { Order, OrderById, OrderCreate, OrderRes, Shipment } from "~/models/product.model";
+import type { Order, OrderById, OrderUpdate, OrderUpdateRes, Shipment } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 definePageMeta({
@@ -161,11 +176,11 @@ definePageMeta({
 });
 
 const orders = ref<Order[]>([]);
+  const loading = ref(true);
 const store = useIndexStore();
 const selectedOrder = ref<OrderById | null>(null);
 const shipment = ref<Shipment[]>([]);
 const selectedAddressMap = ref<{ [key: number]: number }>({});
-
 
 const props = defineProps({
   orderId: {
@@ -173,11 +188,21 @@ const props = defineProps({
   },
   paymentId: {
     type: Number,
-  }
+  },
+});
+
+const orderUpdate = ref<OrderUpdate>({
+  id: 0,
+  status: "cancelled",
 })
 
+const orderUpdateRes = ref<OrderUpdateRes>({
+  id: 0,
+  status: "cancelled",
+})
 
 const getOrderpending = async () => {
+  loading.value = true;
   try {
     const resp = await service.product.getOrderPending();
     orders.value = resp.data.data.map((e: any) => ({
@@ -188,6 +213,7 @@ const getOrderpending = async () => {
   } catch (error) {
     console.error(error);
   }
+  loading.value = false;
 };
 
 const getShipment = async () => {
@@ -224,7 +250,8 @@ const checkOrder = (order: Order) => {
   getOrderById(Number(order.id));
 };
 
-const cancelOrder = (orderId: number): void => {
+const updateStatus = async () => {
+  loading
   if (selectedOrder.value) {
     Swal.fire({
       title: "ยืนยันการยกเลิก",
@@ -235,17 +262,46 @@ const cancelOrder = (orderId: number): void => {
       cancelButtonText: "ไม่, กลับไป",
     }).then((result) => {
       if (result.isConfirmed) {
-        // ลบ order ออกจากรายการ
-        orders.value = orders.value.filter(order => order.id !== selectedOrder.value!.id);
-        
-        Swal.fire("ลบสำเร็จ!", "คำสั่งซื้อถูกยกเลิกและลบออกเรียบร้อยแล้ว", "success");
-        selectedOrder.value = null; // เคลียร์คำสั่งซื้อที่เลือก
+        loading.value = true;
+
+        // เรียกใช้ updateOrder เพื่ออัปเดตสถานะคำสั่งซื้อ
+        service.product.updateOrder(selectedOrder.value?.id, orderUpdate.value)
+          .then((resp: any) => {
+            console.log(resp);
+            const data = resp.data;
+            const orderUpdate: OrderUpdateRes = {
+              id: data.id,
+              status: data.status,
+            };
+            orderUpdateRes.value = orderUpdate;
+
+            if (resp.status == 200) {
+              Swal.fire({
+                title: "ยกเลิกสินค้าสำเร็จ",
+                text: "ยกเลิกการซื้อสินค้าสำเร็จ",
+                icon: "success",
+                confirmButtonText: "ตกลง",
+              });
+
+              // ลบ order ออกจากรายการ
+              orders.value = orders.value.filter(
+                (order) => order.id !== selectedOrder.value!.id
+              );
+
+              // เคลียร์คำสั่งซื้อที่เลือก
+              selectedOrder.value = null;
+            }
+          })
+          .catch((error: any) => {
+            console.error("Error updating order status:", error);
+          })
+          .finally(() => {
+            loading.value = false;
+          });
       }
     });
   }
 };
-
-
 
 
 const formatDate = (timestamp: number | string): string => {

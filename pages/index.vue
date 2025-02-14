@@ -56,9 +56,16 @@
         <div v-for="cate in category" :key="cate.id">
           <div v-if="selectedCategoryId === cate.id || selectedCategoryId === 0">
             <div class="flex justify-between px-10">
-              <h1 class="fontsubheader mt-[3px]">{{ cate.name }}</h1>
+              <h1 class="font-bold text-lg mt-[3px]">{{ cate.name }}</h1>
               <div class="text-black/40 cursor-pointer">
-                ทั้งหมด -></div>
+                <router-link
+                v-if="cate.id"
+                :to="`/category/${cate.id}`"
+                class="text-lg font-bold text-black/50 cursor-pointer hover:text-[#FD8C35]/70"
+              >
+              ทั้งหมด ->
+              </router-link>
+            </div>
             </div>
             <div class="grid grid-cols-4 my-5">
               <div

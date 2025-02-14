@@ -23,13 +23,15 @@
       <div class="mb-6 md:mb-0">
         <div class="font-bold text-base mb-4">หมวดหมู่</div>
         <div
-          v-for="(data, i) in page.slice(0, 5)"
-          :key="i"
-          class="hover:text-[#FCCA81] text-sm mt-1"
         >
-          <NuxtLink :to="data.path">
-            {{ data.name }}
-          </NuxtLink>
+        <div v-for="cate in categories.slice(0,5)" :key="cate.id">
+              <NuxtLink
+                :to="`/category/${cate.id}`"
+                class="block px-4 py-2 hover:bg-gray-100"
+              >
+                {{ cate.name }}
+              </NuxtLink>
+            </div>
         </div>
       </div>
 
@@ -123,6 +125,30 @@
 
 <script setup lang="ts">
 import type { Page } from "~/models/page.model";
+import type { Category } from "~/models/product.model";
+import service from "~/service";
+
+const categories = ref<Category[]>([]);
+
+const getCategoryList = async () => {
+  await service.product
+    .getCategoryList()
+    .then((resp: any) => {
+      const data = resp.data.data;
+      categories.value = data.map((e: any) => ({
+        id: e.id,    
+        name: e.name, 
+        image: e.image,   
+      }));
+    })
+    .catch((error: any) => {
+      console.error("เกิดข้อผิดพลาดในการดึงหมวดหมู่สินค้า:", error);
+    });
+};
+
+onMounted(() => {
+  getCategoryList();
+});
 
 const page = ref<Page[]>([
   {

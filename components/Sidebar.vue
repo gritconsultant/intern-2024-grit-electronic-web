@@ -29,7 +29,7 @@
         <NuxtLink
           to="/order/checkout"
           class="flex items-center space-x-2"
-          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping', '/order/receiving', '/order/review', '/order/history', '/order/refundOrder', '/order/refundHistory']) }"
+          :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping', '/order/receiving', '/order/review', '/order/history', '/order/paid']) }"
         >
           <i class="fas fa-shopping-cart"></i>
           <span>คำสั่งซื้อของฉัน</span>

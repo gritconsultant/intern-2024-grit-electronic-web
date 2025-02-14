@@ -55,20 +55,47 @@
               <li
                 v-for="(product, index) in selectedOrder.products"
                 :key="index"
-                class="text-gray-700"
+                class="flex items-center space-x-4 p-4 border-b"
               >
-                - {{ product }}
+                <!-- Product Image -->
+                <div class="w-24 h-24">
+                  <img
+                    :src="product.image"
+                    alt="product"
+                    class="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
+                                                <!-- Product Info -->
+                                                <div class="flex-grow">
+                  <div class="flex justify-between items-center mb-2">
+                    <h2 class="font-bold text-lg">
+                      {{ product.product_name }}
+                    </h2>
+                    <p class="text-lg font-bold text-gray-800">
+                      ฿{{ product.price }}
+                    </p>
+                  </div>
+                  <p class="text-sm text-gray-500">
+                    จำนวน: {{ product.total_product_amount }}
+                  </p>
+                </div>
+
               </li>
             </ul>
 
             <div class="mt-4 pb-4 border-b">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <p class="text-gray-700">
-                {{ selectedOrder?.Shipment.firstname }} {{ selectedOrder?.Shipment.lastname }}
-                <br />
-                {{ selectedOrder?.Shipment.address }}, {{ selectedOrder?.Shipment.sub_district }},
-                {{ selectedOrder?.Shipment.district }}, {{ selectedOrder?.Shipment.province }}
-                {{ selectedOrder?.Shipment.zip_code }}
+              <p class="text-gray-500 text-sm mt-2">
+                ขื่อผู้รับ: {{ selectedOrder.Shipment.firstname }}
+                {{ selectedOrder.Shipment.lastname }} <br />
+                <span>
+                  ที่อยู่:
+                  {{ selectedOrder.Shipment?.address || "ไม่มีข้อมูล" }}</span
+                >
+                ตำบล/แขวง: {{ selectedOrder.Shipment?.sub_district }} อำเภอ/เขต:
+                {{ selectedOrder.Shipment?.district }} จังหวัด:
+                {{ selectedOrder.Shipment?.province }} รหัสไปรษณีย์:
+                {{ selectedOrder.Shipment?.zip_code }}
               </p>
             </div>
 

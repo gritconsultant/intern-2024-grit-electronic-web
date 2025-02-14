@@ -55,9 +55,32 @@
               <li
                 v-for="(product, index) in selectedOrder.products"
                 :key="index"
+                class="flex items-center space-x-4 p-4 border-b"
               >
-                - {{ product.product_name }}
-                <button
+                <!-- Product Image -->
+                <div class="w-24 h-24">
+                  <img
+                    :src="product.image"
+                    alt="product"
+                    class="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
+                                <!-- Product Info -->
+                                <div class="flex-grow">
+                  <div class="flex justify-between items-center mb-2">
+                    <h2 class="font-bold text-lg">
+                      {{ product.product_name }}
+                    </h2>
+                    <p class="text-lg font-bold text-gray-800">
+                      ฿{{ product.price }}
+                    </p>
+                    
+                  </div>
+                  <div class="flex justify-between">
+                    <p class="text-sm text-gray-500">
+                    จำนวน: {{ product.total_product_amount }}
+                  </p>
+                  <button
                   v-if="product.product_name"
                   class="bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white px-3 py-1 rounded-lg text-sm"
                   @click="openReviewPopup(product)"
@@ -65,20 +88,25 @@
                 >
                   รีวิว
                 </button>
+                  </div>
+
+                </div>
               </li>
             </ul>
 
             <div class="mt-4 pb-4 border-b">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <p class="text-gray-700">
-                {{ selectedOrder?.Shipment.firstname }}
-                {{ selectedOrder?.Shipment.lastname }}
-                <br />
-                {{ selectedOrder?.Shipment.address }},
-                {{ selectedOrder?.Shipment.sub_district }},
-                {{ selectedOrder?.Shipment.district }},
-                {{ selectedOrder?.Shipment.province }}
-                {{ selectedOrder?.Shipment.zip_code }}
+              <p class="text-gray-500 text-sm mt-2">
+                ขื่อผู้รับ: {{ selectedOrder.Shipment.firstname }}
+                {{ selectedOrder.Shipment.lastname }} <br />
+                <span>
+                  ที่อยู่:
+                  {{ selectedOrder.Shipment?.address || "ไม่มีข้อมูล" }}</span
+                >
+                ตำบล/แขวง: {{ selectedOrder.Shipment?.sub_district }} อำเภอ/เขต:
+                {{ selectedOrder.Shipment?.district }} จังหวัด:
+                {{ selectedOrder.Shipment?.province }} รหัสไปรษณีย์:
+                {{ selectedOrder.Shipment?.zip_code }}
               </p>
             </div>
 
@@ -126,6 +154,7 @@
 
       </div>
     </div>
+    <Loading :loading="loading" />
   </div>
 </template>
 
@@ -140,6 +169,7 @@ import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
+const loading = ref(true);
 const orders = ref<Order[]>([]);
 const selectedOrder = ref<OrderById | null>(null);
   const selectedProduct = ref<{ id: number; product_name: string } | null>(null);
@@ -152,6 +182,7 @@ const props = defineProps({
 });
 
 const getOrdersuccess = async () => {
+  loading.value = true;
   try {
     const resp = await service.product.getOrderSuccess();
     orders.value = resp.data.data.map((e: any) => ({
@@ -168,15 +199,18 @@ const getOrdersuccess = async () => {
   } catch (error) {
     console.error("Error fetching orders:", error);
   }
+  loading.value = false;
 };
 
 const getOrderById = async (orderId: number) => {
+  loading.value = true;
   try {
     const resp = await service.product.getOrderById(orderId);
     selectedOrder.value = resp.data.data || null;
   } catch (error) {
     console.error("Error fetching order:", error);
   }
+  loading.value = false;
 };
 
 const checkOrder = (order: Order) => {
@@ -184,6 +218,7 @@ const checkOrder = (order: Order) => {
 };
 
 const openReviewPopup = (product: { product_id: number; product_name: string }) => {
+  loading.value = true;
   if (!product.product_id) {
     console.error("ไม่มี productId");
     return;
@@ -193,6 +228,7 @@ const openReviewPopup = (product: { product_id: number; product_name: string }) 
     id: product.product_id, // Rename here
     product_name: product.product_name
   };
+  loading.value = false;
   store.reviewAction = true;
 };
 
