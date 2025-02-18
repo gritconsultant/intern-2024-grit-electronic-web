@@ -1,5 +1,5 @@
 <template>
-  <div class="flex p-4 h-full">
+  <div class="flex p-4">
     <Sidebar />
     <div class="w-full md:w-3/4 p-6">
       <div class="border-b flex justify-between">
@@ -89,11 +89,8 @@ import type { Shipment } from "~/models/product.model";
 import service from "~/service";
 
 definePageMeta({
+  middleware: 'auth',
   layout: "user",
-});
-
-definePageMeta({
-  middleware: 'auth'
 })
 
 

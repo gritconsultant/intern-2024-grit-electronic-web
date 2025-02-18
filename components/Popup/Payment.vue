@@ -67,11 +67,10 @@
       </div>
 
       <div class="flex justify-center mt-4 px-4 pb-6">
-        <button 
-        type="button"
+        <button
+          type="button"
           class="popupbtn w-full md:w-auto py-2 px-4 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-md"
           @click="updatePayment"
-      
         >
           ยืนยันคำสั่งซื้อ
         </button>
@@ -98,14 +97,12 @@ import type {
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
-
 const router = useRouter();
 const route = useRoute();
 const store = useIndexStore();
 const system = ref<SystemBank[]>([]);
 const order = ref<OrderById | null>(null);
-  const loading = ref(true);
-
+const loading = ref(true);
 
 const props = defineProps({
   orderId: {
@@ -116,10 +113,8 @@ const props = defineProps({
   },
   shipmentId: {
     type: Number,
-  }
-})
-
-
+  },
+});
 
 // เก็บค่าการชำระเงิน
 const paymentCreate = ref<PaymentCreate>({
@@ -137,14 +132,12 @@ const paymentRes = ref<PaymentRes>({
 const orderUpdate = ref<OrderUpdate>({
   id: 0,
   status: "prepare",
-})
+});
 
 const orderUpdateRes = ref<OrderUpdateRes>({
   id: 0,
   status: "prepare",
-})
-
-
+});
 
 // ดึงบัญชีธนาคาร
 const getSystemBank = async () => {
@@ -198,45 +191,43 @@ const getOrder = async (orderId: number) => {
   loading.value = false;
 };
 
-
 const updatePayment = async () => {
   loading.value = true;
-  await service.product.updatePayment(props.paymentId, paymentCreate.value)
-   .then((resp: any) => {
+  console.log(props.paymentId)
+  await service.product
+    .updatePayment(props.orderId, paymentCreate.value)
+
+    .then((resp: any) => {
       console.log(resp);
       const data = resp.data;
-      const paymentCreate : PaymentRes = {
+      const paymentCreate: PaymentRes = {
         system_bank_id: data.system_bank_id,
-  date: data.data,
-  order_id: data.order_id,
+        date: data.date,
+        order_id: data.order_id,
       };
       paymentRes.value = paymentCreate;
 
       if (resp.status == 200) {
-
         Swal.fire({
           title: "ยืนยันการชำระเงินสำเร็จ",
           text: "การชำระเงินสำเร็จแล้ว",
           icon: "success",
           confirmButtonText: "ตกลง",
-        })
-        .then(() => {
-        
+        }).then(() => {
           store.paymentAction = false;
-          router.push({ path: '/order/checkout' }).then(() => window.location.reload());
-
+          router
+            .push({ path: "/order/checkout" })
+            .then(() => window.location.reload());
         });
-  }
+      }
     })
     .catch((error: any) => {
       console.log(error);
     })
     .finally(() => {
-
       loading.value = false;
     });
-}
-
+};
 
 onMounted(async () => {
   await getSystemBank();
@@ -246,6 +237,6 @@ onMounted(async () => {
   } else {
     console.error("ไม่พบ orderId ใน route params");
   }
-  paymentCreate.value.order_id = props.orderId?? 0;
+  paymentCreate.value.order_id = props.orderId ?? 0;
 });
 </script>

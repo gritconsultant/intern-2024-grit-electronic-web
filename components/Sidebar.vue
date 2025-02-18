@@ -72,6 +72,7 @@ const getinfo = ref<UserInfo>({
   Password: "",
   Email: "",
   Phone: 0,
+  Shipment: "",
   created_at: 0,
   updated_at: 0,
 });
@@ -83,13 +84,14 @@ const getuserinfo = async () => {
       console.log(resp);
       const data = resp.data.data;
       const user: UserInfo = {
-        ID: data.ID,
-        FirstName: data.FirstName,
-        LastName: data.LastName,
-        Username: data.Username,
+        ID: data.id,
+        FirstName: data.firstname,
+        LastName: data.lastname,
+        Username: data.username,
         Password: data.Password,
-        Email: data.Email,
-        Phone: data.Phone,
+        Email: data.email,
+        Phone: data.phone,
+        Shipment: data.shipment,
         created_at: data.created_at,
         updated_at: data.updated_at,
       };

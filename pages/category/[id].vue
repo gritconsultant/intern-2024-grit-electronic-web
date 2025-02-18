@@ -39,7 +39,7 @@
   
   <script setup lang="ts">
   import { ref, onMounted, computed } from "vue";
-  import type { Category, Product } from "~/models/product.model";
+  import type { Category, Params, Product } from "~/models/product.model";
   import service from "~/service";
 
   const route = useRoute(); 
@@ -47,6 +47,10 @@
   const products = ref<Product[]>([]);
     const categoryId = computed(() => route.params.id);
     const categories = ref<Category[]>([]);
+      const search = ref<string>("");
+const page = ref<number>(0);
+const size = ref<number>(0);
+    
 
 const getCategoryList = async () => {
   loading.value = true;
@@ -71,7 +75,12 @@ const getCategoryList = async () => {
   // ดึงข้อมูลสินค้าทั้งหมด
   const getProductList = async () => {
     loading.value = true;
-    await service.product.getProductList()
+    const param: Params = {
+    page: page.value, // ใช้ .value ในการเข้าถึง currentPage
+    size: size.value, // ใช้ .value ในการเข้าถึง size
+    search: search.value || "", // ใช้ค่าป้องกันถ้า search เป็น null หรือ undefined
+  };
+    await service.product.getProductList(param)
       .then((resp: any) => {
         const data = resp.data.data || [];
         products.value = data
@@ -96,6 +105,7 @@ const getCategoryList = async () => {
             is_active: e.is_active,
             created_at: e.created_at,
             updated_at: e.updated_at,
+            is_favorite: e.is_favorite,
           }));
       })
       .catch((error: any) => {
@@ -117,7 +127,12 @@ const selectedCategory = computed(() => {
     (product) => product.category.id.toString() === categoryId.value
   );
 });
-  
+
+// Watch for changes in page, size, or search
+watch([page, size, search], () => {
+  // Call getProductList when any of the values change
+  getProductList();
+});
   onMounted(async () => {
     await getProductList();
     await getCategoryList();

@@ -81,7 +81,7 @@
                     จำนวน: {{ product.total_product_amount }}
                   </p>
                   <button
-                  v-if="product.product_name"
+                  v-if="product.product_name && !product.is_review"
                   class="bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white px-3 py-1 rounded-lg text-sm"
                   @click="openReviewPopup(product)"
 
@@ -89,7 +89,7 @@
                   รีวิว
                 </button>
                   </div>
-
+<pre>{{  }}</pre>
                 </div>
               </li>
             </ul>
@@ -171,7 +171,7 @@ import { useIndexStore } from "~/store/main";
 const store = useIndexStore();
 const loading = ref(true);
 const orders = ref<Order[]>([]);
-const selectedOrder = ref<OrderById | null>(null);
+const selectedOrder = ref<OrderById >();
   const selectedProduct = ref<{ id: number; product_name: string } | null>(null);
 
 

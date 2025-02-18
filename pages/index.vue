@@ -1,14 +1,20 @@
 <template>
   <div class="mx-[20px] lg:mx-[50px] grid justify-center">
     <!-- Banner -->
-    <div>
-      <img src="/images/banner.jpg" class="rounded-b-2xl" />
+    <div class="w-full h-[300px] mt-10">
+      <div class="relative w-full h-full">
+        <img
+          :src="banner.length > 0 ? banner[currentIndex].banner : ''"
+          class="rounded-2xl w-full h-full object-cover"
+          alt="Banner Image"
+        />
+      </div>
     </div>
 
-        <!-- Search Bar -->
-        <div class="mt-6 flex justify-end">
+    <!-- Search Bar -->
+    <div class="mt-6 flex justify-end">
       <input
-        v-model="searchQuery"
+        v-model="search"
         type="text"
         placeholder="ค้นหาสินค้า..."
         class="border p-2 rounded-lg w-full max-w-[300px]"
@@ -33,11 +39,13 @@
               }"
               class="rounded-full p-1 w-[90px] h-[90px] lg:w-[100px] lg:h-[100px]"
             >
-              <div class="w-full h-full object-cover rounded-full overflow-hidden">
+              <div
+                class="w-full h-full object-cover rounded-full overflow-hidden"
+              >
                 <img
                   :src="cate.image"
                   alt=""
-                  class="w-full h-full object-cover "
+                  class="w-full h-full object-cover"
                 />
               </div>
             </div>
@@ -54,20 +62,22 @@
       <h1 class="fontheader">สินค้าแนะนำ - Recommend</h1>
       <div class="grid gap-5 mt-[10px]">
         <div v-for="cate in category" :key="cate.id">
-          <div v-if="selectedCategoryId === cate.id || selectedCategoryId === 0">
-            <div class="flex justify-between px-10">
+          <div
+            v-if="selectedCategoryId === cate.id || selectedCategoryId === 0"
+          >
+            <div class="flex justify-between w-full">
               <h1 class="font-bold text-lg mt-[3px]">{{ cate.name }}</h1>
               <div class="text-black/40 cursor-pointer">
                 <router-link
-                v-if="cate.id"
-                :to="`/category/${cate.id}`"
-                class="text-lg font-bold text-black/50 cursor-pointer hover:text-[#FD8C35]/70"
-              >
-              ทั้งหมด ->
-              </router-link>
+                  v-if="cate.id"
+                  :to="`/category/${cate.id}`"
+                  class="text-lg font-bold text-black/50 cursor-pointer hover:text-[#FD8C35]/70"
+                >
+                  ทั้งหมด ->
+                </router-link>
+              </div>
             </div>
-            </div>
-            <div class="grid grid-cols-4 my-5">
+            <div class="grid grid-cols-4 my-5 gap-8">
               <div
                 v-for="item in getProductsByCategory(cate.id).slice(0, 4)"
                 :key="item.id"
@@ -80,37 +90,59 @@
             </div>
           </div>
         </div>
-        
       </div>
-
-      
     </div>
-    
+
     <Loading :loading="loading" />
   </div>
 </template>
 
-
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import type { Category, Product } from "~/models/product.model";
+import type { Banner, Category, Params, Product } from "~/models/product.model";
 import service from "~/service";
 
-
 definePageMeta({
-  middleware: 'auth'
-})
+  middleware: "auth",
+});
 
 const products = ref<Product[]>([]);
 const category = ref<Category[]>([]);
-  const searchQuery = ref("");
+const search = ref<string>("");
+const page = ref<number>(0);
+const size = ref<number>(0);
 const selectedCategoryId = ref(0); // 0 = All categories
-const loading = ref(true); 
+const loading = ref(true);
+const banner = ref<any[]>([]); // เปลี่ยนจาก Banner เป็นอาร์เรย์
+const currentIndex = ref(0); // ใช้เพื่อเก็บดัชนีของภาพที่แสดงในตอนนี้
+
+
+const getbanners = async () => {
+  await service.product
+    .getBanner()
+    .then((resp: any) => {
+      banner.value = resp.data.data; // เก็บข้อมูลของแต่ละภาพในอาร์เรย์
+      if (banner.value.length > 0) {
+        currentIndex.value = 0; // ตั้งค่า default ให้เป็นรูปแรกเมื่อโหลดเสร็จ
+      }
+    })
+    .catch((error: any) => {
+      console.error("Error loading banners:", error);
+    });
+};
+
 
 // ดึงข้อมูลสินค้าทั้งหมด
 const getProductList = async () => {
   loading.value = true;
-  await service.product.getProductList()
+  const param: Params = {
+    page: page.value, // ใช้ .value ในการเข้าถึง currentPage
+    size: size.value, // ใช้ .value ในการเข้าถึง size
+    search: search.value || "", // ใช้ค่าป้องกันถ้า search เป็น null หรือ undefined
+  };
+  console.log(param)
+  await service.product
+    .getProductList(param)
     .then((resp: any) => {
       const data = resp.data.data || [];
       products.value = data
@@ -126,15 +158,17 @@ const getProductList = async () => {
             id: e.category?.id,
             name: e.category?.name,
           },
-          Review: e.Review?.map((r: any) => ({
-            id: r.id,
-            rating: r.rating,
-            username: r.username,
-            description: r.description,
-          })) || [],
+          Review:
+            e.Review?.map((r: any) => ({
+              id: r.id,
+              rating: r.rating,
+              username: r.username,
+              description: r.description,
+            })) || [],
           is_active: e.is_active,
           created_at: e.created_at,
           updated_at: e.updated_at,
+          is_favorite: e.is_favorite,
         }));
     })
     .catch((error: any) => {
@@ -148,7 +182,8 @@ const getProductList = async () => {
 // ดึงข้อมูลหมวดหมู่สินค้า
 const getCategoryList = async () => {
   loading.value = true;
-  await service.product.getCategoryList()
+  await service.product
+    .getCategoryList()
     .then((resp: any) => {
       const data = resp.data.data;
       category.value = data.map((e: any) => ({
@@ -160,8 +195,7 @@ const getCategoryList = async () => {
     .catch((error: any) => {
       console.error("Error loading category list:", error);
     })
-    .finally(() => {
-    });
+    .finally(() => {});
 };
 
 // ฟังก์ชันกรองสินค้าในหมวดหมู่
@@ -173,8 +207,6 @@ const getProductsByCategory = (categoryId: number): Product[] => {
   );
 };
 
-
-
 const toggleCategory = (categoryId: number) => {
   if (selectedCategoryId.value === categoryId) {
     selectedCategoryId.value = 0; // รีเซ็ตการเลือกหมวดหมู่เมื่อกดหมวดหมู่เดิม
@@ -182,13 +214,18 @@ const toggleCategory = (categoryId: number) => {
     selectedCategoryId.value = categoryId;
   }
 };
+
+// Watch for changes in page, size, or search
+watch([page, size, search], () => {
+  // Call getProductList when any of the values change
+  getProductList();
+});
+
 onMounted(async () => {
   await getCategoryList();
   await getProductList();
+  await getbanners();
 });
 </script>
 
-
-
-<style scoped>
-</style>
+<style scoped></style>

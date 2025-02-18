@@ -69,7 +69,7 @@
             <div>
               <button @click="toggleFavorite(index)" class="text-red-500">
                 <svg
-                  v-if="item.isFavorite"
+                  v-if="item.is_favorite"
                   class="w-5 h-5 md:w-6 md:h-6 text-red-500"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -148,7 +148,7 @@ const getWishlist = async () => {
           amount_per_product: e.amount_per_product,
           created_at: e.created_at,
           updated_at: e.updated_at,
-          isFavorite: true,
+          is_favorite: true,
         };
         wishlist.push(wishlists);
       }
@@ -183,7 +183,7 @@ const toggleFavorite = async (index: number) => {
   loading.value = true;
   const item = wish.value[index];
 
-  if (item.isFavorite) {
+  if (item.is_favorite) {
     // ถ้ากดปิด ให้ลบจากรายการโปรด
     try {
       await deleteWishlist(String(item.id));

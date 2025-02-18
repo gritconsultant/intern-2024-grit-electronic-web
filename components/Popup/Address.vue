@@ -50,12 +50,14 @@ import { ref, defineEmits, onMounted } from "vue";
 import type { ShipmentCreate, ShipmentRes } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
+definePageMeta({
+  middleware: 'auth'
+})
 
 const store = useIndexStore();
 
 // กำหนดค่า shipment ให้เป็นค่าเริ่มต้น
 const shipment = ref<ShipmentCreate>({
-  ID: 0,
   firstname: "",
   lastname: "",
   address: "",
@@ -66,7 +68,6 @@ const shipment = ref<ShipmentCreate>({
 });
 
 const shipmentRes = ref<ShipmentRes>({
-  id: 0,
   firstname: "",
   lastname: "",
   address: "",
@@ -116,7 +117,6 @@ const addShipment = async () => {
       }
       // อัพเดทข้อมูล shipmentRes
       shipmentRes.value = {
-        id: data.id,
         firstname: data.firstname,
         lastname: data.lastname,
         address: data.address,

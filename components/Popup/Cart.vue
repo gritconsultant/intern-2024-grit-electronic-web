@@ -285,55 +285,53 @@ const addOrder = async () => {
   loading.value = true;
 
     // ดึงเฉพาะสินค้าที่ถูกเลือก
-    const selectedCartItems = carts.value.filter(item => item.selected);
+    const selectedproduct = selectedItems.value.filter(item => item.selected);
+    console.log(selectedItems.value);
 
-if (selectedCartItems.length === 0) {
-  Swal.fire("เกิดข้อผิดพลาด!", "กรุณาเลือกสินค้าอย่างน้อย 1 รายการ.", "error");
-  loading.value = false;
-  return;
-}
 
-// สร้างข้อมูลคำสั่งซื้อใหม่ (เฉพาะสินค้าที่เลือก)
-const orderData = {
-  shipment_id: orders.value.shipment_id,
-  payment_id: orders.value.payment_id,
-  status: "pending",
-  cartItems: selectedCartItems.map(item => ({
-    id: item.id,
-    total_product_amount: item.total_product_amount,
-  })),
-};
-  orders.value.shipment_id = orders.value.shipment_id;
-  orders.value.payment_id = orders.value.payment_id;
-  await service.product
-    .addOrder(orders.value)
-    .then((resp: any) => {
-      const data = resp.data.data;
-      if (data) {
-        Swal.fire({
-          title: "การสั่งซื้อสำเร็จ!",
-          text: "คำสั่งซื้อของคุณถูกเพิ่มเรียบร้อย!",
-          icon: "success",
-        })
-        .then(() => {
-          // รีโหลดหน้าใหม่
-          router.push({ path: '/order/checkout' }).then(() => window.location.reload());
-        });
-      }
-      const orders: OrderRes = {
-        shipment_id: data.id,
-        payment_id: data.payment_id,
-        status: data.status,
-      };
-      orderRes.value = orders;
-    })
-    .catch((error: any) => {
-      console.error(error);
-    })
-    .finally(() => {
-      loading.value = false;
-    });
-};
+  // สร้างข้อมูลคำสั่งซื้อใหม่ (เฉพาะสินค้าที่เลือก)
+  const orderData = {
+    shipment_id: orders.value.shipment_id,
+    payment_id: orders.value.payment_id,
+    status: "pending",
+    cart_items: selectedproduct.map(item => ({
+      cart_id: item.id,
+      total_product_amount: item.total_product_amount,
+    })),
+  };
+    orders.value.shipment_id = orders.value.shipment_id;
+    orders.value.payment_id = orders.value.payment_id;
+    console.log(orderData)
+    await service.product
+      .addOrder(orderData)
+      .then((resp: any) => {
+        const data = resp.data.data;
+        if (data) {
+          Swal.fire({
+            title: "การสั่งซื้อสำเร็จ!",
+            text: "คำสั่งซื้อของคุณถูกเพิ่มเรียบร้อย!",
+            icon: "success",
+          })
+          .then(() => {
+            // รีโหลดหน้าใหม่
+            router.push({ path: '/order/checkout' }).then(() => window.location.reload());
+          });
+        }
+        const orders: OrderRes = {
+          shipment_id: data.id,
+          payment_id: data.payment_id,
+          status: data.status,
+          
+        };
+        orderRes.value = orders;
+      })
+      .catch((error: any) => {
+        console.error(error);
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  };
 
 const toggleEditItem = (index: number , id: number) => {
     editIndex.value = isEditing.value? null : index;

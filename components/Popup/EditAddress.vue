@@ -108,6 +108,6 @@ const updateShipments = async () => {
 
 // ยกเลิกการแก้ไข
 const cancel = () => {
-  store.editaddressAction = false;
+  
 };
 </script>

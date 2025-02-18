@@ -110,15 +110,13 @@ const addReview = async () => {
       text: "ได้เพิ่มรีวิวแล้ว!",
       icon: "success",
     });
-
-    reviewedProducts.value.push(props.productId); // เพิ่มสินค้าในรายการที่ถูกรีวิวแล้ว
     store.reviewAction = false;
     router.push("/order/review");
   } catch (error: any) {
     console.error("Error adding review:", error);
     Swal.fire({
       title: "เกิดข้อผิดพลาด",
-      text: "ไม่สามารถเพิ่มรีวิวได้ กรุณาลองใหม่",
+      text: "ไม่สามารถเพิ่มรีวิวได้ เนื่องจากได้รีวิวสินค้านี้ไปแล้ว",
       icon: "error",
     });
   }

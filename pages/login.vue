@@ -143,8 +143,9 @@ const getuserinfo = async () => {
   await service.product.getUserInfo()
   .then((resp: any) => {
     const data = resp.data.data;
-    console.log(data.ID);
-    store.$state.userId = data.ID;
+    console.log(data);
+
+    store.$state.userId = data.id;
   })
   .catch((error: any) => {
      console.error(error);

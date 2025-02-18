@@ -1,3 +1,12 @@
+
+
+export interface Banner {
+    id: number;
+    type: string;
+    banner: string;
+    created_at: number;
+}
+ 
  export interface Product {
     id: number;
     name: string;
@@ -10,6 +19,8 @@
     is_active: boolean;
     created_at: number;
     updated_at: number;
+    is_favorite: boolean;
+    
 }
 
 export interface ProductReview {
@@ -83,6 +94,7 @@ export interface UserInfo {
     Password: string;
     Email: string;
     Phone: number;
+    Shipment: string;
     created_at: number;
     updated_at: number;
 }
@@ -141,7 +153,6 @@ export interface ShipmentId {
 }
 
 export interface ShipmentCreate {
-    ID: number;
     firstname: string;
     lastname: string;
     address: string;
@@ -152,7 +163,6 @@ export interface ShipmentCreate {
     // status: string;
 }
 export interface ShipmentRes {
-    id: number;
     firstname: string;
     lastname: string;
     address: string;
@@ -385,6 +395,7 @@ export interface OrderProducts {
     price: number;
     total_product_amount: number;
     image: string;
+    is_review: boolean;
 }
 
 export interface OrderUser {
@@ -511,6 +522,10 @@ export interface Params {
     search: string;
   }
 
+export interface ProductGet{
+    user_id : string;
+}
+
 
   export interface ReviewCreate {
     description: string;
@@ -532,7 +547,7 @@ export interface Params {
     amount_per_product: number;
     created_at: number;  
     updated_at: number;
-    isFavorite: boolean;
+    is_favorite: boolean;
 
   }
 
@@ -553,17 +568,16 @@ export interface Params {
   export interface WishlistCreate {
     user_id: number;
     product_id: number;
-    isFavorite: boolean;
+    is_favorite: boolean;
   }
 
   export interface WishlistRes {
-    user_id: number;
+
     product_id: number;
-    // isFavorite: boolean;
+    is_favorite: boolean;
   }
 
   export interface WishlistUpdate{
-    user_id: number;
     product_id: number;
-    // isFavorite: boolean;
+    is_favorite: boolean;
   }

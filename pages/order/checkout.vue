@@ -367,10 +367,10 @@ const updateShipment = async () => {
     );
     console.log("Response:", resp);
 
-    Swal.fire("สำเร็จ!", "อัปเดตที่อยู่จัดส่งเรียบร้อยแล้ว", "success");
+    Swal.fire("สำเร็จ!", "เลือกที่อยู่จัดส่งเรียบร้อยแล้ว", "success");
   } catch (error) {
     console.error("API Error:", error);
-    Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถอัปเดตที่อยู่ได้", "error");
+    Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถเลือกที่อยู่ได้", "error");
   } finally {
     loading.value = false;
   }

@@ -1,19 +1,26 @@
-import type { CartItemCreate,OrderCreate, OrderUpdate, OrderUpdateShip, Params, PasswordUpdate, PaymentCreate, ProductCartUpdate, ReviewCreate, ShipmentCreate, ShipmentUpdate, WishlistCreate, WishlistUpdate } from "~/models/product.model"
+import type { CartItemCreate,OrderCreate, OrderUpdate, OrderUpdateShip, Params, PasswordUpdate, PaymentCreate, ProductCartUpdate, ProductGet, ReviewCreate, ShipmentCreate, ShipmentUpdate, WishlistCreate, WishlistUpdate } from "~/models/product.model"
 import { client } from "./httpClient"
 
-
-// product
-export const getProductList = () => {
+export const getBanner = () => {
     return client({
-        url: "/product",
+        url: "/banner",
         method: "get",
     })
 }
+// product
+export const getProductList = (params: Params) => {
+    return client({
+        url: "/product",
+        method: "get",
+        params,
+    })
+}
 
-export const getProductById = (id: any) => {
+export const getProductById = (id: any ,query:ProductGet ) => {
     return client({
         url: `/product/${id}`,
         method: "get",
+        params: query,
     })
 }
 
@@ -313,5 +320,12 @@ export const UpdateWish = ( payload: WishlistUpdate) => {
         url: "/wish/update",
         method: "patch",
         data:  payload
+    })
+}
+
+export const checkWishlistStatus = ( productId: any) => {
+    return client({
+        url: `/wishlist/status/${productId}`,
+        method: "get",
     })
 }
