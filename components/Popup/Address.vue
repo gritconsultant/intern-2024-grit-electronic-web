@@ -55,6 +55,8 @@ definePageMeta({
 })
 
 const store = useIndexStore();
+const router = useRouter();
+const loading = ref(true);
 
 // กำหนดค่า shipment ให้เป็นค่าเริ่มต้น
 const shipment = ref<ShipmentCreate>({
@@ -78,30 +80,7 @@ const shipmentRes = ref<ShipmentRes>({
 });
 // เมื่อแอดที่อยู่ใหม่ให้เรียกฟังก์ชันนี้
 const addShipment = async () => {
-  // ตรวจสอบข้อมูล
-  if (!shipment.value.firstname || !shipment.value.lastname || !shipment.value.address || !shipment.value.zip_code ||
-      !shipment.value.sub_district || !shipment.value.district || !shipment.value.province) {
-    Swal.fire({
-      title: "กรุณากรอกข้อมูลให้ครบถ้วน",
-      text: "กรุณากรอกข้อมูลทั้งหมดก่อนบันทึก",
-      icon: "error",
-      confirmButtonText: "ตกลง",
-    });
-    return;
-  }
-
-  // ตรวจสอบรหัสไปรษณีย์
-  if (isNaN(shipment.value.zip_code) || shipment.value.zip_code <= 0) {
-    Swal.fire({
-      title: "รหัสไปรษณีย์ไม่ถูกต้อง",
-      text: "กรุณากรอกรหัสไปรษณีย์ที่ถูกต้อง",
-      icon: "error",
-      confirmButtonText: "ตกลง",
-    });
-    return;
-  }
-
-  // ส่งข้อมูลที่อยู่ใหม่ไปยัง API
+  loading.value = true;
   await service.product.addShipment(shipment.value)
     .then((resp: any) => {
       const data = resp.data.data;
@@ -111,9 +90,13 @@ const addShipment = async () => {
           text: "ที่อยู่ของคุณได้ถูกเพิ่มแล้ว!",
           icon: "success",
           confirmButtonText: "ตกลง",
-        });
-        // ปิด Popup และรีเซ็ตค่าที่อยู่
-        store.addressAction = false;
+        })
+        .then(() => {
+        store.addressAction = false; // ปิด Popup
+        router
+            .push({ path: "/profile/address" })
+            .then(() => window.location.reload());
+      });
       }
       // อัพเดทข้อมูล shipmentRes
       shipmentRes.value = {
@@ -134,17 +117,19 @@ const addShipment = async () => {
         icon: "error",
         confirmButtonText: "ตกลง",
       });
+    })
+    .finally(() => {
+      loading.value = false;
     });
 };
 
 // ฟังก์ชันยกเลิก
 const cancel = () => {
-  store.addressAction = false; // ปิด Popup
+  loading.value = true;
+  router.push("/profile/address").then(() => window.location.reload());
+  loading.value = false;
 };
 
-onMounted(() => {
-  console.log("Component loaded");
-});
 </script>
 
 <style scoped>

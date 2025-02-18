@@ -24,16 +24,16 @@
         </div>
 
       </div>
-      <div class="flex justify-between mt-1">
+      <div class="flex justify-between mt-1 ">
         <div>
-          <span class="font-bold text-base truncate break-words text-wrap "> {{ product.name }} </span>
+          <span class="font-bold text-base text-ellipsis w-[180px] "> {{ product.name }} </span>
         </div>
         <div class="text-red-600 font-bold text-base">฿{{ product.price }}</div>
       </div>
       <div>
         <span class=" font-medium text-sm ">รายละเอียด</span>
         <div
-          class="h-[35px] w-full detail truncate break-words text-wrap"
+          class="h-[35px] w-full text-multiline"
         >
           {{ product.description }}
         </div>
@@ -66,4 +66,16 @@ const averageRating = computed(() => {
 </script>
 
 <style scoped>
+  .text-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .text-multiline {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* ตัดข้อความที่เกิน 2 บรรทัด */
+    overflow: hidden;
+  }
 </style>

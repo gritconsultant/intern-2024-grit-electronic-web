@@ -6,9 +6,6 @@
       <h1 class="text-sm md:text-base font-bold" >
         ตะกร้าสินค้า ({{ carts.length }})
       </h1>
-      <h2 class="text-red-500 cursor-pointer text-xs md:text-sm ml-56">
-        ลบทั้งหมด
-      </h2>
       <button @click="store.cartAction = !store.cartAction">
         <svg
           class="w-5 h-5 md:w-6 md:h-6 hover:text-red-500"
@@ -313,9 +310,11 @@ const addOrder = async () => {
             icon: "success",
           })
           .then(() => {
-            // รีโหลดหน้าใหม่
-            router.push({ path: '/order/checkout' }).then(() => window.location.reload());
-          });
+        store.cartAction = false; // ปิด Popup
+        router
+            .push({ path: "/order/checkout" })
+            .then(() => window.location.reload());
+      });
         }
         const orders: OrderRes = {
           shipment_id: data.id,

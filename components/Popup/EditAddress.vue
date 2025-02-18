@@ -46,6 +46,7 @@
         </form>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -57,6 +58,8 @@ import type { ShipmentUpdate } from "~/models/product.model";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
+const router = useRouter();
+const loading = ref(true);
 
 const props = defineProps({
   addressData: Object as () => ShipmentUpdate | null, // รับค่า addressData จาก props
@@ -73,18 +76,10 @@ const shipmentUpdate = ref<ShipmentUpdate>({
   zip_code: 0,
 });
 
-// อัปเดตข้อมูลเมื่อ props เปลี่ยนแปลง
-watch(
-  () => props.addressData,
-  (newVal) => {
-    if (newVal) {
-      shipmentUpdate.value = { ...newVal };
-    }
-  },
-  { immediate: true }
-);
+
 
 const updateShipments = async () => {
+  loading.value = true;
   try {
     const resp = await service.product.updateShipment(
       shipmentUpdate.value.id.toString(), // 🔹 แปลง id เป็น string ก่อนส่ง
@@ -98,16 +93,36 @@ const updateShipments = async () => {
         text: "ที่อยู่ของคุณได้แก้ไขแล้ว!",
         icon: "success",
         confirmButtonText: "Okay",
+      })
+      .then(() => {
+        store.editaddressAction = false; // ปิด Popup
+        router
+            .push({ path: "/profile/address" })
+            .then(() => window.location.reload());
       });
     }
   } catch (error) {
     console.error("Update Error:", error);
+  } finally {
+    loading.value = false;
   }
 };
 
 
 // ยกเลิกการแก้ไข
 const cancel = () => {
-  
+  loading.value = true;
+  router.push("/profile/address").then(() => window.location.reload());
+  loading.value = false;
 };
+// อัปเดตข้อมูลเมื่อ props เปลี่ยนแปลง
+watch(
+  () => props.addressData,
+  (newVal) => {
+    if (newVal) {
+      shipmentUpdate.value = { ...newVal };
+    }
+  },
+  { immediate: true }
+);
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="mx-[20px] lg:mx-[50px] grid justify-center">
     <!-- Banner -->
-    <div class="w-full h-[300px] mt-10">
+    <div class="w-[1400px] h-[300px] mt-10  bg-slate-500">
       <div class="relative w-full h-full">
         <img
           :src="banner.length > 0 ? banner[currentIndex].banner : ''"
@@ -206,6 +206,21 @@ const getProductsByCategory = (categoryId: number): Product[] => {
       (product.category.id === categoryId || categoryId === 0) // กรองตาม category
   );
 };
+
+// const getProductsByCategory = (categoryId: number): Product[] => {
+//   const filteredProducts = products.value.filter(
+//     (product) =>
+//       product.is_active &&
+//       (product.category.id === categoryId || categoryId === 0)
+//   );
+
+//   return shuffle(filteredProducts).slice(0, 4); // สุ่มและเลือกมา 4 อัน
+// };
+
+// // ฟังก์ชันสุ่มอาร์เรย์
+// const shuffle = (array: Product[]) => {
+//   return array.sort(() => Math.random() - 0.5);
+// };
 
 const toggleCategory = (categoryId: number) => {
   if (selectedCategoryId.value === categoryId) {

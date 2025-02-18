@@ -86,10 +86,8 @@ import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
 import type {
   OrderById,
-  OrderResShip,
   OrderUpdate,
   OrderUpdateRes,
-  OrderUpdateShip,
   PaymentCreate,
   PaymentRes,
   SystemBank,
@@ -129,15 +127,6 @@ const paymentRes = ref<PaymentRes>({
   order_id: 0,
 });
 
-const orderUpdate = ref<OrderUpdate>({
-  id: 0,
-  status: "prepare",
-});
-
-const orderUpdateRes = ref<OrderUpdateRes>({
-  id: 0,
-  status: "prepare",
-});
 
 // ดึงบัญชีธนาคาร
 const getSystemBank = async () => {

@@ -17,7 +17,7 @@
           class="flex justify-center mt-5 overflow-y-auto sticky top-0"
           style="max-height: 56vh"
         >
-          <div class="w-[500px]">
+          <div class="w-[600px]">
             <div
               v-for="(i, index) in shipment"
               :key="i.id"
@@ -26,7 +26,7 @@
               <h2 class="font-bold text-lg">ที่อยู่ {{ index + 1 }}</h2>
               <span>ชื่อ: {{ i.firstname }} {{ i.lastname }}</span>
               <p>
-                บ้านเลขที่: {{ i.address }} <span class="px-2">หมู่: {{ i.address }}</span>
+                บ้านเลขที่: {{ i.address }}
                 <span class="px-1" >ตำบล/แขวง: {{ i.sub_district }}</span>               <span class="px-1">อำเภอ/เขต: {{ i.district }}</span>
               </p>
 
@@ -100,9 +100,11 @@ const editaddressAction = ref(false);
 const loading = ref(false);
 const editingAddressData = ref<Shipment | null>(null);
 
-const editAddress = (address: Shipment) => {
+const editAddress = (address: Shipment) => {  
+  loading.value = true;
   editingAddressData.value = { ...address };
   editaddressAction.value = true;
+  loading.value = false;
 };
 
 const getShipment = async () => {

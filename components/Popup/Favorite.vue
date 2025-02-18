@@ -6,12 +6,6 @@
       <h1 class="text-sm md:text-base font-bold">
         รายการโปรด ({{ wish.length }})
       </h1>
-      <!-- <h2
-        @click="clearFavorites"
-        class="text-red-500 cursor-pointer text-xs md:text-sm ml-56"
-      >
-        ลบทั้งหมด
-      </h2> -->
       <button @click="store.favouriteAction = !store.favouriteAction">
         <svg
           class="w-5 h-5 md:w-6 md:h-6 hover:text-red-500"
@@ -34,7 +28,7 @@
     <!-- Favorite Items -->
     <div class="px-4 md:px-5 overflow-y-auto flex-1">
       <div
-        v-for="(item, index) in wish"
+        v-for="item  in wish"
         :key="item.id"
         class="flex justify-between items-center border-b py-2"
       >
@@ -51,7 +45,7 @@
               <router-link
                 v-if="item.product.id"
                 :to="`/product/${item.product.id}`"
-                class="text-md font-bold text-black cursor-pointer hover:text-[#FD8C35]/70"
+                class="text-lg font-bold text-black cursor-pointer hover:text-[#FD8C35]/70"
               >
                 {{ item.product.name }}
               </router-link>
@@ -66,7 +60,7 @@
             </div>
 
             <!-- fav -->
-            <div>
+            <!-- <div>
               <button @click="toggleFavorite(index)" class="text-red-500">
                 <svg
                   v-if="item.is_favorite"
@@ -95,10 +89,10 @@
                   />
                 </svg>
               </button>
-            </div>
+            </div> -->
           </div>
           <div>
-            <div class="flex justify-between items-center gap-2">
+            <div class="flex justify-between items-center gap-2 mt-5">
               <div>
                 <p class="font-bold">฿{{ item.product.price }}</p>
               </div>
@@ -162,41 +156,41 @@ const getWishlist = async () => {
     });
 };
 
-const deleteWishlist = async (id: String) => {
-  loading.value = true;
-  await service.product
-    .deleteFavorite(id)
-    .then((resp: any) => {
-      const data = resp.data.data;
-      console.log(data);
-    })
-    .catch((error: any) => {
-      console.error(error);
-    })
-    .finally(() => {
-      loading.value = false;
-    });
-};
+// const deleteWishlist = async (id: String) => {
+//   loading.value = true;
+//   await service.product
+//     .deleteFavorite(id)
+//     .then((resp: any) => {
+//       const data = resp.data.data;
+//       console.log(data);
+//     })
+//     .catch((error: any) => {
+//       console.error(error);
+//     })
+//     .finally(() => {
+//       loading.value = false;
+//     });
+// };
 
 // Toggle Favorite - ถ้ากดไอคอนหัวใจซ้ำจะเปลี่ยน isFavorite
-const toggleFavorite = async (index: number) => {
-  loading.value = true;
-  const item = wish.value[index];
+// const toggleFavorite = async (index: number) => {
+//   loading.value = true;
+//   const item = wish.value[index];
 
-  if (item.is_favorite) {
-    // ถ้ากดปิด ให้ลบจากรายการโปรด
-    try {
-      await deleteWishlist(String(item.id));
-      wish.value.splice(index, 1); // ลบออกจาก UI
-    } catch (error) {
-      console.error("Failed to remove from wishlist:", error);
-    }
-  } else {
-    loading.value = false;
-    // ถ้ากดเปิด ต้องเพิ่มเข้าไปในรายการโปรด (ถ้ามี API รองรับ)
-    console.log("เพิ่มเข้ารายการโปรด", item.product.name);
-  }
-};
+//   if (item.is_favorite) {
+//     // ถ้ากดปิด ให้ลบจากรายการโปรด
+//     try {
+//       await deleteWishlist(String(item.id));
+//       wish.value.splice(index, 1); // ลบออกจาก UI
+//     } catch (error) {
+//       console.error("Failed to remove from wishlist:", error);
+//     }
+//   } else {
+//     loading.value = false;
+//     // ถ้ากดเปิด ต้องเพิ่มเข้าไปในรายการโปรด (ถ้ามี API รองรับ)
+//     console.log("เพิ่มเข้ารายการโปรด", item.product.name);
+//   }
+// };
 
 onMounted(() => {
   getWishlist();

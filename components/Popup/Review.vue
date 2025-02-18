@@ -48,6 +48,7 @@ import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 const router = useRouter();
+const loading = ref(true);
 
 
 const props = defineProps({
@@ -57,15 +58,6 @@ const props = defineProps({
   },
 });
 
-const orderUpdate = ref<OrderUpdate>({
-  id: 0,
-  status: "success",
-})
-
-const orderUpdateRes = ref<OrderUpdateRes>({
-  id: 0,
-  status: "success",
-})
 
 // ข้อมูลรีวิว
 const rating = ref(5);
@@ -105,13 +97,17 @@ const addReview = async () => {
     const resp = await service.product.addReview(review);
     const data = resp.data.data;
 
-    await Swal.fire({
-      title: "เพิ่มรีวิวสำเร็จ!",
-      text: "ได้เพิ่มรีวิวแล้ว!",
-      icon: "success",
-    });
-    store.reviewAction = false;
-    router.push("/order/review");
+    if (resp.status === 200) {
+      Swal.fire({
+        title: "เพิ่มรีวิวสำเร็จ!",
+        text: "ได้เพิ่มรีวิวแล้ว!",
+        icon: "success",
+        confirmButtonText: "ตกลง",
+      }).then(() => {
+        store.reviewAction = false;
+        router.push("/order/review").then(() => window.location.reload());
+      })
+    }
   } catch (error: any) {
     console.error("Error adding review:", error);
     Swal.fire({

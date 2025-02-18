@@ -65,8 +65,8 @@
                     class="w-full h-full object-cover rounded-lg"
                   />
                 </div>
-                                                                <!-- Product Info -->
-                                                                <div class="flex-grow">
+                <!-- Product Info -->
+                <div class="flex-grow">
                   <div class="flex justify-between items-center mb-2">
                     <h2 class="font-bold text-lg">
                       {{ product.product_name }}
@@ -169,7 +169,7 @@
               class="mt-4"
             >
               <button
-              @click="updateStatus"
+                @click="updateStatus"
                 class="bg-green-500 text-white px-4 py-2 rounded-lg w-full hover:bg-green-600 transition"
               >
                 ยืนยันได้รับสินค้าแล้ว
@@ -181,7 +181,6 @@
       </div>
     </div>
 
-    
     <Loading :loading="loading" />
   </div>
 </template>
@@ -193,23 +192,28 @@ definePageMeta({
 
 import Swal from "sweetalert2";
 import { ref } from "vue";
-import type { Order, OrderById, OrderUpdate, OrderUpdateRes } from "~/models/product.model";
+import type {
+  Order,
+  OrderById,
+  OrderUpdate,
+  OrderUpdateRes,
+} from "~/models/product.model";
 import service from "~/service";
 
 const loading = ref(true);
-const route = useRoute();
+const router = useRouter();
 const orders = ref<Order[]>([]);
 const selectedOrder = ref<OrderById | null>(null);
 
 const orderUpdate = ref<OrderUpdate>({
   id: 0,
   status: "success",
-})
+});
 
 const orderUpdateRes = ref<OrderUpdateRes>({
   id: 0,
   status: "success",
-})
+});
 
 const getOrdership = async () => {
   loading.value = true;
@@ -276,39 +280,55 @@ const getOrderById = async (orderId: number) => {
 };
 
 const updateStatus = async () => {
-  loading.value = true;
-  await service.product.updateOrder(selectedOrder.value?.id , orderUpdate.value)
-  .then((resp: any) => {
-    console.log(resp);
-    const data = resp.data;
-    const orderUpdate: OrderUpdateRes = {
-      id: data.id,
-      status: data.status,
-    };
-    orderUpdateRes.value = orderUpdate;
+  Swal.fire({
+    title: "คุณแน่ใจหรือไม่?",
+    text: "คุณต้องการยืนยันการรับสินค้าหรือไม่?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "ใช่, ยืนยัน",
+    cancelButtonText: "ยกเลิก",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      loading.value = true;
+      await service.product
+        .updateOrder(selectedOrder.value?.id, orderUpdate.value)
+        .then((resp: any) => {
+          console.log(resp);
+          const data = resp.data;
+          const orderUpdate: OrderUpdateRes = {
+            id: data.id,
+            status: data.status,
+          };
+          orderUpdateRes.value = orderUpdate;
 
-    if (resp.status == 200) {
-      
-      Swal.fire({
-        title: "รับสินค้าสำเร็จ",
-        text: "การยืนยันได้รับสินค้าสำเร็จ",
-        icon: "success",
-        confirmButtonText: "ตกลง",
-      })
+          if (resp.status == 200) {
+            Swal.fire({
+              title: "รับสินค้าสำเร็จ",
+              text: "การยืนยันได้รับสินค้าสำเร็จ",
+              icon: "success",
+              confirmButtonText: "ตกลง",
+            })
+            .then(() => {
+        router
+            .push({ path: "/order/receiving" })
+            .then(() => window.location.reload());
+      });
+          }
+        })
+        .catch((error: any) => {
+          console.error("Error updating order status:", error);
+        })
+        .finally(() => {
+          orderUpdate.value = {
+            id: orderUpdate.value.id,
+            status: "success",
+          };
+          loading.value = false;
+        });
     }
-  })
-  .catch((error: any) => {
-    console.error("Error updating order status:", error);
-  })
-  .finally(() => {
-    orderUpdate.value = {
-      id: orderUpdate.value.id,
-      status: "success",
-      
-    };
-    loading.value = false;
   });
-}
+};
+
 
 const checkOrder = (order: Order) => {
   getOrderById(Number(order.id));
@@ -351,7 +371,6 @@ const copyToClipboard = (text: string) => {
 
 onMounted(async () => {
   await getOrdership();
-
 });
 </script>
 
