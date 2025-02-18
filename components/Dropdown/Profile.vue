@@ -63,10 +63,14 @@
   // ใช้ Pinia store
   import { useIndexStore } from "~/store/main";
 import { useRouter } from "vue-router";
+definePageMeta({
+  middleware: 'auth'
+})
 
 // ใช้ Pinia store
 const store = useIndexStore();
 const router = useRouter();
+
 
 // ฟังก์ชัน logout
 const logout = () => {

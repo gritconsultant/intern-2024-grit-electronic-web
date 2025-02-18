@@ -174,14 +174,6 @@ const getProductsByCategory = (categoryId: number): Product[] => {
 };
 
 
-const filteredProducts = computed(() => {
-  return products.value.filter(
-    (product) =>
-      (selectedCategoryId.value === 0 ||
-        product.category.id === selectedCategoryId.value) &&
-      product.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
-});
 
 const toggleCategory = (categoryId: number) => {
   if (selectedCategoryId.value === categoryId) {

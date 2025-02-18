@@ -23,7 +23,7 @@
                   <!-- ไอคอนหัวใจ -->
                   <button
                     type="submit"
-                    @click="addFavorite"
+                    @click="updateWishlist"
                     class="focus:outline-none"
                   >
                     <svg
@@ -32,7 +32,7 @@
                       viewBox="0 0 24 24"
                       class="w-7 h-7 transition"
                       :class="
-                        wishlistRes.isFavorite
+                        wishlistRes.product_id
                           ? 'text-red-500'
                           : 'text-gray-400 hover:text-red-500'
                       "
@@ -127,22 +127,18 @@
       </div>
       <!-- สินค้าใกล้เคียง -->
       <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30">
-        <div class="flex flex-col gap-4">
-          <p class="text-xl font-semibold">สินค้าใกล้เคียง</p>
-          <div class="flex flex-wrap gap-4">
+        <div class="flex flex-col gap-4 ">
+          <p class="text-xl font-semibold">สินค้า</p>
+          <div class="flex flex-wrap gap-20 justify-center">
             <div
-              v-for="product in relatedProducts"
+              v-for="product in productslist.slice(0, 4)"
               :key="product.id"
-              class="w-[250px] h-[300px] border-2 border-gray-200 p-4 rounded-lg transition hover:border-[#EE973C]"
-            >
-              <img
-                :src="product.image"
-                alt=""
-                class="w-full h-[180px] object-cover rounded"
-              />
-              <h2 class="text-lg font-semibold mt-2">{{ product.name }}</h2>
-              <p class="text-[#FF0808] font-semibold">฿{{ product.price }}</p>
-            </div>
+                class="flex justify-center"
+              >
+                <NuxtLink :to="`/product/${product.id}`">
+                  <CardProduct :product="product" />
+                </NuxtLink>
+              </div>
           </div>
         </div>
       </div>
@@ -161,6 +157,7 @@ import type {
   Product,
   WishlistCreate,
   WishlistRes,
+  WishlistUpdate,
 } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
@@ -169,6 +166,7 @@ const route = useRoute();
 const store = useIndexStore();
 const loading = ref(false);
 const products = ref<Product[]>([]);
+const productslist = ref<Product[]>([]);
 const cartitem = ref<CartItemAdd>({
   product_id: 0,
   total_product_amount: 0,
@@ -188,7 +186,13 @@ const wishlistCreate = ref<WishlistCreate>({
 const wishlistRes = ref<WishlistRes>({
   user_id: 0,
   product_id: 0,
-  isFavorite: false,
+  // isFavorite: false,
+});
+
+const wishlistUpdate = ref<WishlistUpdate>({
+  user_id: 0,
+  product_id: 0,
+  // isFavorite: false,
 });
 
 // Get Product By ID
@@ -225,6 +229,19 @@ const getProductById = async () => {
 };
 
 const addCartItem = async () => {
+  // if (!store.$state.userId) {
+  //   Swal.fire({
+  //     title: "กรุณาเข้าสู่ระบบ",
+  //     text: "คุณต้องเข้าสู่ระบบก่อนเพิ่มสินค้าในตะกร้า",
+  //     icon: "warning",
+  //     confirmButtonText: "ไปที่หน้าเข้าสู่ระบบ",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       navigateTo("/login"); // ไปหน้า login
+  //     }
+  //   });
+  //   return;
+  // }
   cartitem.value.product_id = Number(route.params.id);
   cartitem.value.total_product_amount = selectedAmount.value;
 
@@ -265,37 +282,91 @@ const addCartItem = async () => {
     });
 };
 
-const addFavorite = async () => {
-  wishlistCreate.value.product_id = Number(route.params.id);
-  wishlistCreate.value.user_id = Number(store.$state.userId);
-  
-  // สลับค่าการกดถูกใจ (toggle)
-  wishlistCreate.value.isFavorite = !wishlistRes.value.isFavorite;
-  
-  await service.product.addFavorite(wishlistCreate.value)
+// const addFavorite = async () => {
+//   wishlistCreate.value.product_id = Number(route.params.id);
+//   wishlistCreate.value.user_id = Number(store.$state.userId);
+
+//   // ตรวจสอบว่าถ้าหัวใจเป็นสีแดงแล้ว ให้ทำการลบออกจาก wishlist
+//   if (wishlistRes.value.isFavorite) {
+//     await deleteWishlist(wishlistCreate.value.product_id.toString());
+//   } else {
+//     // สลับการกดหัวใจ (toggle)
+//     wishlistCreate.value.isFavorite = true;
+//     await service.product.addFavorite(wishlistCreate.value)
+//       .then((resp: any) => {
+//         const data = resp.data;
+//         // อัปเดตสถานะการถูกใจ
+//         wishlistRes.value.isFavorite = data.isFavorite;
+//       })
+//       .catch((error: any) => {
+//         console.error("เกิดข้อผิดพลาด:", error);
+//       });
+//   }
+// };
+
+const updateWishlist = async() => {
+  wishlistRes.value.user_id = Number(store.$state.userId);
+  wishlistRes.value.product_id = Number(route.params.id);
+
+  await service.product.UpdateWish( wishlistUpdate.value)
     .then((resp: any) => {
-      const data = resp.data;
+      const data = resp.data.data;
+      // อัปเดตสถานะการถูกใจ
+      const  wishlistUpdate : WishlistUpdate = {
+        user_id: wishlistRes.value.user_id,
+        product_id: wishlistRes.value.product_id,
+        // isFavorite:! wishlistRes.value.isFavorite,
+      };
+      wishlistRes.value = wishlistUpdate;
+    })
+    .catch((error: any) => {
+       console.error("Error updating wishlist:", error);
+     });
+}
 
-      // อัปเดตค่า isFavorite ตามที่ API ส่งกลับมา
-      wishlistRes.value.isFavorite = data.isFavorite;
-
+// ฟังก์ชันสำหรับลบจาก Wishlist
+const deleteWishlist = async (id: string) => {
+  loading.value = true;
+  await service.product.deleteFavorite(id)
+    .then((resp: any) => {
+      const data = resp.data.data;
+      // กรณีลบสำเร็จ
       Swal.fire({
-        title: data.isFavorite ? "กดถูกใจ!" : "เลิกถูกใจ!",
-        text: data.isFavorite ? "ได้กดถูกใจสินค้าแล้ว!" : "ได้เลิกถูกใจสินค้าแล้ว!",
+        title: "ลบออกจากรายการโปรด",
+        text: "สินค้าถูกลบออกจากรายการโปรดแล้ว!",
         icon: "success",
       });
     })
     .catch((error: any) => {
-      if (
-        error.response &&
-        error.response.data.message === "this product is already in the wishlist"
-      ) {
-        // ถ้าสินค้ามีอยู่แล้วใน Wishlist ให้กำหนดให้หัวใจเป็นสีแดง
-        wishlistRes.value.isFavorite = true;
-      } else {
-        console.error("เกิดข้อผิดพลาด:", error);
-      }
+      console.error("Error removing from wishlist:", error);
+    })
+    .finally(() => {
+      loading.value = false;
     });
+};
+
+
+const getAllProducts = async () => {
+  try {
+    const resp = await service.product.getProductList();
+    productslist.value = resp.data.data.map((e: any) => ({
+      id: e.id,
+      name: e.name,
+      price: e.price,
+      stock: e.stock,
+      description: e.description ?? "",
+      image: e.image,
+      category: {
+        id: e.category?.id,
+        name: e.category?.name,
+      },
+      is_active: e.is_active,
+      created_at: e.created_at,
+      updated_at: e.updated_at,
+    }));
+  } catch (error) {
+    console.error("Error fetching all products:", error);
+  }
 };
 
 
@@ -341,18 +412,9 @@ const changePage = (page: number) => {
   }
 };
 
-const relatedProducts = computed(() => {
-  if (!product.value) return [];
-  return products.value
-    .filter(
-      (p) =>
-        p.category.id === product.value?.category.id &&
-        p.id !== product.value?.id
-    )
-    .slice(0, 4);
-});
 
 onMounted(() => {
+   getAllProducts();
   getProductById();
 });
 </script>

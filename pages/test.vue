@@ -1,149 +1,146 @@
 <template>
-  <div class="flex p-4 h-full">
-    <Sidebar />
-    <div class="w-full md:w-3/4 p-6">
-      <div class="border-b flex justify-between">
-        <h1 class="text-xl font-bold mb-6">ที่อยู่</h1>
-        <!-- <button
-          class="text-black/50 hover:underline"
-          @click="addressAction = !addressAction"
-        >
-          เพิ่มที่อยู่ใหม่
-        </button> -->
-      </div>
+  <div>
+    <div>
+      <div class="relative group">
+        <!-- ปุ่ม User -->
+        <button class="flex items-center text-black" type="button">
+          <svg
+            class="w-[30px] h-[30px] text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.3"
+              d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
+        </button>
 
-      <div>
-        <div
-          class="flex justify-center mt-5 overflow-y-auto sticky top-0"
-          style="max-height: 56vh"
-        >
-          <div class="w-[500px]">
-            <div
-              v-for="(i, index) in shipment"
-              :key="i.id"
-              class="mb-4 p-4 rounded-lg transition-colors border"
-            >
-              <h2 class="font-bold text-lg">ที่อยู่ {{ index + 1 }}</h2>
-              <span>ชื่อ: {{ i.firstname }} {{ i.lastname }}</span>
-              <p>
-                บ้านเลขที่: {{ i.address }} <span class="px-2">หมู่: {{ i.address }}</span>
-                <span class="px-1" >ตำบล/แขวง: {{ i.sub_district }}</span>               <span class="px-1">อำเภอ/เขต: {{ i.district }}</span>
-              </p>
-
-
-              <p>
-                จังหวัด: {{ i.province }}
-                <span class="px-1">รหัสไปรษณีย์: {{ i.zip_code }}</span>
-              </p>
-
-              <!-- ปุ่มแก้ไขที่อยู่ -->
-              <!-- <div class="mt-4 flex items-center justify-end">
-                <button
-                  class="text-blue-500 hover:underline"
-                  @click="editAddress(i)"
-                >
-                  แก้ไขที่อยู่
-                </button>
-              </div> -->
-              <!-- ถ้าไม่มีข้อมูลที่อยู่ -->
-              <div
-                v-if="shipment.length === 0"
-                class="text-center text-gray-500 mt-6"
-              >
-                ไม่พบข้อมูลที่อยู่
-              </div>
-            </div>
-          </div>
+        <!-- Dropdown Menu -->
+        <div class="bg-white rounded-lg border shadow hidden group-hover:block absolute -right-0 w-56">
+          <ul class="py-2 text-sm text-gray-700">
+            <li v-if="!isLoggedIn">
+              <NuxtLink to="/login" class="block px-4 py-2 hover:bg-gray-100">เข้าสู่ระบบ</NuxtLink>
+            </li>
+            <li v-if="isLoggedIn">
+              <div class="block px-4 py-2">👤 {{ getinfo?.FirstName || "ไม่มีชื่อ" }}</div>
+            </li>
+            <li v-if="isLoggedIn">
+              <NuxtLink to="/profile" class="block px-4 py-2 hover:bg-gray-100">บัญชีผู้ใช้</NuxtLink>
+            </li>
+            <li v-if="isLoggedIn">
+              <NuxtLink to="/profile/address" class="block px-4 py-2 hover:bg-gray-100">ที่อยู่</NuxtLink>
+            </li>
+            <li v-if="isLoggedIn">
+              <NuxtLink to="/order/checkout" class="block px-4 py-2 hover:bg-gray-100">คำสั่งซื้อ</NuxtLink>
+            </li>
+            <li v-if="isLoggedIn">
+              <div @click="logout" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer">ออกจากระบบ</div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-
-    <!-- Popup สำหรับเพิ่มและแก้ไขที่อยู่ -->
-    <!-- <div
-      v-if="addressAction"
-      @click="addressAction = !addressAction"
-      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-    >
-      <div @click.stop>
-        <PopupAddress />
-      </div>
-    </div> -->
-<!-- 
-    <div
-      v-if="editaddressAction"
-      @click="editaddressAction = !editaddressAction"
-      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-    >
-      <div @click.stop>
-        <PopupEditAddress :addressData="editingAddressData" />
-      </div>
-    </div> -->
-
-    <Loading :loading="loading" />
   </div>
 </template>
 
+
 <script setup lang="ts">
-import type { Shipment } from '~/models/product.model';
-import service from '~/service';
-import { getPaymentList } from '~/service/product.service';
+import { useIndexStore } from "~/store/main";
+import { useRouter } from "vue-router";
+import { ref, computed, watch, onMounted } from "vue";
+import type { UserInfo } from "~/models/product.model";
+import service from "~/service";
 
+// ใช้ Pinia store และ Router
+const store = useIndexStore();
+const router = useRouter();
+const loading = ref(false);
 
-
-definePageMeta({
-  layout: "user",
+// เก็บข้อมูลผู้ใช้
+const getinfo = ref<UserInfo>({
+  ID: 0,
+  FirstName: "",
+  LastName: "",
+  Username: "",
+  Password: "",
+  Email: "",
+  Phone: 0,
+  created_at: 0,
+  updated_at: 0,
 });
 
+// ตรวจสอบว่าผู้ใช้เข้าสู่ระบบหรือไม่
+const isLoggedIn = computed(() => !!store.$state.token);
 
-const loading = ref(true);
-const shipment = ref<Shipment[]>([]);
+// ฟังก์ชันดึงข้อมูลผู้ใช้
+const getuserinfo = async () => {
+  if (!isLoggedIn.value) return; // ถ้าไม่ได้เข้าสู่ระบบ ไม่ต้องดึงข้อมูล
 
-const getShipment = async () => {
-  await service.product.getPaymentList().then((resp: any) => {
+  loading.value = true;
+  try {
+    const resp = await service.product.getUserInfo();
+    console.log(resp);
     const data = resp.data.data;
-    const shipmentlist: Shipment[] = [];
-    console.log(data);
+    getinfo.value = {
+      ID: data.ID,
+      FirstName: data.FirstName,
+      LastName: data.LastName,
+      Username: data.Username,
+      Password: data.Password,
+      Email: data.Email,
+      Phone: data.Phone,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+    };
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loading.value = false;
+  }
+};
 
-    for (let i = 0; i < data.length; i++) {
-      const ship = data[i];
-      const shipments: Shipment = {
-        id: ship.id,
-        firstname: ship.firstname,
-        lastname: ship.lastname,
-        address: ship.address,
-        sub_district: ship.sub_district,
-        district: ship.district,
-        province: ship.province,
-        zip_code: ship.zip_code,
-        status: ship.status,
-        created_at: ship.created_at,
-        updated_at: ship.updated_at,
-      };
-      shipmentlist.push(shipments);
-    }
-    shipment.value = shipmentlist;
-  })
-  .catch((error: any) => {
-      console.error(error);
-    })
-    .finally(() => {
-      loading.value = false;
-    });
-}
-
-onMounted(async () => {
-  await getShipment();
+// 🔥 บันทึก Token ลง localStorage เมื่อมีการเปลี่ยนแปลง
+watch(() => store.$state.token, (newToken) => {
+  if (newToken) {
+    localStorage.setItem("token", newToken);
+    getuserinfo(); // โหลดข้อมูลผู้ใช้
+  }
 });
+
+// 🔥 โหลด Token จาก localStorage เมื่อเปิดหน้าใหม่
+onMounted(() => {
+  const savedToken = localStorage.getItem("token");
+  if (savedToken) {
+    store.$state.token = savedToken;
+    getuserinfo(); // โหลดข้อมูลผู้ใช้
+  }
+});
+
+// ฟังก์ชัน Logout
+const logout = () => {
+  // ลบข้อมูลใน store
+  store.$state.token = "";
+  store.$state.userId = "";
+
+  // ลบ Token จาก localStorage และ sessionStorage
+  sessionStorage.removeItem("token");
+  localStorage.removeItem("token");
+
+  // ลบคุกกี้ที่ชื่อว่า 'token'
+  document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+
+  // เปลี่ยนเส้นทางไปหน้าล็อกอิน
+  router.push("/login");
+};
 </script>
 
-<style scoped>
-.sticky {
-  position: sticky;
-}
-.overflow-hidden {
-  overflow: hidden;
-}
-.overflow-y-auto {
-  overflow-y: auto;
-}
-</style>
+
+<style scoped></style>

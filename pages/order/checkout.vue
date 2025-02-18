@@ -78,21 +78,35 @@
                 </div>
               </li>
             </ul>
-
+            <!-- ที่อยู่ของคุณ -->
             <div class="mt-4 pb-4 border-b">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <p class="text-gray-500 text-sm mt-2">
-                ขื่อผู้รับ: {{ selectedOrder.Shipment.firstname }}
-                {{ selectedOrder.Shipment.lastname }} <br />
-                <span>
-                  ที่อยู่:
-                  {{ selectedOrder.Shipment?.address || "ไม่มีข้อมูล" }}</span
+              <div>
+                <label
+                  for="address"
+                  class="block text-sm font-medium text-gray-700"
+                  >เลือกที่อยู่</label
                 >
-                ตำบล/แขวง: {{ selectedOrder.Shipment?.sub_district }} อำเภอ/เขต:
-                {{ selectedOrder.Shipment?.district }} จังหวัด:
-                {{ selectedOrder.Shipment?.province }} รหัสไปรษณีย์:
-                {{ selectedOrder.Shipment?.zip_code }}
-              </p>
+                <select
+                  v-model="selectedAddressId"
+                  class="mt-1 block w-full p-2 border rounded-md"
+                >
+                  <option
+                    v-for="address in shipment"
+                    :key="address.id"
+                    :value="address.id"
+                  >
+                    {{ address.firstname }} {{ address.lastname }} -
+                    {{ address.address }}
+                  </option>
+                </select>
+                <button
+      class="mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
+      @click="updateShipment"
+    >
+      ยืนยันที่อยู่
+    </button>
+              </div>
             </div>
 
             <!-- Delivery Method -->
@@ -156,31 +170,41 @@
         <PopupPayment
           :orderId="selectedOrder?.id"
           :paymentId="selectedOrder?.Payment.id"
+          :shipmentId="selectedAddressId"
         />
       </div>
     </div>
     <Loading :loading="loading" />
-    
   </div>
-  
 </template>
 
 <script setup lang="ts">
 import Swal from "sweetalert2";
 import { ref, onMounted } from "vue";
-import type { Order, OrderById, OrderUpdate, OrderUpdateRes, Shipment } from "~/models/product.model";
+import type {
+  Order,
+  OrderById,
+  OrderResShip,
+  OrderUpdate,
+  OrderUpdateRes,
+  OrderUpdateShip,
+  Shipment,
+} from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
+import { watch } from "vue";
 definePageMeta({
   layout: "user",
 });
 
 const orders = ref<Order[]>([]);
-  const loading = ref(true);
+const loading = ref(true);
 const store = useIndexStore();
 const selectedOrder = ref<OrderById | null>(null);
 const shipment = ref<Shipment[]>([]);
 const selectedAddressMap = ref<{ [key: number]: number }>({});
+const selectedAddressId = ref<number>();
+
 
 const props = defineProps({
   orderId: {
@@ -189,17 +213,31 @@ const props = defineProps({
   paymentId: {
     type: Number,
   },
+  shipmentId: {
+    type: Number,
+  },
 });
+
+const orderupdateShip = ref<OrderUpdateShip>({
+  id: 0,
+  shipment_id: 0,
+})
+
+const orderresShip = ref<OrderResShip>({
+  id: 0,
+  shipment_id: 0,
+})
+
 
 const orderUpdate = ref<OrderUpdate>({
   id: 0,
   status: "cancelled",
-})
+});
 
 const orderUpdateRes = ref<OrderUpdateRes>({
   id: 0,
   status: "cancelled",
-})
+});
 
 const getOrderpending = async () => {
   loading.value = true;
@@ -237,8 +275,8 @@ const getOrderById = async (orderId: number) => {
       };
 
       if (!selectedAddressMap.value[orderId]) {
-        selectedAddressMap.value[orderId] =
-          shipment.value.length > 0 ? shipment.value[0].id : 0;
+        selectedAddressMap.value[orderId] = data.shipment_id;
+        getShipment();
       }
     }
   } catch (error) {
@@ -251,8 +289,8 @@ const checkOrder = (order: Order) => {
 };
 
 const updateStatus = async () => {
-  loading
-  if (selectedOrder.value) {
+  loading.value = true;
+  if (selectedOrder.value && selectedAddressId.value !== null) {
     Swal.fire({
       title: "ยืนยันการยกเลิก",
       text: `คุณต้องการยกเลิกคำสั่งซื้อ #${selectedOrder.value.id} หรือไม่?`,
@@ -265,7 +303,8 @@ const updateStatus = async () => {
         loading.value = true;
 
         // เรียกใช้ updateOrder เพื่ออัปเดตสถานะคำสั่งซื้อ
-        service.product.updateOrder(selectedOrder.value?.id, orderUpdate.value)
+        service.product
+          .updateOrder(selectedOrder.value?.id, orderUpdate.value)
           .then((resp: any) => {
             console.log(resp);
             const data = resp.data;
@@ -302,6 +341,48 @@ const updateStatus = async () => {
     });
   }
 };
+
+const updateShipment = async () => {
+  loading.value = true;
+
+  console.log("Selected Order ID:", selectedOrder.value?.id);
+  console.log("Selected Address ID:", selectedAddressId.value);
+
+  if (!selectedOrder.value?.id || !selectedAddressId.value) {
+    console.error("Error: Missing order ID or shipment ID");
+    Swal.fire("เกิดข้อผิดพลาด", "โปรดเลือกที่อยู่ก่อนทำการอัปเดต", "error");
+    loading.value = false;
+    return;
+  }
+
+  const orderupdateShip = {
+    id: selectedOrder.value.id,
+    shipment_id: selectedAddressId.value,
+  };
+
+  try {
+    const resp = await service.product.updateorderShip(
+      selectedOrder.value.id,
+      orderupdateShip
+    );
+    console.log("Response:", resp);
+
+    Swal.fire("สำเร็จ!", "อัปเดตที่อยู่จัดส่งเรียบร้อยแล้ว", "success");
+  } catch (error) {
+    console.error("API Error:", error);
+    Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถอัปเดตที่อยู่ได้", "error");
+  } finally {
+    loading.value = false;
+  }
+};
+
+
+watch(selectedAddressId, (newVal) => {
+  console.log("New selected address:", newVal);
+});
+
+
+
 
 
 const formatDate = (timestamp: number | string): string => {

@@ -95,6 +95,7 @@ definePageMeta({
   layout: "auth",
 });
 
+
 const passwordVisible = ref(false);
 const router = useRouter();
 const store = useIndexStore();

@@ -23,7 +23,10 @@
         </div>
       </div>
       <div class="flex justify-center mt-4 px-4 pb-6">
-        <button class="popupbtn w-full md:w-auto py-2 px-4 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-md outline-none" @click="confirmReview">
+        <button
+        v-if="!reviewedProducts.includes(props.productId)"
+        class="popupbtn w-full md:w-auto py-2 px-4 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-md outline-none" @click="confirmReview"
+        >
           รีวิว
         </button>
       </div>
@@ -39,12 +42,13 @@ definePageMeta({
 import Swal from "sweetalert2";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import type { OrderUpdate, OrderUpdateRes, ReviewCreate, ReviewRes } from "~/models/product.model";
+import type { OrderUpdate, OrderUpdateRes, ReviewCreate } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 const store = useIndexStore();
 const router = useRouter();
+
 
 const props = defineProps({
   productId: {
@@ -87,6 +91,7 @@ const confirmReview = () => {
     }
   });
 };
+
 
 // เพิ่มรีวิวและซ่อนปุ่มรีวิวของสินค้าที่ถูกรีวิวแล้ว
 const addReview = async () => {

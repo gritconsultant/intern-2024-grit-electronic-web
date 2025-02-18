@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="w-[300px] h-[ุ500px] border p-5 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg hover:bg-[#FCCA81]"
+      class="w-[300px] h-[ุ600px]  border p-5 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg hover:bg-[#FCCA81]"
     >
       <div class="flex justify-between h-[30px]">
         <div
@@ -26,7 +26,7 @@
       </div>
       <div class="flex justify-between mt-1">
         <div>
-          <span class="font-bold text-base truncate"> {{ product.name }} </span>
+          <span class="font-bold text-base truncate break-words text-wrap "> {{ product.name }} </span>
         </div>
         <div class="text-red-600 font-bold text-base">฿{{ product.price }}</div>
       </div>

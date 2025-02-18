@@ -1,4 +1,4 @@
-import type { CartItemCreate,OrderCreate, OrderUpdate, Params, PasswordUpdate, PaymentCreate, ProductCartUpdate, ReviewCreate, ShipmentCreate, ShipmentUpdate, WishlistCreate } from "~/models/product.model"
+import type { CartItemCreate,OrderCreate, OrderUpdate, OrderUpdateShip, Params, PasswordUpdate, PaymentCreate, ProductCartUpdate, ReviewCreate, ShipmentCreate, ShipmentUpdate, WishlistCreate, WishlistUpdate } from "~/models/product.model"
 import { client } from "./httpClient"
 
 
@@ -142,9 +142,9 @@ export const deleteCartItem = (cartItemId: number) => {
     })
 }
 
-export const updateCartItem = (id: any, payload: ProductCartUpdate) => {
+export const updateCartItem = (cartItemId: any, payload: ProductCartUpdate) => {
     return client({
-        url: `/cartitem/${id}`,
+        url: `/cartitem/${cartItemId}`,
         method: "patch",
         data: payload,
     })
@@ -212,7 +212,16 @@ export const updateOrder = (id: any, payload: OrderUpdate) => {
     return client({
         url: `/order/${id}`,
         method: "patch",
-        data: payload,
+        data: payload
+    })
+}
+
+export const updateorderShip = (id: any, payload: OrderUpdateShip) => {
+    console.log(payload)
+    return client({
+        url: `/order/ship/${id}`,
+        method: "patch",
+        data: payload
     })
 }
 
@@ -299,3 +308,10 @@ export const addFavorite = (payload: WishlistCreate) => {
     })
 }
 
+export const UpdateWish = ( payload: WishlistUpdate) => {
+    return client({
+        url: "/wish/update",
+        method: "patch",
+        data:  payload
+    })
+}

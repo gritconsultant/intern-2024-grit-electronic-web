@@ -134,6 +134,7 @@
 <script setup lang="ts">
 import { useIndexStore } from "~/store/main";
 
+
 const store = useIndexStore();
 </script>
 

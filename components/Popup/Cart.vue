@@ -79,7 +79,7 @@
               </span>
 
               <!-- icon แก้ไข -->
-              <button @click="toggleEditItem(index)" class="ml-2 text-gray-500 hover:text-gray-700">
+              <button @click="toggleEditItem(index, item.id)" class="ml-2 text-gray-500 hover:text-gray-700">
                 <svg
                   class="w-[22px] h-[22px] text-gray-400 hover:text-gray-700 dark:text-white"
                   aria-hidden="true"
@@ -184,6 +184,7 @@ const cartlist = ref<CartItems[]>([]);
 const carts = ref<CartItem[]>([]);
 const editIndex = ref<number | null>(null);
 const isEditing = ref(false);
+const editItem = ref<number>();
 
 const props = defineProps({
   cartitemId: {
@@ -191,7 +192,7 @@ const props = defineProps({
   }
 })
 const orders = ref<OrderAdd>({
-  shipment_id: 1,
+  shipment_id: 0,
   payment_id: 0,
   status: "pending",
 });
@@ -203,7 +204,6 @@ const orderRes = ref<OrderRes>({
 });
 
 const productCartUpdate = ref<ProductCartUpdate>({
-  id: 0,
   total_product_amount: 0,
 })
 
@@ -283,6 +283,26 @@ const selectedItems = computed(() => {
 
 const addOrder = async () => {
   loading.value = true;
+
+    // ดึงเฉพาะสินค้าที่ถูกเลือก
+    const selectedCartItems = carts.value.filter(item => item.selected);
+
+if (selectedCartItems.length === 0) {
+  Swal.fire("เกิดข้อผิดพลาด!", "กรุณาเลือกสินค้าอย่างน้อย 1 รายการ.", "error");
+  loading.value = false;
+  return;
+}
+
+// สร้างข้อมูลคำสั่งซื้อใหม่ (เฉพาะสินค้าที่เลือก)
+const orderData = {
+  shipment_id: orders.value.shipment_id,
+  payment_id: orders.value.payment_id,
+  status: "pending",
+  cartItems: selectedCartItems.map(item => ({
+    id: item.id,
+    total_product_amount: item.total_product_amount,
+  })),
+};
   orders.value.shipment_id = orders.value.shipment_id;
   orders.value.payment_id = orders.value.payment_id;
   await service.product
@@ -315,14 +335,29 @@ const addOrder = async () => {
     });
 };
 
-const toggleEditItem = (index: number) => {
+const toggleEditItem = (index: number , id: number) => {
     editIndex.value = isEditing.value? null : index;
-//   isEditing.value =!isEditing.value;
+    editItem.value = id;
+  isEditing.value =!isEditing.value;
 }
+
+
 
 const saveEdit = async () => {
   loading.value = true;
-  await service.product.updateCartItem(props.cartitemId, productCartUpdate.value)
+
+  const item = carts.value.find((item:CartItem) => item.id == editItem.value )
+  const index = carts.value.findIndex((item:CartItem)=> item.id == editItem.value)
+  
+  console.log(index)
+  if (item && index !== -1){
+    productCartUpdate.value.total_product_amount = item.total_product_amount
+    toggleEditItem(index , item.id)
+  }
+
+
+
+  await service.product.updateCartItem(editItem.value, productCartUpdate.value)
   .then((resp: any) => {
     console.log(resp);
     const data = resp.data.data;
@@ -349,15 +384,6 @@ Swal.fire({
     loading.value = false;
    });
 }
-
-
-
-
-// const saveEdit = () => {
-//     editIndex.value = null;
-// }
-
-const selectedCount = computed(() => cartlist.value.filter((item) => item.selected).length);
 
 
 // เพิ่มจำนวน

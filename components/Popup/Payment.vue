@@ -87,8 +87,10 @@ import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
 import type {
   OrderById,
+  OrderResShip,
   OrderUpdate,
   OrderUpdateRes,
+  OrderUpdateShip,
   PaymentCreate,
   PaymentRes,
   SystemBank,
@@ -110,6 +112,9 @@ const props = defineProps({
     type: Number,
   },
   paymentId: {
+    type: Number,
+  },
+  shipmentId: {
     type: Number,
   }
 })
@@ -231,7 +236,6 @@ const updatePayment = async () => {
       loading.value = false;
     });
 }
-
 
 
 onMounted(async () => {

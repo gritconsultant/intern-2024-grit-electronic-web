@@ -175,6 +175,8 @@ export interface ShipmentUpdate {
     // status: string;
 }
 
+
+
 // Cart
 
 export interface Cart {
@@ -236,7 +238,6 @@ export interface ProductCart {
 }
 
 export interface ProductCartUpdate {
-    id: number;
     // CartID: number;
     // ProductID: number;
     total_product_amount: number;
@@ -310,6 +311,17 @@ export interface OrderUpdate {
 export interface OrderUpdateRes {
     id: number;
     status: string;
+}
+
+
+export interface OrderUpdateShip {
+    id: number;
+    shipment_id: number;
+}
+
+export interface OrderResShip {
+    id: number;
+    shipment_id: number;
 }
 
 
@@ -547,5 +559,11 @@ export interface Params {
   export interface WishlistRes {
     user_id: number;
     product_id: number;
-    isFavorite: boolean;
+    // isFavorite: boolean;
+  }
+
+  export interface WishlistUpdate{
+    user_id: number;
+    product_id: number;
+    // isFavorite: boolean;
   }

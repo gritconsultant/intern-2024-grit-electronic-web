@@ -35,7 +35,7 @@
         <!-- Order List -->
         <div
           class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
-          style="max-height: 48vh"
+          style="max-height: 41vh"
         >
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div v-if="filteredOrders.length">

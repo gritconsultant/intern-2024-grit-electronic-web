@@ -92,6 +92,10 @@ definePageMeta({
   layout: "user",
 });
 
+definePageMeta({
+  middleware: 'auth'
+})
+
 
 const shipment = ref<Shipment[]>([]);
 const addressAction = ref(false);
