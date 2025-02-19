@@ -1,10 +1,11 @@
 <template>
   <div>
-    <div class="h-[80px] pt-[5px] border border-b-black grid items-center">
+    <div class="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
+      <div class="h-[90px] pt-[5px] border border-b-gray/20 grid items-center">
       <div class="flex items-center justify-between">
         <NuxtLink to="/" class="pl-[30px]">
           <img
-            class="w-[150px]"
+            class="w-[200px]"
             src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png"
             alt="Logo"
           />
@@ -13,8 +14,8 @@
         <!-- Nav and Icons -->
         <div class="flex items-center justify-between w-full">
           <!-- Nav Menu -->
-          <div class="flex items-center fonsubtheader">
-            <div class="mx-4">
+          <div class="flex items-center text-lg">
+            <div class="mx-5">
               <NuxtLink
                 to="/product"
                 class="hover:underline hover:text-[#EE973C]"
@@ -23,14 +24,33 @@
             </div>
 
             <!-- Dropdown  -->
-            <DropdownCategory />
+             <div class="mx-5">
+              <DropdownCategory />
+             </div>
+
+
+            <div class="mx-5">
+              <NuxtLink
+                to="/product"
+                class="hover:underline hover:text-[#EE973C]"
+                >เกี่ยวกับโครงการ</NuxtLink
+              >
+            </div>
+
+            <div class="mx-5">
+              <NuxtLink
+                to="/product"
+                class="hover:underline hover:text-[#EE973C]"
+                >ติดต่อเรา</NuxtLink
+              >
+            </div>
           </div>
 
           <!-- Icons (Visible in Desktop) -->
           <div class="hidden md:flex items-center gap-4 md:gap-6 mx-3 md:mx-5">
             <!-- cart -->
             <svg
-              class="w-[30px] h-[30px] text-gray-800 dark:text-white cursor-pointer"
+              class="w-[32px] h-[32px] text-gray-800 dark:text-white cursor-pointer"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -50,7 +70,7 @@
 
             <!-- fav -->
             <svg
-              class="w-[30px] h-[30px] text-gray-800 dark:text-white cursor-pointer"
+              class="w-[32px] h-[32px] text-gray-800 dark:text-white cursor-pointer"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -96,8 +116,8 @@
       </div>
     </div>
 
-    <!-- Cart Popup -->
-    <div
+        <!-- Cart Popup -->
+        <div
       v-if="store.cartAction"
       @click="store.cartAction = !store.cartAction"
       class="fixed inset-0 bg-black/50 flex justify-end z-50"
@@ -107,8 +127,29 @@
       </div>
     </div>
 
-    <!-- Fav Popup -->
-    <div
+        <!-- Fav Popup -->
+        <div
+      v-if="store.favouriteAction"
+      @click="store.favouriteAction = !store.favouriteAction"
+      class="fixed inset-0 bg-black/50 flex justify-end z-50"
+    >
+      <div @click.stop>
+        <PopupFavorite />
+      </div>
+    </div>
+
+        <!-- Fav Popup -->
+        <div
+      v-if="store.favouriteAction"
+      @click="store.favouriteAction = !store.favouriteAction"
+      class="fixed inset-0 bg-black/50 flex justify-end z-50"
+    >
+      <div @click.stop>
+        <PopupFavorite />
+      </div>
+    </div>
+        <!-- Fav Popup -->
+        <div
       v-if="store.favouriteAction"
       @click="store.favouriteAction = !store.favouriteAction"
       class="fixed inset-0 bg-black/50 flex justify-end z-50"
@@ -128,6 +169,13 @@
         <PopupNotification />
       </div>
     </div>
+    </div>
+
+
+
+
+
+
   </div>
 </template>
 

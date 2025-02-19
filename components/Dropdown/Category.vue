@@ -59,7 +59,8 @@ const getCategoryList = async () => {
         id: e.id,    
         name: e.name, 
         image: e.image,   
-      }));
+      }))
+      .sort((a : any, b: any) => a.id - b.id); // เรียงข้อมูลตาม id
     })
     .catch((error: any) => {
       console.error("เกิดข้อผิดพลาดในการดึงหมวดหมู่สินค้า:", error);

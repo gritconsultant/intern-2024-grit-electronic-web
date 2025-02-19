@@ -13,7 +13,7 @@ export interface Register {
     firstname: string;
     lastname: string;
     username: string;
-    phone: number;
+    phone: string;
     email: string;
     password: string;
     confirmPassword: string;

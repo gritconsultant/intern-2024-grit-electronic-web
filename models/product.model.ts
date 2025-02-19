@@ -28,6 +28,7 @@ export interface ProductReview {
     rating: number;
     username: string;
     description: string;
+    created_at: number;
 }
 
 export interface ProductCategory {
@@ -489,6 +490,7 @@ export interface PaymentById {
     bank_name: string;
     account_name: string;
     account_number: number;
+
     created_at: number;
     updated_at: number;
 }

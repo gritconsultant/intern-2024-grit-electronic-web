@@ -166,7 +166,7 @@ const registers = ref<Register>({
   firstname: "",
   lastname: "",
   username: "",
-  phone: 0,
+  phone: "",
   email: "",
   password: "",
   confirmPassword: "",

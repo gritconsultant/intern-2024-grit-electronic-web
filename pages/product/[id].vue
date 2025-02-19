@@ -21,41 +21,40 @@
                 <div>จำนวนรีวิว: {{ products.Review?.length }}</div>
                 <div>
                   <!-- ไอคอนหัวใจ -->
-                  <button v-if="cookie"
+                  <button
+                    v-if="cookie"
                     type="submit"
                     @click="updateWishlist"
                     class="focus:outline-none"
                   >
-                  <span v-if="products.is_favorite">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      class="w-7 h-7 transition text-red-500"
-                  
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M12 4.248c-3.148-5.402-12-2.95-12 3.24 0 4.01 3.97 8.303 11.3 14.477a1.5 1.5 0 002.4 0C20.03 15.79 24 11.498 24 7.488c0-6.19-8.852-8.642-12-3.24z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-              
+                    <span v-if="products.is_favorite">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        class="w-7 h-7 transition text-red-500"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M12 4.248c-3.148-5.402-12-2.95-12 3.24 0 4.01 3.97 8.303 11.3 14.477a1.5 1.5 0 002.4 0C20.03 15.79 24 11.498 24 7.488c0-6.19-8.852-8.642-12-3.24z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </span>
+
                     <span v-else>
                       <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                      class="w-7 h-7 transition text-gray-400 hover:text-red-500"
-               
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M12 4.248c-3.148-5.402-12-2.95-12 3.24 0 4.01 3.97 8.303 11.3 14.477a1.5 1.5 0 002.4 0C20.03 15.79 24 11.498 24 7.488c0-6.19-8.852-8.642-12-3.24z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        class="w-7 h-7 transition text-gray-400 hover:text-red-500"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M12 4.248c-3.148-5.402-12-2.95-12 3.24 0 4.01 3.97 8.303 11.3 14.477a1.5 1.5 0 002.4 0C20.03 15.79 24 11.498 24 7.488c0-6.19-8.852-8.642-12-3.24z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
                     </span>
                   </button>
                 </div>
@@ -103,25 +102,48 @@
             <div class="flex gap-5 mt-4">
               <p>จำนวนรีวิวทั้งหมด: {{ products.Review?.length }}</p>
             </div>
-            <div class="flex justify-center gap-20 mt-10">
+            <div class="flex gap-20 mt-10">
               <div
                 v-for="Review in paginatedReviews"
                 :key="Review.id"
-                class="border rounded-lg p-4 w-[480px]"
+                class="border rounded-lg p-4"
               >
                 <div class="flex justify-between">
                   <div>
-                    <h2 class="font-bold text-xl">
+                    <div class="flex justify-between w-[480px]">
+                      <h2 class="font-bold">
                       โดย: {{ Review.username }}
                     </h2>
-                    <p class="text-sm text-gray-500">
-                      คะแนน: {{ Review.rating }}
+
+                    <p class="text-md text-black/70 flex items-center gap-1">
+                      
+                      <span
+                        v-for="n in Review.rating"
+                        :key="n"
+                        class="text-yellow-500"
+                      >
+                        ★
+                      </span>
+                      <span
+                        v-for="n in 5 - Review.rating"
+                        :key="'empty-' + n"
+                        class="text-gray-400"
+                      >
+                        ☆
+                      </span>
                     </p>
+
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">
+                      วัน/เวลาที่รีวิว: {{ formatDate(Review.created_at) }}
+                    </p>
+
                   </div>
                 </div>
                 <p class="mt-2">{{ Review.description }}</p>
               </div>
             </div>
+
             <div class="flex justify-center mt-6">
               <button
                 v-for="page in totalPages"
@@ -142,10 +164,10 @@
       <!-- สินค้าใกล้เคียง -->
       <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30">
         <div class="flex flex-col gap-4">
-          <p class="text-xl font-semibold">สินค้า</p>
+          <p class="text-xl font-semibold ml-12">สินค้าอื่นๆ</p>
           <div class="flex flex-wrap gap-20 justify-center">
             <div
-              v-for="product in productslist.slice(0, 4)"
+              v-for="product in randomProducts"
               :key="product.id"
               class="flex justify-center"
             >
@@ -171,14 +193,11 @@ import type {
   Params,
   Product,
   ProductGet,
-  UserInfo,
-  WishlistCreate,
   WishlistRes,
   WishlistUpdate,
 } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
-
 
 // definePageMeta({
 //   middleware: "auth",
@@ -193,7 +212,7 @@ const productslist = ref<Product[]>([]);
 const search = ref<string>("");
 const page = ref<number>(0);
 const size = ref<number>(0);
-const cookie = useCookie('token');
+const cookie = useCookie("token");
 
 const cartitem = ref<CartItemAdd>({
   product_id: 0,
@@ -215,19 +234,26 @@ const wishlistUpdate = ref<WishlistUpdate>({
   is_favorite: false,
 });
 
-const getuserinfo = async () => {
-  await service.product.getUserInfo()
-  .then((resp: any) => {
-    const data = resp.data.data;
-    console.log(data);
+const randomProducts = computed(() => {
+  // Shuffle productslist and return the first 4 items
+  const shuffled = [...productslist.value].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 4);
+});
 
-    store.$state.userId = data.id;
-  })
-  .catch((error: any) => {
-     console.error(error);
-   })
-   .finally(() => {});
-}
+const getuserinfo = async () => {
+  await service.product
+    .getUserInfo()
+    .then((resp: any) => {
+      const data = resp.data.data;
+      console.log(data);
+
+      store.$state.userId = data.id;
+    })
+    .catch((error: any) => {
+      console.error(error);
+    })
+    .finally(() => {});
+};
 
 // Get Product By ID
 const getProductById = async () => {
@@ -236,9 +262,7 @@ const getProductById = async () => {
   const ida = ref<string>("");
   if (store.$state.userId) {
     ida.value = store.$state.userId;
-    console.log(store.$state.userId)
-
-
+    console.log(store.$state.userId);
   }
   const query = ref<ProductGet>({
     user_id: ida.value,
@@ -266,6 +290,7 @@ const getProductById = async () => {
         rating: Math.max(1, Math.min(5, r.rating)),
         username: r.username,
         description: r.description,
+        created_at: r.created_at,
       })) ?? [],
     is_active: data.is_active,
     created_at: data.created_at,
@@ -300,11 +325,11 @@ const addCartItem = async () => {
       cartitemRes.value = cartitem;
     })
     .catch((error: any) => {
-
-            // ตรวจสอบว่าข้อผิดพลาดเกี่ยวกับ Token ผิดพลาด
-            if (
+      // ตรวจสอบว่าข้อผิดพลาดเกี่ยวกับ Token ผิดพลาด
+      if (
         error.response &&
-        error.response.data.error === "token is malformed: token contains an invalid number of segments"
+        error.response.data.error ===
+          "token is malformed: token contains an invalid number of segments"
       ) {
         Swal.fire({
           title: "กรุณาเข้าสู่ระบบ",
@@ -424,11 +449,30 @@ watch([page, size, search], () => {
   getAllProducts();
 });
 
-onMounted(async() => {
-  if(cookie) {
-  await  getuserinfo()
-  };
-  getProductById() 
+const formatDate = (timestamp: number | string): string => {
+  const date = new Date(
+    typeof timestamp === "string" ? timestamp : timestamp * 1000
+  );
+
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear() + 543;
+
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
+
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+};
+
+
+
+
+onMounted(async () => {
+  if (cookie) {
+    await getuserinfo();
+  }
+  getProductById();
   getAllProducts();
 });
 </script>

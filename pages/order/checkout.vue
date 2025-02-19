@@ -78,6 +78,7 @@
                 </div>
               </li>
             </ul>
+
             <!-- ที่อยู่ของคุณ -->
             <div class="mt-4 pb-4 border-b">
               <h3 class="font-bold">ที่อยู่ของคุณ</h3>
@@ -174,6 +175,7 @@
         />
       </div>
     </div>
+    <pre>{{  }}</pre>
     <Loading :loading="loading" />
   </div>
 </template>
@@ -274,7 +276,9 @@ const getOrderById = async (orderId: number) => {
       selectedOrder.value = {
         ...data,
         products: Array.isArray(data.products) ? data.products : [],
+    
       };
+      console.log(selectedOrder.value)
 
       if (!selectedAddressMap.value[orderId]) {
         selectedAddressMap.value[orderId] = data.shipment_id;

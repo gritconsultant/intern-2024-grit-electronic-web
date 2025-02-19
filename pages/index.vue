@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-[20px] lg:mx-[50px] grid justify-center">
+  <div class="mx-[20px] lg:mx-[50px] grid justify-center pt-[90px]">
     <!-- Banner -->
     <div class="w-[1400px] h-[300px] mt-10 swiper-container">
       <swiper
@@ -21,13 +21,29 @@
     </div>
 
     <!-- Search Bar -->
-    <div class="mt-6 flex justify-end">
+    <div class="mt-6 flex justify-end relative">
       <input
         v-model="search"
         type="text"
         placeholder="ค้นหาสินค้า..."
-        class="border p-2 rounded-lg w-full max-w-[300px]"
+        class="border border-black/40 p-2 pr-10 rounded-lg w-full max-w-[300px]"
       />
+      <svg
+        class="w-[22px] h-[22px] text-gray-800 dark:text-white absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-width="1"
+          d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+        />
+      </svg>
     </div>
 
     <!-- Categories -->
@@ -88,7 +104,7 @@
             </div>
             <div class="grid grid-cols-4 my-5 gap-8">
               <div
-                v-for="item in getProductsByCategory(cate.id).slice(0, 4)"
+                v-for="item in getRandomProducts(cate.id)"
                 :key="item.id"
                 class="flex justify-center"
               >
@@ -192,16 +208,32 @@ const getCategoryList = async () => {
     .getCategoryList()
     .then((resp: any) => {
       const data = resp.data.data;
-      category.value = data.map((e: any) => ({
-        id: e.id,
-        name: e.name,
-        image: e.image,
-      }));
+      category.value = data
+        .map((e: any) => ({
+          id: e.id,
+          name: e.name,
+          image: e.image,
+        }))
+        .sort((a: any, b: any) => a.id - b.id); // เรียงข้อมูลตาม id
     })
     .catch((error: any) => {
       console.error("Error loading category list:", error);
     })
     .finally(() => {});
+};
+// ฟังก์ชันสุ่มสินค้าในหมวดหมู่
+const getRandomProducts = (categoryId: number): Product[] => {
+  const filteredProducts = getProductsByCategory(categoryId);
+
+  // หากมีสินค้าภายในหมวดหมู่จะทำการจัดเรียงตามเรตติ้ง
+  if (filteredProducts.length > 0) {
+    const sortedProducts = filteredProducts.sort(
+      (a: any, b: any) => b.rating - a.rating
+    ); // เรียงจากดาวมากไปน้อย
+    return sortedProducts.slice(0, 4); // แสดงสินค้า 4 ตัวแรก
+  }
+
+  return [];
 };
 
 // ฟังก์ชันกรองสินค้าในหมวดหมู่
