@@ -264,6 +264,7 @@ const getOrdership = async () => {
 };
 
 const getOrderById = async (orderId: number) => {
+  loading.value = true;
   try {
     selectedOrder.value = null;
     const resp = await service.product.getOrderById(orderId);
@@ -276,6 +277,9 @@ const getOrderById = async (orderId: number) => {
     }
   } catch (error) {
     console.error("Error fetching order:", error);
+  }
+  finally {
+    loading.value = false;
   }
 };
 

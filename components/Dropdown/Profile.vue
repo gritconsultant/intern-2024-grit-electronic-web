@@ -1,7 +1,7 @@
 <template>
     <div>
       <div>
-        <div class="relative group">
+        <div class="relative group z-10">
           <!-- ปุ่ม User -->
           <button
             class="flex items-center text-black "

@@ -112,17 +112,20 @@
 </template>
 
 <script setup lang="ts">
+import Swal from "sweetalert2";
 import type { PasswordRes, PasswordUpdate, UserInfo } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 definePageMeta({
   layout: "user",
+  middleware: "auth"
 });
 
-const route = useRoute();
+const router = useRouter();
 const store = useIndexStore();
 const loading = ref(false); 
+
 
 const getinfo = ref<UserInfo>({
   ID: 0,
@@ -200,10 +203,16 @@ const updatePassword = async () => {
         // lastname: data.lastname,
       };
       confirmPassword.value = changePassword;
-
-      if (resp.status == 200) {
-    alert("เปลี่ยนรหัสผ่านสำเร็จ!");
-  }
+      if (resp.status === 200) {
+      Swal.fire({
+        title: "เปลี่ยนรหัสผ่านสำเร็จ!",
+        text: "ได้เปลี่ยนรหัสผ่านแล้ว!",
+        icon: "success",
+        confirmButtonText: "ตกลง",
+      }).then(() => {
+        router.push("/profile/").then(() => window.location.reload());
+      })
+    }
     })
     .catch((error: any) => {
       console.log(error);

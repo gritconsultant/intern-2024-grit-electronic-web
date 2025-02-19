@@ -5,7 +5,7 @@
     >
       <div class="flex justify-between h-[30px]">
         <div
-          class="flex justify-center rounded-[30px] gap-2 w-[60px] font-semibold text-[#D78D33] bg-[#FFF1E0]"
+          class="flex justify-center items-center rounded-[30px] gap-1 w-[60px] font-semibold text-[#D78D33] bg-[#FFF1E0]"
         >
           <div>
             <i class="fa-solid fa-star"></i>
@@ -24,16 +24,16 @@
         </div>
 
       </div>
-      <div class="flex justify-between mt-1 ">
+      <div class="flex justify-between mt-1 h-[80px] ">
         <div>
-          <span class="font-bold text-base text-ellipsis w-[180px] "> {{ product.name }} </span>
+          <span class="font-bold text-base hyphens-auto  text-multiline  w-[210px] "> {{ product.name }} </span>
         </div>
         <div class="text-red-600 font-bold text-base">฿{{ product.price }}</div>
       </div>
       <div>
         <span class=" font-medium text-sm ">รายละเอียด</span>
         <div
-          class="h-[35px] w-full text-multiline"
+          class="h-[35px] w-full text-xs text-multiline"
         >
           {{ product.description }}
         </div>
@@ -76,6 +76,7 @@ const averageRating = computed(() => {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2; /* ตัดข้อความที่เกิน 2 บรรทัด */
+    line-clamp: 2;
     overflow: hidden;
   }
 </style>

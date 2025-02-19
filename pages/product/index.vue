@@ -7,15 +7,15 @@
          <span class="text-black">สินค้าทั้งหมด</span></div>
       <div class="flex flex-col lg:flex-row gap-2 my-6">
         <h1 class="font-bold text-2xl lg:text-3xl">สินค้าทั้งหมด</h1>
-        <p class="mt-2 lg:mt-[10px] text-black/40">
-          (สินค้าทั้งหมด {{ products.length }} รายการ)
+        <p  class="mt-2 lg:mt-[10px] text-black/40">
+          (สินค้าทั้งหมด {{ filteredProducts.length }} รายการ)
         </p>
       </div>
       <!-- Filter -->
       <div class="flex flex-wrap gap-5 mt-[30px] lg:mt-[50px] pl-3 text-black/40">
         <div>
           หมวดหมู่
-          <select v-model="selectedCategoryId" class="border p-1 rounded">
+          <select v-model="selectedCategoryId"  class="border p-1 rounded">
             <option :value="null">ทั้งหมด</option>
             <option v-for="cate in categories" :key="cate.id" :value="cate.id">
               {{ cate.name }}
@@ -154,6 +154,16 @@ watch([page, size, search], () => {
   // Call getProductList when any of the values change
   getProductList();
 });
+
+// ตรวจจับการเปลี่ยนแปลงของ selectedCategoryId และใส่ loading
+watch(selectedCategoryId, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    loading.value = true;
+    setTimeout(() => {
+      loading.value = false;
+    }, 500); // ปรับเวลาให้เหมาะสม (เช่น 500ms)
+  }
+})
 
 onMounted(async () => {
   getProductList();

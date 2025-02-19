@@ -258,13 +258,14 @@ const filteredOrders = computed(() =>
     : orders.value
 );
 
-const selectedProducts = ref<Product[]>([]);
-
-const selectOrder = (order: OrderById): void => {
-  selectedOrder.value = order;
-  selectedProducts.value = [];
-};
-
+watch(filterStatus, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    loading.value = true;
+    setTimeout(() => {
+      loading.value = false;
+    }, 500); // ปรับเวลาให้เหมาะสม (เช่น 500ms)
+  }
+})
 
 onMounted(async () => {
   await getOrderhistory();

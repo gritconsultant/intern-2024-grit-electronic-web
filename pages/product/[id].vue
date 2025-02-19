@@ -21,7 +21,7 @@
                 <div>จำนวนรีวิว: {{ products.Review?.length }}</div>
                 <div>
                   <!-- ไอคอนหัวใจ -->
-                  <button
+                  <button v-if="cookie"
                     type="submit"
                     @click="updateWishlist"
                     class="focus:outline-none"
@@ -171,6 +171,7 @@ import type {
   Params,
   Product,
   ProductGet,
+  UserInfo,
   WishlistCreate,
   WishlistRes,
   WishlistUpdate,
@@ -178,11 +179,13 @@ import type {
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
-definePageMeta({
-  middleware: "auth",
-});
+
+// definePageMeta({
+//   middleware: "auth",
+// });
 
 const route = useRoute();
+const router = useRouter();
 const store = useIndexStore();
 const loading = ref(false);
 const products = ref<Product>();
@@ -190,6 +193,8 @@ const productslist = ref<Product[]>([]);
 const search = ref<string>("");
 const page = ref<number>(0);
 const size = ref<number>(0);
+const cookie = useCookie('token');
+
 const cartitem = ref<CartItemAdd>({
   product_id: 0,
   total_product_amount: 0,
@@ -199,12 +204,6 @@ const cartitemRes = ref<CartItemRes>({
   product_id: 0,
   total_product_amount: 0,
 });
-
-// const wishlistCreate = ref<WishlistCreate>({
-//   user_id: 0,
-//   product_id: 0,
-//   is_favorite: false,
-// });
 
 const wishlistRes = ref<WishlistRes>({
   product_id: 0,
@@ -216,6 +215,20 @@ const wishlistUpdate = ref<WishlistUpdate>({
   is_favorite: false,
 });
 
+const getuserinfo = async () => {
+  await service.product.getUserInfo()
+  .then((resp: any) => {
+    const data = resp.data.data;
+    console.log(data);
+
+    store.$state.userId = data.id;
+  })
+  .catch((error: any) => {
+     console.error(error);
+   })
+   .finally(() => {});
+}
+
 // Get Product By ID
 const getProductById = async () => {
   loading.value = true;
@@ -223,6 +236,9 @@ const getProductById = async () => {
   const ida = ref<string>("");
   if (store.$state.userId) {
     ida.value = store.$state.userId;
+    console.log(store.$state.userId)
+
+
   }
   const query = ref<ProductGet>({
     user_id: ida.value,
@@ -284,6 +300,22 @@ const addCartItem = async () => {
       cartitemRes.value = cartitem;
     })
     .catch((error: any) => {
+
+            // ตรวจสอบว่าข้อผิดพลาดเกี่ยวกับ Token ผิดพลาด
+            if (
+        error.response &&
+        error.response.data.error === "token is malformed: token contains an invalid number of segments"
+      ) {
+        Swal.fire({
+          title: "กรุณาเข้าสู่ระบบ",
+          text: "คุณต้องเข้าสู่ระบบก่อนเพิ่มสินค้าลงตะกร้า",
+          icon: "warning",
+          confirmButtonText: "ไปหน้าเข้าสู่ระบบ",
+        }).then(() => {
+          router.push("/login");
+        });
+        return;
+      }
       // ตรวจสอบว่า API ส่ง message ว่า stock ไม่พอ
       if (
         error.response &&
@@ -301,28 +333,6 @@ const addCartItem = async () => {
       loading.value = false;
     });
 };
-
-// const addFavorite = async () => {
-//   wishlistCreate.value.product_id = Number(route.params.id);
-//   wishlistCreate.value.user_id = Number(store.$state.userId);
-
-//   // ตรวจสอบว่าถ้าหัวใจเป็นสีแดงแล้ว ให้ทำการลบออกจาก wishlist
-//   if (wishlistRes.value.isFavorite) {
-//     await deleteWishlist(wishlistCreate.value.product_id.toString());
-//   } else {
-//     // สลับการกดหัวใจ (toggle)
-//     wishlistCreate.value.isFavorite = true;
-//     await service.product.addFavorite(wishlistCreate.value)
-//       .then((resp: any) => {
-//         const data = resp.data;
-//         // อัปเดตสถานะการถูกใจ
-//         wishlistRes.value.isFavorite = data.isFavorite;
-//       })
-//       .catch((error: any) => {
-//         console.error("เกิดข้อผิดพลาด:", error);
-//       });
-//   }
-// };
 
 const updateWishlist = async () => {
   loading.value = true;
@@ -414,9 +424,12 @@ watch([page, size, search], () => {
   getAllProducts();
 });
 
-onMounted(() => {
+onMounted(async() => {
+  if(cookie) {
+  await  getuserinfo()
+  };
+  getProductById() 
   getAllProducts();
-  getProductById();
 });
 </script>
 

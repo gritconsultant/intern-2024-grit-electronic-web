@@ -195,6 +195,7 @@ import { useIndexStore } from "~/store/main";
 import { watch } from "vue";
 definePageMeta({
   layout: "user",
+  middleware: "auth"
 });
 
 const orders = ref<Order[]>([]);
@@ -264,6 +265,7 @@ const getShipment = async () => {
 };
 
 const getOrderById = async (orderId: number) => {
+  loading.value = true;
   try {
     selectedOrder.value = null;
     const resp = await service.product.getOrderById(orderId);
@@ -282,6 +284,7 @@ const getOrderById = async (orderId: number) => {
   } catch (error) {
     console.error("Error fetching order:", error);
   }
+  loading.value = false;
 };
 
 const checkOrder = (order: Order) => {

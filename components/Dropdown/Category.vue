@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <div class="relative group">
+      <div class="relative group z-10">
         <button
           class="flex items-center text-black hover:text-[#EE973C]"
           type="button"

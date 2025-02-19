@@ -17,7 +17,7 @@
           <div class="grid justify-center">
             <div>
               <div
-                class="mt-[10px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-32"
+                class="mt-[10px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-20"
               >
                 <div
                   v-for="(item, index) in filteredProducts"

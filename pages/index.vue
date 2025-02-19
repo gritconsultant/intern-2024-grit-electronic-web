@@ -1,14 +1,23 @@
 <template>
   <div class="mx-[20px] lg:mx-[50px] grid justify-center">
     <!-- Banner -->
-    <div class="w-[1400px] h-[300px] mt-10  bg-slate-500">
-      <div class="relative w-full h-full">
-        <img
-          :src="banner.length > 0 ? banner[currentIndex].banner : ''"
-          class="rounded-2xl w-full h-full object-cover"
-          alt="Banner Image"
-        />
-      </div>
+    <div class="w-[1400px] h-[300px] mt-10 swiper-container">
+      <swiper
+        :modules="[Autoplay]"
+        :space-between="50"
+        :slides-per-view="1"
+        :loop="true"
+        :autoplay="{ delay: 5000 }"
+        class="rounded-2xl w-full h-full"
+      >
+        <swiper-slide v-for="(item, index) in banner" :key="index">
+          <img
+            :src="item.banner"
+            class="w-full h-full object-cover rounded-2xl"
+            alt="Banner Image"
+          />
+        </swiper-slide>
+      </swiper>
     </div>
 
     <!-- Search Bar -->
@@ -101,6 +110,9 @@
 import { ref, onMounted } from "vue";
 import type { Banner, Category, Params, Product } from "~/models/product.model";
 import service from "~/service";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import { Autoplay } from "swiper/modules"; // ✅ ใช้ named export (ถูกต้อง)
 
 definePageMeta({
   middleware: "auth",
@@ -114,23 +126,17 @@ const size = ref<number>(0);
 const selectedCategoryId = ref(0); // 0 = All categories
 const loading = ref(true);
 const banner = ref<any[]>([]); // เปลี่ยนจาก Banner เป็นอาร์เรย์
-const currentIndex = ref(0); // ใช้เพื่อเก็บดัชนีของภาพที่แสดงในตอนนี้
-
 
 const getbanners = async () => {
-  await service.product
-    .getBanner()
-    .then((resp: any) => {
-      banner.value = resp.data.data; // เก็บข้อมูลของแต่ละภาพในอาร์เรย์
-      if (banner.value.length > 0) {
-        currentIndex.value = 0; // ตั้งค่า default ให้เป็นรูปแรกเมื่อโหลดเสร็จ
-      }
-    })
-    .catch((error: any) => {
-      console.error("Error loading banners:", error);
-    });
+  loading.value = true;
+  try {
+    const resp = await service.product.getBanner();
+    banner.value = resp.data.data;
+  } catch (error) {
+    console.error("Error loading banners:", error);
+  }
+  loading.value = false;
 };
-
 
 // ดึงข้อมูลสินค้าทั้งหมด
 const getProductList = async () => {
@@ -140,7 +146,7 @@ const getProductList = async () => {
     size: size.value, // ใช้ .value ในการเข้าถึง size
     search: search.value || "", // ใช้ค่าป้องกันถ้า search เป็น null หรือ undefined
   };
-  console.log(param)
+  console.log(param);
   await service.product
     .getProductList(param)
     .then((resp: any) => {
@@ -206,21 +212,6 @@ const getProductsByCategory = (categoryId: number): Product[] => {
       (product.category.id === categoryId || categoryId === 0) // กรองตาม category
   );
 };
-
-// const getProductsByCategory = (categoryId: number): Product[] => {
-//   const filteredProducts = products.value.filter(
-//     (product) =>
-//       product.is_active &&
-//       (product.category.id === categoryId || categoryId === 0)
-//   );
-
-//   return shuffle(filteredProducts).slice(0, 4); // สุ่มและเลือกมา 4 อัน
-// };
-
-// // ฟังก์ชันสุ่มอาร์เรย์
-// const shuffle = (array: Product[]) => {
-//   return array.sort(() => Math.random() - 0.5);
-// };
 
 const toggleCategory = (categoryId: number) => {
   if (selectedCategoryId.value === categoryId) {
