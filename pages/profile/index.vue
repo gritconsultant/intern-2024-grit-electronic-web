@@ -1,5 +1,6 @@
 <template>
-  <div class="p-4">
+  <div class=" pt-[90px]">
+    <div class="p-4">
     <div class="flex">
       <!-- Sidebar -->
       <Sidebar />
@@ -109,6 +110,8 @@
     </div>
     <Loading :loading="loading" />
   </div>
+  </div>
+
 </template>
 
 <script setup lang="ts">

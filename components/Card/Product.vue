@@ -17,7 +17,7 @@
       <div class="flex justify-center items-center h-[300px] w-full overflow-hidden rounded-md">
         <div class="w-full h-full object-cover rounded-md">
           <img
-                  :src="product.image"
+                  :src="product.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
                   alt=""
                   class="w-full h-full object-cover"
                 />

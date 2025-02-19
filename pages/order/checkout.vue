@@ -1,5 +1,6 @@
 <template>
-  <div class="flex p-4">
+  <div class=" pt-[90px]">
+    <div class="flex p-4 ">
     <Sidebar />
     <div class="w-full lg:w-3/4 p-6">
       <div class="border-b">
@@ -178,6 +179,8 @@
     <pre>{{  }}</pre>
     <Loading :loading="loading" />
   </div>
+  </div>
+
 </template>
 
 <script setup lang="ts">

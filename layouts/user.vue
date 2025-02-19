@@ -1,7 +1,7 @@
 <template>
   <div class="h-screen">
     <Header />
-    <div class="h-[70%]">
+    <div class="h-[75%]">
       <slot />
     </div>
     <Footer />

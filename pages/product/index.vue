@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mx-[20px] lg:mx-[50px] pt-[90px]">
     <div class="p-[20px] lg:p-[50px]">
       <div class="text-black/40">
         <NuxtLink to="/">หน้าหลัก</NuxtLink>

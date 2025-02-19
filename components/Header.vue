@@ -31,7 +31,7 @@
 
             <div class="mx-5">
               <NuxtLink
-                to="/product"
+                to="/info"
                 class="hover:underline hover:text-[#EE973C]"
                 >เกี่ยวกับโครงการ</NuxtLink
               >
@@ -39,7 +39,7 @@
 
             <div class="mx-5">
               <NuxtLink
-                to="/product"
+                to="/info/contact"
                 class="hover:underline hover:text-[#EE973C]"
                 >ติดต่อเรา</NuxtLink
               >

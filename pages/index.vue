@@ -12,7 +12,7 @@
       >
         <swiper-slide v-for="(item, index) in banner" :key="index">
           <img
-            :src="item.banner"
+            :src="item.banner || '/public/images/Bangkok brand.jpg'"
             class="w-full h-full object-cover rounded-2xl"
             alt="Banner Image"
           />
@@ -46,77 +46,126 @@
       </svg>
     </div>
 
-    <!-- Categories -->
+    <!-- cate -->
     <div class="grid grid-cols-1 text-center mt-12">
-      <h1 class="my-[50px] lg:my-[70px] fontheader">หมวดหมู่สินค้า</h1>
-      <div class="flex flex-wrap justify-center">
-        <div
-          v-for="cate in category"
-          :key="cate.id"
-          class="text-center w-[90px] lg:w-[200px] cursor-pointer"
-          @click="toggleCategory(cate.id)"
+      <h1 class="my-[40px] lg:my-[70px] fontheader">หมวดหมู่สินค้า</h1>
+      <div class="flex justify-center items-center gap-4">
+        <button
+          @click="prevPage"
+          :disabled="currentPage === 1"
+          class="py-2 disabled:opacity-50"
         >
-          <div class="flex justify-center">
-            <div
-              :class="{
-                'border-2 border-[#EE973C]': selectedCategoryId === cate.id,
-                'border-2': selectedCategoryId !== cate.id,
-              }"
-              class="rounded-full p-1 w-[90px] h-[90px] lg:w-[100px] lg:h-[100px]"
-            >
-              <div
-                class="w-full h-full object-cover rounded-full overflow-hidden"
-              >
-                <img
-                  :src="cate.image"
-                  alt=""
-                  class="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-          <h1 class="fontsubheader mt-[10px] lg:mt-[20px] lg:text-base">
-            {{ cate.name }}
-          </h1>
-        </div>
-      </div>
-    </div>
-
-    <!-- Products -->
-    <div class="mt-[20px] lg:mt-[70px] mx-[20px] lg:mx-[50px]">
-      <h1 class="fontheader">สินค้าแนะนำ - Recommend</h1>
-      <div class="grid gap-5 mt-[10px]">
-        <div v-for="cate in category" :key="cate.id">
-          <div
-            v-if="selectedCategoryId === cate.id || selectedCategoryId === 0"
+          <svg
+            class="w-[22px] h-[22px] text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
           >
-            <div class="flex justify-between w-full">
-              <h1 class="font-bold text-lg mt-[3px]">{{ cate.name }}</h1>
-              <div class="text-black/40 cursor-pointer">
-                <router-link
-                  v-if="cate.id"
-                  :to="`/category/${cate.id}`"
-                  class="text-lg font-bold text-black/50 cursor-pointer hover:text-[#FD8C35]/70"
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="m15 19-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        <div class="flex flex-wrap justify-center gap-6">
+          <div
+            v-for="cate in paginatedCategories"
+            :key="cate.id"
+            class="text-center w-[90px] lg:w-[200px] cursor-pointer"
+            @click="toggleCategory(cate.id)"
+          >
+            <div class="flex justify-center">
+              <div
+                :class="{
+                  'border-2 border-[#EE973C]': selectedCategoryId === cate.id,
+                  'border-2': selectedCategoryId !== cate.id,
+                }"
+                class="rounded-full p-1 w-[90px] h-[90px] lg:w-[100px] lg:h-[100px]"
+              >
+                <div
+                  class="w-full h-full object-cover rounded-full overflow-hidden"
                 >
-                  ทั้งหมด ->
-                </router-link>
+                  <img
+                    :src="cate.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
+                    alt=""
+                    class="w-full h-full object-cover"
+                  />
+                </div>
               </div>
             </div>
-            <div class="grid grid-cols-4 my-5 gap-8">
-              <div
-                v-for="item in getRandomProducts(cate.id)"
-                :key="item.id"
-                class="flex justify-center"
-              >
-                <NuxtLink :to="`/product/${item.id}`">
-                  <CardProduct :product="item" />
-                </NuxtLink>
+            <h1 class="fontsubheader mt-[10px] lg:mt-[20px] lg:text-base">
+              {{ cate.name }}
+            </h1>
+          </div>
+        </div>
+
+        <button
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
+          class="py-2 disabled:opacity-50"
+        >
+          <svg
+            class="w-[22px] h-[22px] text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="m9 5 7 7-7 7"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+          <!-- Products -->
+          <div class="mt-[20px] lg:mt-[70px] mx-[20px] lg:mx-[50px]">
+        <h1 class="fontheader mt-10 ">สินค้าแนะนำ - Recommend</h1>
+        <div class="grid gap-5 mt-[10px]">
+          <div v-for="cate in category" :key="cate.id">
+            <div
+              v-if="selectedCategoryId === cate.id || selectedCategoryId === 0"
+            >
+              <div class="flex justify-between w-full mt-10">
+                <h1 class="font-bold text-xl">{{ cate.name }}</h1>
+                <div class="text-black/40 cursor-pointer">
+                  <router-link
+                    v-if="cate.id"
+                    :to="`/category/${cate.id}`"
+                    class="text-base font-normal text-black/40 cursor-pointer hover:text-[#FD8C35]/70"
+                  >
+                    ทั้งหมด ->
+                  </router-link>
+                </div>
+              </div>
+              <div class="grid grid-cols-4 my-5 gap-8">
+                <div
+                  v-for="item in getRandomProducts(cate.id)"
+                  :key="item.id"
+                  class="flex justify-center"
+                >
+                  <NuxtLink :to="`/product/${item.id}`">
+                    <CardProduct :product="item" />
+                  </NuxtLink>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
     <Loading :loading="loading" />
   </div>
@@ -152,6 +201,36 @@ const getbanners = async () => {
     console.error("Error loading banners:", error);
   }
   loading.value = false;
+};
+
+// Pagination
+const currentPage = ref(1);
+const itemsPerPage = ref(5); // จำนวนหมวดหมู่ที่ต้องการแสดงต่อหน้า
+
+// คำนวณรายการหมวดหมู่ที่ต้องแสดง
+const paginatedCategories = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+  const end = start + itemsPerPage.value;
+  return category.value.slice(start, end);
+});
+
+// จำนวนหน้าทั้งหมด
+const totalPages = computed(() =>
+  Math.ceil(category.value.length / itemsPerPage.value)
+);
+
+const goToPage = (page: number) => {
+  currentPage.value = page;
+  // เรียกใช้ getProductList หรือการกระทำอื่น ๆ ที่จำเป็น
+  getProductList();
+};
+
+// เปลี่ยนหน้า
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+};
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
 };
 
 // ดึงข้อมูลสินค้าทั้งหมด

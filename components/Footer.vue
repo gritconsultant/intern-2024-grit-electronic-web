@@ -1,16 +1,16 @@
 <template>
   <div
-    class="p-6 flex flex-col lg:flex-row gap-9 text-black border border-t-black/40"
+    class="p-6 flex flex-col lg:flex-row gap-9 text-black border border-t-black/40 border-b-white"
   >
     <!-- Logo and Address -->
-    <div class="ml-0 lg:ml-7 flex flex-col items-center lg:items-start">
+    <div class="ml-0 lg:ml-14 flex flex-col items-center lg:items-start">
       <img
         src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png"
         class="w-[200px]"
       />
 
-      <p class="mt-5 text-center lg:text-left text-sm w-[270px]">
-        173 ศาลาว่าการกรุงเทพมหานคร(เสาชิงช้า) ถนนดินสอ แขวงเสาชิงช้า เขตพระนคร
+      <p class="mt-5  lg:text-left text-base w-[240px]">
+        173 ศาลาว่าการกรุงเทพมหานคร (เสาชิงช้า) ถนนดินสอ แขวงเสาชิงช้า เขตพระนคร
         กรุงเทพมหานคร 10200
       </p>
     </div>
@@ -21,13 +21,13 @@
     >
       <!-- Categories -->
       <div class="mb-6 md:mb-0">
-        <div class="font-bold text-base mb-4">หมวดหมู่</div>
+        <div class="font-bold text-lg">หมวดหมู่</div>
         <div
         >
         <div v-for="cate in categories.slice(0,5)" :key="cate.id">
               <NuxtLink
                 :to="`/category/${cate.id}`"
-                class="block text-sm py-2 hover:text-[#FCCA81]"
+                class="block text-base py-2 hover:text-[#FCCA81]"
               >
                 {{ cate.name }}
               </NuxtLink>
@@ -37,11 +37,11 @@
 
       <!-- Help -->
       <div class="mb-6 md:mb-0">
-        <div class="font-bold text-base mb-4">ช่วยเหลือ</div>
+        <div class="font-bold text-lg">ช่วยเหลือ</div>
         <div
           v-for="(data, i) in page.slice(5, 8)"
           :key="i"
-          class="hover:text-[#FCCA81] text-sm mt-1"
+          class="hover:text-[#FCCA81] text-base  py-2"
         >
           <NuxtLink :to="data.path">
             {{ data.name }}
@@ -51,8 +51,8 @@
 
       <!-- Contact -->
       <div>
-        <div class="font-bold text-base mb-4">ช่องทางการติดต่อ</div>
-        <div class="text-sm">
+        <div class="font-bold text-lg mb-1">ช่องทางการติดต่อ</div>
+        <div class="text-base">
           <p>อีเมล : bangkokbrand@gmail.com</p>
           <p class="mt-3">โทรศัพท์ : 02-224-3038</p>
           <div class="flex justify-start mt-3 gap-3 items-center ">
@@ -185,6 +185,16 @@ const page = ref<Page[]>([
   {
     name: "จัดการบัญชี",
     path: "/profile",
+    active: false,
+  },
+  {
+    name: "เกี่ยวกับโครงการ",
+    path: "/info",
+    active: false,
+  },
+  {
+    name: "ติดต่อเรา",
+    path: "/info/contact",
     active: false,
   },
 ]);

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mx-[20px] lg:mx-[50px] pt-[90px]">
     <div v-if="products && products.name">
       <!-- ตรวจสอบว่า product มีค่าและมี name -->
       <div class="p-10">
