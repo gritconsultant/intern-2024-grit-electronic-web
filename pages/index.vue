@@ -49,11 +49,12 @@
     <!-- cate -->
     <div class="grid grid-cols-1 text-center mt-12">
       <h1 class="my-[40px] lg:my-[70px] fontheader">หมวดหมู่สินค้า</h1>
-      <div class="flex justify-center items-center gap-4">
+      <div class="flex justify-center items-center gap-4 w-full">
+        <!-- ปุ่มย้อนกลับ -->
         <button
           @click="prevPage"
           :disabled="currentPage === 1"
-          class="py-2 disabled:opacity-50"
+          class="py-2 disabled:opacity-50 flex justify-center w-[20px]"
         >
           <svg
             class="w-[22px] h-[22px] text-gray-800 dark:text-white"
@@ -74,7 +75,10 @@
           </svg>
         </button>
 
-        <div class="flex flex-wrap justify-center gap-6">
+        <!-- หมวดหมู่สินค้า -->
+        <div
+          class="flex flex-wrap justify-center gap-6 w-[1200px]"
+        >
           <div
             v-for="cate in paginatedCategories"
             :key="cate.id"
@@ -93,7 +97,10 @@
                   class="w-full h-full object-cover rounded-full overflow-hidden"
                 >
                   <img
-                    :src="cate.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
+                    :src="
+                      cate.image ||
+                      'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'
+                    "
                     alt=""
                     class="w-full h-full object-cover"
                   />
@@ -106,10 +113,11 @@
           </div>
         </div>
 
+        <!-- ปุ่มถัดไป -->
         <button
           @click="nextPage"
           :disabled="currentPage === totalPages"
-          class="py-2 disabled:opacity-50"
+          class="py-2 disabled:opacity-50 flex justify-center  w-[20px]"
         >
           <svg
             class="w-[22px] h-[22px] text-gray-800 dark:text-white"
@@ -131,41 +139,42 @@
         </button>
       </div>
     </div>
-          <!-- Products -->
-          <div class="mt-[20px] lg:mt-[70px] mx-[20px] lg:mx-[50px]">
-        <h1 class="fontheader mt-10 ">สินค้าแนะนำ - Recommend</h1>
-        <div class="grid gap-5 mt-[10px]">
-          <div v-for="cate in category" :key="cate.id">
-            <div
-              v-if="selectedCategoryId === cate.id || selectedCategoryId === 0"
-            >
-              <div class="flex justify-between w-full mt-10">
-                <h1 class="font-bold text-xl">{{ cate.name }}</h1>
-                <div class="text-black/40 cursor-pointer">
-                  <router-link
-                    v-if="cate.id"
-                    :to="`/category/${cate.id}`"
-                    class="text-base font-normal text-black/40 cursor-pointer hover:text-[#FD8C35]/70"
-                  >
-                    ทั้งหมด ->
-                  </router-link>
-                </div>
-              </div>
-              <div class="grid grid-cols-4 my-5 gap-8">
-                <div
-                  v-for="item in getRandomProducts(cate.id)"
-                  :key="item.id"
-                  class="flex justify-center"
+
+    <!-- Products -->
+    <div class="mt-[20px] lg:mt-[70px] mx-[20px] lg:mx-[50px]">
+      <h1 class="fontheader mt-10">สินค้าแนะนำ - Recommend</h1>
+      <div class="grid gap-5 mt-[10px]">
+        <div v-for="cate in category" :key="cate.id">
+          <div
+            v-if="selectedCategoryId === cate.id || selectedCategoryId === 0"
+          >
+            <div class="flex justify-between w-full mt-10">
+              <h1 class="font-bold text-xl">{{ cate.name }}</h1>
+              <div class="text-black/40 cursor-pointer">
+                <router-link
+                  v-if="cate.id"
+                  :to="`/category/${cate.id}`"
+                  class="text-base font-normal text-black/40 cursor-pointer hover:text-[#FD8C35]/70"
                 >
-                  <NuxtLink :to="`/product/${item.id}`">
-                    <CardProduct :product="item" />
-                  </NuxtLink>
-                </div>
+                  ทั้งหมด ->
+                </router-link>
+              </div>
+            </div>
+            <div class="grid grid-cols-4 my-5 gap-8">
+              <div
+                v-for="item in getRandomProducts(cate.id)"
+                :key="item.id"
+                class="flex justify-center"
+              >
+                <NuxtLink :to="`/product/${item.id}`">
+                  <CardProduct :product="item" />
+                </NuxtLink>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
     <Loading :loading="loading" />
   </div>

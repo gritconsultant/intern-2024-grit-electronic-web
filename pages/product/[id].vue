@@ -9,7 +9,7 @@
             <div class="w-full p-2 flex justify-center">
               <div class="object-cover max-w-full w-[650px] h-[650px]">
                 <img
-                  :src="products.image"
+                  :src="products.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
                   alt=""
                   class="w-full h-full object-cover"
                 />

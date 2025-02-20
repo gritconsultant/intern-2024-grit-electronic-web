@@ -33,7 +33,7 @@
       >
         <div class="w-[80%] max-w-[300px] mb-6">
           <img
-            :src="i.image"
+            :src="i.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
             alt="QR Code"
             class="w-full h-auto object-cover rounded-lg"
           />
@@ -48,6 +48,11 @@
             ชื่อบัญชี: <span class="font-semibold">{{ i.account_name }}</span>
           </p>
         </div>
+      </div>
+
+      <!-- แสดงราคารวม -->
+      <div class="px-4 mt-5 text-center">
+        <p class="text-lg font-semibold">ราคารวม: {{ totalOrderPrice.toLocaleString() }} บาท</p>
       </div>
 
       <!-- วันที่และเวลาที่โอน -->
@@ -84,10 +89,9 @@ definePageMeta({ layout: "auth" });
 
 import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
+import { computed, ref, onMounted } from "vue";
 import type {
   OrderById,
-  OrderUpdate,
-  OrderUpdateRes,
   PaymentCreate,
   PaymentRes,
   SystemBank,
@@ -127,19 +131,11 @@ const paymentRes = ref<PaymentRes>({
   order_id: 0,
 });
 
-
 // ดึงบัญชีธนาคาร
 const getSystemBank = async () => {
   try {
     const resp = await service.product.getSystemBank();
-    system.value = resp.data.data.map((e: any) => ({
-      id: e.id,
-      bank_name: e.bank_name,
-      account_name: e.account_name,
-      account_number: e.account_number,
-      image: e.image,
-      is_active: e.is_active,
-    }));
+    system.value = resp.data.data;
   } catch (error) {
     console.error("เกิดข้อผิดพลาดในการดึงข้อมูลธนาคาร", error);
   }
@@ -150,65 +146,30 @@ const getOrder = async (orderId: number) => {
   loading.value = true;
   try {
     const resp = await service.product.getOrderById(orderId);
-    const data = resp.data.data;
-    if (data) {
-      order.value = {
-        id: data.id,
-        User: data.User || { id: 0, firstname: "", lastname: "", phone: 0 },
-        Payment: data.Payment || {
-          id: 0,
-          price: 0,
-          bank_name: "",
-          account_name: "",
-          account_number: 0,
-          status: "",
-        },
-        SystemBank: data.SystemBank || null,
-        Shipment: data.Shipment || null,
-        total_amount: data.total_amount || 0,
-        total_price: data.total_price || 0,
-        status: data.status || "",
-        created_at: data.created_at || "",
-        updated_at: data.updated_at || "",
-        tracking_number: data.tracking_number || "",
-        products: Array.isArray(data.products) ? data.products : [],
-      } as OrderById;
-    }
+    order.value = resp.data.data;
   } catch (error) {
     console.error("เกิดข้อผิดพลาดในการดึงข้อมูลคำสั่งซื้อ", error);
   }
   loading.value = false;
 };
 
+const totalOrderPrice = computed(() => {
+  return (order.value?.total_price || 0) + (order.value?.Payment?.price ?? 0);
+});
+
 const updatePayment = async () => {
   loading.value = true;
-  console.log(props.paymentId)
-  await service.product
-    .updatePayment(props.orderId, paymentCreate.value)
-
-    .then((resp: any) => {
-      console.log(resp);
-      const data = resp.data;
-      const paymentCreate: PaymentRes = {
-        system_bank_id: data.system_bank_id,
-        date: data.date,
-        order_id: data.order_id,
-      };
-      paymentRes.value = paymentCreate;
-
-      if (resp.status == 200) {
-        Swal.fire({
-          title: "ยืนยันการชำระเงินสำเร็จ",
-          text: "การชำระเงินสำเร็จแล้ว",
-          icon: "success",
-          confirmButtonText: "ตกลง",
-        }).then(() => {
-          store.paymentAction = false;
-          router
-            .push({ path: "/order/checkout" })
-            .then(() => window.location.reload());
-        });
-      }
+  await service.product.updatePayment(props.orderId, paymentCreate.value)
+    .then(() => {
+      Swal.fire({
+        title: "ยืนยันการชำระเงินสำเร็จ",
+        text: "การชำระเงินสำเร็จแล้ว",
+        icon: "success",
+        confirmButtonText: "ตกลง",
+      }).then(() => {
+        store.paymentAction = false;
+        router.push({ path: "/order/checkout" }).then(() => window.location.reload());
+      });
     })
     .catch((error: any) => {
       console.log(error);
@@ -220,11 +181,8 @@ const updatePayment = async () => {
 
 onMounted(async () => {
   await getSystemBank();
-  const orderId = route.params.orderId ? Number(route.params.orderId) : null;
-  if (orderId) {
-    await getOrder(orderId);
-  } else {
-    console.error("ไม่พบ orderId ใน route params");
+  if (props.orderId) {
+    await getOrder(props.orderId);
   }
   paymentCreate.value.order_id = props.orderId ?? 0;
 });

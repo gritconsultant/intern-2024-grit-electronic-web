@@ -33,7 +33,7 @@
       >
         <input type="checkbox" v-model="item.selected" class="mr-2" />
         <img
-          :src="item.Product.image"
+          :src="item.Product.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
           alt=""
           class="w-[50px] h-[50px] md:w-[75px] md:h-[75px] object-cover rounded-md"
         />

@@ -33,7 +33,7 @@
         class="flex justify-between items-center border-b py-2"
       >
         <img
-          :src="item.product.image"
+          :src="item.product.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
           alt="product"
           class="w-[50px] h-[50px] md:w-[75px] md:h-[75px] object-cover rounded-md"
         />

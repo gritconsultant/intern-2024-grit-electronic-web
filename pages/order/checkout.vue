@@ -57,7 +57,7 @@
                 <!-- Product Image -->
                 <div class="w-24 h-24">
                   <img
-                    :src="product.image"
+                    :src="product.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
                     alt="product"
                     class="w-full h-full object-cover rounded-lg"
                   />
@@ -261,12 +261,14 @@ const getOrderpending = async () => {
 };
 
 const getShipment = async () => {
+  loading.value = true;
   try {
     const resp = await service.product.getShipmentId();
     shipment.value = resp.data.data;
   } catch (error) {
     console.error(error);
   }
+  loading.value = false;
 };
 
 const getOrderById = async (orderId: number) => {
