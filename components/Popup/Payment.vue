@@ -157,7 +157,26 @@ const totalOrderPrice = computed(() => {
   return (order.value?.total_price || 0) + (order.value?.Payment?.price ?? 0);
 });
 
+const validateDate = () => {
+  if (!paymentCreate.value.date) {
+    Swal.fire("กรุณาเลือกวันที่", "โปรดเลือกวันที่และเวลาที่โอน", "warning");
+    return false;
+  }
+
+  const selectedDate = new Date(paymentCreate.value.date);
+  const now = new Date();
+
+  if (selectedDate > now) {
+    Swal.fire("วันที่ไม่ถูกต้อง", "ไม่สามารถโอนเกินวันปัจจุบันได้", "warning");
+    return false;
+  }
+
+  return true;
+};
+
+
 const updatePayment = async () => {
+  if (!validateDate()) return;
   loading.value = true;
   await service.product.updatePayment(props.orderId, paymentCreate.value)
     .then(() => {

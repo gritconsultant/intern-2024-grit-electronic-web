@@ -179,7 +179,7 @@ export interface ShipmentUpdate {
     firstname: string;
     lastname: string;
     address: string;
-    zip_code: number;
+    zip_code: any;
     sub_district: string;
     district: string;
     province: string;

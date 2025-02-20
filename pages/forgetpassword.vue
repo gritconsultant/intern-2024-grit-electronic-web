@@ -20,7 +20,6 @@
           <span class="font-semibold text-lg"
             >Email : Bangkokbrand@gmail.com</span
           >
-          <p class="flex justify-center mt-4">ขออภัยในความไม่สะดวก</p>
         </div>
       </div>
 

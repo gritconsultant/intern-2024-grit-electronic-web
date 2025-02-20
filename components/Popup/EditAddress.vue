@@ -36,7 +36,7 @@
 
           <div class="mb-4">
             <label class="block text-sm font-medium">รหัสไปรษณีย์</label>
-            <input v-model="shipmentUpdate.zip_code" class="w-full p-2 border rounded" required />
+            <input v-model="shipmentUpdate.zip_code" class="w-full p-2 border rounded" required @input="validateZipCode"/>
           </div>
 
           <div class="flex justify-between mt-6">
@@ -73,9 +73,27 @@ const shipmentUpdate = ref<ShipmentUpdate>({
   sub_district: "",
   district: "",
   province: "",
-  zip_code: 0,
+  zip_code: "",
 });
+// ฟังก์ชันตรวจสอบรหัสไปรษณีย์
+const validateZipCode = () => {
+  let zipCode = shipmentUpdate.value.zip_code;
 
+  // เอาเฉพาะตัวเลข
+  zipCode = zipCode.replace(/\D/g, "");
+
+  // ถ้าความยาวน้อยกว่า 5 ให้เติม 0 หน้า
+  if (zipCode.length < 5) {
+    zipCode = zipCode.padStart(5);
+  }
+
+  // จำกัดให้มีแค่ 5 หลัก
+  if (zipCode.length > 5) {
+    zipCode = zipCode.substring(0, 5);
+  }
+
+  shipmentUpdate.value.zip_code = zipCode;
+};
 
 
 const updateShipments = async () => {

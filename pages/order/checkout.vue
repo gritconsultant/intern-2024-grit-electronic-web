@@ -145,7 +145,7 @@
             <div class="flex space-x-4 mt-4">
               <button
                 class="flex-1 py-2 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-lg"
-                @click="store.paymentAction = true"
+                @click="handlePayment"
               >
                 ชำระเงิน
               </button>
@@ -210,6 +210,8 @@ const selectedOrder = ref<OrderById | null>(null);
 const shipment = ref<Shipment[]>([]);
 const selectedAddressMap = ref<{ [key: number]: number }>({});
 const selectedAddressId = ref<number>();
+  const isAddressConfirmed = ref(false);
+
 
 
 const props = defineProps({
@@ -349,6 +351,10 @@ const updateStatus = async () => {
           .finally(() => {
             loading.value = false;
           });
+        } else {
+        // ✅ ถ้าผู้ใช้กด "ไม่, กลับไป"
+        console.log("ยกเลิกการยกเลิกคำสั่งซื้อ");
+        loading.value = false; // ปิดโหลดเมื่อไม่มีการเปลี่ยนแปลง
       }
     });
   }
@@ -362,7 +368,7 @@ const updateShipment = async () => {
 
   if (!selectedOrder.value?.id || !selectedAddressId.value) {
     console.error("Error: Missing order ID or shipment ID");
-    Swal.fire("เกิดข้อผิดพลาด", "โปรดเลือกที่อยู่ก่อนทำการอัปเดต", "error");
+    Swal.fire("เกิดข้อผิดพลาด", "โปรดเลือกที่อยู่ก่อนทำการยืนยัน", "error");
     loading.value = false;
     return;
   }
@@ -380,13 +386,30 @@ const updateShipment = async () => {
     console.log("Response:", resp);
 
     Swal.fire("สำเร็จ!", "เลือกที่อยู่จัดส่งเรียบร้อยแล้ว", "success");
+    isAddressConfirmed.value = true;
   } catch (error) {
     console.error("API Error:", error);
+    isAddressConfirmed.value = false;
     Swal.fire("เกิดข้อผิดพลาด", "ไม่สามารถเลือกที่อยู่ได้", "error");
   } finally {
     loading.value = false;
   }
 };
+
+const handlePayment = () => {
+  if (!selectedAddressId.value) {
+    Swal.fire("กรุณาเลือกที่อยู่", "โปรดเลือกที่อยู่ก่อนทำการชำระเงิน", "warning");
+    return;
+  }
+
+  if (!isAddressConfirmed.value) {
+    Swal.fire("กรุณากดยืนยันที่อยู่", "โปรดยืนยันที่อยู่ก่อนชำระเงิน", "warning");
+    return;
+  }
+
+  store.paymentAction = true;
+};
+
 
 
 watch(selectedAddressId, (newVal) => {

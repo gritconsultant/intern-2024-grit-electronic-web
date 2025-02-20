@@ -28,7 +28,7 @@
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium">รหัสไปรษณีย์</label>
-          <input v-model="shipment.zip_code" class="w-full p-2 border rounded" required />
+          <input v-model="shipment.zip_code" class="w-full p-2 border rounded" required @input="validateZipCode" />
         </div>
 
         <div class="flex justify-between mt-6">
@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import Swal from "sweetalert2";
-import { ref, defineEmits, onMounted } from "vue";
+import { ref } from "vue";
 import type { ShipmentCreate, ShipmentRes } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
@@ -63,7 +63,7 @@ const shipment = ref<ShipmentCreate>({
   firstname: "",
   lastname: "",
   address: "",
-  zip_code: 0,
+  zip_code: "",
   sub_district: "",
   district: "",
   province: "",
@@ -73,11 +73,32 @@ const shipmentRes = ref<ShipmentRes>({
   firstname: "",
   lastname: "",
   address: "",
-  zip_code: 0,
+  zip_code: "",
   sub_district: "",
   district: "",
   province: "",
 });
+
+
+// ฟังก์ชันตรวจสอบรหัสไปรษณีย์
+const validateZipCode = () => {
+  let zipCode = shipment.value.zip_code;
+
+  // เอาเฉพาะตัวเลข
+  zipCode = zipCode.replace(/\D/g, "");
+
+  // ถ้าความยาวน้อยกว่า 5 ให้เติม 0 หน้า
+  if (zipCode.length < 5) {
+    zipCode = zipCode.padStart(5);
+  }
+
+  // จำกัดให้มีแค่ 5 หลัก
+  if (zipCode.length > 5) {
+    zipCode = zipCode.substring(0, 5);
+  }
+
+  shipment.value.zip_code = zipCode;
+};
 // เมื่อแอดที่อยู่ใหม่ให้เรียกฟังก์ชันนี้
 const addShipment = async () => {
   loading.value = true;

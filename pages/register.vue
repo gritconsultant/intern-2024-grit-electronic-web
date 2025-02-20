@@ -27,7 +27,11 @@
             class="inputbox inputboxform"
             required
             placeholder="กรุณาใส่ชื่อ"
+            @input="validateName"
           />
+          <p v-if="nameError" class="text-red-500 text-sm mt-2">
+            กรุณากรอกชื่อให้ถูกต้อง
+          </p>
         </div>
         <div>
           <label for="lastname"> นามสกุล </label>
@@ -38,7 +42,11 @@
             class="inputbox inputboxform"
             required
             placeholder="กรุณาใส่นามสกุล"
+            @input="validateSurname"
           />
+          <p v-if="surnameError" class="text-red-500 text-sm mt-2">
+            กรุณากรอกนามสกุลให้ถูกต้อง
+          </p>
         </div>
       </div>
 
@@ -64,6 +72,7 @@
             class="inputbox inputboxform"
             required
             placeholder="กรุณาใส่เบอร์โทรศัพท์"
+            @input="validatePhone"
           />
         </div>
       </div>
@@ -78,7 +87,11 @@
           class="inputbox inputboxform"
           required
           placeholder="กรุณาใส่อีเมล"
+          @input="validateEmail"
         />
+        <p v-if="emailError" class="text-red-500 text-sm mt-2">
+          ต้องเป็น @gmail.com เท่านั้น
+        </p>
       </div>
 
       <!-- Password & Confirm Password -->
@@ -93,13 +106,20 @@
             :class="{ 'border-red-500': passwordError }"
             required
             placeholder="กรุณาใส่รหัสผ่าน"
+            @input="validatePassword"
           />
+
           <span
             class="absolute right-3 top-[42px] cursor-pointer text-black"
             @click="togglePasswordVisibility"
           >
             <i :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
+
+          <p v-if="passwordError" class="text-red-500 text-sm mt-2">
+            รหัสผ่านต้องมี 8 ตัวขึ้นไป และต้องมีตัวพิมพ์ใหญ่, ตัวเล็ก, และตัวเลข
+            ห้ามมีอักขระพิเศษ
+          </p>
         </div>
         <div class="relative">
           <label for="confirmPassword"> ยืนยันรหัสผ่าน </label>
@@ -110,12 +130,17 @@
             class="inputbox inputboxform"
             required
             placeholder="กรุณายืนยันรหัสผ่าน"
+            @input="validateConfirmPassword"
           />
           <span
             class="absolute right-3 top-[42px] cursor-pointer text-black"
             @click="toggleConfirmPasswordVisibility"
           >
-            <i :class="confirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            <i
+              :class="
+                confirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'
+              "
+            ></i>
           </span>
           <p v-if="passwordMismatch" class="text-[#FD8C35] text-sm mt-2">
             รหัสผ่านไม่ตรงกัน
@@ -176,6 +201,37 @@ const passwordVisible = ref(false);
 const confirmPasswordVisible = ref(false);
 const passwordError = ref(false);
 const passwordMismatch = ref(false);
+const nameError = ref(false);
+const surnameError = ref(false);
+const phoneError = ref(false);
+const emailError = ref(false);
+
+const validateName = () => {
+  nameError.value = /[^a-zA-Zก-๙]/.test(registers.value.firstname);
+};
+const validateSurname = () => {
+  surnameError.value = /[^a-zA-Zก-๙]/.test(registers.value.lastname);
+};
+const validatePhone = () => {
+  const phone = registers.value.phone;
+  phoneError.value = !/^\d{10,20}$/.test(phone);
+};
+const validateEmail = () => {
+  emailError.value = !/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(
+    registers.value.email
+  );
+};
+
+const validatePassword = () => {
+  passwordError.value = !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(
+    registers.value.password
+  );
+};
+
+const validateConfirmPassword = () => {
+  passwordMismatch.value =
+    registers.value.password !== registers.value.confirmPassword;
+};
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
@@ -192,7 +248,6 @@ const register = async () => {
   } else {
     passwordMismatch.value = false;
   }
-
   console.log(registers.value);
   await service.auth
     .register(registers.value)
@@ -221,7 +276,6 @@ const register = async () => {
     })
     .finally(() => {});
 };
-
 </script>
 
 <style scoped></style>
