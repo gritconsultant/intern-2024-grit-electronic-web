@@ -1,23 +1,23 @@
 <template>
   <div
-    class="min-h-screen bg-[url('https://static.vecteezy.com/system/resources/thumbnails/042/345/355/small/pastel-gradient-blur-background-vector.jpg')] bg-cover bg-center flex justify-center items-center"
+    class="min-h-screen bg-[url('https://static.vecteezy.com/system/resources/thumbnails/042/345/355/small/pastel-gradient-blur-background-vector.jpg')] bg-cover bg-center flex justify-center items-center p-4 sm:p-6 md:p-10"
   >
     <form
-      class="rounded-2xl w-full drop-shadow-2xl max-w-[570px] bg-white p-6 h-auto m-10"
+      class="rounded-2xl w-full drop-shadow-2xl max-w-[570px] bg-white p-6 sm:p-8 md:p-10 h-auto"
     >
       <!-- Logo -->
       <div class="flex justify-center">
         <img
           src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png"
-          class="w-[150px] sm:w-[200px] md:w-[230px]"
+          class="w-[120px] sm:w-[180px] md:w-[230px]"
         />
       </div>
-      <div class="flex justify-center font-normal text-xl mt-6">
+      <div class="flex justify-center font-normal text-lg sm:text-xl mt-4 sm:mt-6">
         <h1>ลงทะเบียน</h1>
       </div>
 
       <!-- Firstname & Lastname -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-base mt-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-base mt-6 sm:mt-12">
         <div>
           <label for="firstname"> ชื่อจริง </label>
           <input
@@ -29,9 +29,7 @@
             placeholder="กรุณาใส่ชื่อ"
             @input="validateName"
           />
-          <p v-if="nameError" class="text-red-500 text-sm mt-2">
-            กรุณากรอกชื่อให้ถูกต้อง
-          </p>
+          <p v-if="nameError" class="text-red-500 text-sm mt-2"> กรุณากรอกชื่อให้ถูกต้อง </p>
         </div>
         <div>
           <label for="lastname"> นามสกุล </label>
@@ -44,9 +42,7 @@
             placeholder="กรุณาใส่นามสกุล"
             @input="validateSurname"
           />
-          <p v-if="surnameError" class="text-red-500 text-sm mt-2">
-            กรุณากรอกนามสกุลให้ถูกต้อง
-          </p>
+          <p v-if="surnameError" class="text-red-500 text-sm mt-2"> กรุณากรอกนามสกุลให้ถูกต้อง </p>
         </div>
       </div>
 
@@ -89,9 +85,7 @@
           placeholder="กรุณาใส่อีเมล"
           @input="validateEmail"
         />
-        <p v-if="emailError" class="text-red-500 text-sm mt-2">
-          ต้องเป็น @gmail.com เท่านั้น
-        </p>
+        <p v-if="emailError" class="text-red-500 text-sm mt-2"> ต้องเป็น @gmail.com เท่านั้น </p>
       </div>
 
       <!-- Password & Confirm Password -->
@@ -108,18 +102,13 @@
             placeholder="กรุณาใส่รหัสผ่าน"
             @input="validatePassword"
           />
-
           <span
             class="absolute right-3 top-[42px] cursor-pointer text-black"
             @click="togglePasswordVisibility"
           >
             <i :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
-
-          <p v-if="passwordError" class="text-red-500 text-sm mt-2">
-            รหัสผ่านต้องมี 8 ตัวขึ้นไป และต้องมีตัวพิมพ์ใหญ่, ตัวเล็ก, และตัวเลข
-            ห้ามมีอักขระพิเศษ
-          </p>
+          <p v-if="passwordError" class="text-red-500 text-sm mt-2"> รหัสผ่านต้องมี 8 ตัวขึ้นไป และต้องมีตัวพิมพ์ใหญ่, ตัวเล็ก, และตัวเลข ห้ามมีอักขระพิเศษ </p>
         </div>
         <div class="relative">
           <label for="confirmPassword"> ยืนยันรหัสผ่าน </label>
@@ -136,45 +125,26 @@
             class="absolute right-3 top-[42px] cursor-pointer text-black"
             @click="toggleConfirmPasswordVisibility"
           >
-            <i
-              :class="
-                confirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'
-              "
-            ></i>
+            <i :class="confirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
-          <p v-if="passwordMismatch" class="text-[#FD8C35] text-sm mt-2">
-            รหัสผ่านไม่ตรงกัน
-          </p>
+          <p v-if="passwordMismatch" class="text-[#FD8C35] text-sm mt-2"> รหัสผ่านไม่ตรงกัน </p>
         </div>
       </div>
 
       <!-- Register Button -->
-      <div class="mt-14 flex justify-center">
+      <div class="mt-10 flex justify-center">
         <button
           type="button"
-          class="w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl text-white text-lg"
+          class="w-full max-w-[280px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl text-white text-lg"
           @click="register"
         >
           ลงทะเบียน
         </button>
       </div>
-
-      <!-- Divider -->
-      <hr class="border-black/50 mt-6" />
-
-      <!-- Log in Link -->
-      <div class="flex justify-center mt-6 text-base">
-        <p>มีบัญชีผู้ใช้แล้ว ?</p>
-        <NuxtLink
-          to="/login"
-          class="hover:text-[#FD8C35] ml-2 font-normal hover:underline"
-        >
-          เข้าสู่ระบบ
-        </NuxtLink>
-      </div>
     </form>
   </div>
 </template>
+
 
 <script setup lang="ts">
 import Swal from "sweetalert2";

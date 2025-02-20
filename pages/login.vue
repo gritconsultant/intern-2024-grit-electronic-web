@@ -1,44 +1,44 @@
 <template>
   <div
-    class="min-h-screen bg-[url('https://static.vecteezy.com/system/resources/thumbnails/042/345/355/small/pastel-gradient-blur-background-vector.jpg')] bg-cover bg-center flex justify-center items-center"
+    class="min-h-screen bg-[url('https://static.vecteezy.com/system/resources/thumbnails/042/345/355/small/pastel-gradient-blur-background-vector.jpg')] bg-cover bg-center flex justify-center items-center p-4 sm:p-6"
   >
     <form
-      class="rounded-2xl drop-shadow-2xl  bg-white w-full max-w-[500px] p-6 m-10"
+      class="rounded-2xl drop-shadow-2xl bg-white w-full max-w-[500px] p-6 sm:p-8 m-6 sm:m-10"
     >
       <!-- Logo -->
       <div class="flex justify-center">
-        <img src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" class="w-[190px] sm:w-[230px] md:w-[260px]" />
+        <img src="https://bangkokbrands.com/wp-content/uploads/2023/06/Bangkok-brand-site-logo.png" class="w-[150px] sm:w-[190px] md:w-[230px] lg:w-[260px]" />
       </div>
-      <div class="flex justify-center font-normal text-xl mt-6">
+      <div class="flex justify-center font-normal text-lg sm:text-xl mt-4 sm:mt-6">
         <h1>เข้าสู่ระบบ</h1>
       </div>
 
-      <!-- email Input -->
-      <div class=" text-base mt-10">
+      <!-- Email Input -->
+      <div class="text-base mt-8 sm:mt-10">
         <label for="email"> อีเมล </label>
         <input
           type="text"
           id="email"
           v-model="logins.email"
-          class="inputbox inputboxform"
+          class="inputbox inputboxform w-full"
           required
           placeholder="กรุณาใส่อีเมล"
         />
       </div>
 
       <!-- Password Input -->
-      <div class="text-base  mt-6 relative">
+      <div class="text-base mt-6 sm:mt-8 relative">
         <label for="password"> รหัสผ่าน </label>
         <input
           :type="passwordVisible ? 'text' : 'password'"
           id="password"
           v-model="logins.password"
-          class="inputbox inputboxform"
+          class="inputbox inputboxform w-full"
           required
           placeholder="กรุณาใส่รหัสผ่าน"
         />
         <span
-          class="absolute right-4 top-[43px] cursor-pointer"
+          class="absolute right-4 top-[38px] sm:top-[42px] cursor-pointer"
           @click="togglePasswordVisibility"
         >
           <i :class="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
@@ -46,7 +46,7 @@
       </div>
 
       <!-- Forget Password -->
-      <div class="flex justify-end mt-5 text-base">
+      <div class="flex justify-end mt-4 sm:mt-5 text-base">
         <NuxtLink
           to="/forgetpassword"
           class="hover:text-[#FD8C35] font-normal hover:underline"
@@ -56,10 +56,10 @@
       </div>
 
       <!-- Login Button -->
-      <div class="mt-12 flex justify-center">
+      <div class="mt-10 sm:mt-12 flex justify-center">
         <button
           type="button"
-          class=" w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl text-white text-lg"
+          class="w-full max-w-[250px] sm:max-w-[300px] h-[40px] sm:h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl text-white text-base sm:text-lg"
           @click="login"
         >
           เข้าสู่ระบบ
@@ -67,7 +67,7 @@
       </div>
 
       <!-- Divider -->
-      <hr class="border-black/50 my-6" />
+      <hr class="border-black/50 my-5 sm:my-6" />
 
       <!-- Register Now -->
       <div class="flex justify-center text-base">
@@ -76,7 +76,7 @@
           to="/register"
           class="hover:text-[#FD8C35] ml-2 font-normal hover:underline"
         >
-        ลงทะเบียน
+          ลงทะเบียน
         </NuxtLink>
       </div>
     </form>
