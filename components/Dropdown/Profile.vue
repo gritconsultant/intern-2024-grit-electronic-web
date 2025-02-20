@@ -63,6 +63,7 @@ const dropdownOpen = ref(false);
 // ฟังก์ชันเปิด/ปิด Dropdown
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value;
+
 };
 
 // ปิด Dropdown เมื่อคลิกข้างนอก

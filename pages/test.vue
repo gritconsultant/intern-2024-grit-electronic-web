@@ -33,7 +33,7 @@
             </div>
   
             <!-- Icons (Visible in Desktop & Tablet) -->
-            <div class="hidden md:flex items-center gap-3 lg:gap-6">
+            <div class="hidden md:flex items-center gap-3 lg:gap-6 bg-pink-600">
               <i class="fas fa-shopping-cart text-xl lg:text-2xl cursor-pointer" @click="store.cartAction = !store.cartAction"></i>
               <i class="fas fa-heart text-xl lg:text-2xl cursor-pointer" @click="store.favouriteAction = !store.favouriteAction"></i>
               <DropdownProfile />
@@ -86,39 +86,36 @@
     </div>
   </template>
   
-  <script setup>
-  import { ref } from "vue";
+  <script setup lang="ts">
   import { useIndexStore } from "~/store/main";
   
   const store = useIndexStore();
   const route = useRoute();
   const mobileMenuOpen = ref(false);
-  
-  const isActive = (paths) => {
+  const isActive = (paths: string[]) => {
     return paths.includes(route.path);
   };
   
   const toggleMobileMenu = () => {
-    mobileMenuOpen.value = !mobileMenuOpen.value;
-  };
+      mobileMenuOpen.value = !mobileMenuOpen.value;
+    };
   </script>
   
   <style scoped>
-  /* Navigation Styles */
-  .nav-link {
-    @apply hover:underline hover:text-[#EE973C];
-  }
-  .active {
-    @apply text-[#EE973C] underline;
-  }
-  
-  /* Mobile Menu Animation */
-  .mobile-menu-enter-active, .mobile-menu-leave-active {
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-  }
-  .mobile-menu-enter, .mobile-menu-leave-to {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  </style>
+    .nav-link {
+      @apply hover:underline hover:text-[#EE973C];
+    }
+    .active {
+      @apply text-[#EE973C] underline;
+    }
+    
+    /* Mobile Menu Animation */
+    .mobile-menu-enter-active, .mobile-menu-leave-active {
+      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    }
+    .mobile-menu-enter, .mobile-menu-leave-to {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    </style>
   
