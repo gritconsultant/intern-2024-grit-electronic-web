@@ -153,7 +153,7 @@
                 class="flex-1 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg"
                 @click="updateStatus"
               >
-                ยกเลิกสินค้า
+              ยกเลิกการยกเลิกคำสั่งซื้อ
               </button>
             </div>
           </div>

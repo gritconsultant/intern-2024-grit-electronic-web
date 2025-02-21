@@ -37,7 +37,7 @@
                     {{ formatDate(order.created_at) }}
                   </p>
                 </div>
-                <p class="text-lg font-bold">฿{{ order.total_price }}</p>
+                <p class="text-lg font-bold">฿{{ order.total_price_ship }}</p>
               </div>
             </div>
           </div>
@@ -194,6 +194,7 @@ const getOrderprepare = async () => {
           created_at: e.created_at,
           updated_at: e.updated_at,
           selectedOrder: e.selectedOrder,
+          total_price_ship: e.total_price_ship,
         };
         orderList.push(order);
       }

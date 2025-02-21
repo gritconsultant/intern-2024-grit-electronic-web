@@ -293,6 +293,7 @@ export interface Order {
     created_at: number;
     updated_at: number;
     selectedOrder: boolean;
+    total_price_ship: any,
 }
 
 
@@ -468,13 +469,13 @@ export interface ImageSystemBank {
 // }
 
 export interface PaymentCreate {
-    system_bank_id: number;
     date: string;
     order_id: number;
+    total_price_ship: any;
 }
 
 export interface PaymentRes {
-    system_bank_id: number;
+    total_price_ship: any;
     date: string;
     order_id: number;
 }

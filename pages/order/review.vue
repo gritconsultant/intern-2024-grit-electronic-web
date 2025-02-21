@@ -37,7 +37,7 @@
                     {{ formatDate(order.created_at) }}
                   </p>
                 </div>
-                <p class="text-lg font-bold">฿{{ order.total_price }}</p>
+                <p class="text-lg font-bold">฿{{ order.total_price_ship }}</p>
               </div>
             </div>
           </div>
@@ -90,7 +90,6 @@
                   รีวิว
                 </button>
                   </div>
-<pre>{{  }}</pre>
                 </div>
               </li>
             </ul>
@@ -195,6 +194,7 @@ const getOrdersuccess = async () => {
       status: e.status,
       total_amount: e.total_amount,
       total_price: e.total_price,
+      total_price_ship: e.total_price_ship,
       shipment_status: e.shipment_status,
       created_at: e.created_at,
       products: e.products || [],

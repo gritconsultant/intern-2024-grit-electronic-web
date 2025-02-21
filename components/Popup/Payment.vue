@@ -1,10 +1,8 @@
+Payment
+
 <template>
-  <div
-    class="absolute inset-0 flex items-center justify-center bg-black/50 z-50"
-  >
-    <div
-      class="w-full md:w-[500px] h-auto border-2 flex flex-col rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
-    >
+  <div class="absolute inset-0 flex items-center justify-center bg-black/50 z-50">
+    <div class="w-full md:w-[500px] h-auto border-2 flex flex-col rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden">
       <div class="flex justify-between items-center p-4 md:p-5 border-b-2">
         <h1 class="text-sm md:text-base font-bold">สรุปราคาสินค้า</h1>
         <button @click="store.paymentAction = !store.paymentAction">
@@ -15,22 +13,13 @@
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
 
       <!-- เลือกบัญชีธนาคาร -->
-      <div
-        v-for="i in system"
-        :key="i.id"
-        class="flex flex-col items-center justify-center py-6 px-4 md:px-8"
-      >
+      <div v-for="i in system" :key="i.id" class="flex flex-col items-center justify-center py-6 px-4 md:px-8">
         <div class="w-[80%] max-w-[300px] mb-6">
           <img
             :src="i.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
@@ -52,16 +41,14 @@
 
       <!-- แสดงราคารวม -->
       <div class="px-4 mt-5 text-center">
-        <p class="text-lg font-semibold">ราคารวม: {{ totalOrderPrice.toLocaleString() }} บาท</p>
+        <p class="text-lg font-semibold">ราคาสินค้า: {{ totalProductPrice.toLocaleString() }} บาท</p>
+        <p class="text-lg font-semibold">ค่าจัดส่ง: {{ shippingFee.toLocaleString() }} บาท</p>
+        <p class="text-lg font-semibold mt-2 border-t pt-2">ราคารวม: {{ totalOrderPrice.toLocaleString() }} บาท</p>
       </div>
 
       <!-- วันที่และเวลาที่โอน -->
       <div class="px-4 mt-5">
-        <label
-          for="transfer-datetime"
-          class="block text-sm font-medium text-gray-700"
-          >วันที่และเวลาที่โอน</label
-        >
+        <label for="transfer-datetime" class="block text-sm font-medium text-gray-700">วันที่และเวลาที่โอน</label>
         <input
           id="transfer-datetime"
           type="datetime-local"
@@ -90,12 +77,7 @@ definePageMeta({ layout: "auth" });
 import Swal from "sweetalert2";
 import { useRouter, useRoute } from "vue-router";
 import { computed, ref, onMounted } from "vue";
-import type {
-  OrderById,
-  PaymentCreate,
-  PaymentRes,
-  SystemBank,
-} from "~/models/product.model";
+import type { OrderById, PaymentCreate, PaymentRes, SystemBank } from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
@@ -120,13 +102,13 @@ const props = defineProps({
 
 // เก็บค่าการชำระเงิน
 const paymentCreate = ref<PaymentCreate>({
-  system_bank_id: 0,
+  total_price_ship: 0,
   date: "",
   order_id: 0,
 });
 
 const paymentRes = ref<PaymentRes>({
-  system_bank_id: 0,
+  total_price_ship: 0,
   date: "",
   order_id: 0,
 });
@@ -153,10 +135,24 @@ const getOrder = async (orderId: number) => {
   loading.value = false;
 };
 
-const totalOrderPrice = computed(() => {
-  return (order.value?.total_price || 0) + (order.value?.Payment?.price ?? 0);
+// คำนวณค่าจัดส่ง
+const shippingFee = computed(() => {
+  if (!order.value) return 0;
+  const count: any = order.value?.total_amount || 0;
+  return Math.ceil(count / 5)* 50 ; // เพิ่มค่าจัดส่งทีละ 50 ทุก ๆ 5 ชิ้น // ฟรีค่าจัดส่งถ้าเกิน 1000 บาท
 });
 
+// คำนวณราคาสินค้าทั้งหมด
+const totalProductPrice = computed(() => {
+  return order.value?.total_price || 0;
+});
+
+// คำนวณราคาสุทธิรวมค่าจัดส่ง
+const totalOrderPrice = computed(() => {
+  return totalProductPrice.value + shippingFee.value;
+});
+
+// ตรวจสอบวันที่
 const validateDate = () => {
   if (!paymentCreate.value.date) {
     Swal.fire("กรุณาเลือกวันที่", "โปรดเลือกวันที่และเวลาที่โอน", "warning");
@@ -174,10 +170,12 @@ const validateDate = () => {
   return true;
 };
 
-
+// อัปเดตการชำระเงิน
 const updatePayment = async () => {
   if (!validateDate()) return;
   loading.value = true;
+
+  paymentCreate.value.total_price_ship = totalOrderPrice.value;
   await service.product.updatePayment(props.orderId, paymentCreate.value)
     .then(() => {
       Swal.fire({
