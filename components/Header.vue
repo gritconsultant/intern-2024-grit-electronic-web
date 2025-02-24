@@ -58,11 +58,11 @@
 
             <!-- Icons (Visible in Desktop) -->
             <div
-              class=" md:flex items-center gap-4 md:gap-6 mx-3 md:mx-5"
+              class="hidden md:flex items-center gap-4 md:gap-6 mx-3 md:mx-5"
             >
               <!-- cart -->
               <svg
-                class="w-[32px] h-[32px] text-gray-800  cursor-pointer"
+                class="w-[32px] h-[32px] text-gray-800 dark:text-white cursor-pointer"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -82,7 +82,7 @@
 
               <!-- fav -->
               <svg
-                class="w-[32px] h-[32px] text-gray-800 cursor-pointer"
+                class="w-[32px] h-[32px] text-gray-800 dark:text-white cursor-pointer"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -102,7 +102,7 @@
 
               <!-- Noti -->
               <!-- <svg
-              class="w-[30px] h-[30px] text-gray-800  cursor-pointer"
+              class="w-[30px] h-[30px] text-gray-800 dark:text-white cursor-pointer"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
