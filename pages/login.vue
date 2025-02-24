@@ -2,7 +2,7 @@
   <div
     class="min-h-screen bg-[url('https://static.vecteezy.com/system/resources/thumbnails/042/345/355/small/pastel-gradient-blur-background-vector.jpg')] bg-cover bg-center flex justify-center items-center p-4 sm:p-6"
   >
-    <form @submit.prevent="login"
+    <form
       class="rounded-2xl drop-shadow-2xl bg-white w-full max-w-[500px] p-6 sm:p-8 m-6 sm:m-10"
     >
       <!-- Logo -->
@@ -23,7 +23,6 @@
           class="inputbox inputboxform w-full"
           required
           placeholder="กรุณาใส่อีเมล"
-          @keyup.enter="login"
         />
       </div>
 
@@ -37,7 +36,6 @@
           class="inputbox inputboxform w-full"
           required
           placeholder="กรุณาใส่รหัสผ่าน"
-          @keyup.enter="login"
         />
         <span
           class="absolute right-4 top-[38px] sm:top-[42px] cursor-pointer"
@@ -60,9 +58,9 @@
       <!-- Login Button -->
       <div class="mt-10 sm:mt-12 flex justify-center">
         <button
-          type="submit"
+          type="button"
           class="w-full max-w-[250px] sm:max-w-[300px] h-[40px] sm:h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 rounded-xl text-white text-base sm:text-lg"
-          
+          @click="login"
         >
           เข้าสู่ระบบ
         </button>

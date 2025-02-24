@@ -35,7 +35,6 @@
                           class="w-full max-w-[400px] h-[45px] mt-2 inputbox pr-10"
                           :class="{ 'border-red-500': passwordError }"
                           @input="validatePassword"
-                          @keyup.enter="updatePassword"
                         />
                         <span
                           class="-m-8 cursor-pointer text-black"
@@ -71,7 +70,6 @@
                           v-model="confirmPassword.password"
                           class="w-[400px] h-[45px] mt-2 inputbox"
                           @input="validateConfirmPassword"
-                          @keyup.enter="updatePassword"
                         />
                         <span
                           class="-m-8 cursor-pointer text-black"
@@ -99,7 +97,7 @@
                       <button
                         type="submit"
                         class="text-white w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 hover:text:black rounded-xl"
-                        
+                        @click="updatePassword"
                       >
                         ยืนยันการเปลี่ยนรหัสผ่าน
                       </button>
