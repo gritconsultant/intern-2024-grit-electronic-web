@@ -106,7 +106,7 @@
                 class="px-2 text-xs md:text-sm bg-green-500 text-white rounded"
               >
                 <svg
-                  class="w-[22px] h-[22px] text-gray-800 dark:text-white"
+                  class="w-[22px] h-[22px] text-gray-800 "
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"

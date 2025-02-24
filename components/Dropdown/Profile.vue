@@ -27,7 +27,7 @@
     <!-- Dropdown Menu -->
     <div
       v-show="dropdownOpen"
-      class="dropdown-menu absolute mt-2 w-[700px] bg-white rounded-lg shadow-lg border transition-all duration-300 ease-in-out"
+      class="dropdown-menu absolute mt-2 w-[400px] bg-white rounded-lg shadow-lg border transition-all duration-300 ease-in-out"
     >
       <ul class="py-2 text-sm text-gray-700">
         <li>

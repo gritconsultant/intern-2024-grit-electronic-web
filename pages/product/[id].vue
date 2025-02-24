@@ -4,12 +4,34 @@
       <!-- ตรวจสอบว่า product มีค่าและมี name -->
       <div class="p-10">
         <div class="mx-[20px] lg:mx-[50px]">
+          <div class=" cursor-pointer" @click="goBack">
+            <svg
+              class="w-[22px] h-[22px] text-gray-800 hover:text-[#EE973C] "
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m15 19-7-7 7-7"
+              />
+            </svg>
+          </div>
           <!-- Product Details -->
           <div class="flex flex-col lg:flex-row justify-between gap-4">
             <div class="w-full p-2 flex justify-center">
               <div class="object-cover max-w-full w-[650px] h-[650px]">
                 <img
-                  :src="products.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
+                  :src="
+                    products.image ||
+                    'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'
+                  "
                   alt=""
                   class="w-full h-full object-cover"
                 />
@@ -111,33 +133,28 @@
                 <div class="flex justify-between">
                   <div>
                     <div class="flex justify-between w-[480px]">
-                      <h2 class="font-bold">
-                      โดย: {{ Review.username }}
-                    </h2>
+                      <h2 class="font-bold">โดย: {{ Review.username }}</h2>
 
-                    <p class="text-md text-black/70 flex items-center gap-1">
-                      
-                      <span
-                        v-for="n in Review.rating"
-                        :key="n"
-                        class="text-yellow-500"
-                      >
-                        ★
-                      </span>
-                      <span
-                        v-for="n in 5 - Review.rating"
-                        :key="'empty-' + n"
-                        class="text-gray-400"
-                      >
-                        ☆
-                      </span>
-                    </p>
-
+                      <p class="text-md text-black/70 flex items-center gap-1">
+                        <span
+                          v-for="n in Review.rating"
+                          :key="n"
+                          class="text-yellow-500"
+                        >
+                          ★
+                        </span>
+                        <span
+                          v-for="n in 5 - Review.rating"
+                          :key="'empty-' + n"
+                          class="text-gray-400"
+                        >
+                          ☆
+                        </span>
+                      </p>
                     </div>
                     <p class="text-sm text-gray-500 mt-2">
                       วัน/เวลาที่รีวิว: {{ formatDate(Review.created_at) }}
                     </p>
-
                   </div>
                 </div>
                 <p class="mt-2">{{ Review.description }}</p>
@@ -213,6 +230,14 @@ const search = ref<string>("");
 const page = ref<number>(0);
 const size = ref<number>(0);
 const cookie = useCookie("token");
+
+const goBack = () => {
+  if (window.history.length > 1) {
+    router.back(); // กลับไปหน้าก่อนหน้า
+  } else {
+    router.push("/product"); // ถ้าไม่มีหน้าก่อนหน้าให้ไปหน้า /product
+  }
+};
 
 const cartitem = ref<CartItemAdd>({
   product_id: 0,
@@ -464,9 +489,6 @@ const formatDate = (timestamp: number | string): string => {
 
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
-
-
-
 
 onMounted(async () => {
   if (cookie) {

@@ -150,37 +150,6 @@
         </div>
       </div>
 
-      <!-- Fav Popup -->
-      <div
-        v-if="store.favouriteAction"
-        @click="store.favouriteAction = !store.favouriteAction"
-        class="fixed inset-0 bg-black/50 flex justify-end z-50"
-      >
-        <div @click.stop>
-          <PopupFavorite />
-        </div>
-      </div>
-      <!-- Fav Popup -->
-      <div
-        v-if="store.favouriteAction"
-        @click="store.favouriteAction = !store.favouriteAction"
-        class="fixed inset-0 bg-black/50 flex justify-end z-50"
-      >
-        <div @click.stop>
-          <PopupFavorite />
-        </div>
-      </div>
-
-      <!-- Noti Popup -->
-      <div
-        v-if="store.notificationAction"
-        @click="store.notificationAction = !store.notificationAction"
-        class="fixed inset-0 bg-black/50 flex justify-end z-50"
-      >
-        <div @click.stop>
-          <PopupNotification />
-        </div>
-      </div>
     </div>
   </div>
 </template>
