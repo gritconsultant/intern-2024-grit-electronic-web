@@ -188,9 +188,9 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import { Autoplay } from "swiper/modules"; // ✅ ใช้ named export (ถูกต้อง)
 
-definePageMeta({
-  middleware: "auth",
-});
+// definePageMeta({
+//   middleware: "auth",
+// });
 
 const products = ref<Product[]>([]);
 const category = ref<Category[]>([]);
