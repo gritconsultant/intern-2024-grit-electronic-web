@@ -32,7 +32,10 @@
 
           <div class="mb-4">
             <label class="block text-sm font-medium">รหัสไปรษณีย์</label>
-            <input v-model="shipmentUpdate.zip_code" class="w-full p-2 border rounded" required/>
+            <input v-model="shipmentUpdate.zip_code" class="w-full p-2 border rounded" required @input="validateZipCode"/>
+            <p v-if="zipCodeError" class="text-red-500 text-sm mt-1">
+              {{ zipCodeError }}
+            </p>
           </div>
 
           <div class="flex justify-between mt-6">
@@ -72,9 +75,35 @@ const shipmentUpdate = ref<ShipmentUpdate>({
   zip_code: "",
 });
 
+// State เก็บ Error ของ Zip Code
+const zipCodeError = ref<string | null>(null);
+
+// ✅ ฟังก์ชันตรวจสอบ Zip Code
+const validateZipCode = () => {
+  const zip = shipmentUpdate.value.zip_code;
+  
+  if (!/^\d+$/.test(zip)) {
+    zipCodeError.value = "รหัสไปรษณีย์ต้องเป็นตัวเลขเท่านั้น";
+  } else if (zip.length !== 5) {
+    zipCodeError.value = "รหัสไปรษณีย์ต้องมี 5 หลัก";
+  } else {
+    zipCodeError.value = null;
+  }
+};
+
 
 
 const updateShipments = async () => {
+  validateZipCode();
+  if (zipCodeError.value) {
+    Swal.fire({
+      title: "ข้อมูลไม่ถูกต้อง!",
+      text: zipCodeError.value,
+      icon: "error",
+      confirmButtonText: "ตกลง",
+    });
+    return;
+  }
   loading.value = true;
   try {
     const resp = await service.product.updateShipment(
