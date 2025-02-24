@@ -1,134 +1,176 @@
 <template>
-  <div class=" pt-[90px]">
+  <div class="pt-[90px]">
     <div class="p-4">
-    <div class="flex">
-      <!-- Sidebar -->
-      <Sidebar />
-      <!-- Main Content -->
-      <div class="w-full lg:w-3/4 p-6 h-[100%]">
-        <div class="border-b">
-          <h1 class="text-xl font-bold mb-6">ข้อมูลบัญชีผู้ใช้</h1>
-        </div>
+      <div class="flex">
+        <!-- Sidebar -->
+        <Sidebar />
+        <!-- Main Content -->
+        <div class="w-full lg:w-3/4 p-6 h-[100%]">
+          <div class="border-b">
+            <h1 class="text-xl font-bold mb-6">ข้อมูลบัญชีผู้ใช้</h1>
+          </div>
 
-        <div>
           <div>
-            <div class="grid grid-cols-2">
-              <div class="mt-10 ml-10">
-                <div>
-                  <p> ชื่อ - นามสกุล </p>
-                  <h1 class="font-bold text-lg">{{ getinfo.FirstName }} <span> {{ getinfo.LastName }}</span></h1>
-                </div>
-
-                <!-- change password -->
-                <div>
-                  <div class="mt-5 relative">
-                    <p> เปลี่ยนรหัสผ่าน </p>
-                    <div class="relative">
-                      <input
-                        :type="
-                          passwordVisible.changePassword ? 'text' : 'password'
-                        "
-                        v-model="changePassword.password"
-                        class="w-full max-w-[400px] h-[45px] mt-2 inputbox pr-10"
-                        :class="{ 'border-red-500': passwordError }"
-                      />
-                      <span
-                        class="-m-8 cursor-pointer text-black"
-                        @click="togglePasswordVisibility('changePassword')"
-                      >
-                        <i
-                          :class="
-                            passwordVisible.changePassword
-                              ? 'fas fa-eye-slash'
-                              : 'fas fa-eye'
-                          "
-                        ></i>
-                      </span>
-                    </div>
+            <div>
+              <div class="grid grid-cols-2">
+                <div class="mt-10 ml-10">
+                  <div>
+                    <p>ชื่อ - นามสกุล</p>
+                    <h1 class="font-bold text-lg">
+                      {{ getinfo.FirstName }}
+                      <span> {{ getinfo.LastName }}</span>
+                    </h1>
                   </div>
 
-                  <div  class="mt-5 relative">
-                    <p> ยืนยันรหัสผ่านใหม่ </p>
-                    <div class="relative">
-                      <input
-                        :type="
-                          passwordVisible.confirmPassword? 'text' : 'password'
-                        "
-                        v-model="confirmPassword.password"
-                        class="w-[400px] h-[45px] mt-2 inputbox"
-                      />
-                      <span
-                        class="-m-8 cursor-pointer text-black"
-                        @click="togglePasswordVisibility('confirmPassword')"
-                      >
-                        <i
-                          :class="
+                  <!-- change password -->
+                  <div>
+                    <div class="mt-5 relative">
+                      <p>เปลี่ยนรหัสผ่าน</p>
+                      <div class="relative">
+                        <input
+                          :type="
+                            passwordVisible.changePassword ? 'text' : 'password'
+                          "
+                          v-model="changePassword.password"
+                          class="w-full max-w-[400px] h-[45px] mt-2 inputbox pr-10"
+                          :class="{ 'border-red-500': passwordError }"
+                          @input="validatePassword"
+                        />
+                        <span
+                          class="-m-8 cursor-pointer text-black"
+                          @click="togglePasswordVisibility('changePassword')"
+                        >
+                          <i
+                            :class="
+                              passwordVisible.changePassword
+                                ? 'fas fa-eye-slash'
+                                : 'fas fa-eye'
+                            "
+                          ></i>
+                        </span>
+                        <p
+                          v-if="passwordError"
+                          class="text-red-500 text-sm mt-2"
+                        >
+                          รหัสผ่านต้องมี 8 ตัวขึ้นไป และต้องมีตัวพิมพ์ใหญ่,
+                          ตัวเล็ก, และตัวเลข ห้ามมีอักขระพิเศษ
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="mt-5 relative">
+                      <p>ยืนยันรหัสผ่านใหม่</p>
+                      <div class="relative">
+                        <input
+                          :type="
                             passwordVisible.confirmPassword
-                              ? 'fas fa-eye-slash'
-                              : 'fas fa-eye'
+                              ? 'text'
+                              : 'password'
                           "
-                        ></i>
-                      </span>
+                          v-model="confirmPassword.password"
+                          class="w-[400px] h-[45px] mt-2 inputbox"
+                          @input="validateConfirmPassword"
+                        />
+                        <span
+                          class="-m-8 cursor-pointer text-black"
+                          @click="togglePasswordVisibility('confirmPassword')"
+                        >
+                          <i
+                            :class="
+                              passwordVisible.confirmPassword
+                                ? 'fas fa-eye-slash'
+                                : 'fas fa-eye'
+                            "
+                          ></i>
+                        </span>
+                        <p
+                          v-if="passwordMismatch"
+                          class="text-[#FD8C35] text-sm mt-2"
+                        >
+                          รหัสผ่านไม่ตรงกัน
+                        </p>
+                      </div>
                     </div>
 
-                    <!-- <p
-                      v-if="passwordMismatch"
-                      class="text-red-500 text-xs mt-1"
-                    >
-                      Passwords do not match.
-                    </p> -->
+                    <!-- Login Button -->
+                    <div class="mt-10">
+                      <button
+                        type="submit"
+                        class="text-white w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 hover:text:black rounded-xl"
+                        @click="updatePassword"
+                      >
+                        ยืนยันการเปลี่ยนรหัสผ่าน
+                      </button>
+                    </div>
                   </div>
+                </div>
 
-                  <!-- Login Button -->
+                <div>
                   <div class="mt-10">
-                    <button
-                      type="submit"
-                      class="text-white w-full max-w-[300px] h-[45px] bg-[#EE973C] hover:bg-[#FD8C35]/70 hover:text:black rounded-xl"
-                      @click="updatePassword"
-                    >
-                      ยืนยันการเปลี่ยนรหัสผ่าน
-                    </button>
+                    <p>Email</p>
+                    <h1 class="font-bold text-lg">{{ getinfo.Email }}</h1>
                   </div>
-                </div>
-              </div>
 
-              <div>
-                <div class="mt-10">
-                  <p> Email </p>
-                  <h1 class="font-bold text-lg"> {{ getinfo.Email }}</h1>
-                </div>
-
-                <div class="mt-5">
-                  <p>เบอร์โทรศัพท์</p>
-                  <h1 class="font-bold text-lg">{{ getinfo.Phone }}</h1>
+                  <div class="mt-5">
+                    <p>เบอร์โทรศัพท์</p>
+                    <h1 class="font-bold text-lg">{{ getinfo.Phone }}</h1>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Loading :loading="loading" />
     </div>
-    <Loading :loading="loading" />
   </div>
-  </div>
-
 </template>
 
 <script setup lang="ts">
 import Swal from "sweetalert2";
-import type { PasswordRes, PasswordUpdate, UserInfo } from "~/models/product.model";
+import type {
+  PasswordRes,
+  PasswordUpdate,
+  UserInfo,
+} from "~/models/product.model";
 import service from "~/service";
 import { useIndexStore } from "~/store/main";
 
 definePageMeta({
   layout: "user",
-  middleware: "auth"
+  middleware: "auth",
 });
 
 const router = useRouter();
 const store = useIndexStore();
-const loading = ref(false); 
+const loading = ref(false);
+const passwordError = ref(false);
+const passwordMismatch = ref(false);
+// สถานะสำหรับแสดงซ่อนรหัส
+const passwordVisible = ref({
+  changePassword: false,
+  confirmPassword: false,
+});
 
+const validatePassword = () => {
+  passwordError.value = !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(
+    changePassword.value.password
+  );
+};
+
+const validateConfirmPassword = () => {
+  passwordMismatch.value =
+    changePassword.value.password !== confirmPassword.value.password;
+};
+
+
+
+
+const togglePasswordVisibility = (
+  field: keyof typeof passwordVisible.value
+) => {
+  passwordVisible.value[field] = !passwordVisible.value[field];
+};
 
 const getinfo = ref<UserInfo>({
   ID: 0,
@@ -144,23 +186,12 @@ const getinfo = ref<UserInfo>({
 });
 
 const changePassword = ref<PasswordUpdate>({
-  // username: "",
-    password:  "",
-    // email:  "",
-    // phone: 0,
-    // firstname:  "",
-    // lastname:  "",
-
-})
+  password: "",
+});
 
 const confirmPassword = ref<PasswordRes>({
-  // username: "",
-    password:  "",
-    // email:  "",
-    // phone: 0,
-    // firstname:  "",
-    // lastname:  "",
-})
+  password: "",
+});
 
 const getuserinfo = async () => {
   loading.value = true;
@@ -192,30 +223,58 @@ const getuserinfo = async () => {
 };
 
 const updatePassword = async () => {
+  if (!changePassword.value.password || !confirmPassword.value.password) {
+    Swal.fire({
+      title: "กรุณากรอกรหัสผ่าน",
+      text: "คุณต้องกรอกรหัสผ่านให้ครบ",
+      icon: "warning",
+      confirmButtonText: "ตกลง",
+    });
+    return;
+  }
+
+  validatePassword(); // ตรวจสอบรหัสผ่าน
+  validateConfirmPassword(); // ตรวจสอบรหัสผ่านตรงกัน
+
+  if (passwordError.value) {
+    Swal.fire({
+      title: "รหัสผ่านไม่ถูกต้อง",
+      text: "รหัสผ่านต้องมีอักษรพิมพ์ใหญ่ 1 ตัว พิมพ์เล็ก 1 ตัว และตัวเลข 1 ตัว (ไม่น้อยกว่า 8 ตัว)",
+      icon: "error",
+      confirmButtonText: "ตกลง",
+    });
+    return;
+  }
+
+  if (passwordMismatch.value) {
+    Swal.fire({
+      title: "รหัสผ่านไม่ตรงกัน",
+      text: "กรุณากรอกรหัสผ่านให้ตรงกัน",
+      icon: "error",
+      confirmButtonText: "ตกลง",
+    });
+    return;
+  }
   loading.value = true;
-  await service.product.updatePassword(store.$state.userId, changePassword.value)
-   .then((resp: any) => {
+  await service.product
+    .updatePassword(store.$state.userId, changePassword.value)
+    .then((resp: any) => {
       console.log(resp);
       const data = resp.data;
-      const changePassword : PasswordRes = {
-        // username: data.username,
+      const changePassword: PasswordRes = {
         password: data.password,
-        // email: data.email,
-        // phone: data.phone,
-        // firstname: data.firstname,
-        // lastname: data.lastname,
       };
       confirmPassword.value = changePassword;
       if (resp.status === 200) {
-      Swal.fire({
-        title: "เปลี่ยนรหัสผ่านสำเร็จ!",
-        text: "ได้เปลี่ยนรหัสผ่านแล้ว!",
-        icon: "success",
-        confirmButtonText: "ตกลง",
-      }).then(() => {
-        router.push("/profile/").then(() => window.location.reload());
-      })
-    }
+        Swal.fire({
+          title: "เปลี่ยนรหัสผ่านสำเร็จ!",
+          text: "ได้เปลี่ยนรหัสผ่านแล้ว!",
+          icon: "success",
+          confirmButtonText: "ตกลง",
+        }).then(() => {
+          router.push("/profile/").then(() => window.location.reload());
+        });
+      }
     })
     .catch((error: any) => {
       console.log(error);
@@ -223,22 +282,7 @@ const updatePassword = async () => {
     .finally(() => {
       loading.value = false;
     });
-}
-
-
-// สถานะสำหรับแสดงซ่อนรหัส
-const passwordVisible = ref({
-  changePassword: false,
-  confirmPassword: false,
-});
-const passwordError = ref(false); // แสดงข้อผิดพลาดของรหัสผ่าน
-
-const togglePasswordVisibility = (
-  field: keyof typeof passwordVisible.value
-) => {
-  passwordVisible.value[field] = !passwordVisible.value[field];
 };
-
 
 onMounted(() => {
   getuserinfo();

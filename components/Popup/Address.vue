@@ -1,6 +1,6 @@
 <template>
   <div class="w-full md:w-[500px] border-2 flex flex-col justify-center bg-white drop-shadow-lg rounded-lg">
-    <div class="p-4 border-b">
+    <div class="p-4 border-b-2">
       <h1 class="text-xl font-bold mb-4">เพิ่มที่อยู่ใหม่</h1>
       <form @submit.prevent="addShipment">
 
@@ -12,7 +12,7 @@
 
         <div class="mb-4">
           <label class="block text-sm font-medium">บ้านเลขที่</label>
-          <input v-model="shipment.address" class="w-full p-2 border rounded" required />
+          <input v-model="shipment.address" class="w-full p-2 border rounded h-16" required />
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium">ตำบล/แขวง</label>

@@ -5,18 +5,14 @@
       <div>
         <form @submit.prevent="updateShipments">
           <div class="mb-4">
-            <label class="block text-sm font-medium">ชื่อ</label>
-            <input v-model="shipmentUpdate.firstname" class="w-full p-2 border rounded" required />
+            <label class="block text-sm font-medium">ชื่อผู้รับ</label>
+            <input v-model="shipmentUpdate.firstname" class="w-full p-2 border rounded mt-2" required />
+            <input v-model="shipmentUpdate.lastname" class="w-full p-2 border rounded mt-2" required />
           </div>
 
           <div class="mb-4">
-            <label class="block text-sm font-medium">นามสกุล</label>
-            <input v-model="shipmentUpdate.lastname" class="w-full p-2 border rounded" required />
-          </div>
-
-          <div class="mb-4">
-            <label class="block text-sm font-medium">ที่อยู่</label>
-            <textarea v-model="shipmentUpdate.address" class="w-full p-2 border rounded" required></textarea>
+            <label class="block text-sm font-medium">บ้านเลขที่</label>
+            <textarea v-model="shipmentUpdate.address" class="w-full p-2 border rounded h-16" required></textarea>
           </div>
 
           <div class="mb-4">
@@ -36,7 +32,7 @@
 
           <div class="mb-4">
             <label class="block text-sm font-medium">รหัสไปรษณีย์</label>
-            <input v-model="shipmentUpdate.zip_code" class="w-full p-2 border rounded" required @input="validateZipCode"/>
+            <input v-model="shipmentUpdate.zip_code" class="w-full p-2 border rounded" required/>
           </div>
 
           <div class="flex justify-between mt-6">
@@ -75,25 +71,7 @@ const shipmentUpdate = ref<ShipmentUpdate>({
   province: "",
   zip_code: "",
 });
-// ฟังก์ชันตรวจสอบรหัสไปรษณีย์
-const validateZipCode = () => {
-  let zipCode = shipmentUpdate.value.zip_code;
 
-  // เอาเฉพาะตัวเลข
-  zipCode = zipCode.replace(/\D/g, "");
-
-  // ถ้าความยาวน้อยกว่า 5 ให้เติม 0 หน้า
-  if (zipCode.length < 5) {
-    zipCode = zipCode.padStart(5);
-  }
-
-  // จำกัดให้มีแค่ 5 หลัก
-  if (zipCode.length > 5) {
-    zipCode = zipCode.substring(0, 5);
-  }
-
-  shipmentUpdate.value.zip_code = zipCode;
-};
 
 
 const updateShipments = async () => {
