@@ -4,9 +4,9 @@
       <!-- ตรวจสอบว่า product มีค่าและมี name -->
       <div class="p-10">
         <div class="mx-[20px] lg:mx-[50px]">
-          <div class=" cursor-pointer" @click="goBack">
+          <div class="cursor-pointer" @click="goBack">
             <svg
-              class="w-[22px] h-[22px] text-gray-800 hover:text-[#EE973C] "
+              class="w-[22px] h-[22px] text-gray-800 hover:text-[#EE973C]"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -124,40 +124,43 @@
             <div class="flex gap-5 mt-4">
               <p>จำนวนรีวิวทั้งหมด: {{ products.Review?.length }}</p>
             </div>
-            <div class="flex gap-20 mt-10">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-5">
               <div
                 v-for="Review in paginatedReviews"
                 :key="Review.id"
-                class="border rounded-lg p-4"
+                class="border rounded-lg p-4 flex flex-col"
               >
-                <div class="flex justify-between">
-                  <div>
-                    <div class="flex justify-between w-[480px]">
-                      <h2 class="font-bold">โดย: {{ Review.username }}</h2>
+                <div
+                  class="flex flex-col md:flex-row md:items-center md:justify-between"
+                >
+                  <h2 class="font-bold break-words md:max-w-[70%]">
+                    โดย: {{ Review.username }}
+                  </h2>
 
-                      <p class="text-md text-black/70 flex items-center gap-1">
-                        <span
-                          v-for="n in Review.rating"
-                          :key="n"
-                          class="text-yellow-500"
-                        >
-                          ★
-                        </span>
-                        <span
-                          v-for="n in 5 - Review.rating"
-                          :key="'empty-' + n"
-                          class="text-gray-400"
-                        >
-                          ☆
-                        </span>
-                      </p>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-2">
-                      วัน/เวลาที่รีวิว: {{ formatDate(Review.created_at) }}
-                    </p>
-                  </div>
+                  <p class="text-md text-black/70 flex items-center gap-1">
+                    <span
+                      v-for="n in Review.rating"
+                      :key="n"
+                      class="text-yellow-500"
+                      >★</span
+                    >
+                    <span
+                      v-for="n in 5 - Review.rating"
+                      :key="'empty-' + n"
+                      class="text-gray-400"
+                      >☆</span
+                    >
+                  </p>
                 </div>
-                <p class="mt-2">{{ Review.description }}</p>
+
+                <p class="text-sm text-gray-500 mt-1">
+                  วัน/เวลาที่รีวิว: {{ formatDate(Review.created_at) }}
+                </p>
+
+                <!-- คำบรรยาย ให้รองรับข้อความยาว -->
+                <p class="mt-2 break-words text-justify">
+                  {{ Review.description }}
+                </p>
               </div>
             </div>
 

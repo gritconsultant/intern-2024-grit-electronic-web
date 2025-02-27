@@ -36,8 +36,7 @@ Payment
         <div class="w-[80%] max-w-[300px] mb-6">
           <img
             :src="
-              i.image ||
-              'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'
+              i.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'
             "
             alt="QR Code"
             class="w-full h-auto object-cover rounded-lg"

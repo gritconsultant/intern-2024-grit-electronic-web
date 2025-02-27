@@ -28,7 +28,7 @@
               :key="order.id"
               @click="checkOrder(order)"
               class="cursor-pointer border-b p-4"
-              :class="{ 'bg-gray-400': selectedOrder?.id === order.id }"
+              :class="{ 'bg-gray-300': selectedOrder?.id === order.id }"
             >
               <div class="flex justify-between items-center">
                 <div>
