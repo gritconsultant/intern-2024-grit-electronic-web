@@ -15,24 +15,24 @@
           </button>
         </div>
 
-        <div>
-          <div
-            class="flex justify-center mt-5 overflow-y-auto sticky top-0"
-            style="max-height: 56vh"
-          >
-            <div class="w-[600px]">
-              <div
-                v-for="(i, index) in shipment"
-                :key="i.id"
-                class="mb-4 p-4 rounded-lg transition-colors border"
-              >
-                <h2 class="font-bold text-lg">ที่อยู่ {{ index + 1 }}</h2>
-                <span>ชื่อ: {{ i.firstname }} {{ i.lastname }}</span>
-                <p>
-                  บ้านเลขที่: {{ i.address }}
-                  <span class="px-1">ตำบล/แขวง: {{ i.sub_district }}</span>
-                  <span class="px-1">อำเภอ/เขต: {{ i.district }}</span>
-                </p>
+      <div>
+        <div
+          class="flex justify-center mt-5 overflow-y-auto sticky top-0"
+          style="max-height: 56vh"
+        >
+          <div class="w-[600px]">
+            <div
+              v-for="(i, index) in shipment"
+              :key="i.id"
+              class="mb-4 p-4 rounded-lg transition-colors border"
+            >
+              <h2 class="font-bold text-lg">ที่อยู่ {{ index + 1 }}</h2>
+              <span>ชื่อ: {{ i.firstname }} {{ i.lastname }}</span>
+              <p>
+                บ้านเลขที่: {{ i.address }}
+                <span class="px-1" >ตำบล/แขวง: {{ i.sub_district }}</span>               <span class="px-1">อำเภอ/เขต: {{ i.district }}</span>
+              </p>
+
 
                 <p>
                   จังหวัด: {{ i.province }}
