@@ -1,7 +1,7 @@
 <template>
   <div class="pt-[90px]">
     <div class="flex p-4">
-      <div class="w-1/6 max-lg:w-1/4  border-r">
+      <div class="w-1/6 max-lg:w-1/4  border-r ml-14">
         <Sidebar />
       </div>
       <div class="w-4/6 max-lg:w-3/4 p-6">
