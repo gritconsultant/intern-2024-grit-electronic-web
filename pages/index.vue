@@ -1,7 +1,7 @@
 <template>
   <div class="mx-[20px] lg:mx-[50px] grid justify-center pt-[90px]">
     <!-- Banner -->
-    <div class="w-[1400px] h-[300px] mt-10 swiper-container">
+    <div class="w-[1400px] max-lg:w-[760px] max-md:w-[380px] h-[300px] max-lg:h-[200px]  max-md:h-[100px] mt-10 swiper-container">
       <swiper
         :modules="[Autoplay]"
         :space-between="50"
@@ -160,7 +160,7 @@
                 </router-link>
               </div>
             </div>
-            <div class="grid grid-cols-4 my-5 gap-8">
+            <div class="grid grid-cols-4 max-md:grid-cols-2 my-5 gap-8">
               <div
                 v-for="item in getRandomProducts(cate.id)"
                 :key="item.id"

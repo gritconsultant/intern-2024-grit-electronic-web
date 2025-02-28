@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full md:w-[500px] h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
+    class="w-[500px] max-md:w-[390px] h-full  max-lg:h-[76.4%] max-md:h-full border-2 flex flex-col gap-2 rounded-[5px] bg-[#FFFFFF] drop-shadow-lg overflow-hidden"
   >
     <div  class="flex justify-between items-center p-4 md:p-5 border-b-2" >
       <h1 class="text-sm md:text-base font-bold" >

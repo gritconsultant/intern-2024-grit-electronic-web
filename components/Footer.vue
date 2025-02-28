@@ -17,7 +17,7 @@
 
 
     <div
-      class="grid grid-cols-1 md:grid-cols-3 w-full detail mt-5 lg:mt-2 lg:ml-10 px-0 lg:px-32"
+      class="grid grid-cols-1 md:grid-cols-3 w-full detail mt-5 lg:mt-2 lg:ml-10 px-0 lg:px-32 max-md:hidden"
     >
       <!-- Categories -->
       <div class="mb-6 md:mb-0">
