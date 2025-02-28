@@ -6,7 +6,7 @@
       class="flex items-center text-black focus:outline-none"
     >
       <svg
-        class="w-[32px] h-[32px] text-gray-800"
+        class="w-[32px] h-[32px] max-md:w-[23px] text-gray-800"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -27,20 +27,20 @@
     <!-- Dropdown Menu -->
     <div
       v-show="dropdownOpen"
-      class="dropdown-menu absolute mt-2 w-[400px] bg-white rounded-lg shadow-lg border transition-all duration-300 ease-in-out"
+      class="dropdown-menu fixed  mt-2  bg-white rounded-lg shadow-lg border transition-all duration-300 ease-in-out"
     >
-      <ul class="py-2 text-sm text-gray-700">
-        <li>
-          <NuxtLink to="/profile" class="dropdown-item">บัญชีผู้ใช้</NuxtLink>
+      <ul class="py-2  text-sm text-gray-700">
+        <li >
+          <NuxtLink to="/profile" class="dropdown-item ">บัญชีผู้ใช้</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/profile/address" class="dropdown-item">ที่อยู่</NuxtLink>
+          <NuxtLink to="/profile/address" class="dropdown-item ">ที่อยู่</NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/order/checkout" class="dropdown-item">คำสั่งซื้อ</NuxtLink>
+          <NuxtLink to="/order/checkout" class="dropdown-item ">คำสั่งซื้อ</NuxtLink>
         </li>
         <li>
-          <div @click="logout" class="dropdown-item cursor-pointer text-red-500">
+          <div @click="logout" class="dropdown-item cursor-pointer text-red-500 ">
             ออกจากระบบ
           </div>
         </li>
@@ -104,14 +104,7 @@ const logout = () => {
 }
 
 /* Mobile Responsive */
-@media (max-width: 640px) {
-  .dropdown-menu {
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%; /* ป้องกันล้นจอ */
-    text-align: center;
-  }
-}
+
 
 /* Dropdown Item */
 .dropdown-item {
