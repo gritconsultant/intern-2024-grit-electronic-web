@@ -1,11 +1,11 @@
 <template>
   <div class="pt-[90px]">
     <div class="flex p-4">
-      <div class="w-1/6  max-lg:w-1/4 border-r">
+      <div class="w-1/6  max-lg:w-1/4 border-r ml-8">
         <Sidebar />
       </div>
-      <div class="w-4/6  max-lg:w-3/4 p-6">
-        <div class="border-b flex justify-between">
+      <div class="w-full  max-lg:w-3/4 p-6 ">
+        <div class=" border-b flex justify-between"> 
           <h1 class="text-xl font-bold mb-6">ที่อยู่</h1>
           <button
             class="text-black/50 hover:underline"
@@ -17,10 +17,9 @@
 
       <div>
         <div
-          class="flex justify-center mt-5 overflow-y-auto sticky top-0"
-          style="max-height: 56vh"
+          class="flex justify-center mt-8 overflow-y-auto sticky top-0"
         >
-          <div class="w-[600px]">
+          <div class="w-[600px] h-[560px] max-lg:h-[470px]">
             <div
               v-for="(i, index) in shipment"
               :key="i.id"

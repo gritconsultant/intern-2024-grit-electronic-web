@@ -3,18 +3,20 @@
     <div class="p-4">
       <div class="flex">
         <!-- Sidebar -->
-        <div class="w-1/6 max-lg:w-1/4   border-r">
+        <div class="w-1/6 max-lg:w-1/4 border-r ml-8">
           <Sidebar />
         </div>
         <!-- Main Content -->
-        <div class="w-4/6 max-lg:w-3/4 p-6 h-[100%]">
-          <div class="border-b">
+        <div class="w-full max-lg:w-3/4 p-6 h-[100%]">
+          <div>
             <h1 class="text-xl font-bold mb-6">ข้อมูลบัญชีผู้ใช้</h1>
+            <hr />
           </div>
 
           <div>
             <div>
-              <div class="grid grid-cols-2">
+              <div class="grid grid-cols-2 h-[600px] max-lg:h-[500px]"
+              >
                 <div class="mt-10 ml-10">
                   <div>
                     <p>ชื่อ - นามสกุล</p>
@@ -71,7 +73,7 @@
                               : 'password'
                           "
                           v-model="confirmPassword.password"
-                          class="w-[400px] h-[45px] mt-2 inputbox"
+                          class="w-full max-w-[400px] h-[45px] mt-2 inputbox"
                           @input="validateConfirmPassword"
                           @keyup.enter="updatePassword"
                         />
@@ -109,12 +111,12 @@
                 </div>
 
                 <div>
-                  <div class="mt-10">
+                  <div class="mt-10 ml-5">
                     <p>Email</p>
                     <h1 class="font-bold text-lg">{{ getinfo.Email }}</h1>
                   </div>
 
-                  <div class="mt-5">
+                  <div class="mt-5 ml-5">
                     <p>เบอร์โทรศัพท์</p>
                     <h1 class="font-bold text-lg">{{ getinfo.Phone }}</h1>
                   </div>
