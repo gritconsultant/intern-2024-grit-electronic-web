@@ -4,7 +4,7 @@
       <div class="w-1/6 max-lg:w-1/4  border-r">
         <Sidebar />
       </div>
-      <div class="w-4/6 max-lg:w-4/6 p-6">
+      <div class="w-4/6 max-lg:w-3/4 p-6">
         <div class="border-b">
           <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
         </div>

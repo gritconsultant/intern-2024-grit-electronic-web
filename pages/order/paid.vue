@@ -2,10 +2,11 @@
   <div class=" pt-[90px]">
     <div class="flex p-4">
       <!-- Sidebar -->
-      <Sidebar />
-  
+      <div class="w-1/6 max-lg:w-1/4  border-r  h-[100%]">
+        <Sidebar />
+      </div>
       <!-- Content -->
-      <div class="w-full lg:w-3/4 p-6">
+      <div class="w-4/6 max-lg:w-3/4 p-6 ">
         <div class="border-b">
           <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
         </div>
@@ -15,10 +16,10 @@
           <Tab />
         </div>
   
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="flex  gap-4 w-full h-[80%] ">
           <!-- Order List -->
           <div
-            class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+            class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0 w-[50%] h-[70%] "
             style="max-height: 48vh"
           >
             <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
@@ -30,28 +31,28 @@
                 class="cursor-pointer border-b p-4"
                 :class="{ 'bg-gray-300': selectedOrder?.id === order.id }"
               >
-                <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center max-lg:text-[12px]">
                   <div>
                     <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
-                    <p class="text-gray-500 text-sm">
+                    <p class="text-gray-500 text-sm max-lg:text-[12px]">
                       {{ formatDate(order.created_at) }}
                     </p>
                   </div>
-                  <p class="text-lg font-bold">฿{{ order.total_price_ship }}</p>
+                  <p class="text-lg max-lg:text-base  font-bold">฿{{ order.total_price_ship }}</p>
                 </div>
               </div>
             </div>
-            <div v-else class="text-center text-gray-500">ไม่มีคำสั่งซื้อ</div>
+            <div v-else class="text-center max-lg:text-[12px] text-gray-500">ไม่มีคำสั่งซื้อ</div>
           </div>
   
           <!-- Selected Order Details -->
           <div
-            class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+            class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0 w-[50%] h-[70%]"
             style="max-height: 48vh"
           >
             <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
             <div v-if="selectedOrder">
-              <h3 class="font-bold">สินค้า</h3>
+              <h3 class="font-bold max-lg:text-sm">สินค้า</h3>
               <ul>
                 <li
                   v-for="(product, index) in selectedOrder.products"
@@ -59,7 +60,7 @@
                   class="flex items-center space-x-4 p-4 border-b"
                 >
                   <!-- Product Image -->
-                  <div class="w-24 h-24">
+                  <div class="w-24 h-24 max-lg:w-16  max-lg:h-16 place-content-center ">
                     <img
                       :src="product.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
                       alt="product"
@@ -68,15 +69,15 @@
                   </div>
                                                   <!-- Product Info -->
                                                   <div class="flex-grow">
-                    <div class="flex justify-between items-center mb-2">
-                      <h2 class="font-bold text-lg">
+                    <div class="flex justify-between gap-2 items-center mb-2">
+                      <h2 class="font-bold text-lg max-lg:text-xs  ">
                         {{ product.product_name }}
                       </h2>
-                      <p class="text-lg font-bold text-gray-800">
+                      <p class="text-lg max-lg:text-xs font-bold text-gray-800">
                         ฿{{ product.price }}
                       </p>
                     </div>
-                    <p class="text-sm text-gray-500">
+                    <p class="text-sm max-lg:text-xs text-gray-500">
                       จำนวน: {{ product.total_product_amount }}
                     </p>
                   </div>
@@ -85,8 +86,8 @@
               </ul>
   
               <div class="mt-4 pb-4 border-b">
-                <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-                <p class="text-gray-500 text-sm mt-2">
+                <h3 class="font-bold max-lg:text-sm">ที่อยู่ของคุณ</h3>
+                <p class="text-gray-500 text-sm max-lg:text-xs mt-2">
                   ขื่อผู้รับ: {{ selectedOrder.Shipment.firstname }}
                   {{ selectedOrder.Shipment.lastname }} <br />
                   <span>
@@ -102,17 +103,17 @@
   
               <!-- Delivery Method -->
               <div class="mt-4 space-y-4 border-b pb-4">
-                <h3 class="font-bold">จัดส่งโดย</h3>
-                <div class="border flex items-center rounded-lg">
+                <h3 class="font-bold max-lg:text-sm">จัดส่งโดย</h3>
+                <div class="border flex items-center gap-2 px-2 rounded-lg">
                   <div class="w-20 h-20 rounded-lg">
                     <img
                       src="https://file.thailandpost.com/upload/content/cs4_New%20logo%20THP%20-04_63bce2f853fe8_63f8243acc06e.jpg"
                       class="w-full h-full object-cover rounded-lg"
                     />
                   </div>
-                  <p class="text-md font-medium">
+                  <p class="text-md max-lg:text-xs font-medium">
                     ไปรษณีย์ไทย <br />
-                    <span class="text-sm font-normal text-gray-500">
+                    <span class="text-sm max-lg:text-xs font-normal text-gray-500">
                       จัดส่งโดยไปรษณีย์ไทย (Thailand Post)
                     </span>
                   </p>
@@ -121,10 +122,10 @@
   
               <!-- Payment -->
               <div class="mt-4 space-y-4">
-                <h3 class="font-bold">การชำระเงิน</h3>
-                <p class="text-sm font-medium">
+                <h3 class="font-bold max-lg:text-sm">การชำระเงิน</h3>
+                <p class="text-sm max-lg:text-xs font-medium">
                   OR Code Prompt Pay <br />
-                  <span class="text-sm font-normal text-gray-500">
+                  <span class="text-sm max-lg:text-xs font-normal text-gray-500">
                     ชำระเงินด้วย OR Code Prompt Pay หรือ เลขบัญชี
                   </span>
                 </p>

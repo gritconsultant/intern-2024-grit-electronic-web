@@ -182,10 +182,10 @@
         </div>
       </div>
       <!-- สินค้าใกล้เคียง -->
-      <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30">
+      <div class="p-[20px] lg:p-[40px] bg-[#FCCA81]/30 mb-2">
         <div class="flex flex-col gap-4">
           <p class="text-xl font-semibold ml-12">สินค้าอื่นๆ</p>
-          <div class="flex flex-wrap gap-20 justify-center">
+          <div class="flex flex-wrap gap-20 max-lg:gap-[10px] justify-center">
             <div
               v-for="product in randomProducts"
               :key="product.id"

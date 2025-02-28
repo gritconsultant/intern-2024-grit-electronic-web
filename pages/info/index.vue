@@ -5,7 +5,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <!-- ข้อความ -->
         <div>
-          <h1 class="text-3xl font-bold text-[#2D3748] leading-snug">
+          <h1 class="text-3xl max-lg:text-2xl font-bold text-[#2D3748] leading-snug ">
             โครงการ <span class="text-[#ff8f00]">Bangkok Brand</span>
           </h1>
           <p class="mt-4 text-lg text-gray-600">
@@ -29,7 +29,7 @@
        </div>
     <div class="container mx-auto p-8">
       <!-- Section เกี่ยวกับโครงการ -->
-      <div class="mt-8 p-10 w-full">
+      <div class="mt-8 p-4 w-full">
         <h2 class="text-2xl font-semibold text-[#2D3748]">
           เกี่ยวกับเรา
         </h2>
@@ -41,7 +41,7 @@
 
           <!-- ข้อมูล -->
           <div>
-            <p class="text-lg text-gray-600 leading-relaxed w-[600px]">
+            <p class="text-lg max-lg:text-base text-gray-600 leading-relaxed w-[600px] max-lg:w-[320px]">
               กรุงเทพมหานครได้กําหนดแผนยุทธศาสตร์ กทม.
               หรือที่เรียกกันว่าแผนพัฒนากรุงเทพมหานคร ระยะ 20 ปี (พ.ศ.
               2556-2575) โดยคาดหวังว่าใน 20 ปีข้างหน้า
@@ -51,12 +51,12 @@
               ความสวยงาม สะดวกสบาย น่าอยู่ และเป็นมิตรต่อสิ่งแวดล้อม
             </p>
 
-            <p class="text-lg text-gray-600 leading-relaxed w-[600px]">
+            <p class="text-lg  max-lg:text-base text-gray-600 leading-relaxed w-[600px]">
               ซึ่งประกอบด้วย 7 ประเด็นยุทธศาสตร์ ได้แก่
             </p>
 
             <ul
-              class="text-lg text-gray-600 leading-relaxed w-[600px] list-disc pl-6"
+              class="text-lg max-lg:text-base text-gray-600 leading-relaxed w-[600px] max-lg:w-[320px] list-disc pl-6"
             >
               <p>1. มหานครปลอดภัย</p>
               <p>2. มหานครสีเขียวสะดวกสบาย</p>
@@ -67,7 +67,7 @@
               <p>7. การบริหารจัดการเพื่อการพัฒนากรุงเทพมหานคร ระยะ 20 ปี</p>
             </ul>
 
-            <p class="text-lg text-gray-600 leading-relaxed w-[600px]">
+            <p class="text-lg text-gray-600 leading-relaxed w-[600px] max-lg:hidden">
               ไปสู่การปฏิบัติให้เกิดผลเป็นรูปธรรม
               สามารถนําพากรุงเทพมหานครให้เจริญเติบโตท่ามกลางการเปลี่ยนแปลงสู่ประชาคมอาเซียน
               (ASEAN Community)
@@ -77,6 +77,13 @@
           </div>
         </div>
       </div>
+      <p class="text-lg text-gray-600 leading-relaxed w-[700px] lg:hidden">
+              ไปสู่การปฏิบัติให้เกิดผลเป็นรูปธรรม
+              สามารถนําพากรุงเทพมหานครให้เจริญเติบโตท่ามกลางการเปลี่ยนแปลงสู่ประชาคมอาเซียน
+              (ASEAN Community)
+              ท่ามกลางกระแสการเปลี่ยนแปลงของบริบทแวดล้อมในด้านต่าง ๆ
+              ของกรุงเทพมหานครสู่การเป็นมหานครแห่งเอเชียใน พ.ศ. 2575
+            </p>
     </div>
   </div>
 </template>

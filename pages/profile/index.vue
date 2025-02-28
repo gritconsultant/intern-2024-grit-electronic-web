@@ -3,7 +3,7 @@
     <div class="p-4">
       <div class="flex">
         <!-- Sidebar -->
-        <div class="w-1/6 max-lg:w-1/4   border-r">
+        <div class="w-1/6 max-lg:w-1/4  max-md:hidden  border-r">
           <Sidebar />
         </div>
         <!-- Main Content -->
