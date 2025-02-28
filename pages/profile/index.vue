@@ -3,9 +3,11 @@
     <div class="p-4">
       <div class="flex">
         <!-- Sidebar -->
-        <Sidebar />
+        <div class="w-1/6 max-lg:w-1/4   border-r">
+          <Sidebar />
+        </div>
         <!-- Main Content -->
-        <div class="w-full lg:w-3/4 p-6 h-[100%]">
+        <div class="w-4/6 max-lg:w-3/4 p-6 h-[100%]">
           <div class="border-b">
             <h1 class="text-xl font-bold mb-6">ข้อมูลบัญชีผู้ใช้</h1>
           </div>
@@ -163,9 +165,6 @@ const validateConfirmPassword = () => {
   passwordMismatch.value =
     changePassword.value.password !== confirmPassword.value.password;
 };
-
-
-
 
 const togglePasswordVisibility = (
   field: keyof typeof passwordVisible.value

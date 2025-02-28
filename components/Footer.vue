@@ -9,7 +9,7 @@
         class="w-[200px]"
       />
 
-      <p class="mt-5  lg:text-left text-base w-[240px]">
+      <p class="mt-5  lg:text-left text-base w-[240px] max-lg:w-[390px] max-lg:text-center">
         173 ศาลาว่าการกรุงเทพมหานคร (เสาชิงช้า) ถนนดินสอ แขวงเสาชิงช้า เขตพระนคร
         กรุงเทพมหานคร 10200
       </p>

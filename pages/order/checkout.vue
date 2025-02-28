@@ -1,186 +1,190 @@
 <template>
-  <div class=" pt-[90px]">
-    <div class="flex p-4 ">
-    <Sidebar />
-    <div class="w-full lg:w-3/4 p-6">
-      <div class="border-b">
-        <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
+  <div class="pt-[90px]">
+    <div class="flex p-4">
+      <div class="w-1/6 max-lg:w-1/4  border-r">
+        <Sidebar />
       </div>
-
-      <div class="mt-5">
-        <Tab />
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Order List -->
-        <div
-          class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
-          style="max-height: 48vh"
-        >
-          <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
-          <div v-if="orders.length">
-            <div
-              v-for="order in orders"
-              :key="order.id"
-              @click="checkOrder(order)"
-              class="cursor-pointer border-b p-4"
-              :class="{ 'bg-gray-300': selectedOrder?.id === order.id }"
-            >
-              <div class="flex justify-between items-center">
-                <div>
-                  <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
-                  <p class="text-gray-500 text-sm">
-                    {{ formatDate(order.created_at) }}
-                  </p>
-                </div>
-                <p class="text-lg font-bold">฿{{ order.total_price }}</p>
-              </div>
-            </div>
-          </div>
-          <div v-else class="text-center text-gray-500">ไม่มีคำสั่งซื้อ</div>
+      <div class="w-4/6 max-lg:w-4/6 p-6">
+        <div class="border-b">
+          <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
         </div>
 
-        <!-- Selected Order Details -->
-        <div
-          class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
-          style="max-height: 48vh"
-        >
-          <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
-          <div v-if="selectedOrder">
-            <h3 class="font-bold">สินค้า</h3>
-            <ul>
-              <li
-                v-for="(product, index) in selectedOrder.products"
-                :key="index"
-                class="flex items-center space-x-4 p-4 border-b"
-              >
-                <!-- Product Image -->
-                <div class="w-24 h-24">
-                  <img
-                    :src="product.image || 'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'"
-                    alt="product"
-                    class="w-full h-full object-cover rounded-lg"
-                  />
-                </div>
+        <div class="mt-5">
+          <Tab />
+        </div>
 
-                <!-- Product Info -->
-                <div class="flex-grow">
-                  <div class="flex justify-between items-center mb-2">
-                    <h2 class="font-bold text-lg">
-                      {{ product.product_name }}
-                    </h2>
-                    <p class="text-lg font-bold text-gray-800">
-                      ฿{{ product.price }}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Order List -->
+          <div
+            class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+            style="max-height: 48vh"
+          >
+            <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
+            <div v-if="orders.length">
+              <div
+                v-for="order in orders"
+                :key="order.id"
+                @click="checkOrder(order)"
+                class="cursor-pointer border-b p-4"
+                :class="{ 'bg-gray-300': selectedOrder?.id === order.id }"
+              >
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p>หมายเลขคำสั่งซื้อ #{{ order.id }}</p>
+                    <p class="text-gray-500 text-sm">
+                      {{ formatDate(order.created_at) }}
                     </p>
                   </div>
-                  <p class="text-sm text-gray-500">
-                    จำนวน: {{ product.total_product_amount }}
-                  </p>
+                  <p class="text-lg font-bold">฿{{ order.total_price }}</p>
                 </div>
-              </li>
-            </ul>
-
-            <!-- ที่อยู่ของคุณ -->
-            <div class="mt-4 pb-4 border-b">
-              <h3 class="font-bold">ที่อยู่ของคุณ</h3>
-              <div>
-                <label
-                  for="address"
-                  class="block text-sm font-medium text-gray-700"
-                  >เลือกที่อยู่</label
-                >
-                <select
-                  v-model="selectedAddressId"
-                  class="mt-1 block w-full p-2 border rounded-md"
-                >
-                  <option
-                    v-for="address in shipment"
-                    :key="address.id"
-                    :value="address.id"
-                  >
-                    {{ address.firstname }} {{ address.lastname }} -
-                    {{ address.address }}
-                  </option>
-                </select>
-                <button
-      class="mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
-      @click="updateShipment"
-    >
-      ยืนยันที่อยู่
-    </button>
               </div>
             </div>
+            <div v-else class="text-center text-gray-500">ไม่มีคำสั่งซื้อ</div>
+          </div>
 
-            <!-- Delivery Method -->
-            <div class="mt-4 space-y-4 border-b pb-4">
-              <h3 class="font-bold">จัดส่งโดย</h3>
-              <div class="border flex items-center rounded-lg">
-                <div class="w-20 h-20 rounded-lg">
-                  <img
-                    src="https://file.thailandpost.com/upload/content/cs4_New%20logo%20THP%20-04_63bce2f853fe8_63f8243acc06e.jpg"
-                    class="w-full h-full object-cover rounded-lg"
-                  />
+          <!-- Selected Order Details -->
+          <div
+            class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
+            style="max-height: 48vh"
+          >
+            <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
+            <div v-if="selectedOrder">
+              <h3 class="font-bold">สินค้า</h3>
+              <ul>
+                <li
+                  v-for="(product, index) in selectedOrder.products"
+                  :key="index"
+                  class="flex items-center space-x-4 p-4 border-b"
+                >
+                  <!-- Product Image -->
+                  <div class="w-24 h-24">
+                    <img
+                      :src="
+                        product.image ||
+                        'https://www.shutterstock.com/image-vector/no-image-available-picture-coming-600nw-2057829641.jpg'
+                      "
+                      alt="product"
+                      class="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+
+                  <!-- Product Info -->
+                  <div class="flex-grow">
+                    <div class="flex justify-between items-center mb-2">
+                      <h2 class="font-bold text-lg">
+                        {{ product.product_name }}
+                      </h2>
+                      <p class="text-lg font-bold text-gray-800">
+                        ฿{{ product.price }}
+                      </p>
+                    </div>
+                    <p class="text-sm text-gray-500">
+                      จำนวน: {{ product.total_product_amount }}
+                    </p>
+                  </div>
+                </li>
+              </ul>
+
+              <!-- ที่อยู่ของคุณ -->
+              <div class="mt-4 pb-4 border-b">
+                <h3 class="font-bold">ที่อยู่ของคุณ</h3>
+                <div>
+                  <label
+                    for="address"
+                    class="block text-sm font-medium text-gray-700"
+                    >เลือกที่อยู่</label
+                  >
+                  <select
+                    v-model="selectedAddressId"
+                    class="mt-1 block w-full p-2 border rounded-md"
+                  >
+                    <option
+                      v-for="address in shipment"
+                      :key="address.id"
+                      :value="address.id"
+                    >
+                      {{ address.firstname }} {{ address.lastname }} -
+                      {{ address.address }}
+                    </option>
+                  </select>
+                  <button
+                    class="mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
+                    @click="updateShipment"
+                  >
+                    ยืนยันที่อยู่
+                  </button>
                 </div>
-                <p class="text-md font-medium">
-                  ไปรษณีย์ไทย <br />
+              </div>
+
+              <!-- Delivery Method -->
+              <div class="mt-4 space-y-4 border-b pb-4">
+                <h3 class="font-bold">จัดส่งโดย</h3>
+                <div class="border flex items-center rounded-lg">
+                  <div class="w-20 h-20 rounded-lg">
+                    <img
+                      src="https://file.thailandpost.com/upload/content/cs4_New%20logo%20THP%20-04_63bce2f853fe8_63f8243acc06e.jpg"
+                      class="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                  <p class="text-md font-medium">
+                    ไปรษณีย์ไทย <br />
+                    <span class="text-sm font-normal text-gray-500">
+                      จัดส่งโดยไปรษณีย์ไทย (Thailand Post)
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <!-- Payment -->
+              <div class="mt-4 space-y-4">
+                <h3 class="font-bold">การชำระเงิน</h3>
+                <p class="text-sm font-medium">
+                  OR Code Prompt Pay <br />
                   <span class="text-sm font-normal text-gray-500">
-                    จัดส่งโดยไปรษณีย์ไทย (Thailand Post)
+                    ชำระเงินด้วย OR Code Prompt Pay หรือ เลขบัญชี
                   </span>
                 </p>
               </div>
-            </div>
 
-            <!-- Payment -->
-            <div class="mt-4 space-y-4">
-              <h3 class="font-bold">การชำระเงิน</h3>
-              <p class="text-sm font-medium">
-                OR Code Prompt Pay <br />
-                <span class="text-sm font-normal text-gray-500">
-                  ชำระเงินด้วย OR Code Prompt Pay หรือ เลขบัญชี
-                </span>
-              </p>
+              <!-- Payment Button -->
+              <div class="flex space-x-4 mt-4">
+                <button
+                  class="flex-1 py-2 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-lg"
+                  @click="handlePayment"
+                >
+                  ชำระเงิน
+                </button>
+                <button
+                  class="flex-1 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg"
+                  @click="updateStatus"
+                >
+                  ยกเลิกการยกเลิกคำสั่งซื้อ
+                </button>
+              </div>
             </div>
-
-            <!-- Payment Button -->
-            <div class="flex space-x-4 mt-4">
-              <button
-                class="flex-1 py-2 bg-[#EE973C] hover:bg-[#FD8C35]/70 text-white rounded-lg"
-                @click="handlePayment"
-              >
-                ชำระเงิน
-              </button>
-              <button
-                class="flex-1 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg"
-                @click="updateStatus"
-              >
-              ยกเลิกการยกเลิกคำสั่งซื้อ
-              </button>
-            </div>
+            <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div>
           </div>
-          <div v-else class="text-center text-gray-500">เลือกคำสั่งซื้อ</div>
         </div>
       </div>
-    </div>
 
-    <!--  Popup -->
-    <div
-      v-if="store.paymentAction"
-      class="fixed inset-0 bg-black/50 flex justify-end z-50"
-      @click="store.paymentAction = !store.paymentAction"
-    >
-      <div @click.stop>
-        <PopupPayment
-          :orderId="selectedOrder?.id"
-          :paymentId="selectedOrder?.Payment.id"
-          :shipmentId="selectedAddressId"
-        />
+      <!--  Popup -->
+      <div
+        v-if="store.paymentAction"
+        class="fixed inset-0 bg-black/50 flex justify-end z-50"
+        @click="store.paymentAction = !store.paymentAction"
+      >
+        <div @click.stop>
+          <PopupPayment
+            :orderId="selectedOrder?.id"
+            :paymentId="selectedOrder?.Payment.id"
+            :shipmentId="selectedAddressId"
+          />
+        </div>
       </div>
+      <pre>{{}}</pre>
+      <Loading :loading="loading" />
     </div>
-    <pre>{{  }}</pre>
-    <Loading :loading="loading" />
   </div>
-  </div>
-
 </template>
 
 <script setup lang="ts">
@@ -200,7 +204,7 @@ import { useIndexStore } from "~/store/main";
 import { watch } from "vue";
 definePageMeta({
   layout: "user",
-  middleware: "auth"
+  middleware: "auth",
 });
 
 const orders = ref<Order[]>([]);
@@ -210,9 +214,7 @@ const selectedOrder = ref<OrderById | null>(null);
 const shipment = ref<Shipment[]>([]);
 const selectedAddressMap = ref<{ [key: number]: number }>({});
 const selectedAddressId = ref<number>();
-  const isAddressConfirmed = ref(false);
-
-
+const isAddressConfirmed = ref(false);
 
 const props = defineProps({
   orderId: {
@@ -229,13 +231,12 @@ const props = defineProps({
 const orderupdateShip = ref<OrderUpdateShip>({
   id: 0,
   shipment_id: 0,
-})
+});
 
 const orderresShip = ref<OrderResShip>({
   id: 0,
   shipment_id: 0,
-})
-
+});
 
 const orderUpdate = ref<OrderUpdate>({
   id: 0,
@@ -283,9 +284,8 @@ const getOrderById = async (orderId: number) => {
       selectedOrder.value = {
         ...data,
         products: Array.isArray(data.products) ? data.products : [],
-    
       };
-      console.log(selectedOrder.value)
+      console.log(selectedOrder.value);
 
       if (!selectedAddressMap.value[orderId]) {
         selectedAddressMap.value[orderId] = data.shipment_id;
@@ -351,7 +351,7 @@ const updateStatus = async () => {
           .finally(() => {
             loading.value = false;
           });
-        } else {
+      } else {
         // ✅ ถ้าผู้ใช้กด "ไม่, กลับไป"
         console.log("ยกเลิกการยกเลิกคำสั่งซื้อ");
         loading.value = false; // ปิดโหลดเมื่อไม่มีการเปลี่ยนแปลง
@@ -398,27 +398,29 @@ const updateShipment = async () => {
 
 const handlePayment = () => {
   if (!selectedAddressId.value) {
-    Swal.fire("กรุณาเลือกที่อยู่", "โปรดเลือกที่อยู่ก่อนทำการชำระเงิน", "warning");
+    Swal.fire(
+      "กรุณาเลือกที่อยู่",
+      "โปรดเลือกที่อยู่ก่อนทำการชำระเงิน",
+      "warning"
+    );
     return;
   }
 
   if (!isAddressConfirmed.value) {
-    Swal.fire("กรุณากดยืนยันที่อยู่", "โปรดยืนยันที่อยู่ก่อนชำระเงิน", "warning");
+    Swal.fire(
+      "กรุณากดยืนยันที่อยู่",
+      "โปรดยืนยันที่อยู่ก่อนชำระเงิน",
+      "warning"
+    );
     return;
   }
 
   store.paymentAction = true;
 };
 
-
-
 watch(selectedAddressId, (newVal) => {
   console.log("New selected address:", newVal);
 });
-
-
-
-
 
 const formatDate = (timestamp: number | string): string => {
   const date = new Date(

@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full lg:w-1/4 bg-white border-r flex flex-col max-h-[50vh]">
-    <div class="p-6">
+  <div class="w-1/4  bg-white flex flex-col max-h-[50vh]">
+    <div class="p-6 w-[200px]">
       <h2 class="text-lg font-bold">สวัสดี, ยินดีต้อนรับ</h2>
       <p class="text-gray-600"> {{ getinfo.Username }}</p>
     </div>
@@ -8,7 +8,7 @@
       <li>
         <NuxtLink
           to="/profile"
-          class="flex items-center space-x-2"
+          class="flex items-center space-x-2  w-[160px]"
           :class="{ 'active-btn': isActive(['/profile']) }"
         >
           <i class="fas fa-user"></i>
@@ -18,7 +18,7 @@
       <li>
         <NuxtLink
           to="/profile/address"
-          class="flex items-center space-x-2"
+          class="flex items-center space-x-2 w-[160px]"
           :class="{ 'active-btn': isActive(['/profile/address']) }"
         >
           <i class="fas fa-map-marker-alt"></i>
@@ -28,7 +28,7 @@
       <li>
         <NuxtLink
           to="/order/checkout"
-          class="flex items-center space-x-2"
+          class="flex items-center space-x-2  w-[160px]"
           :class="{ 'active-btn': isActive(['/order/checkout', '/order/shipping', '/order/receiving', '/order/review', '/order/history', '/order/paid']) }"
         >
           <i class="fas fa-shopping-cart"></i>
@@ -38,7 +38,7 @@
       <li>
         <NuxtLink
           to="/login"
-          class="flex items-center space-x-2 rounded-lg p-2 text-red-500 hover:bg-red-100"
+          class="flex items-center space-x-2 w-[160px] rounded-lg p-2 text-red-500 hover:bg-red-100"
         >
           <i class="fas fa-sign-out-alt"></i>
           <span>ออกจากระบบ</span>

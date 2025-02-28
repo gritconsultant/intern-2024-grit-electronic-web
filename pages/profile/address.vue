@@ -1,22 +1,24 @@
 <template>
-  <div class=" pt-[90px]">
+  <div class="pt-[90px]">
     <div class="flex p-4">
-    <Sidebar />
-    <div class="w-full md:w-3/4 p-6">
-      <div class="border-b flex justify-between">
-        <h1 class="text-xl font-bold mb-6">ที่อยู่</h1>
-        <button
-          class="text-black/50 hover:underline"
-          @click="addressAction = !addressAction"
-        >
-          เพิ่มที่อยู่ใหม่
-        </button>
+      <div class="w-1/6  max-lg:w-1/4 border-r">
+        <Sidebar />
       </div>
+      <div class="w-4/6  max-lg:w-3/4 p-6">
+        <div class="border-b flex justify-between">
+          <h1 class="text-xl font-bold mb-6">ที่อยู่</h1>
+          <button
+            class="text-black/50 hover:underline"
+            @click="addressAction = !addressAction"
+          >
+            เพิ่มที่อยู่ใหม่
+          </button>
+        </div>
 
       <div>
         <div
           class="flex justify-center mt-5 overflow-y-auto sticky top-0"
-          style="max-height: 50vh"
+          style="max-height: 56vh"
         >
           <div class="w-[600px]">
             <div
@@ -32,58 +34,57 @@
               </p>
 
 
-              <p>
-                จังหวัด: {{ i.province }}
-                <span class="px-1">รหัสไปรษณีย์: {{ i.zip_code }}</span>
-              </p>
+                <p>
+                  จังหวัด: {{ i.province }}
+                  <span class="px-1">รหัสไปรษณีย์: {{ i.zip_code }}</span>
+                </p>
 
-              <!-- ปุ่มแก้ไขที่อยู่ -->
-              <div class="mt-4 flex items-center justify-end">
-                <button
-                  class="text-blue-500 hover:underline"
-                  @click="editAddress(i)"
+                <!-- ปุ่มแก้ไขที่อยู่ -->
+                <div class="mt-4 flex items-center justify-end">
+                  <button
+                    class="text-blue-500 hover:underline"
+                    @click="editAddress(i)"
+                  >
+                    แก้ไขที่อยู่
+                  </button>
+                </div>
+                <!-- ถ้าไม่มีข้อมูลที่อยู่ -->
+                <div
+                  v-if="shipment.length === 0"
+                  class="text-center text-gray-500 mt-6"
                 >
-                  แก้ไขที่อยู่
-                </button>
-              </div>
-              <!-- ถ้าไม่มีข้อมูลที่อยู่ -->
-              <div
-                v-if="shipment.length === 0"
-                class="text-center text-gray-500 mt-6"
-              >
-                ไม่พบข้อมูลที่อยู่
+                  ไม่พบข้อมูลที่อยู่
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Popup สำหรับเพิ่มและแก้ไขที่อยู่ -->
-    <div
-      v-if="addressAction"
-      @click="addressAction = !addressAction"
-      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-    >
-      <div @click.stop>
-        <PopupAddress />
+      <!-- Popup สำหรับเพิ่มและแก้ไขที่อยู่ -->
+      <div
+        v-if="addressAction"
+        @click="addressAction = !addressAction"
+        class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+      >
+        <div @click.stop>
+          <PopupAddress />
+        </div>
       </div>
-    </div>
 
-    <div
-      v-if="editaddressAction"
-      @click="editaddressAction = !editaddressAction"
-      class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-    >
-      <div @click.stop>
-        <PopupEditAddress :addressData="editingAddressData" />
+      <div
+        v-if="editaddressAction"
+        @click="editaddressAction = !editaddressAction"
+        class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+      >
+        <div @click.stop>
+          <PopupEditAddress :addressData="editingAddressData" />
+        </div>
       </div>
+
+      <Loading :loading="loading" />
     </div>
-
-    <Loading :loading="loading" />
   </div>
-  </div>
-
 </template>
 
 <script setup lang="ts">
@@ -92,10 +93,9 @@ import type { Shipment } from "~/models/product.model";
 import service from "~/service";
 
 definePageMeta({
-  middleware: 'auth',
+  middleware: "auth",
   layout: "user",
-})
-
+});
 
 const shipment = ref<Shipment[]>([]);
 const addressAction = ref(false);
@@ -103,7 +103,7 @@ const editaddressAction = ref(false);
 const loading = ref(false);
 const editingAddressData = ref<Shipment | null>(null);
 
-const editAddress = (address: Shipment) => {  
+const editAddress = (address: Shipment) => {
   loading.value = true;
   editingAddressData.value = { ...address };
   editaddressAction.value = true;
@@ -139,7 +139,7 @@ const getShipment = async () => {
       shipment.value = shipmentlist;
     })
     .catch((error: any) => {
-      console.log(shipment.value)
+      console.log(shipment.value);
       console.log(error);
     })
     .finally(() => {
