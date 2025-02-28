@@ -141,6 +141,19 @@
           ลงทะเบียน
         </button>
       </div>
+            <!-- Divider -->
+            <hr class="border-black/50 my-5 sm:my-6" />
+
+            <!-- login Now -->
+            <div class="flex justify-center text-base">
+        <p>มีบัญชีผู้ใช้แล้ว</p>
+        <NuxtLink
+          to="/login"
+          class="hover:text-[#FD8C35] ml-2 font-normal hover:underline"
+        >
+          เข้าสู่ระบบ
+        </NuxtLink>
+      </div>
     </form>
   </div>
 </template>
