@@ -1,5 +1,5 @@
 <template>
-  <div class="relative z-50">
+  <div class="relative z-50 ">
     <!-- ปุ่ม User -->
     <button
       @click="toggleDropdown"
@@ -27,7 +27,7 @@
     <!-- Dropdown Menu -->
     <div
       v-show="dropdownOpen"
-      class="dropdown-menu fixed  mt-2  bg-white rounded-lg shadow-lg border transition-all duration-300 ease-in-out"
+      class="dropdown-menu fixed  mt-2  bg-white rounded-lg shadow-lg border transition-all duration-300 ease-in-out w-[200px] mr-4"
     >
       <ul class="py-2  text-sm text-gray-700">
         <li >

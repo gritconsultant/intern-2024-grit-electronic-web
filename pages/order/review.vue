@@ -1,18 +1,18 @@
 <template>
   <div class=" pt-[90px]">
     <div class="flex p-4">
-      <div class="w-1/6 max-lg:w-1/4  border-r ml-14">
+      <div class="w-1/6 max-lg:w-1/4  border-r ml-8">
         <Sidebar />
       </div>
 
     <!-- Content -->
-    <div class="w-full lg:w-3/4 p-6">
+    <div class="w-full max-lg:w-3/4 p-6">
       <div class="border-b">
         <h1 class="text-xl font-bold mb-6">คำสั่งซื้อของฉัน</h1>
       </div>
 
       <!-- Tabs -->
-      <div class="mt-5">
+      <div class="mt-2">
         <Tab />
       </div>
 
@@ -20,8 +20,8 @@
         <!-- Order List -->
         <div
           class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
-          style="max-height: 48vh"
         >
+        <div class="h-[490px]">
           <h2 class="font-bold mb-4">รายการคำสั่งซื้อ</h2>
           <div v-if="orders.length">
             <div
@@ -44,12 +44,13 @@
           </div>
           <div v-else class="text-center text-gray-500">ไม่มีคำสั่งซื้อ</div>
         </div>
+      </div>
 
         <!-- Selected Order Details -->
         <div
           class="bg-white p-4 rounded-lg shadow border overflow-y-auto sticky top-0"
-          style="max-height: 48vh"
         >
+        <div class="h-[490px]">
           <h2 class="font-bold mb-4">รายละเอียดคำสั่งซื้อ</h2>
           <div v-if="selectedOrder">
             <h3 class="font-bold">สินค้า</h3>
@@ -140,6 +141,7 @@
             </button>
           </div> -->
         </div>
+      </div>
       </div>
     </div>
 
